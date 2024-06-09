@@ -1,16 +1,16 @@
 package com.imperial.academia.database;
-
+import com.imperial.academia.config.DatabaseConfig;
 import java.sql.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class DatabaseSetup {
-    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
-    static final String DB_URL = "jdbc:mysql://localhost/";
-    static final String DB_NAME = "academia_imperial";
-    static final String USER = "root";
-    static final String PASS = "123456";
+    static final String JDBC_DRIVER = DatabaseConfig.JDBC_DRIVER;  
+    static final String DB_URL = DatabaseConfig.DB_URL;
+    static final String DB_NAME = DatabaseConfig.DB_NAME;
+    static final String USER = DatabaseConfig.USER;
+    static final String PASS = DatabaseConfig.PASS;
     static final String FILE_PATH = "./src/main/java/com/imperial/academia/database/example_data.txt";
 
     public static void main(String[] args) {
