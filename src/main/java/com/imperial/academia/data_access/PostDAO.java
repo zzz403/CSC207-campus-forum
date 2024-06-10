@@ -8,8 +8,8 @@ import java.util.List;
 public class PostDAO implements BaseDAO<Post> {
     private Connection conn;
 
-    public PostDAO() throws SQLException, ClassNotFoundException {
-        this.conn = getConnection();
+    public PostDAO(Connection conn){
+        this.conn = conn;
     }
     @Override
     public void insert(Post post) throws SQLException {

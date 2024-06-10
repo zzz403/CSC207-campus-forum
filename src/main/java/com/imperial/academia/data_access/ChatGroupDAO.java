@@ -8,10 +8,10 @@ import java.util.List;
 public class ChatGroupDAO implements BaseDAO<ChatGroup> {
     private Connection conn;
 
-    public ChatGroupDAO() throws SQLException, ClassNotFoundException {
-        this.conn = getConnection();
+    public ChatGroupDAO(Connection conn){
+        this.conn = conn;
     }
-
+    
     @Override
     public void insert(ChatGroup chatGroup) throws SQLException {
         String sql = "INSERT INTO chat_groups (group_name) VALUES (?)";

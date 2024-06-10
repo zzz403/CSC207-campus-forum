@@ -8,20 +8,64 @@ import java.util.List;
 public class UserDAO implements BaseDAO<User> {
     private Connection conn;
 
-    public UserDAO() throws ClassNotFoundException, SQLException {
-        this.conn = getConnection();
+    public UserDAO(Connection conn){
+        this.conn = conn;
     }
 
     @Override
     public void insert(User user) throws SQLException {
+        if (isUsernameExists(user.getUsername())) {
+            throw new SQLException("Username already exists");
+        }
+        
         String sql = "INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
             pstmt.setString(3, user.getEmail());
             pstmt.setString(4, user.getRole());
             pstmt.executeUpdate();
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    user.setId(generatedKeys.getInt(1));
+                }
+            }
         }
+    }
+
+    private boolean isUsernameExists(String username) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
+    public User getByUsername(String username) throws SQLException {
+        String sql = "SELECT * FROM users WHERE username = ?";
+        User user = null;
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    user = new User(
+                        rs.getInt("user_id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getString("role"),
+                        rs.getTimestamp("registration_date")
+                    );
+                }
+            }
+        }
+        return user;
     }
 
     @Override

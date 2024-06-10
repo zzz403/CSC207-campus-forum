@@ -8,8 +8,8 @@ import java.util.List;
 public class CommentDAO implements BaseDAO<Comment> {
     private Connection conn;
 
-    public CommentDAO() throws SQLException, ClassNotFoundException {
-        this.conn = getConnection();
+    public CommentDAO(Connection conn){
+        this.conn = conn;
     }
 
     @Override

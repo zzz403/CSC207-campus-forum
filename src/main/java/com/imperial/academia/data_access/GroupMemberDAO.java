@@ -8,8 +8,8 @@ import java.util.List;
 public class GroupMemberDAO implements BaseDAO<GroupMember> {
     private Connection conn;
 
-    public GroupMemberDAO() throws SQLException, ClassNotFoundException {
-        this.conn = getConnection();
+    public GroupMemberDAO(Connection conn){
+        this.conn = conn;
     }
     
     @Override

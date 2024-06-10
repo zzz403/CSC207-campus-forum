@@ -1,9 +1,11 @@
 package com.imperial.academia.database;
 
+import com.imperial.academia.config.DatabaseConfig;
 import com.imperial.academia.data_access.*;
 import com.imperial.academia.entity.*;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
@@ -14,13 +16,45 @@ public class DatabaseTest {
         Connection conn = null;
 
         try {
+            // 加载H2数据库驱动
+            Class.forName(DatabaseConfig.getJdbcDriver());
+
+            // 建立数据库连接
+            conn = DriverManager.getConnection(DatabaseConfig.getDbUrlName(), DatabaseConfig.getUser(), DatabaseConfig.getPass());
+
             // Test UserDAO
-            UserDAO userDAO = new UserDAO();
+            testUserDAO(conn);
+
+            // Test BoardDAO
+            testBoardDAO(conn);
+
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (conn != null) conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+
+    private static void testUserDAO(Connection conn) {
+        try {
+            UserDAO userDAO = new UserDAO(conn);
+            
+            User existingUser = userDAO.getByUsername("testuser");
+            if (existingUser != null) {
+                userDAO.delete(existingUser.getId());
+            }
+
             User user = new User(0, "testuser", "testpass", "testuser@example.com", "user", new Timestamp(System.currentTimeMillis()));
             userDAO.insert(user);
             System.out.println("Inserted User: " + user);
 
-            User retrievedUser = userDAO.get(user.getId());
+            User retrievedUser = userDAO.getByUsername("testuser");
+            user.setId(retrievedUser.getId());
+
             System.out.println("Retrieved User: " + retrievedUser);
 
             List<User> users = userDAO.getAll();
@@ -31,17 +65,23 @@ public class DatabaseTest {
             System.out.println("Updated User: " + userDAO.get(user.getId()));
 
             userDAO.delete(user.getId());
-            System.out.println("Deleted User: " + userDAO.get(user.getId()));
+            System.out.println("Deleted User. Attempting to retrieve: " + userDAO.get(user.getId()));
 
-            userDAO.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-            // Test BoardDAO
-            BoardDAO boardDAO = new BoardDAO();
+    private static void testBoardDAO(Connection conn) {
+        try {
+            BoardDAO boardDAO = new BoardDAO(conn);
             Board board = new Board(0, "Test Board", "This is a test board");
             boardDAO.insert(board);
             System.out.println("Inserted Board: " + board);
 
-            Board retrievedBoard = boardDAO.get(board.getId());
+            Board retrievedBoard = boardDAO.getByName("Test Board");
+            board.setId(retrievedBoard.getId());
+
             System.out.println("Retrieved Board: " + retrievedBoard);
 
             List<Board> boards = boardDAO.getAll();
@@ -52,18 +92,10 @@ public class DatabaseTest {
             System.out.println("Updated Board: " + boardDAO.get(board.getId()));
 
             boardDAO.delete(board.getId());
-            System.out.println("Deleted Board: " + boardDAO.get(board.getId()));
+            System.out.println("Deleted Board. Attempting to retrieve: " + boardDAO.get(board.getId()));
 
-            // Similar tests can be added for PostDAO, CommentDAO, ChatGroupDAO, ChatMessageDAO, and GroupMemberDAO
-
-        } catch (SQLException | ClassNotFoundException se) {
-            se.printStackTrace();
-        } finally {
-            try {
-                if (conn != null) conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

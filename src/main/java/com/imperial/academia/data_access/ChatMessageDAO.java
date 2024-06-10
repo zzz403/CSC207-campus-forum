@@ -8,8 +8,8 @@ import java.util.List;
 public class ChatMessageDAO implements BaseDAO<ChatMessage> {
     private Connection conn;
 
-    public ChatMessageDAO() throws SQLException, ClassNotFoundException {
-        this.conn = getConnection();
+    public ChatMessageDAO(Connection conn){
+        this.conn = conn;
     }
 
     @Override
