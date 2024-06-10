@@ -24,6 +24,10 @@ public class DatabaseSetup {
             System.out.println("Connecting to database server...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = conn.createStatement();
+            
+            System.out.println("Dropping existing database if it exists...");
+            String dropSql = "DROP DATABASE IF EXISTS " + DB_NAME;
+            stmt.executeUpdate(dropSql);
 
             System.out.println("Creating database...");
             String sql = "CREATE DATABASE IF NOT EXISTS " + DB_NAME;

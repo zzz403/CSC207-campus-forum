@@ -16,7 +16,7 @@ public interface BaseDAO<T> {
 
     default Connection getConnection() throws SQLException, ClassNotFoundException {
         Class.forName(DatabaseConfig.JDBC_DRIVER);
-        return DriverManager.getConnection(DatabaseConfig.DB_URL, DatabaseConfig.USER, DatabaseConfig.PASS);
+        return DriverManager.getConnection(DatabaseConfig.DB_URL_NAME, DatabaseConfig.USER, DatabaseConfig.PASS);
     }
 }
 
