@@ -1,17 +1,17 @@
-package com.imperial.academia.frontend;
+package com.imperial.academia.view;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class RegisterPanel extends JPanel {
+public class SignupPanel extends JPanel {
     private PanelController panelController;
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JPasswordField confirmPasswordField;
 
-    public RegisterPanel(PanelController panelController) {
+    public SignupPanel(PanelController panelController) {
         this.panelController = panelController;
 
         setLayout(new GridBagLayout());
@@ -74,10 +74,10 @@ public class RegisterPanel extends JPanel {
 
             if (validateRegistration(username, password, confirmPassword)) {
                 // 注册逻辑，成功后跳转到登录页面
-                JOptionPane.showMessageDialog(RegisterPanel.this, "Registration successful", "Register", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(SignupPanel.this, "Registration successful", "Register", JOptionPane.INFORMATION_MESSAGE);
                 panelController.showPanel("login");
             } else {
-                JOptionPane.showMessageDialog(RegisterPanel.this, "Registration failed", "Register Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SignupPanel.this, "Registration failed", "Register Error", JOptionPane.ERROR_MESSAGE);
             }
         }
 

@@ -1,4 +1,4 @@
-package com.imperial.academia.frontend;
+package com.imperial.academia.view;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,11 +20,11 @@ public class MainFrame extends JFrame {
 
         LoginPanel loginPanel = new LoginPanel(panelController);
         ForumPanel forumPanel = new ForumPanel();
-        RegisterPanel registerPanel = new RegisterPanel(panelController);
+        SignupPanel signUpPanel = new SignupPanel(panelController);
 
         mainPanel.add(loginPanel, "login");
         mainPanel.add(forumPanel, "forum");
-        mainPanel.add(registerPanel, "register");
+        mainPanel.add(signUpPanel, "register");
 
         add(mainPanel);
 

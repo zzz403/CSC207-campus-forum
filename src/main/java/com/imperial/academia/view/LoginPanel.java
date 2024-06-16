@@ -1,4 +1,4 @@
-package com.imperial.academia.frontend;
+package com.imperial.academia.view;
 
 import javax.swing.*;
 import java.awt.*;
