@@ -1,7 +1,7 @@
 package com.imperial.academia.app;
 
 import javax.swing.*;
-import com.imperial.academia.frontend.MainFrame;
+import com.imperial.academia.view.MainFrame;
 import java.util.Properties;
 
 public class App {
