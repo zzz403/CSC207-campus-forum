@@ -67,7 +67,7 @@ public class LoginPanel extends JPanel {
         }
 
         private boolean validateLogin(String username, String password) {
-            // 这里添加你的登录验证逻辑
+            // 登录验证逻辑
             return "admin".equals(username) && "password".equals(password);
         }
     }

@@ -82,7 +82,7 @@ public class RegisterPanel extends JPanel {
         }
 
         private boolean validateRegistration(String username, String password, String confirmPassword) {
-            // 这里添加你的注册验证逻辑
+            // 注册验证逻辑
             return !username.isEmpty() && password.equals(confirmPassword);
         }
     }
