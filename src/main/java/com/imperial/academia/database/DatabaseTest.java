@@ -16,10 +16,8 @@ public class DatabaseTest {
         Connection conn = null;
 
         try {
-            // 加载H2数据库驱动
             Class.forName(DatabaseConfig.getJdbcDriver());
 
-            // 建立数据库连接
             conn = DriverManager.getConnection(DatabaseConfig.getDbUrlName(), DatabaseConfig.getUser(), DatabaseConfig.getPass());
 
             // Test UserDAO
