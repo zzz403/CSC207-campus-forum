@@ -1,27 +1,26 @@
 package com.imperial.academia.app;
 
-import javax.swing.*;
-import com.imperial.academia.view.MainFrame;
-import java.util.Properties;
+// import javax.swing.*;
+// import java.util.Properties;
 
 public class App {
-    public static void main(String[] args) {
-        // JTattoo
-        try {
-            Properties props = new Properties();
-            // change style
-            props.put("logoString", "Academia Imperial");
-            com.jtattoo.plaf.acryl.AcrylLookAndFeel.setCurrentTheme(props);
-            UIManager.setLookAndFeel("com.jtattoo.plaf.acryl.AcrylLookAndFeel");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    // public static void main(String[] args) {
+    //     // JTattoo
+    //     try {
+    //         Properties props = new Properties();
+    //         // change style
+    //         props.put("logoString", "Academia Imperial");
+    //         com.jtattoo.plaf.acryl.AcrylLookAndFeel.setCurrentTheme(props);
+    //         UIManager.setLookAndFeel("com.jtattoo.plaf.acryl.AcrylLookAndFeel");
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //     }
 
-        SwingUtilities.invokeLater(() -> {
-            MainFrame mainFrame = new MainFrame();
-            mainFrame.setVisible(true);
-        });
-    }
+    //     SwingUtilities.invokeLater(() -> {
+    //         MainFrame mainFrame = new MainFrame();
+    //         mainFrame.setVisible(true);
+    //     });
+    // }
 }
     
 

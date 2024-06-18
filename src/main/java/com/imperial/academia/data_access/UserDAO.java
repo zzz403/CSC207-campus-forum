@@ -1,9 +1,10 @@
 package com.imperial.academia.data_access;
 
-import com.imperial.academia.entity.User;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.imperial.academia.entity.user.User;
 
 public class UserDAO implements BaseDAO<User> {
     private Connection conn;
@@ -14,7 +15,7 @@ public class UserDAO implements BaseDAO<User> {
 
     @Override
     public void insert(User user) throws SQLException {
-        if (isUsernameExists(user.getUsername())) {
+        if (existsByUsername(user.getUsername())) {
             throw new SQLException("Username already exists");
         }
         
@@ -34,10 +35,23 @@ public class UserDAO implements BaseDAO<User> {
         }
     }
 
-    private boolean isUsernameExists(String username) throws SQLException {
+    public boolean existsByUsername(String username) throws SQLException {
         String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean existsByEmail(String email) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, email);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1) > 0;
@@ -128,12 +142,6 @@ public class UserDAO implements BaseDAO<User> {
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
-        }
-    }
-
-    public void close() throws SQLException {
-        if (conn != null && !conn.isClosed()) {
-            conn.close();
         }
     }
 }
