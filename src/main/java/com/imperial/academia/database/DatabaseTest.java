@@ -3,6 +3,7 @@ package com.imperial.academia.database;
 import com.imperial.academia.config.DatabaseConfig;
 import com.imperial.academia.data_access.*;
 import com.imperial.academia.entity.*;
+import com.imperial.academia.entity.user.User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
