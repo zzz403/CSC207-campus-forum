@@ -1,11 +1,14 @@
 package com.imperial.academia.app;
 
 import com.imperial.academia.data_access.DatabaseConnection;
+import com.imperial.academia.data_access.RememberMeDAO;
 import com.imperial.academia.data_access.UserDAO;
+import com.imperial.academia.interface_adapter.login.RememberMeController;
 import com.imperial.academia.interface_adapter.login.LoginController;
 import com.imperial.academia.interface_adapter.login.LoginPresenter;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
+import com.imperial.academia.use_case.login.RememberMeUseCase;
 import com.imperial.academia.use_case.login.LoginInputBoundary;
 import com.imperial.academia.use_case.login.LoginInteractor;
 import com.imperial.academia.use_case.login.LoginOutputBoundary;
@@ -23,7 +26,8 @@ public class LoginUseCaseFactory {
 
         try {
             LoginController loginController = createUserLoginUseCase(viewManagerModel, loginViewModel);
-            return new LoginView(loginController, loginViewModel);
+            RememberMeController rememberMeController = createRememberMeController();
+            return new LoginView(loginController, loginViewModel, rememberMeController);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
         }
@@ -41,5 +45,11 @@ public class LoginUseCaseFactory {
                 userDataAccessObject, loginOutputBoundary);
 
         return new LoginController(userLoginInteractor);
+    }
+
+    private static RememberMeController createRememberMeController() {
+        RememberMeDAO rememberMeDAO = new RememberMeDAO();
+        RememberMeUseCase rememberMeUseCase = new RememberMeUseCase(rememberMeDAO);
+        return new RememberMeController(rememberMeUseCase);
     }
 }

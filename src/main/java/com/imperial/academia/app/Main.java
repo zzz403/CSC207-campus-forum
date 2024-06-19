@@ -1,6 +1,5 @@
 package com.imperial.academia.app;
 
-import com.jtattoo.plaf.aluminium.AluminiumLookAndFeel;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.signup.SignupViewModel;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
@@ -11,25 +10,14 @@ import com.imperial.academia.view.ViewManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Properties;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class Main {
     public static void main(String[] args) {
-        // Set the look and feel to JTattoo
-        try {
-            Properties props = new Properties();
-            props.put("logoString", "MyApp"); // Customize the logo text
-            AluminiumLookAndFeel.setCurrentTheme(props);
-            UIManager.setLookAndFeel("com.jtattoo.plaf.aluminium.AluminiumLookAndFeel");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // Build the main program window, the main panel containing the
-        // various cards, and the layout, and stitch them together.
-
         // The main application window.
-        JFrame application = new JFrame("Login Example");
+        JFrame application = new JFrame("Academia Imperial");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // Add a window listener to handle the close operation
@@ -40,19 +28,25 @@ public class Main {
             }
         });
 
+        // icon logo
+        try {
+            Image logo = ImageIO.read(new File("resources/logo.png"));
+            application.setIconImage(logo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         CardLayout cardLayout = new CardLayout();
 
-        // The various View objects. Only one view is visible at a time.
         JPanel views = new JPanel(cardLayout);
         application.add(views);
 
-        // This keeps track of and manages which view is currently showing.
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
         
         LoginViewModel loginViewModel = new LoginViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
-
+        
         try {
             SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel);
             views.add(signupView, signupView.viewName);
@@ -70,7 +64,9 @@ public class Main {
         viewManagerModel.setActiveView("log in");
         viewManagerModel.firePropertyChanged();
 
-        application.pack();
+        // Set size and center the window
+        application.setSize(800, 600); // 设置窗口大小
+        application.setLocationRelativeTo(null); // 居中显示
         application.setVisible(true);
     }
 }

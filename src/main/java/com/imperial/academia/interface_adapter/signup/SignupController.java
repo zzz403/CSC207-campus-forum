@@ -1,4 +1,3 @@
-// com/imperial/academia/interface_adapter/signup/SignupController.java
 package com.imperial.academia.interface_adapter.signup;
 
 import com.imperial.academia.use_case.signup.SignupInputBoundary;
