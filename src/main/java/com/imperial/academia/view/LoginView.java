@@ -1,14 +1,18 @@
 package com.imperial.academia.view;
 
-import com.imperial.academia.interface_adapter.login.RememberMeController;
+import com.imperial.academia.interface_adapter.login.LoginState;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.login.LoginController;
+import com.imperial.academia.interface_adapter.login.RememberMeController;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class LoginView extends JPanel {
     public final String viewName = "log in";
+
+    private JLabel usernameErrorLabel;
+    private JLabel passwordErrorLabel;
 
     public LoginView(LoginController loginController, LoginViewModel loginViewModel, RememberMeController rememberMeController) {
         setLayout(new BorderLayout());
@@ -42,10 +46,16 @@ public class LoginView extends JPanel {
 
         gbc.gridy++;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(0, 0, 20, 0);
+        gbc.insets = new Insets(0, 0, 5, 0);
         JTextField usernameField = new JTextField(20);
         usernameField.setPreferredSize(new Dimension(usernameField.getPreferredSize().width, 40));
         leftPanel.add(usernameField, gbc);
+
+        gbc.gridy++;
+        usernameErrorLabel = new JLabel();
+        usernameErrorLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        usernameErrorLabel.setForeground(Color.RED);
+        leftPanel.add(usernameErrorLabel, gbc);
 
         gbc.gridy++;
         gbc.insets = new Insets(10, 0, 10, 0);
@@ -56,10 +66,16 @@ public class LoginView extends JPanel {
 
         gbc.gridy++;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(0, 0, 10, 0);
+        gbc.insets = new Insets(0, 0, 5, 0);
         JPasswordField passwordField = new JPasswordField(20);
         passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, 40));
         leftPanel.add(passwordField, gbc);
+
+        gbc.gridy++;
+        passwordErrorLabel = new JLabel();
+        passwordErrorLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        passwordErrorLabel.setForeground(Color.RED);
+        leftPanel.add(passwordErrorLabel, gbc);
 
         gbc.gridy++;
         gbc.fill = GridBagConstraints.NONE;
@@ -135,5 +151,13 @@ public class LoginView extends JPanel {
             passwordField.setText(credentials[1]);
             rememberMeCheckBox.setSelected(true);
         }
+
+        loginViewModel.addPropertyChangeListener(evt -> {
+            if ("state".equals(evt.getPropertyName())) {
+                LoginState state = loginViewModel.getState();
+                usernameErrorLabel.setText(state.getUsernameError());
+                passwordErrorLabel.setText(state.getPasswordError());
+            }
+        });
     }
 }

@@ -5,7 +5,6 @@ import java.awt.*;
 
 public class UIStyle {
 
-    // 统一的颜色和字体定义
     public static final Color BACKGROUND_COLOR = new Color(240, 240, 255);
     public static final Color BUTTON_COLOR = new Color(70, 130, 180);
     public static final Color BUTTON_TEXT_COLOR = Color.WHITE;

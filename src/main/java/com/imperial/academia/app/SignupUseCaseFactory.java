@@ -1,4 +1,3 @@
-// com/imperial/academia/app/SignupUseCaseFactory.java
 package com.imperial.academia.app;
 
 import com.imperial.academia.data_access.DatabaseConnection;

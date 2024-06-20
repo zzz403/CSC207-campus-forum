@@ -65,7 +65,7 @@ public class Main {
         viewManagerModel.firePropertyChanged();
 
         // Set size and center the window
-        application.setSize(800, 600); // 设置窗口大小
+        application.setSize(800, 700); // 设置窗口大小
         application.setLocationRelativeTo(null); // 居中显示
         application.setVisible(true);
     }
