@@ -1,11 +1,11 @@
-package com.imperial.academia.data_access;
+package com.imperial.academia.data_access.chat_group;
 
 import com.imperial.academia.entity.ChatGroup;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatGroupDAO implements BaseDAO<ChatGroup> {
+public class ChatGroupDAO implements ChatGroupDAI {
     private Connection conn;
 
     public ChatGroupDAO(Connection conn){

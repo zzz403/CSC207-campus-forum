@@ -1,7 +1,7 @@
 package com.imperial.academia.app;
 
 import com.imperial.academia.data_access.DatabaseConnection;
-import com.imperial.academia.data_access.UserDAO;
+import com.imperial.academia.data_access.user.UserDAO;
 import com.imperial.academia.entity.user.CommonUserFactory;
 import com.imperial.academia.entity.user.UserFactory;
 import com.imperial.academia.interface_adapter.signup.SignupController;

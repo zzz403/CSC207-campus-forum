@@ -1,11 +1,11 @@
-package com.imperial.academia.data_access;
+package com.imperial.academia.data_access.chat_message;
 
 import com.imperial.academia.entity.ChatMessage;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatMessageDAO implements BaseDAO<ChatMessage> {
+public class ChatMessageDAO implements ChatMessageDAI {
     private Connection conn;
 
     public ChatMessageDAO(Connection conn){

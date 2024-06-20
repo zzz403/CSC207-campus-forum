@@ -1,15 +1,16 @@
 package com.imperial.academia.use_case.login;
 
-import com.imperial.academia.data_access.UserDAO;
+import com.imperial.academia.data_access.user.UserDAI;
+import com.imperial.academia.data_access.user.UserDAO;
 import com.imperial.academia.entity.user.User;
 
 import java.sql.SQLException;
 
 public class LoginInteractor implements LoginInputBoundary {
-    private final UserDAO userDAO;
+    private final UserDAI userDAO;
     private final LoginOutputBoundary loginPresenter;
 
-    public LoginInteractor(UserDAO userDAO, LoginOutputBoundary loginPresenter) {
+    public LoginInteractor(UserDAI userDAO, LoginOutputBoundary loginPresenter) {
         this.userDAO = userDAO;
         this.loginPresenter = loginPresenter;
     }

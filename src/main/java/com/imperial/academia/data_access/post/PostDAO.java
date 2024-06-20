@@ -1,11 +1,11 @@
-package com.imperial.academia.data_access;
+package com.imperial.academia.data_access.post;
 
 import com.imperial.academia.entity.Post;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostDAO implements BaseDAO<Post> {
+public class PostDAO implements PostDAI {
     private Connection conn;
 
     public PostDAO(Connection conn){

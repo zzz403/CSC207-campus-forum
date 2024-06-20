@@ -1,10 +1,11 @@
-package com.imperial.academia.data_access;
+package com.imperial.academia.data_access.remember_me;
 
 import java.io.*;
 
-public class RememberMeDAO {
-    private static final String FILE_PATH = "src/main/java/com/imperial/academia/database/rememberme.txt";
+public class RememberMeDAO implements RememberMeDAI {
+    private static final String FILE_PATH = "database/rememberme.txt";
 
+    @Override
     public void saveCredentials(String username, String password) throws IOException {
         try (FileWriter writer = new FileWriter(FILE_PATH)) {
             writer.write(username + "\n");
@@ -12,6 +13,7 @@ public class RememberMeDAO {
         }
     }
 
+    @Override
     public String[] loadCredentials() throws IOException {
         String[] credentials = new String[2];
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
@@ -21,6 +23,7 @@ public class RememberMeDAO {
         return credentials;
     }
 
+    @Override
     public void clearCredentials() throws IOException {
         try (FileWriter writer = new FileWriter(FILE_PATH)) {
             writer.write("");

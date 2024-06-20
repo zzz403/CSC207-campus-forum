@@ -1,8 +1,8 @@
 package com.imperial.academia.app;
 
 import com.imperial.academia.data_access.DatabaseConnection;
-import com.imperial.academia.data_access.RememberMeDAO;
-import com.imperial.academia.data_access.UserDAO;
+import com.imperial.academia.data_access.remember_me.RememberMeDAO;
+import com.imperial.academia.data_access.user.UserDAO;
 import com.imperial.academia.interface_adapter.login.RememberMeController;
 import com.imperial.academia.interface_adapter.login.LoginController;
 import com.imperial.academia.interface_adapter.login.LoginPresenter;

@@ -1,7 +1,8 @@
 package com.imperial.academia.database;
 
 import com.imperial.academia.config.DatabaseConfig;
-import com.imperial.academia.data_access.*;
+import com.imperial.academia.data_access.board.BoardDAO;
+import com.imperial.academia.data_access.user.UserDAO;
 import com.imperial.academia.entity.*;
 import com.imperial.academia.entity.user.User;
 
