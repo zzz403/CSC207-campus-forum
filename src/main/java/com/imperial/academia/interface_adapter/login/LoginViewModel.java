@@ -12,10 +12,9 @@ public class LoginViewModel extends ViewModel {
     public final String REMEMBER_BUTTON_LABEL = "Remember me";
     public final String SIGNUP_BUTTON_LABEL = "Don't have an account? Sign up";
     public final String FORGOT_BUTTON_LABEL = "Forgot password?";
-
-    private LoginState state = new LoginState();
-    private String errorMessage;
+    
     private boolean rememberMe;
+    private LoginState state = new LoginState();
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
@@ -32,16 +31,14 @@ public class LoginViewModel extends ViewModel {
         return state;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public void firePropertyChanged() {
+        support.firePropertyChange("state", null, this.state);
     }
 
-    public void setErrorMessage(String errorMessage) {
-        String oldMessage = this.errorMessage;
-        this.errorMessage = errorMessage;
-        support.firePropertyChange("errorMessage", oldMessage, errorMessage);
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
     }
-
+    
     public boolean isRememberMe() {
         return rememberMe;
     }
@@ -49,13 +46,5 @@ public class LoginViewModel extends ViewModel {
     public void setRememberMe(boolean rememberMe) {
         this.rememberMe = rememberMe;
         support.firePropertyChange("rememberMe", !rememberMe, rememberMe);
-    }
-
-    public void firePropertyChanged() {
-        support.firePropertyChange("state", null, this.state);
-    }
-
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        support.addPropertyChangeListener(listener);
     }
 }
