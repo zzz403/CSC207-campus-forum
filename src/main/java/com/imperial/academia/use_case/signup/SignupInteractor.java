@@ -1,13 +1,12 @@
 package com.imperial.academia.use_case.signup;
 
-import com.imperial.academia.data_access.user.UserDAI;
-import com.imperial.academia.data_access.user.UserDAO;
-import com.imperial.academia.entity.user.User;
-import com.imperial.academia.entity.user.UserFactory;
-
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.regex.Pattern;
+
+import com.imperial.academia.data_access.user.UserDAI;
+import com.imperial.academia.entity.user.User;
+import com.imperial.academia.entity.user.UserFactory;
 
 public class SignupInteractor implements SignupInputBoundary {
     private final UserDAI userDAO;
