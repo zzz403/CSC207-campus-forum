@@ -1,11 +1,11 @@
-package com.imperial.academia.data_access;
+package com.imperial.academia.data_access.comment;
 
 import com.imperial.academia.entity.Comment;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommentDAO implements BaseDAO<Comment> {
+public class CommentDAO implements CommentDAI {
     private Connection conn;
 
     public CommentDAO(Connection conn){

@@ -1,11 +1,11 @@
-package com.imperial.academia.data_access;
+package com.imperial.academia.data_access.group_member;
 
 import com.imperial.academia.entity.GroupMember;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupMemberDAO implements BaseDAO<GroupMember> {
+public class GroupMemberDAO implements GroupMemberDAI {
     private Connection conn;
 
     public GroupMemberDAO(Connection conn){

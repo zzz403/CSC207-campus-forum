@@ -1,6 +1,6 @@
 package com.imperial.academia.use_case.login;
 
-import com.imperial.academia.data_access.RememberMeDAO;
+import com.imperial.academia.data_access.remember_me.RememberMeDAO;
 
 import java.io.IOException;
 

@@ -1,6 +1,7 @@
 package com.imperial.academia.use_case.signup;
 
-import com.imperial.academia.data_access.UserDAO;
+import com.imperial.academia.data_access.user.UserDAI;
+import com.imperial.academia.data_access.user.UserDAO;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.entity.user.UserFactory;
 
@@ -9,11 +10,11 @@ import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
 public class SignupInteractor implements SignupInputBoundary {
-    private final UserDAO userDAO;
+    private final UserDAI userDAO;
     private final SignupOutputBoundary signupPresenter;
     private final UserFactory userFactory;
 
-    public SignupInteractor(UserDAO userDAO, SignupOutputBoundary signupPresenter, UserFactory userFactory) {
+    public SignupInteractor(UserDAI userDAO, SignupOutputBoundary signupPresenter, UserFactory userFactory) {
         this.userDAO = userDAO;
         this.signupPresenter = signupPresenter;
         this.userFactory = userFactory;

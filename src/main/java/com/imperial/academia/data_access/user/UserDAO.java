@@ -1,4 +1,4 @@
-package com.imperial.academia.data_access;
+package com.imperial.academia.data_access.user;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.imperial.academia.entity.user.User;
 
-public class UserDAO implements BaseDAO<User> {
+public class UserDAO implements UserDAI {
     private Connection conn;
 
     public UserDAO(Connection conn){
@@ -35,6 +35,7 @@ public class UserDAO implements BaseDAO<User> {
         }
     }
 
+    @Override
     public boolean existsByUsername(String username) throws SQLException {
         String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -48,6 +49,7 @@ public class UserDAO implements BaseDAO<User> {
         return false;
     }
 
+    @Override
     public boolean existsByEmail(String email) throws SQLException {
         String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -61,6 +63,7 @@ public class UserDAO implements BaseDAO<User> {
         return false;
     }
 
+    @Override
     public User getByUsername(String username) throws SQLException {
         String sql = "SELECT * FROM users WHERE username = ?";
         User user = null;

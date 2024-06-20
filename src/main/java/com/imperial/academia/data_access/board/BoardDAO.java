@@ -1,4 +1,4 @@
-package com.imperial.academia.data_access;
+package com.imperial.academia.data_access.board;
 
 import com.imperial.academia.entity.Board;
 
@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardDAO implements BaseDAO<Board> {
+public class BoardDAO implements BoardDAI {
     private Connection conn;
 
     public BoardDAO(Connection conn) {
@@ -29,6 +29,7 @@ public class BoardDAO implements BaseDAO<Board> {
         }
     }
 
+    @Override
     public Board getByName(String name) throws SQLException {
         String sql = "SELECT * FROM boards WHERE name = ?";
         Board board = null;
@@ -102,6 +103,7 @@ public class BoardDAO implements BaseDAO<Board> {
         }
     }
 
+    @Override
     public void close() throws SQLException {
         if (conn != null && !conn.isClosed()) {
             conn.close();
