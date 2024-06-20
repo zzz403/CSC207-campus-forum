@@ -1,7 +1,6 @@
 package com.imperial.academia.use_case.login;
 
 import com.imperial.academia.data_access.user.UserDAI;
-import com.imperial.academia.data_access.user.UserDAO;
 import com.imperial.academia.entity.user.User;
 
 import java.sql.SQLException;
@@ -18,6 +17,7 @@ public class LoginInteractor implements LoginInputBoundary {
     @Override
     public void execute(LoginInputData loginInputData) {
         try {
+            loginPresenter.prepareFailView(null);
             User user = userDAO.getByUsername(loginInputData.getUsername());
             if (user == null) {
                 loginPresenter.prepareFailView("User not found.");

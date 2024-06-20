@@ -6,6 +6,8 @@ import com.imperial.academia.interface_adapter.login.LoginController;
 import com.imperial.academia.interface_adapter.login.RememberMeController;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 
 public class LoginView extends JPanel {
@@ -13,6 +15,8 @@ public class LoginView extends JPanel {
 
     private JLabel usernameErrorLabel;
     private JLabel passwordErrorLabel;
+    private JTextField usernameField;
+    private JPasswordField passwordField;
 
     public LoginView(LoginController loginController, LoginViewModel loginViewModel, RememberMeController rememberMeController) {
         setLayout(new BorderLayout());
@@ -47,7 +51,7 @@ public class LoginView extends JPanel {
         gbc.gridy++;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 0, 5, 0);
-        JTextField usernameField = new JTextField(20);
+        usernameField = new JTextField(20); 
         usernameField.setPreferredSize(new Dimension(usernameField.getPreferredSize().width, 40));
         leftPanel.add(usernameField, gbc);
 
@@ -67,7 +71,7 @@ public class LoginView extends JPanel {
         gbc.gridy++;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 0, 5, 0);
-        JPasswordField passwordField = new JPasswordField(20);
+        passwordField = new JPasswordField(20); // Initialize as member variable
         passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, 40));
         leftPanel.add(passwordField, gbc);
 
@@ -152,9 +156,54 @@ public class LoginView extends JPanel {
             rememberMeCheckBox.setSelected(true);
         }
 
+        // Add DocumentListener to update state
+        usernameField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateState();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateState();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateState();
+            }
+
+            private void updateState() {
+                loginViewModel.setStateUsername(usernameField.getText());
+            }
+        });
+
+        passwordField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateState();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateState();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateState();
+            }
+
+            private void updateState() {
+                loginViewModel.setStatePassword(new String(passwordField.getPassword()));
+            }
+        });
+
         loginViewModel.addPropertyChangeListener(evt -> {
             if ("state".equals(evt.getPropertyName())) {
                 LoginState state = loginViewModel.getState();
+                usernameField.setText(state.getUsername());
+                passwordField.setText(state.getPassword());
                 usernameErrorLabel.setText(state.getUsernameError());
                 passwordErrorLabel.setText(state.getPasswordError());
             }

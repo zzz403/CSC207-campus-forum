@@ -86,4 +86,22 @@ public class SignupState {
     public void setEmailError(String emailError) {
         this.emailError = emailError;
     }
+
+    public void clear() {
+        this.username = "";
+        this.usernameError = null;
+        this.password = "";
+        this.passwordError = null;
+        this.repeatPassword = "";
+        this.repeatPasswordError = null;
+        this.email = "";
+        this.emailError = null;
+    }
+
+    public void clearErrors() {
+        this.usernameError = null;
+        this.passwordError = null;
+        this.repeatPasswordError = null;
+        this.emailError = null;
+    }
 }
