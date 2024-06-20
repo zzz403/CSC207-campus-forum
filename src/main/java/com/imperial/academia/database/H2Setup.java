@@ -52,7 +52,9 @@ public class H2Setup {
                 "password VARCHAR(255) NOT NULL, " +
                 "email VARCHAR(100) NOT NULL UNIQUE, " +
                 "role ENUM('user', 'admin') NOT NULL, " +
-                "registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+                "registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                "token VARCHAR(255) DEFAULT NULL, " +
+                "token_expiry BIGINT DEFAULT NULL" +
                 ")";
             stmt.executeUpdate(createUsersTable);
 
