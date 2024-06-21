@@ -1,13 +1,14 @@
-package com.imperial.academia.service;
+package com.imperial.academia.data_access;
 
 import com.imperial.academia.entity.chat_group.ChatGroup;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * Interface for Chat Group Service.
+ * Interface for Data Access Object for ChatGroup entities.
  */
-public interface ChatGroupService {
+public interface ChatGroupDAI {
     /**
      * Inserts a new chat group into the database.
      *
@@ -32,6 +33,15 @@ public interface ChatGroupService {
      * @throws SQLException if a database access error occurs
      */
     List<ChatGroup> getAll() throws SQLException;
+
+    /**
+     * Retrieves all chat groups that have been modified since a given timestamp.
+     *
+     * @param timestamp the timestamp to compare against
+     * @return a list of chat groups modified since the specified timestamp
+     * @throws SQLException if a database access error occurs
+     */
+    List<ChatGroup> getAllSince(Timestamp timestamp) throws SQLException;
 
     /**
      * Updates an existing chat group in the database.

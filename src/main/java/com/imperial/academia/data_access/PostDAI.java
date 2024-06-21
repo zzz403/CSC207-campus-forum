@@ -1,15 +1,16 @@
-package com.imperial.academia.service;
+package com.imperial.academia.data_access;
 
 import com.imperial.academia.entity.post.Post;
 import com.imperial.academia.entity.post.PostLike;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * Interface for Post Service.
+ * Interface for Data Access Object for Post entities.
  */
-public interface PostService {
+public interface PostDAI {
     /**
      * Inserts a new post into the database.
      *
@@ -36,6 +37,15 @@ public interface PostService {
     List<Post> getAll() throws SQLException;
 
     /**
+     * Retrieves all posts that have been modified since a given timestamp.
+     *
+     * @param timestamp the timestamp to compare against
+     * @return a list of posts modified since the specified timestamp
+     * @throws SQLException if a database access error occurs
+     */
+    List<Post> getAllSince(Timestamp timestamp) throws SQLException;
+
+    /**
      * Updates an existing post in the database.
      *
      * @param post the post to update
@@ -51,8 +61,10 @@ public interface PostService {
      */
     void delete(int id) throws SQLException;
 
+    // Methods for Post Likes
+
     /**
-     * Likes a post by its ID and user ID.
+     * Likes a post.
      *
      * @param postId the ID of the post to like
      * @param userId the ID of the user who likes the post
@@ -61,7 +73,7 @@ public interface PostService {
     void likePost(int postId, int userId) throws SQLException;
 
     /**
-     * Unlikes a post by its ID and user ID.
+     * Unlikes a post.
      *
      * @param postId the ID of the post to unlike
      * @param userId the ID of the user who unlikes the post
@@ -72,7 +84,7 @@ public interface PostService {
     /**
      * Retrieves all likes for a specific post.
      *
-     * @param postId the ID of the post to get likes for
+     * @param postId the ID of the post to retrieve likes for
      * @return a list of likes for the specified post
      * @throws SQLException if a database access error occurs
      */

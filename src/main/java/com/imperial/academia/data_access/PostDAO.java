@@ -1,4 +1,4 @@
-package com.imperial.academia.data_access.post;
+package com.imperial.academia.data_access;
 
 import com.imperial.academia.entity.post.Post;
 import com.imperial.academia.entity.post.PostLike;
@@ -7,13 +7,24 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of the PostDAI interface using JDBC for data access.
+ */
 public class PostDAO implements PostDAI {
     private Connection conn;
 
+    /**
+     * Constructs a new PostDAO with the specified database connection.
+     *
+     * @param conn the database connection
+     */
     public PostDAO(Connection conn) {
         this.conn = conn;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void insert(Post post) throws SQLException {
         String sql = "INSERT INTO posts (title, content, author_id, board_id, last_modified_date) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
@@ -32,6 +43,9 @@ public class PostDAO implements PostDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Post get(int id) throws SQLException {
         String sql = "SELECT * FROM posts WHERE post_id = ?";
@@ -55,6 +69,9 @@ public class PostDAO implements PostDAI {
         return post;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Post> getAll() throws SQLException {
         String sql = "SELECT * FROM posts";
@@ -76,6 +93,9 @@ public class PostDAO implements PostDAI {
         return posts;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Post> getAllSince(Timestamp timestamp) throws SQLException {
         String sql = "SELECT * FROM posts WHERE last_modified_date > ?";
@@ -99,6 +119,9 @@ public class PostDAO implements PostDAI {
         return posts;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(Post post) throws SQLException {
         String sql = "UPDATE posts SET title = ?, content = ?, author_id = ?, board_id = ?, last_modified_date = CURRENT_TIMESTAMP WHERE post_id = ?";
@@ -112,6 +135,9 @@ public class PostDAO implements PostDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(int id) throws SQLException {
         String sql = "DELETE FROM posts WHERE post_id = ?";
@@ -121,7 +147,9 @@ public class PostDAO implements PostDAI {
         }
     }
 
-    // Methods for Post Likes
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void likePost(int postId, int userId) throws SQLException {
         String sql = "INSERT INTO post_likes (user_id, post_id) VALUES (?, ?)";
@@ -132,6 +160,9 @@ public class PostDAO implements PostDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void unlikePost(int postId, int userId) throws SQLException {
         String sql = "DELETE FROM post_likes WHERE user_id = ? AND post_id = ?";
@@ -142,6 +173,9 @@ public class PostDAO implements PostDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<PostLike> getPostLikes(int postId) throws SQLException {
         String sql = "SELECT * FROM post_likes WHERE post_id = ?";

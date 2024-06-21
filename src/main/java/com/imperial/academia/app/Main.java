@@ -18,9 +18,13 @@ import java.sql.SQLException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Main class for the Academia Imperial application.
+ * This class sets up the main application window and initializes different views.
+ */
 public class Main {
     public static void main(String[] args) throws SQLException {
-        // The main application window.
+        // Create the main application window
         JFrame application = new JFrame("Academia Imperial");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -32,7 +36,7 @@ public class Main {
             }
         });
 
-        // icon logo
+        // Set the application icon
         try {
             Image logo = ImageIO.read(new File("resources/logo.png"));
             application.setIconImage(logo);
@@ -40,18 +44,22 @@ public class Main {
             e.printStackTrace();
         }
 
+        // Set up a CardLayout for switching between different views
         CardLayout cardLayout = new CardLayout();
-
         JPanel views = new JPanel(cardLayout);
         application.add(views);
 
+        // Initialize the ViewManagerModel
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
-        
+
+        // Initialize the view models for login and signup
         LoginViewModel loginViewModel = new LoginViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
+
+        // Initialize the service factory and create the views
         PosterViewModel posterViewModel = new PosterViewModel();
-        
+
         try {
             ServiceFactory.initialize();
             SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel);
@@ -65,17 +73,19 @@ public class Main {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        // Create and add the forum view
 
         ForumView forumView = new ForumView(viewManagerModel);
+
         views.add(forumView, forumView.viewName);
 
         // Set the initial view to "log in"
         viewManagerModel.setActiveView("log in");
         viewManagerModel.firePropertyChanged();
 
-        // Set size and center the window
-        application.setSize(800, 700); // 设置窗口大小
-        application.setLocationRelativeTo(null); // 居中显示
+        // Set the size of the application window and center it on the screen
+        application.setSize(800, 700);
+        application.setLocationRelativeTo(null);
         application.setVisible(true);
     }
 }
