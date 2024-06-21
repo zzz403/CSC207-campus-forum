@@ -1,6 +1,6 @@
 package com.imperial.academia.use_case.signup;
 
-import com.imperial.academia.data_access.user.UserDAI;
+import com.imperial.academia.service.UserService;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.entity.user.UserFactory;
 
@@ -9,12 +9,12 @@ import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
 public class SignupInteractor implements SignupInputBoundary {
-    private final UserDAI userDAO;
+    private final UserService userService;
     private final SignupOutputBoundary signupPresenter;
     private final UserFactory userFactory;
 
-    public SignupInteractor(UserDAI userDAO, SignupOutputBoundary signupPresenter, UserFactory userFactory) {
-        this.userDAO = userDAO;
+    public SignupInteractor(UserService userService, SignupOutputBoundary signupPresenter, UserFactory userFactory) {
+        this.userService = userService;
         this.signupPresenter = signupPresenter;
         this.userFactory = userFactory;
     }
@@ -25,7 +25,7 @@ public class SignupInteractor implements SignupInputBoundary {
             signupPresenter.prepareFailView(null);
             if (signupInputData.getUsername().length() <= 6) {
                 signupPresenter.prepareFailView("Username must be longer than 6 characters.");
-            } else if (userDAO.existsByUsername(signupInputData.getUsername())) {
+            } else if (userService.existsByUsername(signupInputData.getUsername())) {
                 signupPresenter.prepareFailView("User already exists.");
             } else if (signupInputData.getPassword().length() <= 6) {
                 signupPresenter.prepareFailView("Password must be longer than 6 characters.");
@@ -33,13 +33,13 @@ public class SignupInteractor implements SignupInputBoundary {
                 signupPresenter.prepareFailView("Repeat Passwords don't match.");
             } else if (!isValidEmail(signupInputData.getEmail())) {
                 signupPresenter.prepareFailView("Email is not valid.");
-            } else if (userDAO.existsByEmail(signupInputData.getEmail())) {
+            } else if (userService.existsByEmail(signupInputData.getEmail())) {
                 signupPresenter.prepareFailView("Email already used.");
             } else {
                 LocalDateTime now = LocalDateTime.now();
                 User user = userFactory.create(signupInputData.getUsername(), signupInputData.getPassword(),
                         signupInputData.getEmail(), "user", now);
-                userDAO.insert(user);
+                userService.insert(user);
                 SignupOutputData signupOutputData = new SignupOutputData(user.getUsername(), now.toString());
                 signupPresenter.prepareSuccessView(signupOutputData);
             }

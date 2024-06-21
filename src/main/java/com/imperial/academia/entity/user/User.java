@@ -10,9 +10,9 @@ public class User {
     private String role;
     private String avatarUrl;
     private Timestamp registrationDate;
+    private Timestamp lastModified;
 
-
-    public User(int id, String username, String password, String email, String role, String avatarUrl,Timestamp registrationDate) {
+    public User(int id, String username, String password, String email, String role, String avatarUrl, Timestamp registrationDate, Timestamp lastModified) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -20,6 +20,7 @@ public class User {
         this.role = role;
         this.avatarUrl = avatarUrl;
         this.registrationDate = registrationDate;
+        this.lastModified = lastModified;
     }
 
     // Getters and Setters
@@ -43,4 +44,7 @@ public class User {
 
     public Timestamp getRegistrationDate() { return registrationDate; }
     public void setRegistrationDate(Timestamp registrationDate) { this.registrationDate = registrationDate; }
+
+    public Timestamp getLastModified() { return lastModified; }
+    public void setLastModified(Timestamp lastModified) { this.lastModified = lastModified; }
 }

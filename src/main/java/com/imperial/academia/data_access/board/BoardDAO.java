@@ -1,5 +1,6 @@
 package com.imperial.academia.data_access.board;
 
+import java.sql.Timestamp;
 import com.imperial.academia.entity.board.Board;
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class BoardDAO implements BoardDAI {
 
     @Override
     public void insert(Board board) throws SQLException {
-        String sql = "INSERT INTO boards (name, description, creator_id) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO boards (name, description, creator_id, last_modified) VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, board.getName());
             pstmt.setString(2, board.getDescription());
@@ -42,7 +43,8 @@ public class BoardDAO implements BoardDAI {
                         rs.getString("name"),
                         rs.getString("description"),
                         rs.getInt("creator_id"),
-                        rs.getTimestamp("created_at")
+                        rs.getTimestamp("created_at"),
+                        rs.getTimestamp("last_modified")
                     );
                 }
             }
@@ -62,7 +64,8 @@ public class BoardDAO implements BoardDAI {
                     rs.getString("name"),
                     rs.getString("description"),
                     rs.getInt("creator_id"),
-                    rs.getTimestamp("created_at")
+                    rs.getTimestamp("created_at"),
+                    rs.getTimestamp("last_modified")
                 ));
             }
         }
@@ -70,8 +73,30 @@ public class BoardDAO implements BoardDAI {
     }
 
     @Override
+    public List<Board> getAllSince(Timestamp timestamp) throws SQLException {
+        String sql = "SELECT * FROM boards WHERE last_modified > ?";
+        List<Board> boards = new ArrayList<>();
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setTimestamp(1, timestamp);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    boards.add(new Board(
+                        rs.getInt("board_id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getInt("creator_id"),
+                        rs.getTimestamp("created_at"),
+                        rs.getTimestamp("last_modified")
+                    ));
+                }
+            }
+        }
+        return boards;
+    }
+
+    @Override
     public void update(Board board) throws SQLException {
-        String sql = "UPDATE boards SET name = ?, description = ?, creator_id = ? WHERE board_id = ?";
+        String sql = "UPDATE boards SET name = ?, description = ?, creator_id = ?, last_modified = CURRENT_TIMESTAMP WHERE board_id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, board.getName());
             pstmt.setString(2, board.getDescription());

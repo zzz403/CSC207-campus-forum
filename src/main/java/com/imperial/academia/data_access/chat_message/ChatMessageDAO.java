@@ -8,13 +8,13 @@ import java.util.List;
 public class ChatMessageDAO implements ChatMessageDAI {
     private Connection conn;
 
-    public ChatMessageDAO(Connection conn){
+    public ChatMessageDAO(Connection conn) {
         this.conn = conn;
     }
 
     @Override
     public void insert(ChatMessage chatMessage) throws SQLException {
-        String sql = "INSERT INTO chat_messages (sender_id, recipient_id, group_id, content) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO chat_messages (sender_id, recipient_id, group_id, content, last_modified) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, chatMessage.getSenderId());
             pstmt.setInt(2, chatMessage.getRecipientId());
@@ -77,8 +77,30 @@ public class ChatMessageDAO implements ChatMessageDAI {
     }
 
     @Override
+    public List<ChatMessage> getAllSince(Timestamp timestamp) throws SQLException {
+        String sql = "SELECT * FROM chat_messages WHERE timestamp > ?";
+        List<ChatMessage> chatMessages = new ArrayList<>();
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setTimestamp(1, timestamp);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    chatMessages.add(new ChatMessage(
+                        rs.getInt("message_id"),
+                        rs.getInt("sender_id"),
+                        rs.getInt("recipient_id"),
+                        rs.getInt("group_id"),
+                        rs.getString("content"),
+                        rs.getTimestamp("timestamp")
+                    ));
+                }
+            }
+        }
+        return chatMessages;
+    }
+
+    @Override
     public void update(ChatMessage chatMessage) throws SQLException {
-        String sql = "UPDATE chat_messages SET sender_id = ?, recipient_id = ?, group_id = ?, content = ? WHERE message_id = ?";
+        String sql = "UPDATE chat_messages SET sender_id = ?, recipient_id = ?, group_id = ?, content = ?, last_modified = CURRENT_TIMESTAMP WHERE message_id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, chatMessage.getSenderId());
             pstmt.setInt(2, chatMessage.getRecipientId());

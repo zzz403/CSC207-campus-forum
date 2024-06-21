@@ -19,7 +19,7 @@ public class UserDAO implements UserDAI {
             throw new SQLException("Username already exists");
         }
 
-        String sql = "INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO users (username, password, email, role, last_modified) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
@@ -78,7 +78,8 @@ public class UserDAO implements UserDAI {
                         rs.getString("email"),
                         rs.getString("role"),
                         rs.getString("avatar_url"),
-                        rs.getTimestamp("registration_date")
+                        rs.getTimestamp("registration_date"),
+                        rs.getTimestamp("last_modified")
                     );
                 }
             }
@@ -101,7 +102,8 @@ public class UserDAO implements UserDAI {
                         rs.getString("email"),
                         rs.getString("role"),
                         rs.getString("avatar_url"),
-                        rs.getTimestamp("registration_date")
+                        rs.getTimestamp("registration_date"),
+                        rs.getTimestamp("last_modified")
                     );
                 }
             }
@@ -123,7 +125,8 @@ public class UserDAO implements UserDAI {
                     rs.getString("email"),
                     rs.getString("role"),
                     rs.getString("avatar_url"),
-                    rs.getTimestamp("registration_date")
+                    rs.getTimestamp("registration_date"),
+                    rs.getTimestamp("last_modified")
                 ));
             }
         }
@@ -131,8 +134,32 @@ public class UserDAO implements UserDAI {
     }
 
     @Override
+    public List<User> getAllSince(Timestamp timestamp) throws SQLException {
+        String sql = "SELECT * FROM users WHERE last_modified > ?";
+        List<User> users = new ArrayList<>();
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setTimestamp(1, timestamp);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    users.add(new User(
+                        rs.getInt("user_id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getString("role"),
+                        rs.getString("avatar_url"),
+                        rs.getTimestamp("registration_date"),
+                        rs.getTimestamp("last_modified")
+                    ));
+                }
+            }
+        }
+        return users;
+    }
+
+    @Override
     public void update(User user) throws SQLException {
-        String sql = "UPDATE users SET username = ?, password = ?, email = ?, role = ? WHERE user_id = ?";
+        String sql = "UPDATE users SET username = ?, password = ?, email = ?, role = ?, last_modified = CURRENT_TIMESTAMP WHERE user_id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
