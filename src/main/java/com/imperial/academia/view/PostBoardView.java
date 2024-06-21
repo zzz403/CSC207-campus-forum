@@ -13,7 +13,7 @@ import com.imperial.academia.interface_adapter.postboard.PostBoardPresenter;
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
 
 public class PostBoardView extends JPanel {
-    public final String viewName = "poster";
+    public final String viewName = "post board";
     public PostBoardView(PostBoardViewModel posterViewModel, PostBoardController posterController,PostBoardPresenter posterPresenter) {
         setLayout(new BorderLayout());
 

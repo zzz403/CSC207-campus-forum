@@ -52,10 +52,9 @@ public class ForumView extends JPanel {
         postButton.setForeground(Color.WHITE);
         postButton.setFocusPainted(false);
         postButton.setPreferredSize(new Dimension(300, 40));
-        
         postButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                ((CardLayout) getParent().getLayout()).show(getParent(), "post");
+                ((CardLayout) getParent().getLayout()).show(getParent(), "post board");
             }
         });
         mainPanel.add(postButton, gbc);
@@ -102,22 +101,5 @@ public class ForumView extends JPanel {
         mainPanel.add(backButton, gbc);
 
         add(mainPanel, BorderLayout.CENTER);
-    }
-
-    private void genPostButton(JPanel mainPanel, GridBagConstraints gbc) {
-        JButton postButton = new JButton("Post");
-        postButton.setFont(new Font("Arial", Font.BOLD, 16));
-        postButton.setBackground(new Color(70, 130, 180));
-        postButton.setForeground(Color.WHITE);
-        postButton.setFocusPainted(false);
-        postButton.setPreferredSize(new Dimension(300, 40));
-        mainPanel.add(postButton, gbc);
-        postButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                viewManagerModel.setActiveView("poster");
-                viewManagerModel.firePropertyChanged();
-            }
-        });
     }
 }

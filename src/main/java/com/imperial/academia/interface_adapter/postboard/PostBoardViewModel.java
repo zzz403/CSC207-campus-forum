@@ -9,7 +9,7 @@ public class PostBoardViewModel extends ViewModel {
     // private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     
     public PostBoardViewModel(){
-        super("Poster board");
+        super("post board");
     }
 
     @Override
