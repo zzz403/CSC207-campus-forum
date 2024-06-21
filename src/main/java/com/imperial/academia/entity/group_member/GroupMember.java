@@ -1,4 +1,4 @@
-package com.imperial.academia.entity;
+package com.imperial.academia.entity.group_member;
 
 import java.sql.Timestamp;
 

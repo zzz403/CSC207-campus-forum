@@ -1,6 +1,6 @@
 package com.imperial.academia.data_access.chat_group;
 
-import com.imperial.academia.entity.ChatGroup;
+import com.imperial.academia.entity.chat_group.ChatGroup;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,13 +11,19 @@ public class ChatGroupDAO implements ChatGroupDAI {
     public ChatGroupDAO(Connection conn){
         this.conn = conn;
     }
-    
+
     @Override
     public void insert(ChatGroup chatGroup) throws SQLException {
         String sql = "INSERT INTO chat_groups (group_name) VALUES (?)";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, chatGroup.getGroupName());
             pstmt.executeUpdate();
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    chatGroup.setId(generatedKeys.getInt(1));
+                }
+            }
         }
     }
 
@@ -27,13 +33,14 @@ public class ChatGroupDAO implements ChatGroupDAI {
         ChatGroup chatGroup = null;
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                chatGroup = new ChatGroup(
-                    rs.getInt("group_id"),
-                    rs.getString("group_name"),
-                    rs.getTimestamp("creation_date")
-                );
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    chatGroup = new ChatGroup(
+                        rs.getInt("group_id"),
+                        rs.getString("group_name"),
+                        rs.getTimestamp("creation_date")
+                    );
+                }
             }
         }
         return chatGroup;
@@ -75,4 +82,3 @@ public class ChatGroupDAO implements ChatGroupDAI {
         }
     }
 }
-

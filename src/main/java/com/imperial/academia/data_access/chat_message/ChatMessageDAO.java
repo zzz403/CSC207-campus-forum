@@ -1,6 +1,6 @@
 package com.imperial.academia.data_access.chat_message;
 
-import com.imperial.academia.entity.ChatMessage;
+import com.imperial.academia.entity.chat_message.ChatMessage;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class ChatMessageDAO implements ChatMessageDAI {
     @Override
     public void insert(ChatMessage chatMessage) throws SQLException {
         String sql = "INSERT INTO chat_messages (sender_id, recipient_id, group_id, content) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, chatMessage.getSenderId());
             pstmt.setInt(2, chatMessage.getRecipientId());
             if (chatMessage.getGroupId() != null) {
@@ -25,6 +25,12 @@ public class ChatMessageDAO implements ChatMessageDAI {
             }
             pstmt.setString(4, chatMessage.getContent());
             pstmt.executeUpdate();
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    chatMessage.setId(generatedKeys.getInt(1));
+                }
+            }
         }
     }
 
@@ -34,16 +40,17 @@ public class ChatMessageDAO implements ChatMessageDAI {
         ChatMessage chatMessage = null;
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                chatMessage = new ChatMessage(
-                    rs.getInt("message_id"),
-                    rs.getInt("sender_id"),
-                    rs.getInt("recipient_id"),
-                    rs.getInt("group_id"),
-                    rs.getString("content"),
-                    rs.getTimestamp("timestamp")
-                );
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    chatMessage = new ChatMessage(
+                        rs.getInt("message_id"),
+                        rs.getInt("sender_id"),
+                        rs.getInt("recipient_id"),
+                        rs.getInt("group_id"),
+                        rs.getString("content"),
+                        rs.getTimestamp("timestamp")
+                    );
+                }
             }
         }
         return chatMessage;

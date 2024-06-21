@@ -8,14 +8,17 @@ public class User {
     private String password;
     private String email;
     private String role;
+    private String avatarUrl;
     private Timestamp registrationDate;
 
-    public User(int id, String username, String password, String email, String role, Timestamp registrationDate) {
+
+    public User(int id, String username, String password, String email, String role, String avatarUrl,Timestamp registrationDate) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
+        this.avatarUrl = avatarUrl;
         this.registrationDate = registrationDate;
     }
 
@@ -34,6 +37,9 @@ public class User {
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+
+    public String getAvatarUrl() { return avatarUrl; }
+    public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
 
     public Timestamp getRegistrationDate() { return registrationDate; }
     public void setRegistrationDate(Timestamp registrationDate) { this.registrationDate = registrationDate; }

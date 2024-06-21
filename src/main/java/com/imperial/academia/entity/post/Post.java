@@ -1,4 +1,4 @@
-package com.imperial.academia.entity;
+package com.imperial.academia.entity.post;
 
 import java.sql.Timestamp;
 

@@ -1,4 +1,4 @@
-package com.imperial.academia.entity;
+package com.imperial.academia.entity.chat_message;
 
 import java.sql.Timestamp;
 

@@ -1,6 +1,6 @@
 package com.imperial.academia.data_access.group_member;
 
-import com.imperial.academia.entity.GroupMember;
+import com.imperial.academia.entity.group_member.GroupMember;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ public class GroupMemberDAO implements GroupMemberDAI {
     public GroupMemberDAO(Connection conn){
         this.conn = conn;
     }
-    
+
     @Override
     public void insert(GroupMember groupMember) throws SQLException {
         String sql = "INSERT INTO group_members (group_id, user_id, role) VALUES (?, ?, ?)";
@@ -24,20 +24,21 @@ public class GroupMemberDAO implements GroupMemberDAI {
     }
 
     @Override
-    public GroupMember get(int id) throws SQLException {
+    public GroupMember get(int groupId, int userId) throws SQLException {
         String sql = "SELECT * FROM group_members WHERE group_id = ? AND user_id = ?";
         GroupMember groupMember = null;
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);  // Assuming group_id is the primary key for this example
-            pstmt.setInt(2, id);  // Assuming user_id is the primary key for this example
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                groupMember = new GroupMember(
-                    rs.getInt("group_id"),
-                    rs.getInt("user_id"),
-                    rs.getString("role"),
-                    rs.getTimestamp("joined_date")
-                );
+            pstmt.setInt(1, groupId);
+            pstmt.setInt(2, userId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    groupMember = new GroupMember(
+                        rs.getInt("group_id"),
+                        rs.getInt("user_id"),
+                        rs.getString("role"),
+                        rs.getTimestamp("joined_date")
+                    );
+                }
             }
         }
         return groupMember;
@@ -73,13 +74,12 @@ public class GroupMemberDAO implements GroupMemberDAI {
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public void delete(int groupId, int userId) throws SQLException {
         String sql = "DELETE FROM group_members WHERE group_id = ? AND user_id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
-            pstmt.setInt(2, id);
+            pstmt.setInt(1, groupId);
+            pstmt.setInt(2, userId);
             pstmt.executeUpdate();
         }
     }
 }
-

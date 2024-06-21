@@ -1,33 +1,111 @@
-INSERT INTO users (username, password, email, role) VALUES
-('admin', 'admin123', 'admin@imperial.academia', 'admin'),
-('johndoe', 'password123', 'john.doe@example.com', 'user'),
-('janedoe', 'password123', 'jane.doe@example.com', 'user');
+-- 插入用户数据
+INSERT INTO users (username, password, email, role, avatar_url) VALUES
+('admin', 'admin123', 'admin@imperial.academia', 'Admin', 'http://example.com/avatar/admin.png'),
+('johndoe', 'password123', 'john.doe@example.com', 'User', 'http://example.com/avatar/johndoe.png'),
+('janedoe', 'password123', 'jane.doe@example.com', 'User', 'http://example.com/avatar/janedoe.png');
 
-INSERT INTO boards (name, description) VALUES
-('General Discussion', 'Talk about anything here'),
-('Announcements', 'Official announcements and news');
+-- 插入板块数据
+INSERT INTO boards (name, description, creator_id) VALUES
+('General Discussion', 'Talk about anything here', 1),
+('Announcements', 'Official announcements and news', 1);
 
+-- 插入帖子数据
 INSERT INTO posts (title, content, author_id, board_id) VALUES
 ('Welcome to the Forum', 'This is the first post in the General Discussion board', 1, 1),
 ('New Feature Release', 'We have just released a new feature for all users', 1, 2),
 ('Hello World!', 'Just saying hello to everyone here.', 2, 1);
 
+-- 插入评论数据
 INSERT INTO comments (content, author_id, post_id, parent_comment_id) VALUES
 ('Great to be here!', 2, 1, NULL),
 ('Thanks for the update!', 3, 2, NULL),
 ('Hello John!', 3, 3, NULL);
 
+-- 插入聊天群组数据
 INSERT INTO chat_groups (group_name) VALUES
 ('Project Team'),
 ('Study Group');
 
+-- 插入聊天消息数据
 INSERT INTO chat_messages (sender_id, recipient_id, group_id, content) VALUES
 (1, 2, 1, 'Welcome to the Project Team chat!'),
 (2, 1, 1, 'Thanks! Looking forward to working with everyone.'),
 (3, 2, 2, 'Hi Jane, ready for the study session?');
 
+-- 插入群组成员数据
 INSERT INTO group_members (group_id, user_id, role) VALUES
 (1, 1, 'admin'),
 (1, 2, 'member'),
 (2, 2, 'admin'),
 (2, 3, 'member');
+
+-- 插入帖子点赞数据
+INSERT INTO post_likes (user_id, post_id) VALUES
+(2, 1),
+(3, 1),
+(3, 2);
+
+-- 插入评论点赞数据
+INSERT INTO comment_likes (user_id, comment_id) VALUES
+(1, 1),
+(2, 2),
+(3, 3);
+
+-- 插入私信数据
+INSERT INTO private_messages (sender_id, recipient_id, content) VALUES
+(1, 2, 'Hello John! How are you?'),
+(2, 1, 'Hi Admin, I am good! Thanks for asking.'),
+(3, 2, 'Hi John, do you need any help?');
+
+-- 插入用户关注数据
+INSERT INTO user_follows (follower_id, followee_id) VALUES
+(2, 1),
+(3, 1),
+(3, 2);
+
+-- 插入文件数据
+INSERT INTO files (uploader_id, post_id, comment_id, file_url) VALUES
+(1, 1, NULL, 'http://example.com/files/post1_file1.png'),
+(2, 2, NULL, 'http://example.com/files/post2_file1.png'),
+(3, 1, 1, 'http://example.com/files/comment1_file1.png');
+
+-- 插入通知数据
+INSERT INTO notifications (user_id, type, reference_id) VALUES
+(2, 'like', 1),
+(3, 'comment', 2),
+(1, 'follow', 3);
+
+-- 插入角色数据
+INSERT INTO roles (name, description) VALUES
+('User', 'Regular user with limited permissions'),
+('Moderator', 'User with moderation permissions'),
+('Admin', 'Administrator with full permissions');
+
+-- 插入用户角色数据
+INSERT INTO user_roles (user_id, role_id) VALUES
+(1, 3), -- Admin
+(2, 1), -- User
+(3, 1); -- User
+
+-- 插入权限数据
+INSERT INTO permissions (name, description) VALUES
+('post:create', 'Permission to create a post'),
+('post:read', 'Permission to read posts'),
+('post:delete', 'Permission to delete posts'),
+('comment:create', 'Permission to create a comment'),
+('comment:read', 'Permission to read comments'),
+('comment:delete', 'Permission to delete comments'),
+('like:create', 'Permission to like a post or comment'),
+('user:manage', 'Permission to manage users');
+
+-- 分配权限到角色
+INSERT INTO role_permissions (role_id, permission_id) VALUES
+(1, 1), (1, 2), (1, 4), (1, 5), (1, 7), -- User permissions
+(2, 1), (2, 2), (2, 3), (2, 4), (2, 5), (2, 6), (2, 7), -- Moderator permissions
+(3, 1), (3, 2), (3, 3), (3, 4), (3, 5), (3, 6), (3, 7), (3, 8); -- Admin permissions
+
+-- 插入用户统计数据
+INSERT INTO user_statistics (user_id, login_count, post_count, comment_count) VALUES
+(1, 10, 5, 3),
+(2, 8, 4, 2),
+(3, 5, 2, 1);

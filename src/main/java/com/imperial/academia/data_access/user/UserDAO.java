@@ -18,7 +18,7 @@ public class UserDAO implements UserDAI {
         if (existsByUsername(user.getUsername())) {
             throw new SQLException("Username already exists");
         }
-        
+
         String sql = "INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, user.getUsername());
@@ -77,6 +77,7 @@ public class UserDAO implements UserDAI {
                         rs.getString("password"),
                         rs.getString("email"),
                         rs.getString("role"),
+                        rs.getString("avatar_url"),
                         rs.getTimestamp("registration_date")
                     );
                 }
@@ -91,16 +92,18 @@ public class UserDAO implements UserDAI {
         User user = null;
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                user = new User(
-                    rs.getInt("user_id"),
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("email"),
-                    rs.getString("role"),
-                    rs.getTimestamp("registration_date")
-                );
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    user = new User(
+                        rs.getInt("user_id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getString("role"),
+                        rs.getString("avatar_url"),
+                        rs.getTimestamp("registration_date")
+                    );
+                }
             }
         }
         return user;
@@ -119,6 +122,7 @@ public class UserDAO implements UserDAI {
                     rs.getString("password"),
                     rs.getString("email"),
                     rs.getString("role"),
+                    rs.getString("avatar_url"),
                     rs.getTimestamp("registration_date")
                 ));
             }
