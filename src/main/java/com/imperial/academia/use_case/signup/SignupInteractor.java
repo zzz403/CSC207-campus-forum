@@ -8,17 +8,32 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
+/**
+ * Interactor class for handling the signup use case.
+ */
 public class SignupInteractor implements SignupInputBoundary {
     private final UserService userService;
     private final SignupOutputBoundary signupPresenter;
     private final UserFactory userFactory;
 
+    /**
+     * Constructs a SignupInteractor with the given dependencies.
+     *
+     * @param userService the user service
+     * @param signupPresenter the signup presenter
+     * @param userFactory the user factory
+     */
     public SignupInteractor(UserService userService, SignupOutputBoundary signupPresenter, UserFactory userFactory) {
         this.userService = userService;
         this.signupPresenter = signupPresenter;
         this.userFactory = userFactory;
     }
 
+    /**
+     * Executes the signup use case.
+     *
+     * @param signupInputData the input data for signup
+     */
     @Override
     public void execute(SignupInputData signupInputData) {
         try {
@@ -38,7 +53,7 @@ public class SignupInteractor implements SignupInputBoundary {
             } else {
                 LocalDateTime now = LocalDateTime.now();
                 User user = userFactory.create(signupInputData.getUsername(), signupInputData.getPassword(),
-                        signupInputData.getEmail(), "user", now);
+                        signupInputData.getEmail(), now);
                 userService.insert(user);
                 SignupOutputData signupOutputData = new SignupOutputData(user.getUsername(), now.toString());
                 signupPresenter.prepareSuccessView(signupOutputData);
@@ -48,6 +63,12 @@ public class SignupInteractor implements SignupInputBoundary {
         }
     }
 
+    /**
+     * Validates the given email address.
+     *
+     * @param email the email address to validate
+     * @return true if the email is valid, false otherwise
+     */
     private boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pat = Pattern.compile(emailRegex);
@@ -55,7 +76,7 @@ public class SignupInteractor implements SignupInputBoundary {
     }
 
     @Override
-    public void navigateToLogin(){
+    public void navigateToLogin() {
         signupPresenter.navigateToLogin();
     }
 }

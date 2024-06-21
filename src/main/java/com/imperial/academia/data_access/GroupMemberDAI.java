@@ -1,13 +1,14 @@
-package com.imperial.academia.service;
+package com.imperial.academia.data_access;
 
 import com.imperial.academia.entity.group_member.GroupMember;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * Interface for Group Member Service.
+ * Interface for Data Access Object for GroupMember entities.
  */
-public interface GroupMemberService {
+public interface GroupMemberDAI {
     /**
      * Inserts a new group member into the database.
      *
@@ -17,11 +18,11 @@ public interface GroupMemberService {
     void insert(GroupMember groupMember) throws SQLException;
 
     /**
-     * Retrieves a group member by its group ID and user ID.
+     * Retrieves a group member by group ID and user ID.
      *
-     * @param groupId the ID of the group
-     * @param userId the ID of the user
-     * @return the group member with the specified IDs, or null if not found
+     * @param groupId the group ID
+     * @param userId the user ID
+     * @return the group member with the specified group ID and user ID, or null if not found
      * @throws SQLException if a database access error occurs
      */
     GroupMember get(int groupId, int userId) throws SQLException;
@@ -35,6 +36,15 @@ public interface GroupMemberService {
     List<GroupMember> getAll() throws SQLException;
 
     /**
+     * Retrieves all group members that have been modified since a given timestamp.
+     *
+     * @param timestamp the timestamp to compare against
+     * @return a list of group members modified since the specified timestamp
+     * @throws SQLException if a database access error occurs
+     */
+    List<GroupMember> getAllSince(Timestamp timestamp) throws SQLException;
+
+    /**
      * Updates an existing group member in the database.
      *
      * @param groupMember the group member to update
@@ -43,10 +53,10 @@ public interface GroupMemberService {
     void update(GroupMember groupMember) throws SQLException;
 
     /**
-     * Deletes a group member by its group ID and user ID.
+     * Deletes a group member by group ID and user ID.
      *
-     * @param groupId the ID of the group
-     * @param userId the ID of the user
+     * @param groupId the group ID
+     * @param userId the user ID
      * @throws SQLException if a database access error occurs
      */
     void delete(int groupId, int userId) throws SQLException;

@@ -1,15 +1,16 @@
-package com.imperial.academia.service;
+package com.imperial.academia.data_access;
 
 import com.imperial.academia.entity.comment.Comment;
 import com.imperial.academia.entity.comment.CommentLike;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * Interface for Comment Service.
+ * Interface for Data Access Object for Comment entities.
  */
-public interface CommentService {
+public interface CommentDAI {
     /**
      * Inserts a new comment into the database.
      *
@@ -36,6 +37,15 @@ public interface CommentService {
     List<Comment> getAll() throws SQLException;
 
     /**
+     * Retrieves all comments that have been modified since a given timestamp.
+     *
+     * @param timestamp the timestamp to compare against
+     * @return a list of comments modified since the specified timestamp
+     * @throws SQLException if a database access error occurs
+     */
+    List<Comment> getAllSince(Timestamp timestamp) throws SQLException;
+
+    /**
      * Updates an existing comment in the database.
      *
      * @param comment the comment to update
@@ -51,8 +61,10 @@ public interface CommentService {
      */
     void delete(int id) throws SQLException;
 
+    // Methods for Comment Likes
+
     /**
-     * Likes a comment by its ID and user ID.
+     * Likes a comment.
      *
      * @param commentId the ID of the comment to like
      * @param userId the ID of the user who likes the comment
@@ -61,7 +73,7 @@ public interface CommentService {
     void likeComment(int commentId, int userId) throws SQLException;
 
     /**
-     * Unlikes a comment by its ID and user ID.
+     * Unlikes a comment.
      *
      * @param commentId the ID of the comment to unlike
      * @param userId the ID of the user who unlikes the comment
@@ -72,7 +84,7 @@ public interface CommentService {
     /**
      * Retrieves all likes for a specific comment.
      *
-     * @param commentId the ID of the comment to get likes for
+     * @param commentId the ID of the comment to retrieve likes for
      * @return a list of likes for the specified comment
      * @throws SQLException if a database access error occurs
      */

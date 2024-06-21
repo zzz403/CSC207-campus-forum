@@ -1,13 +1,14 @@
-package com.imperial.academia.service;
+package com.imperial.academia.data_access;
 
-import com.imperial.academia.entity.chat_message.ChatMessage;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
+import com.imperial.academia.entity.chat_message.ChatMessage;
 
 /**
- * Interface for Chat Message Service.
+ * Interface for Data Access Object for ChatMessage entities.
  */
-public interface ChatMessageService {
+public interface ChatMessageDAI {
     /**
      * Inserts a new chat message into the database.
      *
@@ -32,6 +33,15 @@ public interface ChatMessageService {
      * @throws SQLException if a database access error occurs
      */
     List<ChatMessage> getAll() throws SQLException;
+
+    /**
+     * Retrieves all chat messages that have been created since a given timestamp.
+     *
+     * @param timestamp the timestamp to compare against
+     * @return a list of chat messages created since the specified timestamp
+     * @throws SQLException if a database access error occurs
+     */
+    List<ChatMessage> getAllSince(Timestamp timestamp) throws SQLException;
 
     /**
      * Updates an existing chat message in the database.

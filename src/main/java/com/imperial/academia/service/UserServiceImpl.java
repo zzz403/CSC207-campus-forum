@@ -1,27 +1,43 @@
 package com.imperial.academia.service;
 
 import com.imperial.academia.cache.UserCache;
-import com.imperial.academia.data_access.user.UserDAI;
+import com.imperial.academia.data_access.UserDAI;
 import com.imperial.academia.entity.user.User;
 
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Implementation of the UserService interface.
+ * Uses caching to reduce database access.
+ */
 public class UserServiceImpl implements UserService {
     private UserCache userCache;
     private UserDAI userDAO;
 
+    /**
+     * Constructs a new UserServiceImpl with the specified cache and DAO.
+     *
+     * @param userCache the cache to use
+     * @param userDAO the DAO to use
+     */
     public UserServiceImpl(UserCache userCache, UserDAI userDAO) {
         this.userCache = userCache;
         this.userDAO = userDAO;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void insert(User user) throws SQLException {
         userDAO.insert(user);
         userCache.setUser("user:" + user.getId(), user);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean existsByUsername(String username) throws SQLException {
         if (userCache.exists("username:" + username)) {
@@ -34,6 +50,9 @@ public class UserServiceImpl implements UserService {
         return exists;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean existsByEmail(String email) throws SQLException {
         if (userCache.exists("email:" + email)) {
@@ -47,6 +66,9 @@ public class UserServiceImpl implements UserService {
         return exists;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User getByUsername(String username) throws SQLException {
         User user = userCache.getUser("username:" + username);
@@ -59,6 +81,9 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User get(int id) throws SQLException {
         User user = userCache.getUser("user:" + id);
@@ -71,6 +96,9 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> getAll() throws SQLException {
         List<User> users = userCache.getUsers("users:all");
@@ -81,12 +109,18 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(User user) throws SQLException {
         userDAO.update(user);
         userCache.setUser("user:" + user.getId(), user);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(int id) throws SQLException {
         userDAO.delete(id);

@@ -1,17 +1,28 @@
-package com.imperial.academia.data_access.chat_group;
+package com.imperial.academia.data_access;
 
 import com.imperial.academia.entity.chat_group.ChatGroup;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of the ChatGroupDAI interface using JDBC for data access.
+ */
 public class ChatGroupDAO implements ChatGroupDAI {
     private Connection conn;
 
-    public ChatGroupDAO(Connection conn){
+    /**
+     * Constructs a new ChatGroupDAO with the specified database connection.
+     *
+     * @param conn the database connection
+     */
+    public ChatGroupDAO(Connection conn) {
         this.conn = conn;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void insert(ChatGroup chatGroup) throws SQLException {
         String sql = "INSERT INTO chat_groups (group_name, last_modified) VALUES (?, CURRENT_TIMESTAMP)";
@@ -27,6 +38,9 @@ public class ChatGroupDAO implements ChatGroupDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ChatGroup get(int id) throws SQLException {
         String sql = "SELECT * FROM chat_groups WHERE group_id = ?";
@@ -47,6 +61,9 @@ public class ChatGroupDAO implements ChatGroupDAI {
         return chatGroup;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<ChatGroup> getAll() throws SQLException {
         String sql = "SELECT * FROM chat_groups";
@@ -65,6 +82,9 @@ public class ChatGroupDAO implements ChatGroupDAI {
         return chatGroups;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<ChatGroup> getAllSince(Timestamp timestamp) throws SQLException {
         String sql = "SELECT * FROM chat_groups WHERE last_modified > ?";
@@ -85,6 +105,9 @@ public class ChatGroupDAO implements ChatGroupDAI {
         return chatGroups;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(ChatGroup chatGroup) throws SQLException {
         String sql = "UPDATE chat_groups SET group_name = ?, last_modified = CURRENT_TIMESTAMP WHERE group_id = ?";
@@ -95,6 +118,9 @@ public class ChatGroupDAO implements ChatGroupDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(int id) throws SQLException {
         String sql = "DELETE FROM chat_groups WHERE group_id = ?";
