@@ -1,24 +1,40 @@
 package com.imperial.academia.use_case.login;
 
 import com.imperial.academia.session.SessionManager;
-import com.imperial.academia.data_access.remember_me.RememberMeDAI;
 import com.imperial.academia.service.UserService;
+import com.imperial.academia.data_access.RememberMeDAI;
 import com.imperial.academia.entity.user.User;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * The LoginInteractor class implements the LoginInputBoundary interface and
+ * handles the business logic for the login process.
+ */
 public class LoginInteractor implements LoginInputBoundary {
     private final UserService userService;
     private final LoginOutputBoundary loginPresenter;
     private final RememberMeDAI rememberMeDAO;
 
+    /**
+     * Constructs a LoginInteractor with the specified UserService, LoginOutputBoundary, and RememberMeDAI.
+     * 
+     * @param userService The user service for user operations.
+     * @param loginPresenter The login presenter to present the results.
+     * @param rememberMeDAO The remember me DAO for managing saved credentials.
+     */
     public LoginInteractor(UserService userService, LoginOutputBoundary loginPresenter, RememberMeDAI rememberMeDAO) {
         this.userService = userService;
         this.loginPresenter = loginPresenter;
         this.rememberMeDAO = rememberMeDAO;
     }
 
+    /**
+     * Executes the login process with the provided login input data.
+     * 
+     * @param loginInputData The input data for the login process.
+     */
     @Override
     public void execute(LoginInputData loginInputData) {
         try {
@@ -61,18 +77,39 @@ public class LoginInteractor implements LoginInputBoundary {
         loginPresenter.prepareSuccessView(loginOutputData);
     }
 
+    /**
+     * Saves the provided credentials for future logins.
+     * 
+     * @param username The username to be saved.
+     * @param password The password to be saved.
+     * @throws IOException If an I/O error occurs while saving the credentials.
+     */
     public void saveCredentials(String username, String password) throws IOException {
         rememberMeDAO.saveCredentials(username, password);
     }
 
+    /**
+     * Loads the saved credentials, if available.
+     * 
+     * @return An array containing the username and password.
+     * @throws IOException If an I/O error occurs while loading the credentials.
+     */
     public String[] loadCredentials() throws IOException {
         return rememberMeDAO.loadCredentials();
     }
 
+    /**
+     * Clears the saved credentials.
+     * 
+     * @throws IOException If an I/O error occurs while clearing the credentials.
+     */
     public void clearCredentials() throws IOException {
         rememberMeDAO.clearCredentials();
     }
 
+    /**
+     * Navigates to the signup view.
+     */
     @Override
     public void navigateToSignup() {
         loginPresenter.navigateToSignup();

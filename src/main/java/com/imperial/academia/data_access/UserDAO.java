@@ -1,4 +1,4 @@
-package com.imperial.academia.data_access.user;
+package com.imperial.academia.data_access;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -6,13 +6,24 @@ import java.util.List;
 
 import com.imperial.academia.entity.user.User;
 
+/**
+ * Implementation of the UserDAI interface using JDBC for data access.
+ */
 public class UserDAO implements UserDAI {
     private Connection conn;
 
+    /**
+     * Constructs a new UserDAO with the specified database connection.
+     *
+     * @param conn the database connection
+     */
     public UserDAO(Connection conn){
         this.conn = conn;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void insert(User user) throws SQLException {
         if (existsByUsername(user.getUsername())) {
@@ -35,6 +46,9 @@ public class UserDAO implements UserDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean existsByUsername(String username) throws SQLException {
         String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
@@ -49,6 +63,9 @@ public class UserDAO implements UserDAI {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean existsByEmail(String email) throws SQLException {
         String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
@@ -63,6 +80,9 @@ public class UserDAO implements UserDAI {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User getByUsername(String username) throws SQLException {
         String sql = "SELECT * FROM users WHERE username = ?";
@@ -87,6 +107,9 @@ public class UserDAO implements UserDAI {
         return user;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User get(int id) throws SQLException {
         String sql = "SELECT * FROM users WHERE user_id = ?";
@@ -111,6 +134,9 @@ public class UserDAO implements UserDAI {
         return user;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> getAll() throws SQLException {
         String sql = "SELECT * FROM users";
@@ -133,6 +159,9 @@ public class UserDAO implements UserDAI {
         return users;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> getAllSince(Timestamp timestamp) throws SQLException {
         String sql = "SELECT * FROM users WHERE last_modified > ?";
@@ -157,6 +186,9 @@ public class UserDAO implements UserDAI {
         return users;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(User user) throws SQLException {
         String sql = "UPDATE users SET username = ?, password = ?, email = ?, role = ?, last_modified = CURRENT_TIMESTAMP WHERE user_id = ?";
@@ -170,6 +202,9 @@ public class UserDAO implements UserDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(int id) throws SQLException {
         String sql = "DELETE FROM users WHERE user_id = ?";

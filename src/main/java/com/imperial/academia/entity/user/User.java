@@ -2,6 +2,9 @@ package com.imperial.academia.entity.user;
 
 import java.sql.Timestamp;
 
+/**
+ * The User class represents a user entity with relevant details.
+ */
 public class User {
     private int id;
     private String username;
@@ -12,6 +15,18 @@ public class User {
     private Timestamp registrationDate;
     private Timestamp lastModified;
 
+    /**
+     * Constructs a new User with the specified details.
+     * 
+     * @param id The unique identifier of the user.
+     * @param username The username of the user.
+     * @param password The password of the user.
+     * @param email The email address of the user.
+     * @param role The role of the user (e.g., 'user', 'admin').
+     * @param avatarUrl The URL of the user's avatar.
+     * @param registrationDate The timestamp when the user registered.
+     * @param lastModified The timestamp when the user's details were last modified.
+     */
     public User(int id, String username, String password, String email, String role, String avatarUrl, Timestamp registrationDate, Timestamp lastModified) {
         this.id = id;
         this.username = username;
@@ -24,27 +39,148 @@ public class User {
     }
 
     // Getters and Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
 
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+    /**
+     * Gets the unique identifier of the user.
+     * 
+     * @return The unique identifier of the user.
+     */
+    public int getId() { 
+        return id; 
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    /**
+     * Sets the unique identifier of the user.
+     * 
+     * @param id The unique identifier of the user.
+     */
+    public void setId(int id) { 
+        this.id = id; 
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    /**
+     * Gets the username of the user.
+     * 
+     * @return The username of the user.
+     */
+    public String getUsername() { 
+        return username; 
+    }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    /**
+     * Sets the username of the user.
+     * 
+     * @param username The username of the user.
+     */
+    public void setUsername(String username) { 
+        this.username = username; 
+    }
 
-    public String getAvatarUrl() { return avatarUrl; }
-    public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
+    /**
+     * Gets the password of the user.
+     * 
+     * @return The password of the user.
+     */
+    public String getPassword() { 
+        return password; 
+    }
 
-    public Timestamp getRegistrationDate() { return registrationDate; }
-    public void setRegistrationDate(Timestamp registrationDate) { this.registrationDate = registrationDate; }
+    /**
+     * Sets the password of the user.
+     * 
+     * @param password The password of the user.
+     */
+    public void setPassword(String password) { 
+        this.password = password; 
+    }
 
-    public Timestamp getLastModified() { return lastModified; }
-    public void setLastModified(Timestamp lastModified) { this.lastModified = lastModified; }
+    /**
+     * Gets the email address of the user.
+     * 
+     * @return The email address of the user.
+     */
+    public String getEmail() { 
+        return email; 
+    }
+
+    /**
+     * Sets the email address of the user.
+     * 
+     * @param email The email address of the user.
+     */
+    public void setEmail(String email) { 
+        this.email = email; 
+    }
+
+    /**
+     * Gets the role of the user.
+     * 
+     * @return The role of the user.
+     */
+    public String getRole() { 
+        return role; 
+    }
+
+    /**
+     * Sets the role of the user.
+     * 
+     * @param role The role of the user.
+     */
+    public void setRole(String role) { 
+        this.role = role; 
+    }
+
+    /**
+     * Gets the URL of the user's avatar.
+     * 
+     * @return The URL of the user's avatar.
+     */
+    public String getAvatarUrl() { 
+        return avatarUrl; 
+    }
+
+    /**
+     * Sets the URL of the user's avatar.
+     * 
+     * @param avatarUrl The URL of the user's avatar.
+     */
+    public void setAvatarUrl(String avatarUrl) { 
+        this.avatarUrl = avatarUrl; 
+    }
+
+    /**
+     * Gets the timestamp when the user registered.
+     * 
+     * @return The timestamp when the user registered.
+     */
+    public Timestamp getRegistrationDate() { 
+        return registrationDate; 
+    }
+
+    /**
+     * Sets the timestamp when the user registered.
+     * 
+     * @param registrationDate The timestamp when the user registered.
+     */
+    public void setRegistrationDate(Timestamp registrationDate) { 
+        this.registrationDate = registrationDate; 
+    }
+
+    /**
+     * Gets the timestamp when the user's details were last modified.
+     * 
+     * @return The timestamp when the user's details were last modified.
+     */
+    public Timestamp getLastModified() { 
+        return lastModified; 
+    }
+
+    /**
+     * Sets the timestamp when the user's details were last modified.
+     * 
+     * @param lastModified The timestamp when the user's details were last modified.
+     */
+    public void setLastModified(Timestamp lastModified) { 
+        this.lastModified = lastModified; 
+    }
 }

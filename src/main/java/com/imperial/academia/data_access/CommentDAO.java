@@ -1,4 +1,4 @@
-package com.imperial.academia.data_access.comment;
+package com.imperial.academia.data_access;
 
 import com.imperial.academia.entity.comment.Comment;
 import com.imperial.academia.entity.comment.CommentLike;
@@ -7,13 +7,24 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of the CommentDAI interface using JDBC for data access.
+ */
 public class CommentDAO implements CommentDAI {
     private Connection conn;
 
+    /**
+     * Constructs a new CommentDAO with the specified database connection.
+     *
+     * @param conn the database connection
+     */
     public CommentDAO(Connection conn) {
         this.conn = conn;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void insert(Comment comment) throws SQLException {
         String sql = "INSERT INTO comments (content, author_id, post_id, parent_comment_id, last_modified) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
@@ -36,6 +47,9 @@ public class CommentDAO implements CommentDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Comment get(int id) throws SQLException {
         String sql = "SELECT * FROM comments WHERE comment_id = ?";
@@ -59,6 +73,9 @@ public class CommentDAO implements CommentDAI {
         return comment;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Comment> getAll() throws SQLException {
         String sql = "SELECT * FROM comments";
@@ -80,6 +97,9 @@ public class CommentDAO implements CommentDAI {
         return comments;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Comment> getAllSince(Timestamp timestamp) throws SQLException {
         String sql = "SELECT * FROM comments WHERE last_modified > ?";
@@ -103,6 +123,9 @@ public class CommentDAO implements CommentDAI {
         return comments;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(Comment comment) throws SQLException {
         String sql = "UPDATE comments SET content = ?, author_id = ?, post_id = ?, parent_comment_id = ?, last_modified = CURRENT_TIMESTAMP WHERE comment_id = ?";
@@ -120,6 +143,9 @@ public class CommentDAO implements CommentDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(int id) throws SQLException {
         String sql = "DELETE FROM comments WHERE comment_id = ?";
@@ -130,6 +156,10 @@ public class CommentDAO implements CommentDAI {
     }
 
     // Methods for Comment Likes
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void likeComment(int commentId, int userId) throws SQLException {
         String sql = "INSERT INTO comment_likes (user_id, comment_id) VALUES (?, ?)";
@@ -140,6 +170,9 @@ public class CommentDAO implements CommentDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void unlikeComment(int commentId, int userId) throws SQLException {
         String sql = "DELETE FROM comment_likes WHERE user_id = ? AND comment_id = ?";
@@ -150,6 +183,9 @@ public class CommentDAO implements CommentDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<CommentLike> getCommentLikes(int commentId) throws SQLException {
         String sql = "SELECT * FROM comment_likes WHERE comment_id = ?";

@@ -1,17 +1,28 @@
-package com.imperial.academia.data_access.chat_message;
+package com.imperial.academia.data_access;
 
 import com.imperial.academia.entity.chat_message.ChatMessage;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of the ChatMessageDAI interface using JDBC for data access.
+ */
 public class ChatMessageDAO implements ChatMessageDAI {
     private Connection conn;
 
+    /**
+     * Constructs a new ChatMessageDAO with the specified database connection.
+     *
+     * @param conn the database connection
+     */
     public ChatMessageDAO(Connection conn) {
         this.conn = conn;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void insert(ChatMessage chatMessage) throws SQLException {
         String sql = "INSERT INTO chat_messages (sender_id, recipient_id, group_id, content, last_modified) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
@@ -34,6 +45,9 @@ public class ChatMessageDAO implements ChatMessageDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ChatMessage get(int id) throws SQLException {
         String sql = "SELECT * FROM chat_messages WHERE message_id = ?";
@@ -56,6 +70,9 @@ public class ChatMessageDAO implements ChatMessageDAI {
         return chatMessage;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<ChatMessage> getAll() throws SQLException {
         String sql = "SELECT * FROM chat_messages";
@@ -76,6 +93,9 @@ public class ChatMessageDAO implements ChatMessageDAI {
         return chatMessages;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<ChatMessage> getAllSince(Timestamp timestamp) throws SQLException {
         String sql = "SELECT * FROM chat_messages WHERE timestamp > ?";
@@ -98,6 +118,9 @@ public class ChatMessageDAO implements ChatMessageDAI {
         return chatMessages;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(ChatMessage chatMessage) throws SQLException {
         String sql = "UPDATE chat_messages SET sender_id = ?, recipient_id = ?, group_id = ?, content = ?, last_modified = CURRENT_TIMESTAMP WHERE message_id = ?";
@@ -115,6 +138,9 @@ public class ChatMessageDAO implements ChatMessageDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(int id) throws SQLException {
         String sql = "DELETE FROM chat_messages WHERE message_id = ?";

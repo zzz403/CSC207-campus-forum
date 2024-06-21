@@ -8,25 +8,40 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * H2Setup is a utility class for setting up an H2 database.
+ * It connects to the database, drops existing tables if they exist,
+ * creates new tables, and inserts initial data from a file.
+ */
 public class H2Setup {
+    // JDBC driver name and database URL
     static final String JDBC_DRIVER = "org.h2.Driver";
     static final String DB_URL = "jdbc:h2:./database/academia_imperial";
+    // Database credentials
     static final String USER = "sa";
     static final String PASS = "";
+    // File path for initial data
     static final String FILE_PATH = "./database/example_data.txt";
 
+    /**
+     * The main method to set up the H2 database.
+     * @param args Command line arguments
+     */
     public static void main(String[] args) {
         Connection conn = null;
         Statement stmt = null;
         BufferedReader reader = null;
 
         try {
+            // Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
+            // Open a connection
             System.out.println("Connecting to H2 database...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = conn.createStatement();
-            
+
+            // Drop existing tables
             System.out.println("Dropping existing tables if they exist...");
             String[] dropTables = {
                 "DROP TABLE IF EXISTS users",
@@ -46,10 +61,12 @@ public class H2Setup {
                 "DROP TABLE IF EXISTS user_statistics"
             };
 
+            // Execute drop table statements
             for (String dropTable : dropTables) {
                 stmt.executeUpdate(dropTable);
             }
 
+            // Create new tables
             System.out.println("Creating tables in the H2 database...");
 
             String createUsersTable = "CREATE TABLE users (" +
@@ -267,6 +284,7 @@ public class H2Setup {
             String line;
             StringBuilder sqlBuilder = new StringBuilder();
 
+            // Read and execute SQL statements from file
             while ((line = reader.readLine()) != null) {
                 sqlBuilder.append(line);
                 if (line.trim().endsWith(";")) {
@@ -281,6 +299,7 @@ public class H2Setup {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            // Clean up resources
             try {
                 if (reader != null) reader.close();
                 if (stmt != null) stmt.close();

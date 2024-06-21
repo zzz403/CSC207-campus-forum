@@ -16,33 +16,48 @@ import com.imperial.academia.view.SignupView;
 import javax.swing.*;
 import java.sql.SQLException;
 
+/**
+ * Factory class for creating the Signup use case and its related components.
+ */
 public class SignupUseCaseFactory {
 
     /** Prevent instantiation. */
     private SignupUseCaseFactory() {}
 
+    /**
+     * Creates and returns a SignupView.
+     *
+     * @param viewManagerModel the view manager model
+     * @param loginViewModel the login view model
+     * @param signupViewModel the signup view model
+     * @return the signup view
+     * @throws ClassNotFoundException if the UserDAO class is not found
+     */
     public static SignupView create(ViewManagerModel viewManagerModel, LoginViewModel loginViewModel, SignupViewModel signupViewModel) throws ClassNotFoundException {
-
         try {
             SignupController signupController = createUserSignupUseCase(viewManagerModel, signupViewModel, loginViewModel);
             return new SignupView(signupController, signupViewModel);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
         }
-
         return null;
     }
 
+    /**
+     * Creates the SignupController and its dependencies.
+     *
+     * @param viewManagerModel the view manager model
+     * @param signupViewModel the signup view model
+     * @param loginViewModel the login view model
+     * @return the signup controller
+     * @throws SQLException if a database access error occurs
+     * @throws ClassNotFoundException if the UserDAO class is not found
+     */
     private static SignupController createUserSignupUseCase(ViewManagerModel viewManagerModel, SignupViewModel signupViewModel, LoginViewModel loginViewModel) throws SQLException, ClassNotFoundException {
         UserService userService = ServiceFactory.getUserService();
-
-        // Notice how we pass this method's parameters to the Presenter.
         SignupOutputBoundary signupOutputBoundary = new SignupPresenter(viewManagerModel, signupViewModel, loginViewModel);
-
         UserFactory userFactory = new CommonUserFactory();
-
-        SignupInputBoundary userSignupInteractor = new SignupInteractor(
-                userService, signupOutputBoundary, userFactory);
+        SignupInputBoundary userSignupInteractor = new SignupInteractor(userService, signupOutputBoundary, userFactory);
 
         return new SignupController(userSignupInteractor);
     }

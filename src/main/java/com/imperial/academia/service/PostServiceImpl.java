@@ -1,28 +1,44 @@
 package com.imperial.academia.service;
 
 import com.imperial.academia.cache.PostCache;
-import com.imperial.academia.data_access.post.PostDAI;
+import com.imperial.academia.data_access.PostDAI;
 import com.imperial.academia.entity.post.Post;
 import com.imperial.academia.entity.post.PostLike;
 
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Implementation of the PostService interface.
+ * Uses caching to reduce database access.
+ */
 public class PostServiceImpl implements PostService {
     private PostCache postCache;
     private PostDAI postDAO;
 
+    /**
+     * Constructs a new PostServiceImpl with the specified cache and DAO.
+     *
+     * @param postCache the cache to use
+     * @param postDAO the DAO to use
+     */
     public PostServiceImpl(PostCache postCache, PostDAI postDAO) {
         this.postCache = postCache;
         this.postDAO = postDAO;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void insert(Post post) throws SQLException {
         postDAO.insert(post);
         postCache.setPost("post:" + post.getId(), post);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Post get(int id) throws SQLException {
         Post post = postCache.getPost("post:" + id);
@@ -35,6 +51,9 @@ public class PostServiceImpl implements PostService {
         return post;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Post> getAll() throws SQLException {
         List<Post> posts = postCache.getPosts("posts:all");
@@ -45,31 +64,45 @@ public class PostServiceImpl implements PostService {
         return posts;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(Post post) throws SQLException {
         postDAO.update(post);
         postCache.setPost("post:" + post.getId(), post);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(int id) throws SQLException {
         postDAO.delete(id);
         postCache.deletePost("post:" + id);
     }
 
-    // Methods for Post Likes
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void likePost(int postId, int userId) throws SQLException {
         postDAO.likePost(postId, userId);
         postCache.deletePost("post:" + postId);  // Invalidate cache for the post
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void unlikePost(int postId, int userId) throws SQLException {
         postDAO.unlikePost(postId, userId);
         postCache.deletePost("post:" + postId);  // Invalidate cache for the post
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<PostLike> getPostLikes(int postId) throws SQLException {
         return postDAO.getPostLikes(postId);

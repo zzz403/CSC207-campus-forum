@@ -7,6 +7,9 @@ import com.imperial.academia.interface_adapter.signup.SignupState;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * SignupView class represents the signup interface of the application.
+ */
 public class SignupView extends JPanel {
     public final String viewName = "sign up";
 
@@ -15,10 +18,16 @@ public class SignupView extends JPanel {
     private JLabel repeatPasswordErrorLabel;
     private JLabel emailErrorLabel;
 
+    /**
+     * Constructs a SignupView instance and initializes the UI components.
+     *
+     * @param signupController the signup controller
+     * @param signupViewModel the signup view model
+     */
     public SignupView(SignupController signupController, SignupViewModel signupViewModel) {
         setLayout(new BorderLayout());
 
-        // 左侧面板
+        // Left panel setup
         JPanel leftPanel = new JPanel(new GridBagLayout());
         leftPanel.setBackground(Color.WHITE);
         leftPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
@@ -36,6 +45,7 @@ public class SignupView extends JPanel {
         titleLabel.setForeground(new Color(70, 130, 180));
         leftPanel.add(titleLabel, gbc);
 
+        // Username field setup
         gbc.gridy++;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.gridwidth = 1;
@@ -58,6 +68,7 @@ public class SignupView extends JPanel {
         usernameErrorLabel.setForeground(Color.RED);
         leftPanel.add(usernameErrorLabel, gbc);
 
+        // Password field setup
         gbc.gridy++;
         gbc.insets = new Insets(10, 0, 10, 0);
 
@@ -78,6 +89,7 @@ public class SignupView extends JPanel {
         passwordErrorLabel.setForeground(Color.RED);
         leftPanel.add(passwordErrorLabel, gbc);
 
+        // Repeat password field setup
         gbc.gridy++;
         gbc.insets = new Insets(10, 0, 10, 0);
 
@@ -98,6 +110,7 @@ public class SignupView extends JPanel {
         repeatPasswordErrorLabel.setForeground(Color.RED);
         leftPanel.add(repeatPasswordErrorLabel, gbc);
 
+        // Email field setup
         gbc.gridy++;
         gbc.insets = new Insets(10, 0, 10, 0);
 
@@ -118,6 +131,7 @@ public class SignupView extends JPanel {
         emailErrorLabel.setForeground(Color.RED);
         leftPanel.add(emailErrorLabel, gbc);
 
+        // Signup button setup
         gbc.gridy++;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
@@ -136,6 +150,7 @@ public class SignupView extends JPanel {
                 emailField.getText()));
         leftPanel.add(signupButton, gbc);
 
+        // Back to login label setup
         gbc.gridy++;
         gbc.insets = new Insets(0, 0, 10, 0);
 
@@ -150,6 +165,7 @@ public class SignupView extends JPanel {
         });
         leftPanel.add(backToLoginLabel, gbc);
 
+        // Right panel setup
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BorderLayout());
         rightPanel.setBackground(new Color(230, 240, 255));
@@ -162,11 +178,11 @@ public class SignupView extends JPanel {
         add(leftPanel, BorderLayout.WEST);
         add(rightPanel, BorderLayout.CENTER);
 
+        // Add property change listener to update the view when the model changes
         signupViewModel.addPropertyChangeListener(evt -> {
             System.out.println("Property changed: " + evt.getPropertyName());
             if ("clean".equals(evt.getPropertyName())) {
                 SignupState state = signupViewModel.getState();
-                // clean
                 usernameField.setText(state.getUsername());
                 passwordField.setText(state.getPassword());
                 repeatPasswordField.setText(state.getRepeatPassword());

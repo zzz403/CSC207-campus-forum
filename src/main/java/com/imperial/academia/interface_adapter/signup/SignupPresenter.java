@@ -9,17 +9,32 @@ import com.imperial.academia.interface_adapter.login.LoginState;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * The SignupPresenter class presents the signup results to the view.
+ */
 public class SignupPresenter implements SignupOutputBoundary {
     private final SignupViewModel signupViewModel;
     private final LoginViewModel loginViewModel;
     private final ViewManagerModel viewManagerModel;
 
+    /**
+     * Constructs a SignupPresenter with the specified ViewManagerModel, SignupViewModel, and LoginViewModel.
+     * 
+     * @param viewManagerModel The view manager model.
+     * @param signupViewModel The signup view model.
+     * @param loginViewModel The login view model.
+     */
     public SignupPresenter(ViewManagerModel viewManagerModel, SignupViewModel signupViewModel, LoginViewModel loginViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.signupViewModel = signupViewModel;
         this.loginViewModel = loginViewModel;
     }
 
+    /**
+     * Prepares the success view when signup is successful.
+     * 
+     * @param response The output data of the signup process.
+     */
     @Override
     public void prepareSuccessView(SignupOutputData response) {
         LocalDateTime responseTime = LocalDateTime.parse(response.getCreationTime());
@@ -32,7 +47,7 @@ public class SignupPresenter implements SignupOutputBoundary {
         loginState.setUsername(response.getUsername());
         loginState.setPassword(null);
         loginState.clearErrors();
-        
+
         this.loginViewModel.setState(loginState);
         loginViewModel.firePropertyChanged();
         viewManagerModel.setActiveView(loginViewModel.getViewName());
@@ -40,6 +55,11 @@ public class SignupPresenter implements SignupOutputBoundary {
         viewManagerModel.firePropertyChanged();
     }
 
+    /**
+     * Prepares the fail view when signup fails.
+     * 
+     * @param error The error message.
+     */
     @Override
     public void prepareFailView(String error) {
         SignupState signupState = signupViewModel.getState();
@@ -52,15 +72,18 @@ public class SignupPresenter implements SignupOutputBoundary {
             signupState.setUsernameError(error);
         } else if (error.contains("Password")) {
             signupState.setPasswordError(error);
-        }else if (error.contains("Repeat Passwords")){
+        } else if (error.contains("Repeat Passwords")) {
             signupState.setRepeatPasswordError(error);
-        }else if (error.contains("Email")) {
+        } else if (error.contains("Email")) {
             signupState.setEmailError(error);
         }
         signupViewModel.setState(signupState);
         signupViewModel.firePropertyChanged("error");
     }
 
+    /**
+     * Navigates to the login view.
+     */
     @Override
     public void navigateToLogin() {
         viewManagerModel.setActiveView("log in");

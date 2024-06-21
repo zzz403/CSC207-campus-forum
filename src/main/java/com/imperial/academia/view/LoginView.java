@@ -9,6 +9,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 
+/**
+ * LoginView class represents the login interface of the application.
+ */
 public class LoginView extends JPanel {
     public final String viewName = "log in";
 
@@ -17,10 +20,16 @@ public class LoginView extends JPanel {
     private JTextField usernameField;
     private JPasswordField passwordField;
 
+    /**
+     * Constructs a LoginView instance and initializes the UI components.
+     *
+     * @param loginController the login controller
+     * @param loginViewModel the login view model
+     */
     public LoginView(LoginController loginController, LoginViewModel loginViewModel) {
         setLayout(new BorderLayout());
 
-        // Left panel
+        // Left panel setup
         JPanel leftPanel = new JPanel(new GridBagLayout());
         leftPanel.setBackground(Color.WHITE);
         leftPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
@@ -38,6 +47,7 @@ public class LoginView extends JPanel {
         titleLabel.setForeground(new Color(70, 130, 180));
         leftPanel.add(titleLabel, gbc);
 
+        // Username field setup
         gbc.gridy++;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.gridwidth = 1;
@@ -50,7 +60,7 @@ public class LoginView extends JPanel {
         gbc.gridy++;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 0, 5, 0);
-        usernameField = new JTextField(20); 
+        usernameField = new JTextField(20);
         usernameField.setPreferredSize(new Dimension(usernameField.getPreferredSize().width, 40));
         leftPanel.add(usernameField, gbc);
 
@@ -60,6 +70,7 @@ public class LoginView extends JPanel {
         usernameErrorLabel.setForeground(Color.RED);
         leftPanel.add(usernameErrorLabel, gbc);
 
+        // Password field setup
         gbc.gridy++;
         gbc.insets = new Insets(10, 0, 10, 0);
 
@@ -80,6 +91,7 @@ public class LoginView extends JPanel {
         passwordErrorLabel.setForeground(Color.RED);
         leftPanel.add(passwordErrorLabel, gbc);
 
+        // Remember me checkbox setup
         gbc.gridy++;
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.WEST;
@@ -90,6 +102,7 @@ public class LoginView extends JPanel {
         rememberMeCheckBox.setFont(new Font("Arial", Font.PLAIN, 14));
         leftPanel.add(rememberMeCheckBox, gbc);
 
+        // Login button setup
         gbc.gridy++;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.gridwidth = 2;
@@ -102,10 +115,11 @@ public class LoginView extends JPanel {
         loginButton.setFocusPainted(false);
         loginButton.setPreferredSize(new Dimension(usernameField.getPreferredSize().width, 40));
         loginButton.addActionListener(e -> {
-            loginController.execute(usernameField.getText(), new String(passwordField.getPassword()),rememberMeCheckBox.isSelected());
+            loginController.execute(usernameField.getText(), new String(passwordField.getPassword()), rememberMeCheckBox.isSelected());
         });
         leftPanel.add(loginButton, gbc);
 
+        // Forgot password label setup
         gbc.gridy++;
         gbc.fill = GridBagConstraints.NONE;
         gbc.insets = new Insets(20, 0, 0, 0);
@@ -116,6 +130,7 @@ public class LoginView extends JPanel {
         forgotPasswordLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         leftPanel.add(forgotPasswordLabel, gbc);
 
+        // Sign up label setup
         gbc.gridy++;
         gbc.insets = new Insets(0, 0, 0, 0);
 
@@ -130,7 +145,7 @@ public class LoginView extends JPanel {
         });
         leftPanel.add(signUpLabel, gbc);
 
-        // Right panel
+        // Right panel setup
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BorderLayout());
         rightPanel.setBackground(new Color(230, 240, 255));
@@ -143,6 +158,7 @@ public class LoginView extends JPanel {
         add(leftPanel, BorderLayout.WEST);
         add(rightPanel, BorderLayout.CENTER);
 
+        // Load saved credentials if available
         String[] credentials = loginController.loadCredentials();
         if (credentials[0] != null && credentials[1] != null) {
             usernameField.setText(credentials[0]);
@@ -193,6 +209,7 @@ public class LoginView extends JPanel {
             }
         });
 
+        // Add property change listener to update the view when the model changes
         loginViewModel.addPropertyChangeListener(evt -> {
             if ("state".equals(evt.getPropertyName())) {
                 LoginState state = loginViewModel.getState();
