@@ -1,7 +1,22 @@
 package com.imperial.academia.view;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 
 /**
  * The ForumView class represents the forum view in the application.
@@ -13,8 +28,11 @@ public class ForumView extends JPanel {
     /**
      * Constructs a ForumView instance and initializes the UI components.
      */
-    public ForumView() {
-        // Set the layout of the main panel
+
+    private final ViewManagerModel viewManagerModel;
+    public ForumView(ViewManagerModel viewManagerModel) {
+        this.viewManagerModel = viewManagerModel;
+
         setLayout(new BorderLayout());
 
         // Create the main panel with GridBagLayout
@@ -66,23 +84,21 @@ public class ForumView extends JPanel {
         add(mainPanel, BorderLayout.CENTER);
     }
 
-    /**
-     * Creates a JButton with specified text and action listener.
-     *
-     * @param text the text to display on the button
-     * @param actionListener the action listener to attach to the button
-     * @return the created JButton
-     */
-    private JButton createButton(String text, java.awt.event.ActionListener actionListener) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Arial", Font.BOLD, 16));
-        button.setBackground(new Color(70, 130, 180));
-        button.setForeground(Color.WHITE);
-        button.setFocusPainted(false);
-        button.setPreferredSize(new Dimension(300, 40));
-        if (actionListener != null) {
-            button.addActionListener(actionListener);
-        }
-        return button;
+    private void genPostButton(JPanel mainPanel, GridBagConstraints gbc) {
+        JButton postButton = new JButton("Post");
+        postButton.setFont(new Font("Arial", Font.BOLD, 16));
+        postButton.setBackground(new Color(70, 130, 180));
+        postButton.setForeground(Color.WHITE);
+        postButton.setFocusPainted(false);
+        postButton.setPreferredSize(new Dimension(300, 40));
+        mainPanel.add(postButton, gbc);
+        postButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                viewManagerModel.setActiveView("poster");
+                viewManagerModel.firePropertyChanged();
+            }
+        });
+
     }
 }
