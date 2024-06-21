@@ -36,7 +36,6 @@ public class H2Setup {
                 "DROP TABLE IF EXISTS chat_groups",
                 "DROP TABLE IF EXISTS chat_messages",
                 "DROP TABLE IF EXISTS group_members",
-                "DROP TABLE IF EXISTS private_messages",
                 "DROP TABLE IF EXISTS user_follows",
                 "DROP TABLE IF EXISTS files",
                 "DROP TABLE IF EXISTS notifications",
@@ -62,7 +61,8 @@ public class H2Setup {
                 "registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
                 "avatar_url VARCHAR(255), " +
                 "token VARCHAR(255) DEFAULT NULL, " +
-                "token_expiry BIGINT DEFAULT NULL" +
+                "token_expiry BIGINT DEFAULT NULL, " +
+                "last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" +
                 ")";
             stmt.executeUpdate(createUsersTable);
 
@@ -72,6 +72,7 @@ public class H2Setup {
                 "description TEXT, " +
                 "creator_id INT, " +
                 "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                "last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, " +
                 "FOREIGN KEY (creator_id) REFERENCES users(user_id)" +
                 ")";
             stmt.executeUpdate(createBoardsTable);
@@ -96,6 +97,7 @@ public class H2Setup {
                 "post_id INT NOT NULL, " +
                 "parent_comment_id INT DEFAULT NULL, " +
                 "creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                "last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, " +
                 "FOREIGN KEY (author_id) REFERENCES users(user_id), " +
                 "FOREIGN KEY (post_id) REFERENCES posts(post_id), " +
                 "FOREIGN KEY (parent_comment_id) REFERENCES comments(comment_id)" +
@@ -105,7 +107,8 @@ public class H2Setup {
             String createChatGroupsTable = "CREATE TABLE chat_groups (" +
                 "group_id INT AUTO_INCREMENT PRIMARY KEY, " +
                 "group_name VARCHAR(100) NOT NULL, " +
-                "creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+                "creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                "last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" +
                 ")";
             stmt.executeUpdate(createChatGroupsTable);
 
@@ -127,6 +130,7 @@ public class H2Setup {
                 "user_id INT NOT NULL, " +
                 "role ENUM('member', 'admin') DEFAULT 'member', " +
                 "joined_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                "last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, " +
                 "PRIMARY KEY (group_id, user_id), " +
                 "FOREIGN KEY (group_id) REFERENCES chat_groups(group_id), " +
                 "FOREIGN KEY (user_id) REFERENCES users(user_id)" +
@@ -153,17 +157,6 @@ public class H2Setup {
                 ")";
             stmt.executeUpdate(createCommentLikesTable);
 
-            String createPrivateMessagesTable = "CREATE TABLE private_messages (" +
-                "id INT AUTO_INCREMENT PRIMARY KEY, " +
-                "sender_id INT, " +
-                "recipient_id INT, " +
-                "content TEXT, " +
-                "sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
-                "FOREIGN KEY (sender_id) REFERENCES users(user_id), " +
-                "FOREIGN KEY (recipient_id) REFERENCES users(user_id)" +
-                ")";
-            stmt.executeUpdate(createPrivateMessagesTable);
-
             String createUserFollowsTable = "CREATE TABLE user_follows (" +
                 "follower_id INT, " +
                 "followee_id INT, " +
@@ -181,6 +174,7 @@ public class H2Setup {
                 "comment_id INT, " +
                 "file_url VARCHAR(255), " +
                 "uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                "last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, " +
                 "FOREIGN KEY (uploader_id) REFERENCES users(user_id), " +
                 "FOREIGN KEY (post_id) REFERENCES posts(post_id), " +
                 "FOREIGN KEY (comment_id) REFERENCES comments(comment_id)" +
@@ -194,6 +188,7 @@ public class H2Setup {
                 "reference_id INT, " +
                 "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
                 "read_at TIMESTAMP, " +
+                "last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, " +
                 "FOREIGN KEY (user_id) REFERENCES users(user_id)" +
                 ")";
             stmt.executeUpdate(createNotificationsTable);
