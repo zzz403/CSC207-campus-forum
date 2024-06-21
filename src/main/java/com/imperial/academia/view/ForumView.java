@@ -1,12 +1,27 @@
 package com.imperial.academia.view;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 
 public class ForumView extends JPanel {
     public final String viewName = "forum";
-
-    public ForumView() {
+    private final ViewManagerModel viewManagerModel;
+    public ForumView(ViewManagerModel viewManagerModel) {
+        this.viewManagerModel = viewManagerModel;
         setLayout(new BorderLayout());
 
         JPanel mainPanel = new JPanel(new GridBagLayout());
@@ -30,13 +45,7 @@ public class ForumView extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(20, 0, 10, 0);
 
-        JButton postButton = new JButton("Post");
-        postButton.setFont(new Font("Arial", Font.BOLD, 16));
-        postButton.setBackground(new Color(70, 130, 180));
-        postButton.setForeground(Color.WHITE);
-        postButton.setFocusPainted(false);
-        postButton.setPreferredSize(new Dimension(300, 40));
-        mainPanel.add(postButton, gbc);
+        genPostButton(mainPanel, gbc); // go to poster button
 
         gbc.gridy++;
         gbc.insets = new Insets(10, 0, 10, 0);
@@ -78,5 +87,22 @@ public class ForumView extends JPanel {
         mainPanel.add(backButton, gbc);
 
         add(mainPanel, BorderLayout.CENTER);
+    }
+
+    private void genPostButton(JPanel mainPanel, GridBagConstraints gbc) {
+        JButton postButton = new JButton("Post");
+        postButton.setFont(new Font("Arial", Font.BOLD, 16));
+        postButton.setBackground(new Color(70, 130, 180));
+        postButton.setForeground(Color.WHITE);
+        postButton.setFocusPainted(false);
+        postButton.setPreferredSize(new Dimension(300, 40));
+        mainPanel.add(postButton, gbc);
+        postButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                viewManagerModel.setActiveView("poster");
+                viewManagerModel.firePropertyChanged();
+            }
+        });
     }
 }
