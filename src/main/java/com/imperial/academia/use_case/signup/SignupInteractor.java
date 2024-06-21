@@ -1,12 +1,12 @@
 package com.imperial.academia.use_case.signup;
 
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.regex.Pattern;
-
 import com.imperial.academia.data_access.user.UserDAI;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.entity.user.UserFactory;
+
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.regex.Pattern;
 
 public class SignupInteractor implements SignupInputBoundary {
     private final UserDAI userDAO;
@@ -22,16 +22,17 @@ public class SignupInteractor implements SignupInputBoundary {
     @Override
     public void execute(SignupInputData signupInputData) {
         try {
+            signupPresenter.prepareFailView(null);
             if (signupInputData.getUsername().length() <= 6) {
                 signupPresenter.prepareFailView("Username must be longer than 6 characters.");
-            } else if (signupInputData.getPassword().length() <= 6) {
-                signupPresenter.prepareFailView("Password must be longer than 6 characters.");
-            } else if (!isValidEmail(signupInputData.getEmail())) {
-                signupPresenter.prepareFailView("Email is not valid.");
             } else if (userDAO.existsByUsername(signupInputData.getUsername())) {
                 signupPresenter.prepareFailView("User already exists.");
+            } else if (signupInputData.getPassword().length() <= 6) {
+                signupPresenter.prepareFailView("Password must be longer than 6 characters.");
             } else if (!signupInputData.getPassword().equals(signupInputData.getRepeatPassword())) {
-                signupPresenter.prepareFailView("Passwords don't match.");
+                signupPresenter.prepareFailView("Repeat Passwords don't match.");
+            } else if (!isValidEmail(signupInputData.getEmail())) {
+                signupPresenter.prepareFailView("Email is not valid.");
             } else if (userDAO.existsByEmail(signupInputData.getEmail())) {
                 signupPresenter.prepareFailView("Email already used.");
             } else {

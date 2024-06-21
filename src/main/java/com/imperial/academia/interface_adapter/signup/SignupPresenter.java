@@ -25,18 +25,39 @@ public class SignupPresenter implements SignupOutputBoundary {
         LocalDateTime responseTime = LocalDateTime.parse(response.getCreationTime());
         response.setCreationTime(responseTime.format(DateTimeFormatter.ofPattern("hh:mm:ss")));
 
-        // SignupState signupState = signupViewModel.getState();
+        SignupState signupState = signupViewModel.getState();
+        signupState.clear();
+
         LoginState loginState = loginViewModel.getState();
         loginState.setUsername(response.getUsername());
+        loginState.setPassword(null);
+        loginState.clearErrors();
+        
         this.loginViewModel.setState(loginState);
         loginViewModel.firePropertyChanged();
         viewManagerModel.setActiveView(loginViewModel.getViewName());
+        signupViewModel.firePropertyChanged("clean");
         viewManagerModel.firePropertyChanged();
     }
 
     @Override
     public void prepareFailView(String error) {
-        signupViewModel.setErrorMessage(error);
-        signupViewModel.firePropertyChanged();
+        SignupState signupState = signupViewModel.getState();
+        if (error == null) {
+            signupState.setUsernameError(null);
+            signupState.setPasswordError(null);
+            signupState.setRepeatPasswordError(null);
+            signupState.setEmailError(null);
+        } else if (error.contains("Username")) {
+            signupState.setUsernameError(error);
+        } else if (error.contains("Password")) {
+            signupState.setPasswordError(error);
+        }else if (error.contains("Repeat Passwords")){
+            signupState.setRepeatPasswordError(error);
+        }else if (error.contains("Email")) {
+            signupState.setEmailError(error);
+        }
+        signupViewModel.setState(signupState);
+        signupViewModel.firePropertyChanged("error");
     }
 }

@@ -47,4 +47,14 @@ public class LoginViewModel extends ViewModel {
         this.rememberMe = rememberMe;
         support.firePropertyChange("rememberMe", !rememberMe, rememberMe);
     }
+
+    public void setStateUsername(String username) {
+        state.setUsername(username);
+        support.firePropertyChange("username", null, username);
+    }
+
+    public void setStatePassword(String password) {
+        state.setPassword(password);
+        support.firePropertyChange("password", null, password);
+    }
 }

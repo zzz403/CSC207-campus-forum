@@ -69,6 +69,23 @@ public class ForumView extends JPanel {
         chatButton.setPreferredSize(new Dimension(300, 40));
         mainPanel.add(chatButton, gbc);
 
+        gbc.gridy++;
+        gbc.insets = new Insets(10, 0, 10, 0);  // Update the insets here
+
+        JButton backButton = new JButton("Back");
+        backButton.setFont(new Font("Arial", Font.BOLD, 16));
+        backButton.setBackground(new Color(70, 130, 180));
+        backButton.setForeground(Color.WHITE);
+        backButton.setFocusPainted(false);
+        backButton.setPreferredSize(new Dimension(300, 40));
+
+        backButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ((CardLayout) getParent().getLayout()).show(getParent(), "log in");
+            }
+        });
+        mainPanel.add(backButton, gbc);
+
         add(mainPanel, BorderLayout.CENTER);
     }
 

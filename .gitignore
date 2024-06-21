@@ -33,4 +33,4 @@ build/
 ### VS Code ###
 .vscode/
 
-.src/main/java/com/imperial/academia/database/academia_imperial.trace.db
+.database/academia_imperial.trace.db
