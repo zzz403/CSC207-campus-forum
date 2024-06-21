@@ -53,4 +53,9 @@ public class SignupInteractor implements SignupInputBoundary {
         Pattern pat = Pattern.compile(emailRegex);
         return pat.matcher(email).matches();
     }
+
+    @Override
+    public void navigateToLogin(){
+        signupPresenter.navigateToLogin();
+    }
 }

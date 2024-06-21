@@ -36,6 +36,12 @@ public class ForumView extends JPanel {
         postButton.setForeground(Color.WHITE);
         postButton.setFocusPainted(false);
         postButton.setPreferredSize(new Dimension(300, 40));
+        
+        postButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ((CardLayout) getParent().getLayout()).show(getParent(), "post");
+            }
+        });
         mainPanel.add(postButton, gbc);
 
         gbc.gridy++;
@@ -47,6 +53,7 @@ public class ForumView extends JPanel {
         profileButton.setForeground(Color.WHITE);
         profileButton.setFocusPainted(false);
         profileButton.setPreferredSize(new Dimension(300, 40));
+        
         mainPanel.add(profileButton, gbc);
 
         gbc.gridy++;
@@ -59,6 +66,7 @@ public class ForumView extends JPanel {
         chatButton.setFocusPainted(false);
         chatButton.setPreferredSize(new Dimension(300, 40));
         mainPanel.add(chatButton, gbc);
+        
 
         gbc.gridy++;
         gbc.insets = new Insets(10, 0, 10, 0);  // Update the insets here

@@ -1,6 +1,6 @@
 package com.imperial.academia.use_case.login;
 
-import com.imperial.academia.app.SessionManager;
+import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.data_access.remember_me.RememberMeDAI;
 import com.imperial.academia.data_access.user.UserDAI;
 import com.imperial.academia.entity.user.User;
@@ -22,7 +22,7 @@ public class LoginInteractor implements LoginInputBoundary {
     @Override
     public void execute(LoginInputData loginInputData) {
         try {
-            loginPresenter.prepareFailView(null); // Reset the fail view
+            loginPresenter.prepareFailView(null); 
 
             User user = userDAO.getByUsername(loginInputData.getUsername());
             if (user == null) {
@@ -71,5 +71,10 @@ public class LoginInteractor implements LoginInputBoundary {
 
     public void clearCredentials() throws IOException {
         rememberMeDAO.clearCredentials();
+    }
+
+    @Override
+    public void navigateToSignup() {
+        loginPresenter.navigateToSignup();
     }
 }

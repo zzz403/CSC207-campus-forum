@@ -25,4 +25,8 @@ public class LoginController {
         }
         return new String[2];
     }
+
+    public void navigateToSignup() {
+        loginInteractor.navigateToSignup();
+    }
 }
