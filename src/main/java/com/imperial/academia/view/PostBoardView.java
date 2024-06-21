@@ -8,13 +8,13 @@ import java.awt.GridBagLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import com.imperial.academia.interface_adapter.poster.PosterController;
-import com.imperial.academia.interface_adapter.poster.PosterPresenter;
-import com.imperial.academia.interface_adapter.poster.PosterViewModel;
+import com.imperial.academia.interface_adapter.postboard.PostBoardController;
+import com.imperial.academia.interface_adapter.postboard.PostBoardPresenter;
+import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
 
-public class PosterView extends JPanel {
+public class PostBoardView extends JPanel {
     public final String viewName = "poster";
-    public PosterView(PosterViewModel posterViewModel, PosterController posterController,PosterPresenter posterPresenter) {
+    public PostBoardView(PostBoardViewModel posterViewModel, PostBoardController posterController,PostBoardPresenter posterPresenter) {
         setLayout(new BorderLayout());
 
         JPanel mainPanel = new JPanel(new GridBagLayout());

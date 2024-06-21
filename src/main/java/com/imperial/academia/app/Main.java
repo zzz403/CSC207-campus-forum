@@ -1,11 +1,11 @@
 package com.imperial.academia.app;
 
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
-import com.imperial.academia.interface_adapter.poster.PosterViewModel;
+import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
 import com.imperial.academia.interface_adapter.signup.SignupViewModel;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.view.LoginView;
-import com.imperial.academia.view.PosterView;
+import com.imperial.academia.view.PostBoardView;
 import com.imperial.academia.view.SignupView;
 import com.imperial.academia.view.ForumView;
 import com.imperial.academia.view.ViewManager;
@@ -50,7 +50,7 @@ public class Main {
         
         LoginViewModel loginViewModel = new LoginViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
-        PosterViewModel posterViewModel = new PosterViewModel();
+        PostBoardViewModel posterViewModel = new PostBoardViewModel();
         
         try {
             ServiceFactory.initialize();
@@ -60,7 +60,7 @@ public class Main {
             LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel);
             views.add(loginView, loginView.viewName);
 
-            PosterView posterView = PosterUseCaseFactory.create(viewManagerModel, posterViewModel);
+            PostBoardView posterView = PostBoardUseCaseFactory.create(viewManagerModel, posterViewModel);
             views.add(posterView, posterView.viewName);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

@@ -1,14 +1,14 @@
-package com.imperial.academia.interface_adapter.poster;
+package com.imperial.academia.interface_adapter.postboard;
 
 import java.beans.PropertyChangeListener;
 
 import com.imperial.academia.interface_adapter.common.ViewModel;
 
-public class PosterViewModel extends ViewModel {
+public class PostBoardViewModel extends ViewModel {
 
     // private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     
-    public PosterViewModel(){
+    public PostBoardViewModel(){
         super("Poster board");
     }
 
