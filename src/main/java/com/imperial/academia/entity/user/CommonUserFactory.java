@@ -6,6 +6,6 @@ import java.time.LocalDateTime;
 public class CommonUserFactory implements UserFactory {
     @Override
     public User create(String username, String password, String email, String role, LocalDateTime registrationDate) {
-        return new User(0, username, password, email, role, Timestamp.valueOf(registrationDate));
+        return new User(0, username, password, email, role,null, Timestamp.valueOf(registrationDate), Timestamp.valueOf(registrationDate));
     }
 }

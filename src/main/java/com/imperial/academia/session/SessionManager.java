@@ -1,4 +1,4 @@
-package com.imperial.academia.app;
+package com.imperial.academia.session;
 import com.imperial.academia.entity.user.User;
 
 public class SessionManager {

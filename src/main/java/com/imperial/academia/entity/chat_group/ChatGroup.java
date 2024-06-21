@@ -1,4 +1,4 @@
-package com.imperial.academia.entity;
+package com.imperial.academia.entity.chat_group;
 
 import java.sql.Timestamp;
 
@@ -6,11 +6,13 @@ public class ChatGroup {
     private int id;
     private String groupName;
     private Timestamp creationDate;
+    private Timestamp lastModified;
 
-    public ChatGroup(int id, String groupName, Timestamp creationDate) {
+    public ChatGroup(int id, String groupName, Timestamp creationDate, Timestamp lastModified) {
         this.id = id;
         this.groupName = groupName;
         this.creationDate = creationDate;
+        this.lastModified = lastModified;
     }
 
     // Getters and Setters
@@ -22,4 +24,7 @@ public class ChatGroup {
 
     public Timestamp getCreationDate() { return creationDate; }
     public void setCreationDate(Timestamp creationDate) { this.creationDate = creationDate; }
+
+    public Timestamp getLastModified() { return lastModified; }
+    public void setLastModified(Timestamp lastModified) { this.lastModified = lastModified; }
 }

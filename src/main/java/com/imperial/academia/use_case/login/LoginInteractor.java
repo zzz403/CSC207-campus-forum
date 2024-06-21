@@ -1,20 +1,20 @@
 package com.imperial.academia.use_case.login;
 
-import com.imperial.academia.app.SessionManager;
+import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.data_access.remember_me.RememberMeDAI;
-import com.imperial.academia.data_access.user.UserDAI;
+import com.imperial.academia.service.UserService;
 import com.imperial.academia.entity.user.User;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class LoginInteractor implements LoginInputBoundary {
-    private final UserDAI userDAO;
+    private final UserService userService;
     private final LoginOutputBoundary loginPresenter;
     private final RememberMeDAI rememberMeDAO;
 
-    public LoginInteractor(UserDAI userDAO, LoginOutputBoundary loginPresenter, RememberMeDAI rememberMeDAO) {
-        this.userDAO = userDAO;
+    public LoginInteractor(UserService userService, LoginOutputBoundary loginPresenter, RememberMeDAI rememberMeDAO) {
+        this.userService = userService;
         this.loginPresenter = loginPresenter;
         this.rememberMeDAO = rememberMeDAO;
     }
@@ -22,9 +22,9 @@ public class LoginInteractor implements LoginInputBoundary {
     @Override
     public void execute(LoginInputData loginInputData) {
         try {
-            loginPresenter.prepareFailView(null); // Reset the fail view
+            loginPresenter.prepareFailView(null);
 
-            User user = userDAO.getByUsername(loginInputData.getUsername());
+            User user = userService.getByUsername(loginInputData.getUsername());
             if (user == null) {
                 handleLoginFailure("User not found.");
             } else if (!user.getPassword().equals(loginInputData.getPassword())) {
@@ -71,5 +71,10 @@ public class LoginInteractor implements LoginInputBoundary {
 
     public void clearCredentials() throws IOException {
         rememberMeDAO.clearCredentials();
+    }
+
+    @Override
+    public void navigateToSignup() {
+        loginPresenter.navigateToSignup();
     }
 }

@@ -70,7 +70,7 @@ public class LoginView extends JPanel {
         gbc.gridy++;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 0, 5, 0);
-        passwordField = new JPasswordField(20); // Initialize as member variable
+        passwordField = new JPasswordField(20);
         passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, 40));
         leftPanel.add(passwordField, gbc);
 
@@ -125,7 +125,7 @@ public class LoginView extends JPanel {
         signUpLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         signUpLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                ((CardLayout) getParent().getLayout()).show(getParent(), "sign up");
+                loginController.navigateToSignup();
             }
         });
         leftPanel.add(signUpLabel, gbc);

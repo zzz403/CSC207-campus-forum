@@ -3,6 +3,7 @@ package com.imperial.academia.data_access.user;
 import com.imperial.academia.entity.user.User;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface UserDAI {
@@ -17,6 +18,8 @@ public interface UserDAI {
     User get(int id) throws SQLException;
 
     List<User> getAll() throws SQLException;
+
+    List<User> getAllSince(Timestamp timestamp) throws SQLException;
 
     void update(User user) throws SQLException;
 

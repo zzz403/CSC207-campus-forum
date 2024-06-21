@@ -145,7 +145,7 @@ public class SignupView extends JPanel {
         backToLoginLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backToLoginLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                ((CardLayout) getParent().getLayout()).show(getParent(), "log in");
+                signupController.navigateToLogin();
             }
         });
         leftPanel.add(backToLoginLabel, gbc);

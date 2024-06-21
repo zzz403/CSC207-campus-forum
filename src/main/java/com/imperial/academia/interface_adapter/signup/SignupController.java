@@ -14,4 +14,8 @@ public class SignupController {
         SignupInputData signupInputData = new SignupInputData(username, password1, password2, email);
         signupInteractor.execute(signupInputData);
     }
+
+    public void navigateToLogin() {
+        signupInteractor.navigateToLogin();
+    }
 }

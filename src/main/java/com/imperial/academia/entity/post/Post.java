@@ -1,4 +1,4 @@
-package com.imperial.academia.entity;
+package com.imperial.academia.entity.post;
 
 import java.sql.Timestamp;
 
@@ -43,4 +43,3 @@ public class Post {
     public Timestamp getLastModifiedDate() { return lastModifiedDate; }
     public void setLastModifiedDate(Timestamp lastModifiedDate) { this.lastModifiedDate = lastModifiedDate; }
 }
-
