@@ -133,8 +133,7 @@ public class SignupView extends JPanel {
                 usernameField.getText(),
                 new String(passwordField.getPassword()),
                 new String(repeatPasswordField.getPassword()),
-                emailField.getText()
-        ));
+                emailField.getText()));
         leftPanel.add(signupButton, gbc);
 
         gbc.gridy++;
@@ -151,23 +150,29 @@ public class SignupView extends JPanel {
         });
         leftPanel.add(backToLoginLabel, gbc);
 
-        // 右侧面板
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BorderLayout());
         rightPanel.setBackground(new Color(230, 240, 255));
         rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JLabel imageLabel = new JLabel(new ImageIcon("/mnt/data/image.png")); // 添加你的图片路径
+        JLabel imageLabel = new JLabel(new ImageIcon("/mnt/data/image.png"));
         imageLabel.setHorizontalAlignment(JLabel.CENTER);
         rightPanel.add(imageLabel, BorderLayout.CENTER);
 
-        // 添加面板到主面板
         add(leftPanel, BorderLayout.WEST);
         add(rightPanel, BorderLayout.CENTER);
 
         signupViewModel.addPropertyChangeListener(evt -> {
-            if ("state".equals(evt.getPropertyName())) {
+            System.out.println("Property changed: " + evt.getPropertyName());
+            if ("clean".equals(evt.getPropertyName())) {
                 SignupState state = signupViewModel.getState();
+                // clean
+                usernameField.setText(state.getUsername());
+                passwordField.setText(state.getPassword());
+                repeatPasswordField.setText(state.getRepeatPassword());
+                emailField.setText(state.getEmail());
+            } else if ("error".equals(evt.getPropertyName())) {
+                SignupState state = (SignupState) evt.getNewValue();
                 usernameErrorLabel.setText(state.getUsernameError());
                 passwordErrorLabel.setText(state.getPasswordError());
                 repeatPasswordErrorLabel.setText(state.getRepeatPasswordError());

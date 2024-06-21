@@ -23,7 +23,14 @@ public class LoginPresenter implements LoginOutputBoundary {
     @Override
     public void prepareFailView(String error) {
         LoginState state = loginViewModel.getState();
-        state.setUsernameError(error);
+        if (error == null) {
+            state.setUsernameError(null);
+            state.setPasswordError(null);
+        } else if (error.contains("User")) {
+            state.setUsernameError(error);
+        } else if (error.contains("password")) {
+            state.setPasswordError(error);
+        }
         loginViewModel.setState(state);
         loginViewModel.firePropertyChanged();
     }

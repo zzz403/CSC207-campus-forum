@@ -45,6 +45,10 @@ public class SignupViewModel extends ViewModel {
         support.firePropertyChange("state", null, this.state);
     }
 
+    public void firePropertyChanged(String propertyName) {
+        support.firePropertyChange(propertyName, null, this.state);
+    }
+
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
