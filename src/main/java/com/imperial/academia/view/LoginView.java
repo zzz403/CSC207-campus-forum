@@ -3,7 +3,6 @@ package com.imperial.academia.view;
 import com.imperial.academia.interface_adapter.login.LoginState;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.login.LoginController;
-import com.imperial.academia.interface_adapter.login.RememberMeController;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -18,7 +17,7 @@ public class LoginView extends JPanel {
     private JTextField usernameField;
     private JPasswordField passwordField;
 
-    public LoginView(LoginController loginController, LoginViewModel loginViewModel, RememberMeController rememberMeController) {
+    public LoginView(LoginController loginController, LoginViewModel loginViewModel) {
         setLayout(new BorderLayout());
 
         // Left panel
@@ -103,12 +102,7 @@ public class LoginView extends JPanel {
         loginButton.setFocusPainted(false);
         loginButton.setPreferredSize(new Dimension(usernameField.getPreferredSize().width, 40));
         loginButton.addActionListener(e -> {
-            loginController.execute(usernameField.getText(), new String(passwordField.getPassword()));
-            if (rememberMeCheckBox.isSelected()) {
-                rememberMeController.saveCredentials(usernameField.getText(), new String(passwordField.getPassword()));
-            } else {
-                rememberMeController.clearCredentials();
-            }
+            loginController.execute(usernameField.getText(), new String(passwordField.getPassword()),rememberMeCheckBox.isSelected());
         });
         leftPanel.add(loginButton, gbc);
 
@@ -149,7 +143,7 @@ public class LoginView extends JPanel {
         add(leftPanel, BorderLayout.WEST);
         add(rightPanel, BorderLayout.CENTER);
 
-        String[] credentials = rememberMeController.loadCredentials();
+        String[] credentials = loginController.loadCredentials();
         if (credentials[0] != null && credentials[1] != null) {
             usernameField.setText(credentials[0]);
             passwordField.setText(credentials[1]);
