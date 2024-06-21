@@ -1,4 +1,3 @@
-// com/imperial/academia/interface_adapter/common/ViewManagerModel.java
 package com.imperial.academia.interface_adapter.common;
 
 import java.beans.PropertyChangeListener;
