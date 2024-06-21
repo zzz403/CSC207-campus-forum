@@ -9,14 +9,16 @@ public class Comment {
     private int postId;
     private Integer parentCommentId;
     private Timestamp creationDate;
+    private Timestamp lastModified;
 
-    public Comment(int id, String content, int authorId, int postId, Integer parentCommentId, Timestamp creationDate) {
+    public Comment(int id, String content, int authorId, int postId, Integer parentCommentId, Timestamp creationDate, Timestamp lastModified) {
         this.id = id;
         this.content = content;
         this.authorId = authorId;
         this.postId = postId;
         this.parentCommentId = parentCommentId;
         this.creationDate = creationDate;
+        this.lastModified = lastModified;
     }
 
     // Getters and Setters
@@ -37,5 +39,7 @@ public class Comment {
 
     public Timestamp getCreationDate() { return creationDate; }
     public void setCreationDate(Timestamp creationDate) { this.creationDate = creationDate; }
-}
 
+    public Timestamp getLastModified() { return lastModified; }
+    public void setLastModified(Timestamp lastModified) { this.lastModified = lastModified; }
+}

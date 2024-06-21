@@ -1,7 +1,6 @@
 package com.imperial.academia.app;
 
-import com.imperial.academia.data_access.DatabaseConnection;
-import com.imperial.academia.data_access.user.UserDAO;
+import com.imperial.academia.service.UserService;
 import com.imperial.academia.entity.user.CommonUserFactory;
 import com.imperial.academia.entity.user.UserFactory;
 import com.imperial.academia.interface_adapter.signup.SignupController;
@@ -35,7 +34,7 @@ public class SignupUseCaseFactory {
     }
 
     private static SignupController createUserSignupUseCase(ViewManagerModel viewManagerModel, SignupViewModel signupViewModel, LoginViewModel loginViewModel) throws SQLException, ClassNotFoundException {
-        UserDAO userDataAccessObject = new UserDAO(DatabaseConnection.getConnection());
+        UserService userService = ServiceFactory.getUserService();
 
         // Notice how we pass this method's parameters to the Presenter.
         SignupOutputBoundary signupOutputBoundary = new SignupPresenter(viewManagerModel, signupViewModel, loginViewModel);
@@ -43,7 +42,7 @@ public class SignupUseCaseFactory {
         UserFactory userFactory = new CommonUserFactory();
 
         SignupInputBoundary userSignupInteractor = new SignupInteractor(
-                userDataAccessObject, signupOutputBoundary, userFactory);
+                userService, signupOutputBoundary, userFactory);
 
         return new SignupController(userSignupInteractor);
     }

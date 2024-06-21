@@ -1,10 +1,11 @@
 -- Insert users
 INSERT INTO users (username, password, email, role, registration_date, avatar_url) VALUES
-('john_doe', 'hashed_password1', 'john@example.com', 'user', CURRENT_TIMESTAMP, 'http://example.com/avatar1.jpg'),
-('jane_smith', 'hashed_password2', 'jane@example.com', 'admin', CURRENT_TIMESTAMP, 'http://example.com/avatar2.jpg'),
-('alice_jones', 'hashed_password3', 'alice@example.com', 'user', CURRENT_TIMESTAMP, 'http://example.com/avatar3.jpg'),
-('bob_brown', 'hashed_password4', 'bob@example.com', 'moderator', CURRENT_TIMESTAMP, 'http://example.com/avatar4.jpg'),
-('charlie_clark', 'hashed_password5', 'charlie@example.com', 'user', CURRENT_TIMESTAMP, 'http://example.com/avatar5.jpg');
+('admin','admin123','admin@example.com', 'admin', CURRENT_TIMESTAMP, 'http://i.pravatar.cc/150?img=1')
+('john_doe', 'hashed_password1', 'john@example.com', 'user', CURRENT_TIMESTAMP, 'http://i.pravatar.cc/150?img=2'),
+('jane_smith', 'hashed_password2', 'jane@example.com', 'admin', CURRENT_TIMESTAMP, 'http://i.pravatar.cc/150?img=3'),
+('alice_jones', 'hashed_password3', 'alice@example.com', 'user', CURRENT_TIMESTAMP, 'http://i.pravatar.cc/150?img=4'),
+('bob_brown', 'hashed_password4', 'bob@example.com', 'moderator', CURRENT_TIMESTAMP, 'http://i.pravatar.cc/150?img=5'),
+('charlie_clark', 'hashed_password5', 'charlie@example.com', 'user', CURRENT_TIMESTAMP, 'http://i.pravatar.cc/150?img=6');
 
 -- Insert boards
 INSERT INTO boards (name, description, creator_id, created_at) VALUES

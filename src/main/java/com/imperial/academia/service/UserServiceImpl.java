@@ -1,66 +1,95 @@
-package com.imperial.academia.service.impl;
+package com.imperial.academia.service;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import com.imperial.academia.cache.UserCache;
 import com.imperial.academia.data_access.user.UserDAI;
 import com.imperial.academia.entity.user.User;
-import com.imperial.academia.service.UserService;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class UserServiceImpl implements UserService {
-    private final UserDAI userDAO;
-    private Cache<Integer, User> userCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(30, TimeUnit.MINUTES)
-            .build();
+    private UserCache userCache;
+    private UserDAI userDAO;
 
-    public UserServiceImpl(UserDAI userDAO) {
+    public UserServiceImpl(UserCache userCache, UserDAI userDAO) {
+        this.userCache = userCache;
         this.userDAO = userDAO;
     }
 
     @Override
-    public void createUser(User user) throws SQLException {
+    public void insert(User user) throws SQLException {
         userDAO.insert(user);
-        userCache.put(user.getId(), user);
+        userCache.setUser("user:" + user.getId(), user);
     }
 
     @Override
-    public User getUserById(int id) throws SQLException {
-        User user = userCache.getIfPresent(id);
+    public boolean existsByUsername(String username) throws SQLException {
+        if (userCache.exists("username:" + username)) {
+            return true;
+        }
+        boolean exists = userDAO.existsByUsername(username);
+        if (exists) {
+            userCache.setUser("username:" + username, userDAO.getByUsername(username));
+        }
+        return exists;
+    }
+
+    @Override
+    public boolean existsByEmail(String email) throws SQLException {
+        if (userCache.exists("email:" + email)) {
+            return true;
+        }
+        boolean exists = userDAO.existsByEmail(email);
+        if (exists) {
+            User user = userDAO.getByUsername(email);
+            userCache.setUser("email:" + email, user);
+        }
+        return exists;
+    }
+
+    @Override
+    public User getByUsername(String username) throws SQLException {
+        User user = userCache.getUser("username:" + username);
         if (user == null) {
-            user = userDAO.get(id);
+            user = userDAO.getByUsername(username);
             if (user != null) {
-                userCache.put(id, user);
+                userCache.setUser("username:" + username, user);
             }
         }
         return user;
     }
 
     @Override
-    public User getUserByUsername(String username) throws SQLException {
-        User user = userDAO.getByUsername(username);
-        if (user != null) {
-            userCache.put(user.getId(), user);
+    public User get(int id) throws SQLException {
+        User user = userCache.getUser("user:" + id);
+        if (user == null) {
+            user = userDAO.get(id);
+            if (user != null) {
+                userCache.setUser("user:" + id, user);
+            }
         }
         return user;
     }
 
     @Override
-    public List<User> getAllUsers() throws SQLException {
-        return userDAO.getAll();
+    public List<User> getAll() throws SQLException {
+        List<User> users = userCache.getUsers("users:all");
+        if (users == null) {
+            users = userDAO.getAll();
+            userCache.setUsers("users:all", users);
+        }
+        return users;
     }
 
     @Override
-    public void updateUser(User user) throws SQLException {
+    public void update(User user) throws SQLException {
         userDAO.update(user);
-        userCache.put(user.getId(), user);
+        userCache.setUser("user:" + user.getId(), user);
     }
 
     @Override
-    public void deleteUser(int id) throws SQLException {
+    public void delete(int id) throws SQLException {
         userDAO.delete(id);
-        userCache.invalidate(id);
+        userCache.deleteUser("user:" + id);
     }
 }

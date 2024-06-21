@@ -1,17 +1,11 @@
 package com.imperial.academia.app;
 
-import com.imperial.academia.cache.UserCache;
-import com.imperial.academia.cache.UserCacheImpl;
-import com.imperial.academia.data_access.DatabaseConnection;
 import com.imperial.academia.data_access.remember_me.RememberMeDAO;
-import com.imperial.academia.data_access.user.UserDAO;
-import com.imperial.academia.data_access.user.UserDAI;
 import com.imperial.academia.interface_adapter.login.LoginController;
 import com.imperial.academia.interface_adapter.login.LoginPresenter;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.service.UserService;
-import com.imperial.academia.service.UserServiceImpl;
 import com.imperial.academia.use_case.login.LoginInputBoundary;
 import com.imperial.academia.use_case.login.LoginInteractor;
 import com.imperial.academia.use_case.login.LoginOutputBoundary;
@@ -38,9 +32,7 @@ public class LoginUseCaseFactory {
     }
 
     private static LoginController createUserLoginUseCase(ViewManagerModel viewManagerModel, LoginViewModel loginViewModel) throws SQLException, ClassNotFoundException {
-        UserDAI userDataAccessObject = new UserDAO(DatabaseConnection.getConnection());
-        UserCache userCache = new UserCacheImpl();
-        UserService userService = new UserServiceImpl(userCache, userDataAccessObject);
+        UserService userService = ServiceFactory.getUserService();
 
         LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, loginViewModel);
 

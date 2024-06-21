@@ -16,7 +16,7 @@ public class CommentDAO implements CommentDAI {
 
     @Override
     public void insert(Comment comment) throws SQLException {
-        String sql = "INSERT INTO comments (content, author_id, post_id, parent_comment_id) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO comments (content, author_id, post_id, parent_comment_id, last_modified) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, comment.getContent());
             pstmt.setInt(2, comment.getAuthorId());
@@ -50,7 +50,8 @@ public class CommentDAO implements CommentDAI {
                         rs.getInt("author_id"),
                         rs.getInt("post_id"),
                         rs.getInt("parent_comment_id"),
-                        rs.getTimestamp("creation_date")
+                        rs.getTimestamp("creation_date"),
+                        rs.getTimestamp("last_modified")
                     );
                 }
             }
@@ -71,7 +72,8 @@ public class CommentDAO implements CommentDAI {
                     rs.getInt("author_id"),
                     rs.getInt("post_id"),
                     rs.getInt("parent_comment_id"),
-                    rs.getTimestamp("creation_date")
+                    rs.getTimestamp("creation_date"),
+                    rs.getTimestamp("last_modified")
                 ));
             }
         }
@@ -79,8 +81,31 @@ public class CommentDAO implements CommentDAI {
     }
 
     @Override
+    public List<Comment> getAllSince(Timestamp timestamp) throws SQLException {
+        String sql = "SELECT * FROM comments WHERE last_modified > ?";
+        List<Comment> comments = new ArrayList<>();
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setTimestamp(1, timestamp);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    comments.add(new Comment(
+                        rs.getInt("comment_id"),
+                        rs.getString("content"),
+                        rs.getInt("author_id"),
+                        rs.getInt("post_id"),
+                        rs.getInt("parent_comment_id"),
+                        rs.getTimestamp("creation_date"),
+                        rs.getTimestamp("last_modified")
+                    ));
+                }
+            }
+        }
+        return comments;
+    }
+
+    @Override
     public void update(Comment comment) throws SQLException {
-        String sql = "UPDATE comments SET content = ?, author_id = ?, post_id = ?, parent_comment_id = ? WHERE comment_id = ?";
+        String sql = "UPDATE comments SET content = ?, author_id = ?, post_id = ?, parent_comment_id = ?, last_modified = CURRENT_TIMESTAMP WHERE comment_id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, comment.getContent());
             pstmt.setInt(2, comment.getAuthorId());

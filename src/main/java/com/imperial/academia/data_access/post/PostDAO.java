@@ -16,7 +16,7 @@ public class PostDAO implements PostDAI {
 
     @Override
     public void insert(Post post) throws SQLException {
-        String sql = "INSERT INTO posts (title, content, author_id, board_id) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO posts (title, content, author_id, board_id, last_modified_date) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, post.getTitle());
             pstmt.setString(2, post.getContent());
@@ -77,8 +77,31 @@ public class PostDAO implements PostDAI {
     }
 
     @Override
+    public List<Post> getAllSince(Timestamp timestamp) throws SQLException {
+        String sql = "SELECT * FROM posts WHERE last_modified_date > ?";
+        List<Post> posts = new ArrayList<>();
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setTimestamp(1, timestamp);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    posts.add(new Post(
+                        rs.getInt("post_id"),
+                        rs.getString("title"),
+                        rs.getString("content"),
+                        rs.getInt("author_id"),
+                        rs.getInt("board_id"),
+                        rs.getTimestamp("creation_date"),
+                        rs.getTimestamp("last_modified_date")
+                    ));
+                }
+            }
+        }
+        return posts;
+    }
+
+    @Override
     public void update(Post post) throws SQLException {
-        String sql = "UPDATE posts SET title = ?, content = ?, author_id = ?, board_id = ? WHERE post_id = ?";
+        String sql = "UPDATE posts SET title = ?, content = ?, author_id = ?, board_id = ?, last_modified_date = CURRENT_TIMESTAMP WHERE post_id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, post.getTitle());
             pstmt.setString(2, post.getContent());

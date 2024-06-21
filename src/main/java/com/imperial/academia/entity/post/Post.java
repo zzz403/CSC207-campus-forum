@@ -43,4 +43,3 @@ public class Post {
     public Timestamp getLastModifiedDate() { return lastModifiedDate; }
     public void setLastModifiedDate(Timestamp lastModifiedDate) { this.lastModifiedDate = lastModifiedDate; }
 }
-

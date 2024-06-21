@@ -1,6 +1,6 @@
 package com.imperial.academia.entity.board;
 
-import com.google.protobuf.Timestamp;
+import java.sql.Timestamp;
 
 public class Board {
     private int id;
@@ -8,12 +8,15 @@ public class Board {
     private String description;
     private int creatorId;
     private Timestamp creationDate;
+    private Timestamp lastModified;
 
-    public Board(int id, String name, String description, int creatorId, java.sql.Timestamp timestamp) {
+    public Board(int id, String name, String description, int creatorId, Timestamp creationDate, Timestamp lastModified) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.creatorId = creatorId;
+        this.creationDate = creationDate;
+        this.lastModified = lastModified;
     }
 
     // Getters and Setters
@@ -31,4 +34,7 @@ public class Board {
 
     public Timestamp getCreationDate() { return creationDate; }
     public void setCreationDate(Timestamp creationDate) { this.creationDate = creationDate; }
+
+    public Timestamp getLastModified() { return lastModified; }
+    public void setLastModified(Timestamp lastModified) { this.lastModified = lastModified; }
 }

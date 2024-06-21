@@ -7,12 +7,14 @@ public class GroupMember {
     private int userId;
     private String role;
     private Timestamp joinedDate;
+    private Timestamp lastModified;
 
-    public GroupMember(int groupId, int userId, String role, Timestamp joinedDate) {
+    public GroupMember(int groupId, int userId, String role, Timestamp joinedDate, Timestamp lastModified) {
         this.groupId = groupId;
         this.userId = userId;
         this.role = role;
         this.joinedDate = joinedDate;
+        this.lastModified = lastModified;
     }
 
     // Getters and Setters
@@ -27,4 +29,7 @@ public class GroupMember {
 
     public Timestamp getJoinedDate() { return joinedDate; }
     public void setJoinedDate(Timestamp joinedDate) { this.joinedDate = joinedDate; }
+
+    public Timestamp getLastModified() { return lastModified; }
+    public void setLastModified(Timestamp lastModified) { this.lastModified = lastModified; }
 }
