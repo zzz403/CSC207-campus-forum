@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarController;
 
 public class TopNavigationBar extends JPanel {
+    // TODO: idk why
     public TopNavigationBar(TopNavigationBarController topNavigationBarController) {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);

@@ -5,68 +5,50 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 
-/**
- * H2Setup is a utility class for setting up an H2 database.
- * It connects to the database, drops existing tables if they exist,
- * creates new tables, and inserts initial data from a file.
- */
 public class H2Setup {
-    // JDBC driver name and database URL
     static final String JDBC_DRIVER = "org.h2.Driver";
     static final String DB_URL = "jdbc:h2:./database/academia_imperial";
-    // Database credentials
     static final String USER = "sa";
     static final String PASS = "";
-    // File path for initial data
-    static final String FILE_PATH = "./database/example_data.txt";
+    static final String FILE_PATH = "./database/example_data.sql";
 
-    /**
-     * The main method to set up the H2 database.
-     * @param args Command line arguments
-     */
     public static void main(String[] args) {
         Connection conn = null;
         Statement stmt = null;
         BufferedReader reader = null;
 
         try {
-            // Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // Open a connection
             System.out.println("Connecting to H2 database...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = conn.createStatement();
+            conn.setAutoCommit(false); // 开始事务
 
-            // Drop existing tables
             System.out.println("Dropping existing tables if they exist...");
             String[] dropTables = {
-                "DROP TABLE IF EXISTS users",
-                "DROP TABLE IF EXISTS boards",
-                "DROP TABLE IF EXISTS posts",
-                "DROP TABLE IF EXISTS comments",
-                "DROP TABLE IF EXISTS chat_groups",
-                "DROP TABLE IF EXISTS chat_messages",
-                "DROP TABLE IF EXISTS group_members",
-                "DROP TABLE IF EXISTS user_follows",
-                "DROP TABLE IF EXISTS files",
-                "DROP TABLE IF EXISTS notifications",
-                "DROP TABLE IF EXISTS roles",
-                "DROP TABLE IF EXISTS user_roles",
-                "DROP TABLE IF EXISTS permissions",
-                "DROP TABLE IF EXISTS role_permissions",
-                "DROP TABLE IF EXISTS user_statistics"
+                "DROP TABLE IF EXISTS user_statistics;",
+                "DROP TABLE IF EXISTS role_permissions;",
+                "DROP TABLE IF EXISTS permissions;",
+                "DROP TABLE IF EXISTS user_roles;",
+                "DROP TABLE IF EXISTS roles;",
+                "DROP TABLE IF EXISTS notifications;",
+                "DROP TABLE IF EXISTS files;",
+                "DROP TABLE IF EXISTS user_follows;",
+                "DROP TABLE IF EXISTS group_members;",
+                "DROP TABLE IF EXISTS chat_messages;",
+                "DROP TABLE IF EXISTS chat_groups;",
+                "DROP TABLE IF EXISTS comments;",
+                "DROP TABLE IF EXISTS posts;",
+                "DROP TABLE IF EXISTS boards;",
+                "DROP TABLE IF EXISTS users;"
             };
 
-            // Execute drop table statements
             for (String dropTable : dropTables) {
                 stmt.executeUpdate(dropTable);
             }
 
-            // Create new tables
             System.out.println("Creating tables in the H2 database...");
 
             String createUsersTable = "CREATE TABLE users (" +
@@ -74,7 +56,7 @@ public class H2Setup {
                 "username VARCHAR(50) NOT NULL UNIQUE, " +
                 "password VARCHAR(255) NOT NULL, " +
                 "email VARCHAR(100) NOT NULL UNIQUE, " +
-                "role ENUM('user', 'admin') NOT NULL, " +
+                "role VARCHAR(20) NOT NULL, " +
                 "registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
                 "avatar_url VARCHAR(255), " +
                 "token VARCHAR(255) DEFAULT NULL, " +
@@ -145,7 +127,7 @@ public class H2Setup {
             String createGroupMembersTable = "CREATE TABLE group_members (" +
                 "group_id INT NOT NULL, " +
                 "user_id INT NOT NULL, " +
-                "role ENUM('member', 'admin') DEFAULT 'member', " +
+                "role VARCHAR(20) DEFAULT 'member', " +
                 "joined_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
                 "last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, " +
                 "PRIMARY KEY (group_id, user_id), " +
@@ -252,14 +234,12 @@ public class H2Setup {
                 ")";
             stmt.executeUpdate(createUserStatisticsTable);
 
-            // Insert roles
             String insertRoles = "INSERT INTO roles (name, description) VALUES " +
                 "('User', 'Regular user with limited permissions'), " +
                 "('Moderator', 'User with moderation permissions'), " +
                 "('Admin', 'Administrator with full permissions')";
             stmt.executeUpdate(insertRoles);
 
-            // Insert permissions
             String insertPermissions = "INSERT INTO permissions (name, description) VALUES " +
                 "('post:create', 'Permission to create a post'), " +
                 "('post:read', 'Permission to read posts'), " +
@@ -271,35 +251,27 @@ public class H2Setup {
                 "('user:manage', 'Permission to manage users')";
             stmt.executeUpdate(insertPermissions);
 
-            // Assign permissions to roles
             String insertRolePermissions = "INSERT INTO role_permissions (role_id, permission_id) VALUES " +
-                "(1, 1), (1, 2), (1, 4), (1, 5), (1, 7), " + // User permissions
-                "(2, 1), (2, 2), (2, 3), (2, 4), (2, 5), (2, 6), (2, 7), " + // Moderator permissions
-                "(3, 1), (3, 2), (3, 3), (3, 4), (3, 5), (3, 6), (3, 7), (3, 8)"; // Admin permissions
+                "(1, 1), (1, 2), (1, 4), (1, 5), (1, 7), " +
+                "(2, 1), (2, 2), (2, 3), (2, 4), (2, 5), (2, 6), (2, 7), " +
+                "(3, 1), (3, 2), (3, 3), (3, 4), (3, 5), (3, 6), (3, 7), (3, 8)";
             stmt.executeUpdate(insertRolePermissions);
 
-            // Insert data from the file
             System.out.println("Reading SQL data from file...");
-            reader = new BufferedReader(new FileReader(FILE_PATH));
-            String line;
-            StringBuilder sqlBuilder = new StringBuilder();
+            
+            String sql = "RUNSCRIPT FROM '" + FILE_PATH + "'";
+            stmt.execute(sql);
 
-            // Read and execute SQL statements from file
-            while ((line = reader.readLine()) != null) {
-                sqlBuilder.append(line);
-                if (line.trim().endsWith(";")) {
-                    stmt.executeUpdate(sqlBuilder.toString());
-                    sqlBuilder.setLength(0);
-                }
-            }
+            System.out.println("SQL file imported successfully");
+            
 
+            conn.commit(); // 提交事务
             System.out.println("Data inserted successfully...");
         } catch (SQLException se) {
             se.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // Clean up resources
             try {
                 if (reader != null) reader.close();
                 if (stmt != null) stmt.close();
@@ -310,6 +282,8 @@ public class H2Setup {
                 se.printStackTrace();
             }
         }
+
+
         System.out.println("Finish!");
     }
 }
