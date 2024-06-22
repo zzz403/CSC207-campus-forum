@@ -29,7 +29,7 @@ public class LoginPresenter implements LoginOutputBoundary {
      */
     @Override
     public void prepareSuccessView(LoginOutputData loginOutputData) {
-        viewManagerModel.setActiveView("forum"); // Example: navigate to forum view
+        viewManagerModel.setActiveView("post board"); // Example: navigate to forum view
         viewManagerModel.firePropertyChanged();
     }
 
