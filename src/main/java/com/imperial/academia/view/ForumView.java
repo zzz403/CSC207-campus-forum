@@ -8,15 +8,12 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 
 /**
  * The ForumView class represents the forum view in the application.
@@ -29,10 +26,7 @@ public class ForumView extends JPanel {
      * Constructs a ForumView instance and initializes the UI components.
      */
 
-    private final ViewManagerModel viewManagerModel;
-    public ForumView(ViewManagerModel viewManagerModel) {
-        this.viewManagerModel = viewManagerModel;
-
+    public ForumView() {
         setLayout(new BorderLayout());
 
         // Create the main panel with GridBagLayout
@@ -84,21 +78,12 @@ public class ForumView extends JPanel {
         add(mainPanel, BorderLayout.CENTER);
     }
 
-    private void genPostButton(JPanel mainPanel, GridBagConstraints gbc) {
-        JButton postButton = new JButton("Post");
-        postButton.setFont(new Font("Arial", Font.BOLD, 16));
-        postButton.setBackground(new Color(70, 130, 180));
-        postButton.setForeground(Color.WHITE);
-        postButton.setFocusPainted(false);
-        postButton.setPreferredSize(new Dimension(300, 40));
-        mainPanel.add(postButton, gbc);
-        postButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                viewManagerModel.setActiveView("poster");
-                viewManagerModel.firePropertyChanged();
-            }
-        });
-
+    // Method to create buttons with action listeners
+    private JButton createButton(String text, ActionListener action) {
+        JButton button = new JButton(text);
+        if (action != null) {
+            button.addActionListener(action);
+        }
+        return button;
     }
 }
