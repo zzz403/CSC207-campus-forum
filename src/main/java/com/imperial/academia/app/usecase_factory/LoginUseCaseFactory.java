@@ -1,8 +1,9 @@
-package com.imperial.academia.app;
+package com.imperial.academia.app.usecase_factory;
 
 import com.imperial.academia.interface_adapter.login.LoginController;
 import com.imperial.academia.interface_adapter.login.LoginPresenter;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
+import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.data_access.RememberMeDAO;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.service.UserService;

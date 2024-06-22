@@ -1,20 +1,22 @@
-package com.imperial.academia.app;
+package com.imperial.academia.app.usecase_factory;
 
-import com.imperial.academia.service.UserService;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.entity.user.CommonUserFactory;
 import com.imperial.academia.entity.user.UserFactory;
+import com.imperial.academia.interface_adapter.common.ViewManagerModel;
+import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.signup.SignupController;
 import com.imperial.academia.interface_adapter.signup.SignupPresenter;
 import com.imperial.academia.interface_adapter.signup.SignupViewModel;
-import com.imperial.academia.interface_adapter.common.ViewManagerModel;
-import com.imperial.academia.interface_adapter.login.LoginViewModel;
+import com.imperial.academia.service.UserService;
 import com.imperial.academia.use_case.signup.SignupInputBoundary;
 import com.imperial.academia.use_case.signup.SignupInteractor;
 import com.imperial.academia.use_case.signup.SignupOutputBoundary;
 import com.imperial.academia.view.SignupView;
-
-import javax.swing.*;
-import java.sql.SQLException;
 
 /**
  * Factory class for creating the Signup use case and its related components.
