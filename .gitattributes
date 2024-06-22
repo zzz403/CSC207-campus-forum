@@ -1,2 +1,2 @@
-src/main/java/com/imperial/academia/database/academia_imperial.mv.db merge=ours
-src/main/java/com/imperial/academia/database/rememberme.txt
+database/academia_imperial.mv.db merge=ours
+database/rememberme.txt
