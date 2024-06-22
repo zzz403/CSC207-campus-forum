@@ -1,22 +1,31 @@
 package com.imperial.academia.app;
 
-import com.imperial.academia.interface_adapter.login.LoginViewModel;
-import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
-import com.imperial.academia.interface_adapter.signup.SignupViewModel;
-import com.imperial.academia.interface_adapter.common.ViewManagerModel;
-import com.imperial.academia.view.LoginView;
-import com.imperial.academia.view.PostBoardView;
-import com.imperial.academia.view.SignupView;
-import com.imperial.academia.view.ForumView;
-import com.imperial.academia.view.ViewManager;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.CardLayout;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
+
+import com.imperial.academia.app.usecase_factory.CreatePostUseCaseFactory;
+import com.imperial.academia.app.usecase_factory.LoginUseCaseFactory;
+import com.imperial.academia.app.usecase_factory.PostBoardUseCaseFactory;
+import com.imperial.academia.app.usecase_factory.SignupUseCaseFactory;
+import com.imperial.academia.interface_adapter.common.ViewManagerModel;
+import com.imperial.academia.interface_adapter.login.LoginViewModel;
+import com.imperial.academia.interface_adapter.postboard.CreatePostViewModel;
+import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
+import com.imperial.academia.interface_adapter.signup.SignupViewModel;
+import com.imperial.academia.view.CreatePostView;
+import com.imperial.academia.view.ForumView;
+import com.imperial.academia.view.LoginView;
+import com.imperial.academia.view.PostBoardView;
+import com.imperial.academia.view.SignupView;
+import com.imperial.academia.view.ViewManager;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
@@ -44,13 +53,15 @@ public class Main {
 
         JPanel views = new JPanel(cardLayout);
         application.add(views);
-
+        
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
-        
+
         LoginViewModel loginViewModel = new LoginViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
         PostBoardViewModel posterViewModel = new PostBoardViewModel();
+        CreatePostViewModel createPostViewModel = new CreatePostViewModel();
+        
         
         try {
             ServiceFactory.initialize();
@@ -62,6 +73,8 @@ public class Main {
 
             PostBoardView posterView = PostBoardUseCaseFactory.create(viewManagerModel, posterViewModel);
             views.add(posterView, posterView.viewName);
+            CreatePostView createPostView = CreatePostUseCaseFactory.create(viewManagerModel, createPostViewModel);
+            views.add(createPostView, createPostView.viewName);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
