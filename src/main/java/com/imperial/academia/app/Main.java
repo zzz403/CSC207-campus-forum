@@ -3,6 +3,8 @@ package com.imperial.academia.app;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.poster.PosterViewModel;
 import com.imperial.academia.interface_adapter.signup.SignupViewModel;
+import com.imperial.academia.service.UserService;
+import com.imperial.academia.entity.user.User;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.view.LoginView;
 import com.imperial.academia.view.PosterView;
@@ -15,6 +17,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -62,6 +65,17 @@ public class Main {
 
         try {
             ServiceFactory.initialize();
+            UserService userService = ServiceFactory.getUserService();
+            List<User> user = null;
+            try {
+                user = userService.getAll();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            for (User u : user) {
+                System.out.println(u.getUsername());
+            }
+            System.out.println();
             SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel);
             views.add(signupView, signupView.viewName);
 
@@ -75,7 +89,7 @@ public class Main {
         }
         // Create and add the forum view
 
-        ForumView forumView = new ForumView(viewManagerModel);
+        ForumView forumView = new ForumView();
 
         views.add(forumView, forumView.viewName);
 
@@ -87,5 +101,7 @@ public class Main {
         application.setSize(800, 700);
         application.setLocationRelativeTo(null);
         application.setVisible(true);
+
+
     }
 }
