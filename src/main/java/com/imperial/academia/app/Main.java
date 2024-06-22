@@ -1,33 +1,38 @@
 package com.imperial.academia.app;
 
-import com.imperial.academia.interface_adapter.login.LoginViewModel;
-import com.imperial.academia.interface_adapter.poster.PosterViewModel;
-import com.imperial.academia.interface_adapter.signup.SignupViewModel;
-import com.imperial.academia.service.UserService;
-import com.imperial.academia.entity.user.User;
-import com.imperial.academia.interface_adapter.common.ViewManagerModel;
-import com.imperial.academia.view.LoginView;
-import com.imperial.academia.view.PosterView;
-import com.imperial.academia.view.SignupView;
-import com.imperial.academia.view.ForumView;
-import com.imperial.academia.view.ViewManager;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.CardLayout;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
-/**
- * Main class for the Academia Imperial application.
- * This class sets up the main application window and initializes different views.
- */
+import com.imperial.academia.app.usecase_factory.CreatePostUseCaseFactory;
+import com.imperial.academia.app.usecase_factory.LoginUseCaseFactory;
+import com.imperial.academia.app.usecase_factory.PostBoardUseCaseFactory;
+import com.imperial.academia.app.usecase_factory.SignupUseCaseFactory;
+import com.imperial.academia.entity.user.User;
+import com.imperial.academia.interface_adapter.common.ViewManagerModel;
+import com.imperial.academia.interface_adapter.login.LoginViewModel;
+import com.imperial.academia.interface_adapter.postboard.CreatePostViewModel;
+import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
+import com.imperial.academia.interface_adapter.signup.SignupViewModel;
+import com.imperial.academia.service.UserService;
+import com.imperial.academia.view.CreatePostView;
+import com.imperial.academia.view.ForumView;
+import com.imperial.academia.view.LoginView;
+import com.imperial.academia.view.PostBoardView;
+import com.imperial.academia.view.SignupView;
+import com.imperial.academia.view.ViewManager;
+
 public class Main {
     public static void main(String[] args) throws SQLException {
-        // Create the main application window
+        // The main application window.
         JFrame application = new JFrame("Academia Imperial");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -39,7 +44,7 @@ public class Main {
             }
         });
 
-        // Set the application icon
+        // icon logo
         try {
             Image logo = ImageIO.read(new File("resources/logo.png"));
             application.setIconImage(logo);
@@ -47,22 +52,20 @@ public class Main {
             e.printStackTrace();
         }
 
-        // Set up a CardLayout for switching between different views
         CardLayout cardLayout = new CardLayout();
+
         JPanel views = new JPanel(cardLayout);
         application.add(views);
-
-        // Initialize the ViewManagerModel
+        
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
 
-        // Initialize the view models for login and signup
         LoginViewModel loginViewModel = new LoginViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
-
-        // Initialize the service factory and create the views
-        PosterViewModel posterViewModel = new PosterViewModel();
-
+        PostBoardViewModel posterViewModel = new PostBoardViewModel();
+        CreatePostViewModel createPostViewModel = new CreatePostViewModel();
+        
+        
         try {
             ServiceFactory.initialize();
             UserService userService = ServiceFactory.getUserService();
@@ -82,12 +85,13 @@ public class Main {
             LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel);
             views.add(loginView, loginView.viewName);
 
-            PosterView posterView = PosterUseCaseFactory.create(viewManagerModel, posterViewModel);
+            PostBoardView posterView = PostBoardUseCaseFactory.create(viewManagerModel, posterViewModel);
             views.add(posterView, posterView.viewName);
+            CreatePostView createPostView = CreatePostUseCaseFactory.create(viewManagerModel, createPostViewModel);
+            views.add(createPostView, createPostView.viewName);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        // Create and add the forum view
 
         ForumView forumView = new ForumView();
 
@@ -97,9 +101,9 @@ public class Main {
         viewManagerModel.setActiveView("log in");
         viewManagerModel.firePropertyChanged();
 
-        // Set the size of the application window and center it on the screen
-        application.setSize(800, 700);
-        application.setLocationRelativeTo(null);
+        // Set size and center the window
+        application.setSize(800, 700); // 设置窗口大小
+        application.setLocationRelativeTo(null); // 居中显示
         application.setVisible(true);
 
 
