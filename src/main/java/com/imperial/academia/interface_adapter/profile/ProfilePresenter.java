@@ -4,8 +4,6 @@ import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.use_case.profile.ProfileOutputBoundry;
 import com.imperial.academia.use_case.profile.ProfileOutputData;
 
-import java.sql.Timestamp;
-
 public class ProfilePresenter implements ProfileOutputBoundry {
     private final ProfileViewModel profileViewModel;
     private final ViewManagerModel viewManagerModel;

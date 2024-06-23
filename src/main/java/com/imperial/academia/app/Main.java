@@ -5,7 +5,6 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -16,19 +15,19 @@ import com.imperial.academia.app.usecase_factory.CreatePostUseCaseFactory;
 import com.imperial.academia.app.usecase_factory.LoginUseCaseFactory;
 import com.imperial.academia.app.usecase_factory.PostBoardUseCaseFactory;
 import com.imperial.academia.app.usecase_factory.SignupUseCaseFactory;
-import com.imperial.academia.entity.user.User;
+import com.imperial.academia.app.usecase_factory.TopNavigationBarUseCaseFacory;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.postboard.CreatePostViewModel;
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
 import com.imperial.academia.interface_adapter.signup.SignupViewModel;
-import com.imperial.academia.service.UserService;
 import com.imperial.academia.view.CreatePostView;
 import com.imperial.academia.view.ForumView;
 import com.imperial.academia.view.LoginView;
 import com.imperial.academia.view.PostBoardView;
 import com.imperial.academia.view.SignupView;
 import com.imperial.academia.view.ViewManager;
+import com.imperial.academia.view.components.TopNavigationBar;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
@@ -56,37 +55,29 @@ public class Main {
 
         JPanel views = new JPanel(cardLayout);
         application.add(views);
-        
+
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
 
         LoginViewModel loginViewModel = new LoginViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
-        PostBoardViewModel posterViewModel = new PostBoardViewModel();
+        PostBoardViewModel postBoardViewModel = new PostBoardViewModel();
         CreatePostViewModel createPostViewModel = new CreatePostViewModel();
-        
-        
+
         try {
             ServiceFactory.initialize();
-            UserService userService = ServiceFactory.getUserService();
-            List<User> user = null;
-            try {
-                user = userService.getAll();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            for (User u : user) {
-                System.out.println(u.getUsername());
-            }
-            System.out.println();
+
+            TopNavigationBar topNavigationBar = TopNavigationBarUseCaseFacory.create(viewManagerModel);
+
             SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel);
             views.add(signupView, signupView.viewName);
 
             LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel);
             views.add(loginView, loginView.viewName);
 
-            PostBoardView posterView = PostBoardUseCaseFactory.create(viewManagerModel, posterViewModel);
-            views.add(posterView, posterView.viewName);
+            PostBoardView postBoardView = PostBoardUseCaseFactory.create(viewManagerModel, postBoardViewModel);
+            views.add(postBoardView, postBoardView.viewName);
+            postBoardView.addTopNavigationBar(topNavigationBar);
             CreatePostView createPostView = CreatePostUseCaseFactory.create(viewManagerModel, createPostViewModel);
             views.add(createPostView, createPostView.viewName);
         } catch (ClassNotFoundException e) {
@@ -105,7 +96,6 @@ public class Main {
         application.setSize(800, 700); // 设置窗口大小
         application.setLocationRelativeTo(null); // 居中显示
         application.setVisible(true);
-
 
     }
 }
