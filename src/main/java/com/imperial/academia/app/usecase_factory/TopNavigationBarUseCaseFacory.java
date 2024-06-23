@@ -6,7 +6,7 @@ import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarPresent
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.changeview.ChangeViewInteractor;
 import com.imperial.academia.use_case.changeview.ChangeViewOutputBoundary;
-import com.imperial.academia.view.TopNavigationBar;
+import com.imperial.academia.view.components.TopNavigationBar;
 
 public class TopNavigationBarUseCaseFacory {
     
