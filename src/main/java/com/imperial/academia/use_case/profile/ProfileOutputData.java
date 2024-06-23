@@ -1,7 +1,5 @@
 package com.imperial.academia.use_case.profile;
 
-import com.imperial.academia.entity.user.User;
-
 import java.sql.Timestamp;
 
 public class ProfileOutputData {

@@ -1,4 +1,4 @@
-package com.imperial.academia.view;
+package com.imperial.academia.view.components;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,12 +18,11 @@ import javax.swing.JTextField;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarController;
 
 public class TopNavigationBar extends JPanel {
-    // TODO: idk why
     public TopNavigationBar(TopNavigationBarController topNavigationBarController) {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
         setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-
+        
         // Logo
         ImageIcon logo = new ImageIcon("resources/logo.png");
         logo.setImage(logo.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
@@ -33,7 +32,7 @@ public class TopNavigationBar extends JPanel {
 
         // Search Bar
         JTextField searchField = new JTextField("Search");
-        searchField.setPreferredSize(new Dimension(400, 30));
+        searchField.setPreferredSize(new Dimension(200, 30));
         searchField.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
         add(searchField, BorderLayout.CENTER);
 
@@ -45,7 +44,7 @@ public class TopNavigationBar extends JPanel {
         JButton createPostButton = new JButton("Create Post");
         createPostButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                // topNavigationBarController.changeView("create post");
+                topNavigationBarController.changeView("create post");
             }
         });
         JButton notificationButton = new JButton("Notification");

@@ -1,14 +1,28 @@
 package com.imperial.academia.view;
 
-import com.imperial.academia.interface_adapter.login.LoginState;
-import com.imperial.academia.interface_adapter.login.LoginViewModel;
-import com.imperial.academia.interface_adapter.login.LoginController;
-import com.imperial.academia.view.components.AvatarComponent;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.*;
+
+import com.imperial.academia.interface_adapter.login.LoginController;
+import com.imperial.academia.interface_adapter.login.LoginState;
+import com.imperial.academia.interface_adapter.login.LoginViewModel;
 
 /**
  * LoginView class represents the login interface of the application.
