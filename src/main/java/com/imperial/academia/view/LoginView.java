@@ -3,6 +3,7 @@ package com.imperial.academia.view;
 import com.imperial.academia.interface_adapter.login.LoginState;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.login.LoginController;
+import com.imperial.academia.view.components.AvatarComponent;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
