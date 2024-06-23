@@ -2,9 +2,11 @@ package com.imperial.academia.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import com.imperial.academia.interface_adapter.postboard.PostBoardController;
@@ -13,7 +15,7 @@ import com.imperial.academia.view.components.TopNavigationBar;
 
 public class PostBoardView extends JPanel {
     public final String viewName = "post board";
-
+    private JPanel mainPanel;
     // private final PostBoardViewModel posterViewModel;
     // private final PostBoardController posterController;
 
@@ -24,18 +26,23 @@ public class PostBoardView extends JPanel {
         setLayout(new BorderLayout());
 
         // Create the main panel
-        JPanel mainPanel = new JPanel();
+        mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 
         // Add main panel to the center of the layout
+        JButton postButton = new JButton("Post");
+        postButton.setSize(new Dimension(100, 50));
+        mainPanel.add(postButton);
         add(mainPanel, BorderLayout.CENTER);
     }
 
     public void addTopNavigationBar(TopNavigationBar topNavigationBar) {
         JPanel topNavPanel = new JPanel();
-        topNavPanel.add(topNavigationBar);
-        add(topNavPanel);
+        topNavPanel.setLayout(new BorderLayout());
+        topNavPanel.add(topNavigationBar, BorderLayout.CENTER);
+        topNavPanel.setBackground(Color.WHITE);
+        add(topNavPanel, BorderLayout.NORTH);
     }
 }

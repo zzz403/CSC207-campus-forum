@@ -73,7 +73,7 @@ public class LoginInteractor implements LoginInputBoundary {
         }
 
         SessionManager.setCurrentUser(user);
-        LoginOutputData loginOutputData = new LoginOutputData(user.getUsername(), "Login successful.");
+        LoginOutputData loginOutputData = new LoginOutputData(user.getUsername(), "Login successful.", user.getAvatarUrl(), user.getId());
         loginPresenter.prepareSuccessView(loginOutputData);
     }
 

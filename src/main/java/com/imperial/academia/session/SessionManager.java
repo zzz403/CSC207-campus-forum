@@ -1,5 +1,8 @@
 package com.imperial.academia.session;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 import com.imperial.academia.entity.user.User;
 
 /**
@@ -8,7 +11,7 @@ import com.imperial.academia.entity.user.User;
  */
 public class SessionManager {
     private static User currentUser;
-
+    private static final PropertyChangeSupport support = new PropertyChangeSupport(SessionManager.class);
     /**
      * Gets the current user of the session.
      *
@@ -24,7 +27,9 @@ public class SessionManager {
      * @param user the user to set as the current user
      */
     public static void setCurrentUser(User user) {
+        User oldUser = currentUser;
         currentUser = user;
+        support.firePropertyChange("currentUser", oldUser, currentUser);
     }
 
     /**
@@ -32,6 +37,16 @@ public class SessionManager {
      * This method sets the current user to null, effectively logging the user out.
      */
     public static void clearSession() {
+        User oldUser = currentUser;
         currentUser = null;
+        support.firePropertyChange("currentUser", oldUser, currentUser);
+    }
+
+     public static void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
+    }
+
+    public static void removePropertyChangeListener(PropertyChangeListener listener) {
+        support.removePropertyChangeListener(listener);
     }
 }

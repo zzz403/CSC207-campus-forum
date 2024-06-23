@@ -180,7 +180,6 @@ public class SignupView extends JPanel {
 
         // Add property change listener to update the view when the model changes
         signupViewModel.addPropertyChangeListener(evt -> {
-            System.out.println("Property changed: " + evt.getPropertyName());
             if ("clean".equals(evt.getPropertyName())) {
                 SignupState state = signupViewModel.getState();
                 usernameField.setText(state.getUsername());

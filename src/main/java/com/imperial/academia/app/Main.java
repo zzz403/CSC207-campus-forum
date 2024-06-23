@@ -1,5 +1,6 @@
 package com.imperial.academia.app;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Image;
 import java.io.File;
@@ -21,6 +22,7 @@ import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.postboard.CreatePostViewModel;
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
 import com.imperial.academia.interface_adapter.signup.SignupViewModel;
+import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
 import com.imperial.academia.view.CreatePostView;
 import com.imperial.academia.view.ForumView;
 import com.imperial.academia.view.LoginView;
@@ -30,7 +32,7 @@ import com.imperial.academia.view.ViewManager;
 import com.imperial.academia.view.components.TopNavigationBar;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, IOException {
         // The main application window.
         JFrame application = new JFrame("Academia Imperial");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -63,21 +65,26 @@ public class Main {
         SignupViewModel signupViewModel = new SignupViewModel();
         PostBoardViewModel postBoardViewModel = new PostBoardViewModel();
         CreatePostViewModel createPostViewModel = new CreatePostViewModel();
+        TopNavigationBarViewModel topNavigationBarViewModel = new TopNavigationBarViewModel();
 
         try {
             ServiceFactory.initialize();
 
-            TopNavigationBar topNavigationBar = TopNavigationBarUseCaseFacory.create(viewManagerModel);
+            TopNavigationBar topNavigationBar = TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel);
 
             SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel);
             views.add(signupView, signupView.viewName);
 
-            LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel);
+            LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel,topNavigationBarViewModel);
             views.add(loginView, loginView.viewName);
 
             PostBoardView postBoardView = PostBoardUseCaseFactory.create(viewManagerModel, postBoardViewModel);
             views.add(postBoardView, postBoardView.viewName);
-            postBoardView.addTopNavigationBar(topNavigationBar);
+
+            // Add the top navigation bar to the post board view
+            // postBoardView.addTopNavigationBar(topNavigationBar);
+            postBoardView.add(topNavigationBar, BorderLayout.NORTH);
+
             CreatePostView createPostView = CreatePostUseCaseFactory.create(viewManagerModel, createPostViewModel);
             views.add(createPostView, createPostView.viewName);
         } catch (ClassNotFoundException e) {

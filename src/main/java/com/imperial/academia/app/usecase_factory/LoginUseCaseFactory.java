@@ -3,6 +3,7 @@ package com.imperial.academia.app.usecase_factory;
 import com.imperial.academia.interface_adapter.login.LoginController;
 import com.imperial.academia.interface_adapter.login.LoginPresenter;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
+import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
 import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.data_access.RememberMeDAO;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
@@ -31,10 +32,10 @@ public class LoginUseCaseFactory {
      * @return the login view
      * @throws ClassNotFoundException if the UserDAO class is not found
      */
-    public static LoginView create(ViewManagerModel viewManagerModel, LoginViewModel loginViewModel) throws ClassNotFoundException {
+    public static LoginView create(ViewManagerModel viewManagerModel, LoginViewModel loginViewModel,TopNavigationBarViewModel topNavigationBarViewModel) throws ClassNotFoundException {
 
         try {
-            LoginController loginController = createUserLoginUseCase(viewManagerModel, loginViewModel);
+            LoginController loginController = createUserLoginUseCase(viewManagerModel, loginViewModel,topNavigationBarViewModel);
             return new LoginView(loginController, loginViewModel);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
@@ -52,12 +53,12 @@ public class LoginUseCaseFactory {
      * @throws SQLException if a database access error occurs
      * @throws ClassNotFoundException if the UserDAO class is not found
      */
-    private static LoginController createUserLoginUseCase(ViewManagerModel viewManagerModel, LoginViewModel loginViewModel) throws SQLException, ClassNotFoundException {
+    private static LoginController createUserLoginUseCase(ViewManagerModel viewManagerModel, LoginViewModel loginViewModel,TopNavigationBarViewModel topNavigationBarViewModel) throws SQLException, ClassNotFoundException {
         // Get the UserService instance from the ServiceFactory
         UserService userService = ServiceFactory.getUserService();
 
         // Create the presenter for the login use case
-        LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, loginViewModel);
+        LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, loginViewModel, topNavigationBarViewModel);
 
         // Create the RememberMeDAO
         RememberMeDAO rememberMeDAO = new RememberMeDAO();
