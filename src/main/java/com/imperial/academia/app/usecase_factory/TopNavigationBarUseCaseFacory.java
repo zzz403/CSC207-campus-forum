@@ -2,6 +2,8 @@ package com.imperial.academia.app.usecase_factory;
 
 import java.io.IOException;
 
+import javax.swing.JFrame;
+
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarController;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarPresenter;
@@ -14,12 +16,15 @@ import com.imperial.academia.use_case.session.SessionInteractor;
 import com.imperial.academia.view.components.TopNavigationBar;
 
 public class TopNavigationBarUseCaseFacory {
+    private static TopNavigationBarController topNavigationBarController = null;
     
     private TopNavigationBarUseCaseFacory(){}
 
-    public static TopNavigationBar create(ViewManagerModel viewManagerModel,TopNavigationBarViewModel topNavigationBarViewModel) throws IOException{
-        TopNavigationBarController topNavigationBarController = createController(viewManagerModel,topNavigationBarViewModel);
-        return new TopNavigationBar(topNavigationBarController,topNavigationBarViewModel);
+    public static TopNavigationBar create(ViewManagerModel viewManagerModel,TopNavigationBarViewModel topNavigationBarViewModel, JFrame frame) throws IOException{
+        if (topNavigationBarController == null) {
+            topNavigationBarController = createController(viewManagerModel,topNavigationBarViewModel);
+        }
+        return new TopNavigationBar(topNavigationBarController,topNavigationBarViewModel, frame);
     }
 
     private static TopNavigationBarController createController(ViewManagerModel viewManagerModel ,TopNavigationBarViewModel topNavigationBarViewModel){

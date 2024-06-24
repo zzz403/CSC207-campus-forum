@@ -2,11 +2,9 @@ package com.imperial.academia.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import com.imperial.academia.interface_adapter.postboard.PostBoardController;
@@ -32,9 +30,6 @@ public class PostBoardView extends JPanel {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 
         // Add main panel to the center of the layout
-        JButton postButton = new JButton("Post");
-        postButton.setSize(new Dimension(100, 50));
-        mainPanel.add(postButton);
         add(mainPanel, BorderLayout.CENTER);
     }
 
@@ -43,6 +38,6 @@ public class PostBoardView extends JPanel {
         topNavPanel.setLayout(new BorderLayout());
         topNavPanel.add(topNavigationBar, BorderLayout.CENTER);
         topNavPanel.setBackground(Color.WHITE);
-        add(topNavPanel, BorderLayout.NORTH);
+        add(topNavigationBar, BorderLayout.NORTH);
     }
 }

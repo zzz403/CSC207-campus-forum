@@ -51,6 +51,4 @@ public class CreatePostView extends JPanel {
         add(tagsPanel, BorderLayout.SOUTH);
         add(buttonsPanel, BorderLayout.SOUTH);
     }
-
-    
 }
