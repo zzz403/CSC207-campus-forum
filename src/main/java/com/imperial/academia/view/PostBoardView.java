@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 
 import com.imperial.academia.interface_adapter.postboard.PostBoardController;
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
-import com.imperial.academia.view.components.TopNavigationBar;
 
 public class PostBoardView extends JPanel {
     public final String viewName = "post board";
@@ -31,13 +30,5 @@ public class PostBoardView extends JPanel {
 
         // Add main panel to the center of the layout
         add(mainPanel, BorderLayout.CENTER);
-    }
-
-    public void addTopNavigationBar(TopNavigationBar topNavigationBar) {
-        JPanel topNavPanel = new JPanel();
-        topNavPanel.setLayout(new BorderLayout());
-        topNavPanel.add(topNavigationBar, BorderLayout.CENTER);
-        topNavPanel.setBackground(Color.WHITE);
-        add(topNavigationBar, BorderLayout.NORTH);
     }
 }

@@ -142,8 +142,6 @@ public class TopNavigationBar extends JPanel {
                 profileButton.setAvatarUrl(avatarUrlLambda);
                 profileButton.setCurrentViewName(state.getCurrentViewName());
                 profileButton.setUserId(state.getUserId());
-                System.out.println("TopNavigationBar: Avatar URL: " + state.getAvatarUrl());
-                System.out.println("TopNavigationBar: Current View Name: " + state.getCurrentViewName());
             }
         });
 

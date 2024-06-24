@@ -51,7 +51,6 @@ public class AvatarComponent extends JLabel {
         Dimension originalSize = getPreferredSize();
 
         ImageIcon originalIcon = new ImageIcon(avatarUrl);
-        System.out.println("Avatar URL: " + avatarUrl);
         Image scaledImage = originalIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
