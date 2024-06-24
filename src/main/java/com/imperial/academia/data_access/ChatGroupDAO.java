@@ -60,23 +60,28 @@ public class ChatGroupDAO implements ChatGroupDAI {
         }
         return chatGroup;
     }
-
+    
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<ChatGroup> getAll() throws SQLException {
-        String sql = "SELECT * FROM chat_groups";
+    public List<ChatGroup> getAll(int userId) throws SQLException {
+        String sql = "SELECT cg.group_id, cg.group_name, cg.creation_date, cg.last_modified " +
+                     "FROM chat_groups cg " +
+                     "JOIN group_members gm ON cg.group_id = gm.group_id " +
+                     "WHERE gm.user_id = ?";
         List<ChatGroup> chatGroups = new ArrayList<>();
-        try (Statement stmt = conn.createStatement()) {
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                chatGroups.add(new ChatGroup(
-                    rs.getInt("group_id"),
-                    rs.getString("group_name"),
-                    rs.getTimestamp("creation_date"),
-                    rs.getTimestamp("last_modified")
-                ));
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    chatGroups.add(new ChatGroup(
+                        rs.getInt("group_id"),
+                        rs.getString("group_name"),
+                        rs.getTimestamp("creation_date"),
+                        rs.getTimestamp("last_modified")
+                    ));
+                }
             }
         }
         return chatGroups;
