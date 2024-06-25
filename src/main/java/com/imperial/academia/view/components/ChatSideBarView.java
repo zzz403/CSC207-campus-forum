@@ -1,4 +1,4 @@
-package com.imperial.academia.view;
+package com.imperial.academia.view.components;
 
 import com.imperial.academia.interface_adapter.chat.ChatSideBarController;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarViewModel;
@@ -24,6 +24,7 @@ public class ChatSideBarView extends JPanel{
                 displayChatGroups(chatSideBarViewModel.getState().getChatGroups());
             }
         });
+        System.out.println("success in ChatSideBarView");
     }
 
     public void displayChatGroups(List<ChatGroupDTO> chatGroups) {

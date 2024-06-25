@@ -22,7 +22,8 @@ public class ChatSideBarInteractor implements ChatSideBarInputBoundary{
             if(chatGroups.isEmpty()){
                 chatSideBarPresenter.presentError("No chat groups found.");
             }else{
-                chatSideBarPresenter.presentChatGroups(chatGroups);
+                ChatSideBarOutputData chatSideBarOutputData = new ChatSideBarOutputData(chatGroups);
+                chatSideBarPresenter.presentChatGroups(chatSideBarOutputData);
             }
         } catch (Exception e) {
             chatSideBarPresenter.presentError("An error occurred while searching for chat groups.");
