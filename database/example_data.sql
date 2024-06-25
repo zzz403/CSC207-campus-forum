@@ -1,10 +1,10 @@
 -- Insert users
 INSERT INTO users (username, password, email, role, registration_date, avatar_url, last_modified) VALUES
-('admin','admin123','admin@example.com', 'admin', CURRENT_TIMESTAMP, 'http://i.pravatar.cc/150?img=1', CURRENT_TIMESTAMP),
-('john_doe', 'hashed_password1', 'john@example.com', 'user', CURRENT_TIMESTAMP, 'http://i.pravatar.cc/150?img=2', CURRENT_TIMESTAMP),
-('jane_smith', 'hashed_password2', 'jane@example.com', 'admin', CURRENT_TIMESTAMP, 'http://i.pravatar.cc/150?img=3', CURRENT_TIMESTAMP),
-('alice_jones', 'hashed_password3', 'alice@example.com', 'user', CURRENT_TIMESTAMP, 'http://i.pravatar.cc/150?img=4', CURRENT_TIMESTAMP),
-('bob_brown', 'hashed_password4', 'bob@example.com', 'moderator', CURRENT_TIMESTAMP, 'http://i.pravatar.cc/150?img=5', CURRENT_TIMESTAMP),
+('admin','admin123','admin@example.com', 'admin', CURRENT_TIMESTAMP, 'resources/avatar/admin_avatar.png', CURRENT_TIMESTAMP),
+('john_doe', 'hashed_password1', 'john@example.com', 'user', CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=2', CURRENT_TIMESTAMP),
+('jane_smith', 'hashed_password2', 'jane@example.com', 'admin', CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=3', CURRENT_TIMESTAMP),
+('alice_jones', 'hashed_password3', 'alice@example.com', 'user', CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=4', CURRENT_TIMESTAMP),
+('bob_brown', 'hashed_password4', 'bob@example.com', 'moderator', CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=5', CURRENT_TIMESTAMP),
 ('charlie_clark', 'hashed_password5', 'charlie@example.com', 'user', CURRENT_TIMESTAMP, 'http://i.pravatar.cc/150?img=6', CURRENT_TIMESTAMP);
 
 -- Insert boards

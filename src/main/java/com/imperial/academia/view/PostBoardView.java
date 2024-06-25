@@ -13,7 +13,7 @@ import com.imperial.academia.view.components.TopNavigationBar;
 
 public class PostBoardView extends JPanel {
     public final String viewName = "post board";
-
+    private JPanel mainPanel;
     // private final PostBoardViewModel posterViewModel;
     // private final PostBoardController posterController;
 
@@ -24,7 +24,7 @@ public class PostBoardView extends JPanel {
         setLayout(new BorderLayout());
 
         // Create the main panel
-        JPanel mainPanel = new JPanel();
+        mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
@@ -35,7 +35,9 @@ public class PostBoardView extends JPanel {
 
     public void addTopNavigationBar(TopNavigationBar topNavigationBar) {
         JPanel topNavPanel = new JPanel();
-        topNavPanel.add(topNavigationBar);
-        add(topNavPanel);
+        topNavPanel.setLayout(new BorderLayout());
+        topNavPanel.add(topNavigationBar, BorderLayout.CENTER);
+        topNavPanel.setBackground(Color.WHITE);
+        add(topNavigationBar, BorderLayout.NORTH);
     }
 }

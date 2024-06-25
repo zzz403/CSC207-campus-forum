@@ -1,5 +1,6 @@
 package com.imperial.academia.app;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Image;
 import java.io.File;
@@ -21,16 +22,16 @@ import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.postboard.CreatePostViewModel;
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
 import com.imperial.academia.interface_adapter.signup.SignupViewModel;
+import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
 import com.imperial.academia.view.CreatePostView;
 import com.imperial.academia.view.ForumView;
 import com.imperial.academia.view.LoginView;
 import com.imperial.academia.view.PostBoardView;
 import com.imperial.academia.view.SignupView;
 import com.imperial.academia.view.ViewManager;
-import com.imperial.academia.view.components.TopNavigationBar;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, IOException {
         // The main application window.
         JFrame application = new JFrame("Academia Imperial");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -51,6 +52,9 @@ public class Main {
             e.printStackTrace();
         }
 
+        application.setSize(800, 700); // 设置窗口大小
+        application.setLocationRelativeTo(null); // 居中显示
+
         CardLayout cardLayout = new CardLayout();
 
         JPanel views = new JPanel(cardLayout);
@@ -63,23 +67,27 @@ public class Main {
         SignupViewModel signupViewModel = new SignupViewModel();
         PostBoardViewModel postBoardViewModel = new PostBoardViewModel();
         CreatePostViewModel createPostViewModel = new CreatePostViewModel();
+        TopNavigationBarViewModel topNavigationBarViewModel = new TopNavigationBarViewModel();
 
         try {
             ServiceFactory.initialize();
 
-            TopNavigationBar topNavigationBar = TopNavigationBarUseCaseFacory.create(viewManagerModel);
-
             SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel);
             views.add(signupView, signupView.viewName);
 
-            LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel);
+            LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel,topNavigationBarViewModel);
             views.add(loginView, loginView.viewName);
 
             PostBoardView postBoardView = PostBoardUseCaseFactory.create(viewManagerModel, postBoardViewModel);
             views.add(postBoardView, postBoardView.viewName);
-            postBoardView.addTopNavigationBar(topNavigationBar);
             CreatePostView createPostView = CreatePostUseCaseFactory.create(viewManagerModel, createPostViewModel);
             views.add(createPostView, createPostView.viewName);
+            // Add the top navigation bar to the post board view
+            // postBoardView.addTopNavigationBar(topNavigationBar);
+            
+            createPostView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
+            postBoardView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
+            
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -93,8 +101,7 @@ public class Main {
         viewManagerModel.firePropertyChanged();
 
         // Set size and center the window
-        application.setSize(800, 700); // 设置窗口大小
-        application.setLocationRelativeTo(null); // 居中显示
+        
         application.setVisible(true);
 
     }
