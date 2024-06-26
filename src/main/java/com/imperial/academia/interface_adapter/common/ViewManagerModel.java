@@ -2,6 +2,7 @@ package com.imperial.academia.interface_adapter.common;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.Stack;
 
 /**
  * The ViewManagerModel class manages the active view in an application and
@@ -9,6 +10,7 @@ import java.beans.PropertyChangeSupport;
  */
 public class ViewManagerModel {
     private String activeViewName;
+    private final Stack<String> viewStack = new Stack<>(); // Stack to keep track of view history
 
     // PropertyChangeSupport object to manage listeners and fire property changes
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
@@ -23,12 +25,25 @@ public class ViewManagerModel {
     }
 
     /**
-     * Sets the name of the currently active view.
+     * Sets the name of the currently active view and records it in the stack.
      * 
      * @param activeView The name of the view to set as active.
      */
     public void setActiveView(String activeView) {
+        if (activeViewName != null && !activeViewName.equals(activeView)) {
+            viewStack.push(activeViewName); // Push the current view to the stack
+        }
         this.activeViewName = activeView;
+    }
+
+    /**
+     * Goes back to the previous view if there is one.
+     * 
+     */
+    public void goBack() {
+        if (!viewStack.isEmpty()) {
+            activeViewName = viewStack.pop(); // Pop the previous view from the stack
+        }
     }
 
     /**

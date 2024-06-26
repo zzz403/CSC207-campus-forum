@@ -36,7 +36,7 @@ public class LoginViewModel extends ViewModel {
      * @return The current state of the login view.
      */
     public LoginState getState() {
-        return state;
+        return new LoginState(state);
     }
 
     /**

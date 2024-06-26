@@ -109,7 +109,7 @@ public class Main {
         views.add(forumView, forumView.viewName);
 
         // Set the initial view to "log in"
-        viewManagerModel.setActiveView("chat");
+        viewManagerModel.setActiveView("log in");
         viewManagerModel.firePropertyChanged();
 
         // Set size and center the window

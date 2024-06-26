@@ -23,7 +23,6 @@ public class ProfilePresenter implements ProfileOutputBoundry {
         profileState.setRole(profileOutputData.getRole());
         profileState.setAvatarUrl(profileOutputData.getAvatarUrl());
         profileState.setRegistrationDate(profileOutputData.getRegistrationDate());
-        profileState.setPreviousViewName(profileOutputData.getPreviousViewName());
 
         profileViewModel.setProfileState(profileState);
         profileViewModel.firePropertyChanged();

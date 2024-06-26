@@ -36,7 +36,7 @@ public class SignupViewModel extends ViewModel {
      * @return The current state of the signup view.
      */
     public SignupState getState() {
-        return state;
+        return new SignupState(state);
     }
 
     /**

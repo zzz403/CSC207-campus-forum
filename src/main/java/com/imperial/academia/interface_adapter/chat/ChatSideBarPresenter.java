@@ -4,6 +4,7 @@ import com.imperial.academia.use_case.chat.ChatSideBarOutputData;
 import com.imperial.academia.use_case.chat.ChatSideBarOutputBoundary;
 import com.imperial.academia.entity.chat_group.ChatGroupDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChatSideBarPresenter implements ChatSideBarOutputBoundary{
@@ -25,6 +26,7 @@ public class ChatSideBarPresenter implements ChatSideBarOutputBoundary{
     public void presentError(String error) {
         ChatSideBarState state = chatSideBarViewModel.getState();
         state.setError(error);
+        state.setChatGroups(new ArrayList<>());
         chatSideBarViewModel.setState(state);
         
         chatSideBarViewModel.firePropertyChanged();

@@ -9,8 +9,8 @@ import com.imperial.academia.view.components.AvatarComponent;
 public class AvatarFacory {
     private AvatarFacory(){}
 
-    public static AvatarComponent create(int userId, String avatarUrl, String currentViewName) throws IOException{
+    public static AvatarComponent create(int userId, String avatarUrl) throws IOException{
         ProfileController profileController = ProfilUseCaseFactory.getProfileController();
-        return new AvatarComponent(profileController, userId, avatarUrl, currentViewName);
+        return new AvatarComponent(profileController, userId, avatarUrl);
     }
 }
