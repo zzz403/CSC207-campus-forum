@@ -14,6 +14,7 @@ public class ChatWindowPresenter implements ChatWindowOutputBoundary {
     public void presentChatMessages(ChatWindowOutputData chatWindowOutputData) {
         ChatWindowState state = chatWindowViewModel.getState();
         state.setChatMessages(chatWindowOutputData.getChatMessages());
+        state.setChatGroupId(chatWindowOutputData.getChatGroupId());
         chatWindowViewModel.setState(state);
         chatWindowViewModel.firePropertyChanged();
     }

@@ -7,7 +7,17 @@ import java.util.List;
 
 public class ChatWindowState {
     private List<ChatMessageDTO> chatMessages = new ArrayList<>();
+    private int chatGroupId;
     private String error = "";
+
+    public ChatWindowState(ChatWindowState chatWindowState) {
+        this.chatMessages = chatWindowState.getChatMessages();
+        this.chatGroupId = chatWindowState.getChatGroupId();
+        this.error = chatWindowState.getError();
+    }
+
+    public ChatWindowState() {
+    }
 
     public List<ChatMessageDTO> getChatMessages() {
         return chatMessages;
@@ -23,5 +33,13 @@ public class ChatWindowState {
 
     public void setError(String error) {
         this.error = error;
+    }
+
+    public int getChatGroupId() {
+        return chatGroupId;
+    }
+
+    public void setChatGroupId(int chatGroupId) {
+        this.chatGroupId = chatGroupId;
     }
 }

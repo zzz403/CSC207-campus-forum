@@ -56,6 +56,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                 user.getUsername(),
                 user.getAvatarUrl(),
                 chatMessage.getGroupId(),
+                chatMessage.getContentType(),
                 chatMessage.getContent(),
                 chatMessage.getTimestamp()
             );
@@ -112,6 +113,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                 user.getUsername(),
                 user.getAvatarUrl(),
                 chatMessage.getGroupId(),
+                chatMessage.getContentType(),
                 chatMessage.getContent(),
                 chatMessage.getTimestamp()
             ));

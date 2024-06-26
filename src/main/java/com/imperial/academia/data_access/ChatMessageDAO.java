@@ -48,6 +48,7 @@ public class ChatMessageDAO implements ChatMessageDAI {
                         rs.getInt("sender_id"),
                         rs.getInt("recipient_id"),
                         rs.getInt("group_id"),
+                        rs.getString("content_type"),
                         rs.getString("content"),
                         rs.getTimestamp("timestamp")
                     );
@@ -69,6 +70,7 @@ public class ChatMessageDAO implements ChatMessageDAI {
                     rs.getInt("sender_id"),
                     rs.getInt("recipient_id"),
                     rs.getInt("group_id"),
+                    rs.getString("content_type"),
                     rs.getString("content"),
                     rs.getTimestamp("timestamp")
                 ));
@@ -90,6 +92,7 @@ public class ChatMessageDAO implements ChatMessageDAI {
                         rs.getInt("sender_id"),
                         rs.getInt("recipient_id"),
                         rs.getInt("group_id"),
+                        rs.getString("content_type"),
                         rs.getString("content"),
                         rs.getTimestamp("timestamp")
                     ));

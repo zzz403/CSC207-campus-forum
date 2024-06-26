@@ -15,7 +15,7 @@ public class ChatWindowViewModel extends ViewModel {
     }
 
     public ChatWindowState getState() {
-        return chatWindowState;
+        return new ChatWindowState(chatWindowState);
     }
 
     public void setState(ChatWindowState chatWindowState) {

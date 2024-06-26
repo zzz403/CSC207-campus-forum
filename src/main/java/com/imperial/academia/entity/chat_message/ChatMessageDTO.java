@@ -8,15 +8,17 @@ public class ChatMessageDTO {
     private String senderName;
     private String senderAvatarUrl;
     private Integer groupId;
+    private String contentType;
     private String content;
     private Timestamp timestamp;
 
-    public ChatMessageDTO(int id, int senderId, String senderName, String senderAvatarUrl, Integer groupId, String content, Timestamp timestamp) {
+    public ChatMessageDTO(int id, int senderId, String senderName, String senderAvatarUrl, Integer groupId, String contentType, String content, Timestamp timestamp) {
         this.id = id;
         this.senderId = senderId;
         this.senderName = senderName;
         this.senderAvatarUrl = senderAvatarUrl;
         this.groupId = groupId;
+        this.contentType = contentType;
         this.content = content;
         this.timestamp = timestamp;
     }
@@ -77,5 +79,13 @@ public class ChatMessageDTO {
         this.timestamp = timestamp;
     }
 
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
     
 }

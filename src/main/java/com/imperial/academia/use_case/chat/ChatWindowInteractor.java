@@ -19,7 +19,7 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
         int chatGroupId = chatWindowInputData.getChatGroupId();
         try {
             List<ChatMessageDTO> chatMessages = chatMessageService.getAllByGroupId(chatGroupId);
-            ChatWindowOutputData chatWindowOutputData = new ChatWindowOutputData(chatMessages);
+            ChatWindowOutputData chatWindowOutputData = new ChatWindowOutputData(chatMessages, chatGroupId);
             chatWindowPresenter.presentChatMessages(chatWindowOutputData);
         } catch (Exception e) {
             chatWindowPresenter.presentError("An error occurred while loading chat messages.");
