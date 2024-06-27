@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import java.io.File;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 
@@ -27,28 +30,20 @@ public class H2Setup {
             conn.setAutoCommit(false); // 开始事务
 
             System.out.println("Dropping existing tables if they exist...");
-            String[] dropTables = {
-                "DROP TABLE IF EXISTS user_statistics;",
-                "DROP TABLE IF EXISTS role_permissions;",
-                "DROP TABLE IF EXISTS permissions;",
-                "DROP TABLE IF EXISTS user_roles;",
-                "DROP TABLE IF EXISTS roles;",
-                "DROP TABLE IF EXISTS notifications;",
-                "DROP TABLE IF EXISTS files;",
-                "DROP TABLE IF EXISTS user_follows;",
-                "DROP TABLE IF EXISTS group_members;",
-                "DROP TABLE IF EXISTS chat_messages;",
-                "DROP TABLE IF EXISTS chat_groups;",
-                "DROP TABLE IF EXISTS comments;",
-                "DROP TABLE IF EXISTS posts;",
-                "DROP TABLE IF EXISTS boards;",
-                "DROP TABLE IF EXISTS users;"
-            };
+            // File file = new File("./database/academia_imperial.mv.db");
+            
 
-            for (String dropTable : dropTables) {
-                stmt.executeUpdate(dropTable);
-            }
-
+            // if (file.exists()) {
+            //     // 尝试删除文件
+            //     if (file.delete()) {
+            //         System.out.println("文件已成功删除");
+            //     } else {
+            //         System.out.println("文件删除失败");
+            //     }
+            // } else {
+            //     System.out.println("文件不存在");
+            // }
+            // Thread.sleep(2000);
             System.out.println("Creating tables in the H2 database...");
 
             String createUsersTable = "CREATE TABLE users (" +
@@ -116,6 +111,7 @@ public class H2Setup {
                 "sender_id INT NOT NULL, " +
                 "recipient_id INT NOT NULL, " +
                 "group_id INT DEFAULT NULL, " +
+                "content_type VARCHAR(20) DEFAULT 'text'," +
                 "content TEXT NOT NULL, " +
                 "timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
                 "FOREIGN KEY (sender_id) REFERENCES users(user_id), " +

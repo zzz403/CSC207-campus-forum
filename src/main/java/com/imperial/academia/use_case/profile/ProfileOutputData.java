@@ -9,20 +9,14 @@ public class ProfileOutputData {
     private final String role;
     private final String avatarUrl;
     private final Timestamp registrationDate;
-    private final String previousViewName;
 
-    public ProfileOutputData(int id, String username, String email, String role, String avatarUrl, Timestamp registrationDate, String previousViewName) {
+    public ProfileOutputData(int id, String username, String email, String role, String avatarUrl, Timestamp registrationDate) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.role = role;
         this.avatarUrl = avatarUrl;
         this.registrationDate = registrationDate;
-        this.previousViewName = previousViewName;
-    }
-
-    public String getPreviousViewName() {
-        return previousViewName;
     }
 
     public int getId() {

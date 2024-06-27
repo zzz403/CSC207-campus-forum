@@ -3,8 +3,11 @@ package com.imperial.academia.service;
 import com.imperial.academia.cache.ChatGroupCache;
 import com.imperial.academia.data_access.ChatGroupDAI;
 import com.imperial.academia.entity.chat_group.ChatGroup;
+import com.imperial.academia.entity.chat_group.ChatGroupDTO;
+import com.imperial.academia.session.SessionManager;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,10 +57,39 @@ public class ChatGroupServiceImpl implements ChatGroupService {
      * {@inheritDoc}
      */
     @Override
+    public List<ChatGroupDTO> getChatGroupsByGroupName(String groupName) throws SQLException {
+        List<ChatGroup> allChatGroups = chatGroupCache.getChatGroups("chatgroups:all");
+        if (allChatGroups == null) {
+            allChatGroups = getAll();
+        }
+
+        List<ChatGroup> matchingChatGroups = new ArrayList<>();
+        for (ChatGroup chatGroup : allChatGroups) {
+            if (chatGroup.getGroupName().contains(groupName)) {
+                matchingChatGroups.add(chatGroup);
+            }
+        }
+
+        return convertToDTO(matchingChatGroups);
+    }
+
+    private List<ChatGroupDTO> convertToDTO(List<ChatGroup> chatGroups) {
+        List<ChatGroupDTO> chatGroupDTOs = new ArrayList<>();
+        for (ChatGroup chatGroup : chatGroups) {
+            chatGroupDTOs.add(new ChatGroupDTO(chatGroup.getId(),chatGroup.getGroupName(), chatGroup.getLastModified()));
+        }
+        return chatGroupDTOs;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<ChatGroup> getAll() throws SQLException {
         List<ChatGroup> chatGroups = chatGroupCache.getChatGroups("chatgroups:all");
         if (chatGroups == null) {
-            chatGroups = chatGroupDAO.getAll();
+            int currentUserId = SessionManager.getCurrentUser().getId();
+            chatGroups = chatGroupDAO.getAll(currentUserId);
             chatGroupCache.setChatGroups("chatgroups:all", chatGroups);
         }
         return chatGroups;

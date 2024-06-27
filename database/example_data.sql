@@ -1,11 +1,11 @@
 -- Insert users
 INSERT INTO users (username, password, email, role, registration_date, avatar_url, last_modified) VALUES
 ('admin','admin123','admin@example.com', 'admin', CURRENT_TIMESTAMP, 'resources/avatar/admin_avatar.png', CURRENT_TIMESTAMP),
-('john_doe', 'hashed_password1', 'john@example.com', 'user', CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=2', CURRENT_TIMESTAMP),
-('jane_smith', 'hashed_password2', 'jane@example.com', 'admin', CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=3', CURRENT_TIMESTAMP),
-('alice_jones', 'hashed_password3', 'alice@example.com', 'user', CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=4', CURRENT_TIMESTAMP),
-('bob_brown', 'hashed_password4', 'bob@example.com', 'moderator', CURRENT_TIMESTAMP, 'https://i.pravatar.cc/150?img=5', CURRENT_TIMESTAMP),
-('charlie_clark', 'hashed_password5', 'charlie@example.com', 'user', CURRENT_TIMESTAMP, 'http://i.pravatar.cc/150?img=6', CURRENT_TIMESTAMP);
+('john_doe', 'hashed_password1', 'john@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example2.png', CURRENT_TIMESTAMP),
+('jane_smith', 'hashed_password2', 'jane@example.com', 'admin', CURRENT_TIMESTAMP, 'resources/avatar/avater_example3.png', CURRENT_TIMESTAMP),
+('alice_jones', 'hashed_password3', 'alice@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example4.png', CURRENT_TIMESTAMP),
+('bob_brown', 'hashed_password4', 'bob@example.com', 'moderator', CURRENT_TIMESTAMP, 'resources/avatar/avater_example5.png', CURRENT_TIMESTAMP),
+('charlie_clark', 'hashed_password5', 'charlie@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example6.png', CURRENT_TIMESTAMP);
 
 -- Insert boards
 INSERT INTO boards (name, description, creator_id, created_at) VALUES
@@ -38,18 +38,20 @@ INSERT INTO chat_groups (group_name, creation_date, last_modified) VALUES
 ('Gaming Group', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('Fitness Enthusiasts', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('Travel Lovers', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('Book Club', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+('Book Club', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Testing', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Insert chat messages
-INSERT INTO chat_messages (sender_id, recipient_id, group_id, content, timestamp) VALUES
-(1, 2, 1, 'Hey, how are you?', CURRENT_TIMESTAMP),
-(2, 1, 2, 'Anyone up for a game?', CURRENT_TIMESTAMP),
-(3, 4, 3, 'Let''s discuss some workout routines.', CURRENT_TIMESTAMP),  
-(4, 3, 4, 'Has anyone been to Paris?', CURRENT_TIMESTAMP),
-(5, 1, 5, 'What book are you reading right now?', CURRENT_TIMESTAMP),   
-(1, 5, 1, 'I''m good, thanks!', CURRENT_TIMESTAMP),
-(2, 3, 2, 'I just got a new game!', CURRENT_TIMESTAMP);
-
+INSERT INTO chat_messages (sender_id, recipient_id, group_id, content_type, content, timestamp) VALUES
+(1, 2, 1, 'text', 'Hey, how are you?', CURRENT_TIMESTAMP),
+(2, 1, 2, 'text', 'Anyone up for a game?', CURRENT_TIMESTAMP),
+(3, 4, 3, 'text', 'Let''s discuss some workout routines.', CURRENT_TIMESTAMP),  
+(4, 3, 4, 'text', 'Has anyone been to Paris?', CURRENT_TIMESTAMP),
+(5, 1, 5, 'text', 'What book are you reading right now?', CURRENT_TIMESTAMP),   
+(1, 5, 1, 'text', 'I''m good, thanks!', CURRENT_TIMESTAMP),
+(2, 3, 2, 'text', 'I just got a new game!', CURRENT_TIMESTAMP),
+(3, 2, 3, 'image', 'resources/image/3/test1.png', CURRENT_TIMESTAMP),
+(1, 2, 1, 'audio','resources/audio/0/admin_20240626_180700.wav',CURRENT_TIMESTAMP);
 
 -- Insert group members
 INSERT INTO group_members (group_id, user_id, role, joined_date, last_modified) VALUES

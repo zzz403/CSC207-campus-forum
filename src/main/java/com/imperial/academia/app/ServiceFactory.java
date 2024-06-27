@@ -1,11 +1,8 @@
 package com.imperial.academia.app;
 
-import com.imperial.academia.cache.UserCache;
-import com.imperial.academia.cache.UserCacheImpl;
-import com.imperial.academia.data_access.DatabaseConnection;
-import com.imperial.academia.data_access.UserDAO;
-import com.imperial.academia.service.UserService;
-import com.imperial.academia.service.UserServiceImpl;
+import com.imperial.academia.cache.*;
+import com.imperial.academia.data_access.*;
+import com.imperial.academia.service.*;
 
 import java.sql.SQLException;
 
@@ -14,6 +11,8 @@ import java.sql.SQLException;
  */
 public class ServiceFactory {
     private static UserService userService;
+    private static ChatGroupService chatGroupService;
+    private static ChatMessageService chatMessageService;
 
     /**
      * Initializes the service factory by creating and configuring the necessary services.
@@ -25,6 +24,14 @@ public class ServiceFactory {
         UserCache userCache = new UserCacheImpl();
         UserDAO userDAO = new UserDAO(DatabaseConnection.getConnection());
         userService = new UserServiceImpl(userCache, userDAO);
+
+        ChatGroupCache chatGroupCache = new ChatGroupCacheImpl();
+        ChatGroupDAO chatGroupDAO = new ChatGroupDAO(DatabaseConnection.getConnection());
+        chatGroupService = new ChatGroupServiceImpl(chatGroupCache, chatGroupDAO);
+
+        ChatMessageCache chatMessageCache = new ChatMessageCacheImpl();
+        ChatMessageDAO chatMessageDAO = new ChatMessageDAO(DatabaseConnection.getConnection());
+        chatMessageService = new ChatMessageServiceImpl(chatMessageDAO, userDAO, chatMessageCache, userCache);
     }
 
     /**
@@ -34,5 +41,23 @@ public class ServiceFactory {
      */
     public static UserService getUserService() {
         return userService;
+    }
+
+    /**
+     * Returns the ChatGroupService instance.
+     *
+     * @return the chat group service
+     */
+    public static ChatGroupService getChatGroupService() {
+        return chatGroupService;
+    }
+
+    /**
+     * Returns the ChatMessageService instance.
+     *
+     * @return the chat message service
+     */
+    public static ChatMessageService getChatMessageService() {
+        return chatMessageService;
     }
 }
