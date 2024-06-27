@@ -7,6 +7,7 @@ import com.imperial.academia.interface_adapter.chat.ChatWindowController;
 import com.imperial.academia.interface_adapter.chat.ChatWindowPresenter;
 import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
+import com.imperial.academia.service.AudioService;
 import com.imperial.academia.service.ChatGroupService;
 import com.imperial.academia.service.ChatMessageService;
 import com.imperial.academia.use_case.chat.ChatSideBarOutputBoundary;
@@ -30,8 +31,9 @@ public class ChatUseCaseFactory {
         ChatSideBarInputBoundary chatSideBarInteractor = new ChatSideBarInteractor(chatGroupService, chatPresenter);
 
         ChatMessageService chatMessageService = ServiceFactory.getChatMessageService();
+        AudioService audioService = ServiceFactory.getAudioService();
         ChatWindowOutputBoundary chatWindowPresenter = new ChatWindowPresenter(chatWindowViewModel);
-        ChatWindowInputBoundary chatWindowInteractor = new ChatWindowInteractor(chatMessageService, chatWindowPresenter);
+        ChatWindowInputBoundary chatWindowInteractor = new ChatWindowInteractor(chatMessageService, audioService, chatWindowPresenter);
         
         // ChatSideBarController chatSideBarController = createChatSideBarController(chatSideBarViewModel);
         ChatSideBarController chatSideBarController = new ChatSideBarController(chatSideBarInteractor, chatWindowInteractor);

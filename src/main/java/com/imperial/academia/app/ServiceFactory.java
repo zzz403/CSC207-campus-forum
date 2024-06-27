@@ -14,6 +14,8 @@ public class ServiceFactory {
     private static ChatGroupService chatGroupService;
     private static ChatMessageService chatMessageService;
 
+    private static AudioService audioService;
+
     /**
      * Initializes the service factory by creating and configuring the necessary services.
      *
@@ -32,6 +34,8 @@ public class ServiceFactory {
         ChatMessageCache chatMessageCache = new ChatMessageCacheImpl();
         ChatMessageDAO chatMessageDAO = new ChatMessageDAO(DatabaseConnection.getConnection());
         chatMessageService = new ChatMessageServiceImpl(chatMessageDAO, userDAO, chatMessageCache, userCache);
+
+        audioService = new AudioServiceImpl();
     }
 
     /**
@@ -59,5 +63,15 @@ public class ServiceFactory {
      */
     public static ChatMessageService getChatMessageService() {
         return chatMessageService;
+    }
+
+    /**
+     * Returns the AudioService instance.
+     *
+     * @return the audio service
+     */
+
+    public static AudioService getAudioService() {
+        return audioService;
     }
 }

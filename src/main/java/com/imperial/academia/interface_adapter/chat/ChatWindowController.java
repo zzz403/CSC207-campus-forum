@@ -19,4 +19,18 @@ public class ChatWindowController {
         // Implementation for sending a message
         // Use chatWindowInteractor to interact with the use case
     }
+
+    public void startRecording(int chatGroupId) {
+        ChatWindowInputData chatWindowInputData = new ChatWindowInputData(chatGroupId);
+        chatWindowInteractor.startRecording(chatWindowInputData);
+    }
+
+    public void stopRecording() {
+        chatWindowInteractor.stopRecording();
+    }
+
+    public void loadAudio(String audioPath) {
+        ChatWindowInputData chatWindowInputData = new ChatWindowInputData(audioPath);
+        chatWindowInteractor.loadAudio(chatWindowInputData);
+    }
 }

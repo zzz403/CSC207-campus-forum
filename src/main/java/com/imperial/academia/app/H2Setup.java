@@ -5,8 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import java.io.File;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 
