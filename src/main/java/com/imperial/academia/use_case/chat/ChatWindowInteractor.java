@@ -43,9 +43,11 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
     }
 
     @Override
-    public void stopRecording() {
+    public void stopRecording(int chatGroupId) {
         try {
             audioService.stopRecording();
+            ChatWindowInputData chatWindowInputData = new ChatWindowInputData(chatGroupId, audioService.getOutputFilePath(),"audio");
+            sendMessage(chatWindowInputData);
         } catch (Exception e) {
             chatWindowPresenter.presentError("An error occurred while stopping recording.");
         }
@@ -66,7 +68,7 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
         int groupId = chatWindowInputData.getChatGroupId();
         String contentType = chatWindowInputData.getContentType();
         String content = chatWindowInputData.getContent();
-        ChatMessage chatMessage = chatMessageFactory.createChatMessage(senderId, -1, groupId, contentType, content);
+        ChatMessage chatMessage = chatMessageFactory.createChatMessage(senderId, 1, groupId, contentType, content);
         try {
             chatMessageService.insert(chatMessage);
         } catch (Exception e) {

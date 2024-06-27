@@ -24,8 +24,8 @@ public class ChatWindowController {
         chatWindowInteractor.startRecording(chatGroupId);
     }
 
-    public void stopRecording() {
-        chatWindowInteractor.stopRecording();
+    public void stopRecording(int chatGroupId) {
+        chatWindowInteractor.stopRecording(chatGroupId);
     }
 
     public void loadAudio(String audioPath) {

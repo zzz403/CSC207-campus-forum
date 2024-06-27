@@ -51,7 +51,7 @@ INSERT INTO chat_messages (sender_id, recipient_id, group_id, content_type, cont
 (1, 5, 1, 'text', 'I''m good, thanks!', CURRENT_TIMESTAMP),
 (2, 3, 2, 'text', 'I just got a new game!', CURRENT_TIMESTAMP),
 (3, 2, 3, 'image', 'resources/image/3/test1.png', CURRENT_TIMESTAMP),
-(1, 2, 1, 'audio','resources/audio/0/admin_20240626_180700.wav',CURRENT_TIMESTAMP);
+(1, 2, 1, 'audio','resources/audio/for_test/admin_20240626_180700.wav',CURRENT_TIMESTAMP);
 
 -- Insert group members
 INSERT INTO group_members (group_id, user_id, role, joined_date, last_modified) VALUES

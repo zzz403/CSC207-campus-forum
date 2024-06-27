@@ -5,6 +5,7 @@ import com.imperial.academia.data_access.UserDAI;
 import com.imperial.academia.entity.chat_message.ChatMessage;
 import com.imperial.academia.entity.chat_message.ChatMessageDTO;
 import com.imperial.academia.entity.user.User;
+import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.cache.ChatMessageCache;
 import com.imperial.academia.cache.UserCache;
 
@@ -68,6 +69,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                     chatMessage.getGroupId(),
                     chatMessage.getContentType(),
                     chatMessage.getContent(),
+                    chatMessage.getId() == SessionManager.getCurrentUser().getId(),
                     chatMessage.getTimestamp());
         }
         return null;
@@ -124,6 +126,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                     chatMessage.getGroupId(),
                     chatMessage.getContentType(),
                     chatMessage.getContent(),
+                    chatMessage.getSenderId() == SessionManager.getCurrentUser().getId(),
                     chatMessage.getTimestamp()));
         }
         return chatMessageDTOs;
