@@ -66,8 +66,9 @@ public class ChatWindowView extends JPanel {
         messageInputField.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         messageInputField.addActionListener(e -> {
             String messageContent = messageInputField.getText();
+            int groupId = chatWindowViewModel.getState().getChatGroupId();
             if (!messageContent.isEmpty()) {
-                chatWindowController.sendMessage(messageContent);
+                chatWindowController.sendMessage(messageContent, "text", groupId);
                 messageInputField.setText("");
             }
         });

@@ -2,28 +2,24 @@ package com.imperial.academia.use_case.chat;
 
 public class ChatWindowInputData {
     private final int chatGroupId;
-    private final String audioPath;
+    private final String content;
+    private final String contentType;
 
-    public ChatWindowInputData(int chatGroupId) {
+    public ChatWindowInputData(int chatGroupId, String content, String contentType) {
         this.chatGroupId = chatGroupId;
-        this.audioPath = null;
-    }
-
-    public ChatWindowInputData(String audioPath) {
-        this.chatGroupId = -1;
-        this.audioPath = audioPath;
-    }
-
-    public ChatWindowInputData(int chatGroupId, String audioPath) {
-        this.chatGroupId = chatGroupId;
-        this.audioPath = audioPath;
+        this.content = content;
+        this.contentType = contentType;
     }
 
     public int getChatGroupId() {
         return chatGroupId;
     }
 
-    public String getAudioPath() {
-        return audioPath;
+    public String getContent() {
+        return content;
+    }
+
+    public String getContentType() {
+        return contentType;
     }
 }

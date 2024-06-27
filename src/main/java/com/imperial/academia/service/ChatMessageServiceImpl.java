@@ -18,7 +18,8 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     private final ChatMessageCache chatMessageCache;
     private final UserCache userCache;
 
-    public ChatMessageServiceImpl(ChatMessageDAI chatMessageDAO, UserDAI userDAO, ChatMessageCache chatMessageCache, UserCache userCache) {
+    public ChatMessageServiceImpl(ChatMessageDAI chatMessageDAO, UserDAI userDAO, ChatMessageCache chatMessageCache,
+            UserCache userCache) {
         this.chatMessageDAO = chatMessageDAO;
         this.userDAO = userDAO;
         this.chatMessageCache = chatMessageCache;
@@ -28,7 +29,16 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     @Override
     public void insert(ChatMessage chatMessage) throws SQLException {
         chatMessageDAO.insert(chatMessage);
+        // 更新单条消息缓存
         chatMessageCache.setChatMessage("chatMessage:" + chatMessage.getId(), chatMessage);
+
+        // 更新群组消息列表缓存
+        String groupCacheKey = "chatMessages:group:" + chatMessage.getGroupId();
+        List<ChatMessage> chatMessages = chatMessageCache.getChatMessages(groupCacheKey);
+        if (chatMessages != null) {
+            chatMessages.add(chatMessage);
+            chatMessageCache.setChatMessages(groupCacheKey, chatMessages);
+        }
     }
 
     @SuppressWarnings("null")
@@ -51,15 +61,14 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                 }
             }
             return new ChatMessageDTO(
-                chatMessage.getId(),
-                chatMessage.getSenderId(),
-                user.getUsername(),
-                user.getAvatarUrl(),
-                chatMessage.getGroupId(),
-                chatMessage.getContentType(),
-                chatMessage.getContent(),
-                chatMessage.getTimestamp()
-            );
+                    chatMessage.getId(),
+                    chatMessage.getSenderId(),
+                    user.getUsername(),
+                    user.getAvatarUrl(),
+                    chatMessage.getGroupId(),
+                    chatMessage.getContentType(),
+                    chatMessage.getContent(),
+                    chatMessage.getTimestamp());
         }
         return null;
     }
@@ -108,15 +117,14 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                 }
             }
             chatMessageDTOs.add(new ChatMessageDTO(
-                chatMessage.getId(),
-                chatMessage.getSenderId(),
-                user.getUsername(),
-                user.getAvatarUrl(),
-                chatMessage.getGroupId(),
-                chatMessage.getContentType(),
-                chatMessage.getContent(),
-                chatMessage.getTimestamp()
-            ));
+                    chatMessage.getId(),
+                    chatMessage.getSenderId(),
+                    user.getUsername(),
+                    user.getAvatarUrl(),
+                    chatMessage.getGroupId(),
+                    chatMessage.getContentType(),
+                    chatMessage.getContent(),
+                    chatMessage.getTimestamp()));
         }
         return chatMessageDTOs;
     }
