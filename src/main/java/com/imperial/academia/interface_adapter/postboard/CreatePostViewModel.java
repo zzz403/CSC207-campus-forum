@@ -10,7 +10,6 @@ import java.beans.PropertyChangeSupport;
 public class CreatePostViewModel extends ViewModel {
     public final String TITLE_LABEL = "Title";
     public final String BODY_LABEL = "Body";
-    public final String TAGS_LABEL = "Tags";
     public final String SAVE_DRAFT_BUTTON_LABEL = "Save Draft";
     public final String POST_BUTTON_LABEL = "Post";
 
@@ -76,18 +75,13 @@ public class CreatePostViewModel extends ViewModel {
      * 
      * @param body The body to set.
      */
-    public void setStateBody(String body) {
+    public void setBody(String body) {
+        String oldBody = this.state.getBody();
         state.setBody(body);
-        support.firePropertyChange("body", null, body);
+        support.firePropertyChange("body", oldBody, body);
     }
 
-    /**
-     * Sets the tags in the state and fires a property change event.
-     * 
-     * @param tags The tags to set.
-     */
-    public void setStateTags(String tags) {
-        state.setTags(tags);
-        support.firePropertyChange("tags", null, tags);
+    public String getBody(){
+        return this.state.getBody();
     }
 }

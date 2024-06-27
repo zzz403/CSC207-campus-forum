@@ -1,12 +1,11 @@
 package com.imperial.academia.app;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import java.io.BufferedReader;
-import java.io.IOException;
 
 public class H2Setup {
     static final String JDBC_DRIVER = "org.h2.Driver";
