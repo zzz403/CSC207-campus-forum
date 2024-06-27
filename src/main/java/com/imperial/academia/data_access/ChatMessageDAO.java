@@ -15,7 +15,8 @@ public class ChatMessageDAO implements ChatMessageDAI {
 
     @Override
     public void insert(ChatMessage chatMessage) throws SQLException {
-        String sql = "INSERT INTO chat_messages (sender_id, recipient_id, group_id, content, timestamp) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
+        System.out.println("ChatMessageDAO: insert");
+        String sql = "INSERT INTO chat_messages (sender_id, recipient_id, group_id, content_type, content, timestamp) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, chatMessage.getSenderId());
             pstmt.setInt(2, chatMessage.getRecipientId());
@@ -24,12 +25,16 @@ public class ChatMessageDAO implements ChatMessageDAI {
             } else {
                 pstmt.setNull(3, Types.INTEGER);
             }
-            pstmt.setString(4, chatMessage.getContent());
+            pstmt.setString(4, chatMessage.getContentType());
+            pstmt.setString(5, chatMessage.getContent());
+            System.out.println("ChatMessageDAO: insert: pstmt = " + pstmt);
             pstmt.executeUpdate();
+            System.out.println("ChatMessageDAO: insert: pstmt.executeUpdate()");
 
             try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     chatMessage.setId(generatedKeys.getInt(1));
+                    System.out.println("ChatMessageDAO: insert: chatMessage.getId() = " + chatMessage.getId());
                 }
             }
         }

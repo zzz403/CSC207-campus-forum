@@ -11,23 +11,25 @@ import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarState;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
 
 /**
- * TopNavigationBar component class responsible for creating and managing all components of the top navigation bar.
+ * TopNavigationBar component class responsible for creating and managing all
+ * components of the top navigation bar.
  */
 public class TopNavigationBar extends JPanel {
     private JPanel topNavPanel;
     private JLabel logoText;
     private JFrame applicationFrame;
-    private AvatarComponent profileButton;
+    private JLabel profileButton;
 
     /**
      * Constructor to initialize the top navigation bar component.
      *
      * @param topNavigationBarController The top navigation bar controller.
-     * @param topNavigationBarViewModel The top navigation bar view model.
-     * @param applicationFrame The main application frame.
+     * @param topNavigationBarViewModel  The top navigation bar view model.
+     * @param applicationFrame           The main application frame.
      * @throws IOException If an error occurs while reading resources.
      */
-    public TopNavigationBar(TopNavigationBarController topNavigationBarController, TopNavigationBarViewModel topNavigationBarViewModel, JFrame applicationFrame) throws IOException {
+    public TopNavigationBar(TopNavigationBarController topNavigationBarController,
+            TopNavigationBarViewModel topNavigationBarViewModel, JFrame applicationFrame) throws IOException {
         this.applicationFrame = applicationFrame;
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
@@ -130,9 +132,8 @@ public class TopNavigationBar extends JPanel {
         rightPanel.add(notificationButton);
 
         // Profile Button
-        String avatarUrl = "resources/avatar/admin_avatar.png";
-        profileButton = AvatarFacory.create(ABORT, avatarUrl);
-        profileButton.setPreferredSize(new Dimension(60, 60)); 
+        profileButton = new JLabel();
+        profileButton.setPreferredSize(new Dimension(60, 60));
         profileButton.setBorder(new LineBorder(Color.WHITE, 1, true)); // Circular border
 
         rightPanel.add(profileButton);
@@ -145,9 +146,20 @@ public class TopNavigationBar extends JPanel {
         topNavigationBarViewModel.addPropertyChangeListener(e -> {
             if ("state".equals(e.getPropertyName())) {
                 TopNavigationBarState state = topNavigationBarViewModel.getState();
-                String avatarUrlLambda = state.getAvatarUrl() != null ? state.getAvatarUrl() : "resources/default_profile_icon.png";
+                String avatarUrlLambda = state.getAvatarUrl() != null ? state.getAvatarUrl()
+                        : "resources/default_profile_icon.png";
                 try {
+                    System.out.println("TopNavigationBar: avatarUrlLambda = " + avatarUrlLambda);
+                    rightPanel.remove(profileButton);
+
+                    // Create and add the new AvatarComponent
                     profileButton = AvatarFacory.create(state.getUserId(), avatarUrlLambda);
+                    profileButton.setPreferredSize(new Dimension(60, 60));
+                    profileButton.setBorder(new LineBorder(Color.WHITE, 1, true)); // Circular border
+
+                    rightPanel.add(profileButton);
+                    rightPanel.revalidate();
+                    rightPanel.repaint();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -168,7 +180,7 @@ public class TopNavigationBar extends JPanel {
      * Creates a text and icon button with hover text.
      *
      * @param imagePath The path to the icon image.
-     * @param text The text to display on the button.
+     * @param text      The text to display on the button.
      * @param hoverText The text to display when the button is hovered over.
      * @return The created JButton.
      */
@@ -208,7 +220,8 @@ public class TopNavigationBar extends JPanel {
                 tooltipWindow.add(contentPanel);
                 tooltipWindow.pack();
                 Point location = button.getLocationOnScreen();
-                tooltipWindow.setLocation(location.x + (button.getWidth() - tooltipWindow.getWidth()) / 2, location.y + button.getHeight());
+                tooltipWindow.setLocation(location.x + (button.getWidth() - tooltipWindow.getWidth()) / 2,
+                        location.y + button.getHeight());
                 tooltipWindow.setVisible(true);
             }
 
@@ -228,8 +241,8 @@ public class TopNavigationBar extends JPanel {
      * Creates an icon button with hover text.
      *
      * @param imagePath The path to the icon image.
-     * @param width The width of the icon.
-     * @param height The height of the icon.
+     * @param width     The width of the icon.
+     * @param height    The height of the icon.
      * @param hoverText The text to display when the button is hovered over.
      * @return The created JButton.
      */
@@ -259,7 +272,8 @@ public class TopNavigationBar extends JPanel {
                 tooltipWindow.add(contentPanel);
                 tooltipWindow.pack();
                 Point location = button.getLocationOnScreen();
-                tooltipWindow.setLocation(location.x + (button.getWidth() - tooltipWindow.getWidth()) / 2, location.y + button.getHeight());
+                tooltipWindow.setLocation(location.x + (button.getWidth() - tooltipWindow.getWidth()) / 2,
+                        location.y + button.getHeight());
                 tooltipWindow.setVisible(true);
             }
 
@@ -283,7 +297,8 @@ public class TopNavigationBar extends JPanel {
 
         public CustomSearchBar(int columns) {
             super(columns);
-            Image searchImage = new ImageIcon("resources/search_icon.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+            Image searchImage = new ImageIcon("resources/search_icon.png").getImage().getScaledInstance(20, 20,
+                    Image.SCALE_SMOOTH);
             searchIcon = new ImageIcon(searchImage);
             setOpaque(false);
             setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 20));
@@ -341,7 +356,7 @@ public class TopNavigationBar extends JPanel {
      */
     private void adjustLogoVisibility() {
         int frameWidth = applicationFrame.getWidth();
-        if (frameWidth < 1000) { 
+        if (frameWidth < 1000) {
             logoText.setVisible(false);
         } else {
             logoText.setVisible(true);

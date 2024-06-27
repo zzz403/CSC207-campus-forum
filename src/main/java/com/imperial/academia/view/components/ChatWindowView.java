@@ -2,11 +2,9 @@ package com.imperial.academia.view.components;
 
 import com.imperial.academia.interface_adapter.chat.ChatWindowController;
 import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
-import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.entity.chat_message.ChatMessageDTO;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -25,15 +23,14 @@ import java.util.TimerTask;
 public class ChatWindowView extends JPanel {
     private JPanel messageListPanel;
     private JTextField messageInputField;
-    private AudioRecorder audioRecorder;
-    private AudioPlayer audioPlayer;
+    ChatWindowController chatWindowController;
+    Image scaledOpenMicIconImage;
+    Image scaledCloseMicIconImage;
 
     public ChatWindowView(ChatWindowController chatWindowController, ChatWindowViewModel chatWindowViewModel) {
         setLayout(new BorderLayout());
 
-        // Initialize audio recorder and player
-        audioRecorder = new AudioRecorder();
-        audioPlayer = new AudioPlayer();
+        this.chatWindowController = chatWindowController;
 
         // Message list panel
         messageListPanel = new JPanel();
@@ -52,7 +49,7 @@ public class ChatWindowView extends JPanel {
         attachmentsPanel.setOpaque(false); // Make panel transparent
 
         try {
-            BufferedImage plusIconImage = ImageIO.read(new File("resources\\plus_icon.png"));
+            BufferedImage plusIconImage = ImageIO.read(new File("resources/plus_icon.png"));
             Image scaledPlusIconImage = plusIconImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
             JLabel plusIcon = new JLabel(new ImageIcon(scaledPlusIconImage));
             attachmentsPanel.add(plusIcon);
@@ -69,8 +66,9 @@ public class ChatWindowView extends JPanel {
         messageInputField.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         messageInputField.addActionListener(e -> {
             String messageContent = messageInputField.getText();
+            int groupId = chatWindowViewModel.getState().getChatGroupId();
             if (!messageContent.isEmpty()) {
-                chatWindowController.sendMessage(messageContent);
+                chatWindowController.sendMessage(messageContent, "text", groupId);
                 messageInputField.setText("");
             }
         });
@@ -83,14 +81,18 @@ public class ChatWindowView extends JPanel {
         optionsPanel.setOpaque(false); // Make panel transparent
 
         try {
-            BufferedImage smileyIconImage = ImageIO.read(new File("resources\\smiley_icon.png"));
+            BufferedImage smileyIconImage = ImageIO.read(new File("resources/smiley_icon.png"));
             Image scaledSmileyIconImage = smileyIconImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
             JLabel smileyIcon = new JLabel(new ImageIcon(scaledSmileyIconImage));
             optionsPanel.add(smileyIcon);
 
-            BufferedImage micIconImage = ImageIO.read(new File("resources\\mic_icon.png"));
-            Image scaledMicIconImage = micIconImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-            JButton micButton = new JButton(new ImageIcon(scaledMicIconImage));
+            BufferedImage micCloseIconImage = ImageIO.read(new File("resources/mic_close_icon.png"));
+            scaledCloseMicIconImage = micCloseIconImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+
+            BufferedImage micOpenIconImage = ImageIO.read(new File("resources/mic_open_icon.png"));
+            scaledOpenMicIconImage = micOpenIconImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+
+            JButton micButton = new JButton(new ImageIcon(scaledCloseMicIconImage));
             micButton.setBorder(BorderFactory.createEmptyBorder());
             micButton.setContentAreaFilled(false);
             micButton.addActionListener(new ActionListener() {
@@ -116,22 +118,11 @@ public class ChatWindowView extends JPanel {
 
                     if (!recording) {
                         // Get the current group ID and sender info
-                        String groupId = String.valueOf(chatWindowViewModel.getState().getChatGroupId()); // Replace with actual group ID
-                        String senderName = SessionManager.getCurrentUser().getUsername(); // Replace with actual sender name
-                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
-                        String timestampStr = dateFormat.format(timestamp);
+                        int groupId = chatWindowViewModel.getState().getChatGroupId();
 
-                        // Create the directory if it doesn't exist
-                        File groupDir = new File("resources\\audio\\" + groupId);
-                        if (!groupDir.exists()) {
-                            groupDir.mkdirs();
-                        }
-
-                        String outputFilePath = "resources\\audio\\" + groupId + "\\" + senderName + "_" + timestampStr + ".wav";
-                        audioRecorder.startRecording(outputFilePath);
+                        chatWindowController.startRecording(groupId);
                         recording = true;
-                        micButton.setIcon(new ImageIcon(scaledMicIconImage)); // Change icon if needed
+                        micButton.setIcon(new ImageIcon(scaledOpenMicIconImage)); // Change icon if needed
 
                         // Start a timer to stop recording after 60 seconds
                         timer = new Timer();
@@ -139,18 +130,17 @@ public class ChatWindowView extends JPanel {
                             @Override
                             public void run() {
                                 if (recording) {
-                                    audioRecorder.stopRecording();
+                                    chatWindowController.stopRecording(groupId);
                                     recording = false;
-                                    micButton.setIcon(new ImageIcon(scaledMicIconImage)); // Change icon if needed
-                                    chatWindowController.sendMessage("[Audio] " + outputFilePath); // Send the audio file path as a message
+                                    micButton.setIcon(new ImageIcon(scaledCloseMicIconImage)); // Change icon if needed
                                 }
                             }
                         }, 60000);
                     } else {
-                        audioRecorder.stopRecording();
+                        int groupId = chatWindowViewModel.getState().getChatGroupId();
+                        chatWindowController.stopRecording(groupId);
                         recording = false;
-                        micButton.setIcon(new ImageIcon(scaledMicIconImage)); // Change icon if needed
-                        chatWindowController.sendMessage("[Audio] " + audioRecorder.getOutputFilePath()); // Send the audio file path as a message
+                        micButton.setIcon(new ImageIcon(scaledCloseMicIconImage)); // Change icon if needed
                         if (timer != null) {
                             timer.cancel(); // Cancel the timer if recording is stopped manually
                         }
@@ -159,7 +149,7 @@ public class ChatWindowView extends JPanel {
             });
             optionsPanel.add(micButton);
 
-            BufferedImage cameraIconImage = ImageIO.read(new File("resources\\camera_icon.png"));
+            BufferedImage cameraIconImage = ImageIO.read(new File("resources/camera_icon.png"));
             Image scaledCameraIconImage = cameraIconImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
             JLabel cameraIcon = new JLabel(new ImageIcon(scaledCameraIconImage));
             optionsPanel.add(cameraIcon);
@@ -185,35 +175,45 @@ public class ChatWindowView extends JPanel {
             JPanel messagePanel = new JPanel();
             messagePanel.setLayout(new BorderLayout());
             messagePanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-            messagePanel.setBackground(new Color(245, 245, 245));
-    
-            // Avatar
-            JLabel avatarLabel = new JLabel();
-            try {
-                BufferedImage avatarImage = ImageIO.read(new File(chatMessage.getSenderAvatarUrl()));
-                Image scaledAvatarImage = avatarImage.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-                avatarLabel.setIcon(new ImageIcon(scaledAvatarImage));
-            } catch (IOException e) {
-                e.printStackTrace();
+
+            // Adjust background based on sender
+            if (chatMessage.isMe()) {
+                messagePanel.setBackground(new Color(200, 230, 201)); // Light green for self
+            } else {
+                messagePanel.setBackground(new Color(245, 245, 245)); // Light grey for others
             }
-            avatarLabel.setBorder(new EmptyBorder(0, 0, 0, 10));
-            messagePanel.add(avatarLabel, BorderLayout.WEST);
-    
+
+            if (!chatMessage.isMe()) {
+                // Avatar
+                JLabel avatarLabel = new JLabel();
+                try {
+                    BufferedImage avatarImage = ImageIO.read(new File(chatMessage.getSenderAvatarUrl()));
+                    Image scaledAvatarImage = avatarImage.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+                    avatarLabel.setIcon(new ImageIcon(scaledAvatarImage));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                avatarLabel.setBorder(new EmptyBorder(0, 0, 0, 10));
+                messagePanel.add(avatarLabel, BorderLayout.WEST);
+            }
+
             // Message content
             JPanel contentPanel = new JPanel();
             contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-            contentPanel.setBackground(new Color(245, 245, 245));
-            
-            JLabel senderLabel = new JLabel(chatMessage.getSenderName());
-            senderLabel.setFont(new Font("Arial", Font.BOLD, 12));
-            senderLabel.setForeground(new Color(44, 62, 80));
-            contentPanel.add(senderLabel);
-    
+            contentPanel.setBackground(chatMessage.isMe() ? new Color(200, 230, 201) : new Color(245, 245, 245));
+
+            if (!chatMessage.isMe()) {
+                JLabel senderLabel = new JLabel(chatMessage.getSenderName());
+                senderLabel.setFont(new Font("Arial", Font.BOLD, 12));
+                senderLabel.setForeground(new Color(44, 62, 80));
+                contentPanel.add(senderLabel);
+            }
+
             if (chatMessage.getContentType().equals("text")) {
                 JLabel messageContentLabel = new JLabel(chatMessage.getContent());
                 messageContentLabel.setFont(new Font("Arial", Font.PLAIN, 14));
                 messageContentLabel.setOpaque(true);
-                messageContentLabel.setBackground(new Color(52, 152, 219));
+                messageContentLabel.setBackground(chatMessage.isMe() ? new Color(76, 175, 80) : new Color(52, 152, 219));
                 messageContentLabel.setForeground(Color.WHITE);
                 messageContentLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
                 contentPanel.add(messageContentLabel);
@@ -223,35 +223,35 @@ public class ChatWindowView extends JPanel {
                 try {
                     messageImage = ImageIO.read(new File(chatMessage.getContent()));
                 } catch (IOException e) {
-                    messageImage = (BufferedImage) new ImageIcon("resources\\image_not_found.png").getImage();
+                    messageImage = (BufferedImage) new ImageIcon("resources/image_not_found.png").getImage();
                 }
                 Image scaledMessageImage = messageImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
                 messageImageLabel.setIcon(new ImageIcon(scaledMessageImage));
-                /**
-                 *                 
-                 */
                 contentPanel.add(messageImageLabel);
             } else if (chatMessage.getContentType().equals("audio")) {
                 JButton playButton = new JButton("Play");
-                System.out.println("audio file path: " + chatMessage.getContent());
-                playButton.addActionListener(e -> audioPlayer.load(chatMessage.getContent())); // Load and play the audio file
+                playButton.addActionListener(e -> chatWindowController.loadAudio(chatMessage.getContent()));
                 contentPanel.add(playButton);
             }
-    
+
             // Format timestamp
             String formattedTimestamp = formatTimestamp(chatMessage.getTimestamp());
             JLabel timeLabel = new JLabel(formattedTimestamp);
             timeLabel.setFont(new Font("Arial", Font.PLAIN, 12));
             timeLabel.setForeground(new Color(189, 195, 199));
             contentPanel.add(timeLabel);
-    
-            messagePanel.add(contentPanel, BorderLayout.CENTER);
+
+            if (chatMessage.isMe()) {
+                messagePanel.add(contentPanel, BorderLayout.EAST);
+            } else {
+                messagePanel.add(contentPanel, BorderLayout.CENTER);
+            }
+
             messageListPanel.add(messagePanel);
         }
         revalidate();
         repaint();
     }
-    
 
     private String formatTimestamp(Timestamp timestamp) {
         Calendar messageTime = Calendar.getInstance();
@@ -272,78 +272,6 @@ public class ChatWindowView extends JPanel {
             }
         } else {
             return yearFormat.format(messageTime.getTime()); // Different year
-        }
-    }
-
-    // Inner classes for audio recording and playback
-    class AudioRecorder {
-        private AudioFormat audioFormat;
-        private TargetDataLine targetDataLine;
-        private String outputFilePath;
-
-        public AudioRecorder() {
-            audioFormat = new AudioFormat(44100, 16, 2, true, true);
-        }
-
-        public void startRecording(String outputFilePath) {
-            this.outputFilePath = outputFilePath;
-            try {
-                DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
-                targetDataLine = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
-                targetDataLine.open(audioFormat);
-                targetDataLine.start();
-
-                Thread recordingThread = new Thread(() -> {
-                    AudioInputStream audioInputStream = new AudioInputStream(targetDataLine);
-                    File audioFile = new File(outputFilePath);
-                    try {
-                        AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, audioFile);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-
-                recordingThread.start();
-            } catch (LineUnavailableException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public void stopRecording() {
-            targetDataLine.stop();
-            targetDataLine.close();
-        }
-
-        public String getOutputFilePath() {
-            return outputFilePath;
-        }
-    }
-
-    class AudioPlayer {
-        private Clip audioClip;
-
-        public void load(String audioFilePath) {
-            try {
-                File audioFile = new File(audioFilePath);
-                AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
-                audioClip = AudioSystem.getClip();
-                audioClip.open(audioStream);
-                audioClip.start(); // Automatically start playing the audio
-            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public void play() {
-            if (audioClip != null) {
-                audioClip.start();
-            }
-        }
-
-        public void stop() {
-            if (audioClip != null) {
-                audioClip.stop();
-            }
         }
     }
 }

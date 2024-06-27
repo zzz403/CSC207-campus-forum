@@ -2,9 +2,11 @@ package com.imperial.academia.interface_adapter.login;
 
 import com.imperial.academia.use_case.login.LoginOutputBoundary;
 import com.imperial.academia.use_case.login.LoginOutputData;
+
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarState;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
+import com.imperial.academia.session.SessionManager;
 
 /**
  * The LoginPresenter class presents the login results to the view.
@@ -36,6 +38,7 @@ public class LoginPresenter implements LoginOutputBoundary {
         TopNavigationBarState topNavigationBarState = topNavigationBarViewModel.getState();
         topNavigationBarState.setAvatarUrl(loginOutputData.getAvatarUrl());
         topNavigationBarState.setUserId(loginOutputData.getUserId());
+        topNavigationBarState.setAvatarUrl(SessionManager.getCurrentUser().getAvatarUrl());
         topNavigationBarState.setCurrentViewName("post board");
         topNavigationBarViewModel.setState(topNavigationBarState);
         topNavigationBarViewModel.firePropertyChanged();

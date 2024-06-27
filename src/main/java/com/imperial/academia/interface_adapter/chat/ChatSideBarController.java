@@ -3,7 +3,6 @@ package com.imperial.academia.interface_adapter.chat;
 import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
 import com.imperial.academia.use_case.chat.ChatSideBarInputData;
 import com.imperial.academia.use_case.chat.ChatWindowInputBoundary;
-import com.imperial.academia.use_case.chat.ChatWindowInputData;
 
 public class ChatSideBarController {
     private final ChatSideBarInputBoundary chatSideBarInteractor;
@@ -20,7 +19,6 @@ public class ChatSideBarController {
     }
 
     public void selectChatGroup(int chatGroupId) {
-        ChatWindowInputData windowInputData = new ChatWindowInputData(chatGroupId);
-        chatWindowInteractor.execute(windowInputData);
+        chatWindowInteractor.execute(chatGroupId);
     }
 }

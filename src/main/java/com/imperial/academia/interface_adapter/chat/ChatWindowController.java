@@ -11,12 +11,24 @@ public class ChatWindowController {
     }
 
     public void loadChatMessages(int chatGroupId) {
-        ChatWindowInputData chatWindowInputData = new ChatWindowInputData(chatGroupId);
-        chatWindowInteractor.execute(chatWindowInputData);
+        
+        chatWindowInteractor.execute(chatGroupId);
     }
 
-    public void sendMessage(String content) {
-        // Implementation for sending a message
-        // Use chatWindowInteractor to interact with the use case
+    public void sendMessage(String content, String contentType, int groupId) {
+        ChatWindowInputData chatWindowInputData = new ChatWindowInputData(groupId, content, contentType);
+        chatWindowInteractor.sendMessage(chatWindowInputData);
+    }
+
+    public void startRecording(int chatGroupId) {
+        chatWindowInteractor.startRecording(chatGroupId);
+    }
+
+    public void stopRecording(int chatGroupId) {
+        chatWindowInteractor.stopRecording(chatGroupId);
+    }
+
+    public void loadAudio(String audioPath) {
+        chatWindowInteractor.loadAudio(audioPath);
     }
 }
