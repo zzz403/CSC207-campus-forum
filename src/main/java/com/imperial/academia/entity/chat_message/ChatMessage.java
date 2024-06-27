@@ -10,24 +10,16 @@ public class ChatMessage {
     private int senderId;
     private int recipientId;
     private Integer groupId;
+    private String contentType;
     private String content;
     private Timestamp timestamp;
 
-    /**
-     * Constructs a new ChatMessage with the specified details.
-     * 
-     * @param id The unique identifier of the chat message.
-     * @param senderId The ID of the user who sent the message.
-     * @param recipientId The ID of the user who received the message.
-     * @param groupId The ID of the group the message was sent to, if applicable.
-     * @param content The content of the chat message.
-     * @param timestamp The timestamp when the message was sent.
-     */
-    public ChatMessage(int id, int senderId, int recipientId, Integer groupId, String content, Timestamp timestamp) {
+    public ChatMessage(int id, int senderId, int recipientId, Integer groupId, String contentType, String content, Timestamp timestamp) {
         this.id = id;
         this.senderId = senderId;
         this.recipientId = recipientId;
         this.groupId = groupId;
+        this.contentType = contentType;
         this.content = content;
         this.timestamp = timestamp;
     }
@@ -140,5 +132,13 @@ public class ChatMessage {
      */
     public void setTimestamp(Timestamp timestamp) { 
         this.timestamp = timestamp; 
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public String getContentType() {
+        return contentType;
     }
 }

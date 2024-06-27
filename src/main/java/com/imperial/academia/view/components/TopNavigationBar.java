@@ -17,6 +17,7 @@ public class TopNavigationBar extends JPanel {
     private JPanel topNavPanel;
     private JLabel logoText;
     private JFrame applicationFrame;
+    private AvatarComponent profileButton;
 
     /**
      * Constructor to initialize the top navigation bar component.
@@ -107,6 +108,12 @@ public class TopNavigationBar extends JPanel {
 
         // Chat Button
         JButton chatButton = createIconButton("resources/chat_icon.png", 40, 40, "Go to Chat");
+        chatButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                topNavigationBarController.changeView("chat");
+            }
+        });
         rightPanel.add(chatButton);
 
         // Add Create button
@@ -124,7 +131,7 @@ public class TopNavigationBar extends JPanel {
 
         // Profile Button
         String avatarUrl = "resources/avatar/admin_avatar.png";
-        AvatarComponent profileButton = AvatarFacory.create(ABORT, avatarUrl, avatarUrl);
+        profileButton = AvatarFacory.create(ABORT, avatarUrl);
         profileButton.setPreferredSize(new Dimension(60, 60)); 
         profileButton.setBorder(new LineBorder(Color.WHITE, 1, true)); // Circular border
 
@@ -139,11 +146,11 @@ public class TopNavigationBar extends JPanel {
             if ("state".equals(e.getPropertyName())) {
                 TopNavigationBarState state = topNavigationBarViewModel.getState();
                 String avatarUrlLambda = state.getAvatarUrl() != null ? state.getAvatarUrl() : "resources/default_profile_icon.png";
-                profileButton.setAvatarUrl(avatarUrlLambda);
-                profileButton.setCurrentViewName(state.getCurrentViewName());
-                profileButton.setUserId(state.getUserId());
-                System.out.println("TopNavigationBar: Avatar URL: " + state.getAvatarUrl());
-                System.out.println("TopNavigationBar: Current View Name: " + state.getCurrentViewName());
+                try {
+                    profileButton = AvatarFacory.create(state.getUserId(), avatarUrlLambda);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
 

@@ -1,83 +1,123 @@
 package com.imperial.academia.service;
 
-import com.imperial.academia.cache.ChatMessageCache;
 import com.imperial.academia.data_access.ChatMessageDAI;
+import com.imperial.academia.data_access.UserDAI;
 import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.chat_message.ChatMessageDTO;
+import com.imperial.academia.entity.user.User;
+import com.imperial.academia.cache.ChatMessageCache;
+import com.imperial.academia.cache.UserCache;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Implementation of the ChatMessageService interface.
- * Uses caching to reduce database access.
- */
 public class ChatMessageServiceImpl implements ChatMessageService {
-    private ChatMessageCache chatMessageCache;
-    private ChatMessageDAI chatMessageDAO;
+    private final ChatMessageDAI chatMessageDAO;
+    private final UserDAI userDAO;
+    private final ChatMessageCache chatMessageCache;
+    private final UserCache userCache;
 
-    /**
-     * Constructs a new ChatMessageServiceImpl with the specified cache and DAO.
-     *
-     * @param chatMessageCache the cache to use
-     * @param chatMessageDAO the DAO to use
-     */
-    public ChatMessageServiceImpl(ChatMessageCache chatMessageCache, ChatMessageDAI chatMessageDAO) {
-        this.chatMessageCache = chatMessageCache;
+    public ChatMessageServiceImpl(ChatMessageDAI chatMessageDAO, UserDAI userDAO, ChatMessageCache chatMessageCache, UserCache userCache) {
         this.chatMessageDAO = chatMessageDAO;
+        this.userDAO = userDAO;
+        this.chatMessageCache = chatMessageCache;
+        this.userCache = userCache;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void insert(ChatMessage chatMessage) throws SQLException {
         chatMessageDAO.insert(chatMessage);
-        chatMessageCache.setChatMessage("chatmessage:" + chatMessage.getId(), chatMessage);
+        chatMessageCache.setChatMessage("chatMessage:" + chatMessage.getId(), chatMessage);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @SuppressWarnings("null")
     @Override
-    public ChatMessage get(int id) throws SQLException {
-        ChatMessage chatMessage = chatMessageCache.getChatMessage("chatmessage:" + id);
+    public ChatMessageDTO get(int id) throws SQLException {
+        ChatMessage chatMessage = chatMessageCache.getChatMessage("chatMessage:" + id);
         if (chatMessage == null) {
             chatMessage = chatMessageDAO.get(id);
             if (chatMessage != null) {
-                chatMessageCache.setChatMessage("chatmessage:" + id, chatMessage);
+                chatMessageCache.setChatMessage("chatMessage:" + id, chatMessage);
             }
         }
-        return chatMessage;
+
+        if (chatMessage != null) {
+            User user = userCache.getUser("user:" + chatMessage.getSenderId());
+            if (user == null) {
+                user = userDAO.get(chatMessage.getSenderId());
+                if (user != null) {
+                    userCache.setUser("user:" + chatMessage.getSenderId(), user);
+                }
+            }
+            return new ChatMessageDTO(
+                chatMessage.getId(),
+                chatMessage.getSenderId(),
+                user.getUsername(),
+                user.getAvatarUrl(),
+                chatMessage.getGroupId(),
+                chatMessage.getContentType(),
+                chatMessage.getContent(),
+                chatMessage.getTimestamp()
+            );
+        }
+        return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public List<ChatMessage> getAll() throws SQLException {
-        List<ChatMessage> chatMessages = chatMessageCache.getChatMessages("chatmessages:all");
+    public List<ChatMessageDTO> getAll() throws SQLException {
+        List<ChatMessage> chatMessages = chatMessageCache.getChatMessages("chatMessages:all");
         if (chatMessages == null) {
             chatMessages = chatMessageDAO.getAll();
-            chatMessageCache.setChatMessages("chatmessages:all", chatMessages);
+            chatMessageCache.setChatMessages("chatMessages:all", chatMessages);
         }
-        return chatMessages;
+        return convertToDTOs(chatMessages);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public List<ChatMessageDTO> getAllByGroupId(int groupId) throws SQLException {
+        List<ChatMessage> chatMessages = chatMessageCache.getChatMessages("chatMessages:group:" + groupId);
+        if (chatMessages == null) {
+            chatMessages = chatMessageDAO.getAllByGroupId(groupId);
+            chatMessageCache.setChatMessages("chatMessages:group:" + groupId, chatMessages);
+        }
+        return convertToDTOs(chatMessages);
+    }
+
     @Override
     public void update(ChatMessage chatMessage) throws SQLException {
         chatMessageDAO.update(chatMessage);
-        chatMessageCache.setChatMessage("chatmessage:" + chatMessage.getId(), chatMessage);
+        chatMessageCache.setChatMessage("chatMessage:" + chatMessage.getId(), chatMessage);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void delete(int id) throws SQLException {
         chatMessageDAO.delete(id);
-        chatMessageCache.deleteChatMessage("chatmessage:" + id);
+        chatMessageCache.deleteChatMessage("chatMessage:" + id);
+    }
+
+    @SuppressWarnings("null")
+    private List<ChatMessageDTO> convertToDTOs(List<ChatMessage> chatMessages) throws SQLException {
+        List<ChatMessageDTO> chatMessageDTOs = new ArrayList<>();
+        for (ChatMessage chatMessage : chatMessages) {
+            User user = userCache.getUser("user:" + chatMessage.getSenderId());
+            if (user == null) {
+                user = userDAO.get(chatMessage.getSenderId());
+                if (user != null) {
+                    userCache.setUser("user:" + chatMessage.getSenderId(), user);
+                }
+            }
+            chatMessageDTOs.add(new ChatMessageDTO(
+                chatMessage.getId(),
+                chatMessage.getSenderId(),
+                user.getUsername(),
+                user.getAvatarUrl(),
+                chatMessage.getGroupId(),
+                chatMessage.getContentType(),
+                chatMessage.getContent(),
+                chatMessage.getTimestamp()
+            ));
+        }
+        return chatMessageDTOs;
     }
 }

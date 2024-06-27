@@ -24,8 +24,7 @@ public class ProfileInteractor implements ProfileInputBoundry {
                         user.getEmail(),
                         user.getRole(),
                         user.getAvatarUrl(),
-                        user.getRegistrationDate(),
-                        profileInputData.getPreviousViewName());
+                        user.getRegistrationDate());
                 profilepresenter.present(profileOutputData);
             } else {
                 profilepresenter.presentError("User not found");

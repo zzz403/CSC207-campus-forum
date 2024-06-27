@@ -11,8 +11,8 @@ public class ProfileController{
     }
 
 
-    public void showProfile(int userId, String previousViewName){
-        ProfileInputData profileInputData = new ProfileInputData(userId,previousViewName);
+    public void showProfile(int userId){
+        ProfileInputData profileInputData = new ProfileInputData(userId);
         profileInteractor.excute(profileInputData);
     }
 }

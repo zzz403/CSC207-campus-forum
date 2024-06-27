@@ -1,6 +1,8 @@
 package com.imperial.academia.service;
 
 import com.imperial.academia.entity.chat_group.ChatGroup;
+import com.imperial.academia.entity.chat_group.ChatGroupDTO;
+
 import java.sql.SQLException;
 import java.util.List;
 
@@ -24,6 +26,15 @@ public interface ChatGroupService {
      * @throws SQLException if a database access error occurs
      */
     ChatGroup get(int id) throws SQLException;
+
+    /**
+     * Retrieves all chat groups that have the specified group name.
+     *
+     * @param groupName the group name to search for
+     * @return a list of chat groups with the specified group name
+     * @throws SQLException if a database access error occurs
+     */
+    List<ChatGroupDTO> getChatGroupsByGroupName(String groupName) throws SQLException;
 
     /**
      * Retrieves all chat groups from the database.

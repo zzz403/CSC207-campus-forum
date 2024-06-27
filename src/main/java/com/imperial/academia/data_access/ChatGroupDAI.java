@@ -32,7 +32,7 @@ public interface ChatGroupDAI {
      * @return a list of all chat groups
      * @throws SQLException if a database access error occurs
      */
-    List<ChatGroup> getAll() throws SQLException;
+    List<ChatGroup> getAll(int userId) throws SQLException;
 
     /**
      * Retrieves all chat groups that have been modified since a given timestamp.

@@ -33,7 +33,6 @@ public class LoginUseCaseFactory {
      * @throws ClassNotFoundException if the UserDAO class is not found
      */
     public static LoginView create(ViewManagerModel viewManagerModel, LoginViewModel loginViewModel,TopNavigationBarViewModel topNavigationBarViewModel) throws ClassNotFoundException {
-
         try {
             LoginController loginController = createUserLoginUseCase(viewManagerModel, loginViewModel,topNavigationBarViewModel);
             return new LoginView(loginController, loginViewModel);

@@ -14,7 +14,7 @@ public class TopNavigationBarViewModel extends ViewModel{
     }
 
     public TopNavigationBarState getState() {
-        return state;
+        return new TopNavigationBarState(state);
     }
 
     public void setState(TopNavigationBarState state) {

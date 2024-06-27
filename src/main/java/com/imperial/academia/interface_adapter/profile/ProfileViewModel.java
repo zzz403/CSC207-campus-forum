@@ -14,7 +14,7 @@ public class ProfileViewModel extends ViewModel {
     }
 
     public ProfileState getProfileState() {
-        return profileState;
+        return new ProfileState(profileState);
     }
 
     public void setProfileState(ProfileState profileState) {
