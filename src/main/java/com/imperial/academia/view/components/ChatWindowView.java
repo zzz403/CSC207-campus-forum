@@ -1,5 +1,6 @@
 package com.imperial.academia.view.components;
 
+import com.imperial.academia.app.components_factory.AvatarFactory;
 import com.imperial.academia.interface_adapter.chat.ChatWindowController;
 import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
 import com.imperial.academia.entity.chat_message.ChatMessageDTO;
@@ -21,8 +22,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class ChatWindowView extends JPanel {
-    private JPanel messageListPanel;
-    private JTextField messageInputField;
+    private final JPanel messageListPanel;
+    private final JTextField messageInputField;
     ChatWindowController chatWindowController;
     Image scaledOpenMicIconImage;
     Image scaledCloseMicIconImage;
@@ -116,10 +117,8 @@ public class ChatWindowView extends JPanel {
                     };
                     new Timer().schedule(enableButtonTask, 1000);
 
+                    int groupId = chatWindowViewModel.getState().getChatGroupId();
                     if (!recording) {
-                        // Get the current group ID and sender info
-                        int groupId = chatWindowViewModel.getState().getChatGroupId();
-
                         chatWindowController.startRecording(groupId);
                         recording = true;
                         micButton.setIcon(new ImageIcon(scaledOpenMicIconImage)); // Change icon if needed
@@ -137,7 +136,6 @@ public class ChatWindowView extends JPanel {
                             }
                         }, 60000);
                     } else {
-                        int groupId = chatWindowViewModel.getState().getChatGroupId();
                         chatWindowController.stopRecording(groupId);
                         recording = false;
                         micButton.setIcon(new ImageIcon(scaledCloseMicIconImage)); // Change icon if needed
@@ -177,22 +175,11 @@ public class ChatWindowView extends JPanel {
             messagePanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
             // Adjust background based on sender
-            if (chatMessage.isMe()) {
-                messagePanel.setBackground(new Color(200, 230, 201)); // Light green for self
-            } else {
-                messagePanel.setBackground(new Color(245, 245, 245)); // Light grey for others
-            }
+            messagePanel.setBackground(new Color(245, 245, 245)); // Light grey for others
 
             if (!chatMessage.isMe()) {
                 // Avatar
-                JLabel avatarLabel = new JLabel();
-                try {
-                    BufferedImage avatarImage = ImageIO.read(new File(chatMessage.getSenderAvatarUrl()));
-                    Image scaledAvatarImage = avatarImage.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-                    avatarLabel.setIcon(new ImageIcon(scaledAvatarImage));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                AvatarComponent avatarLabel = AvatarFactory.create(chatMessage.getSenderId(), chatMessage.getSenderAvatarUrl(),40);
                 avatarLabel.setBorder(new EmptyBorder(0, 0, 0, 10));
                 messagePanel.add(avatarLabel, BorderLayout.WEST);
             }
@@ -200,7 +187,7 @@ public class ChatWindowView extends JPanel {
             // Message content
             JPanel contentPanel = new JPanel();
             contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-            contentPanel.setBackground(chatMessage.isMe() ? new Color(200, 230, 201) : new Color(245, 245, 245));
+            contentPanel.setBackground(new Color(245, 245, 245));
 
             if (!chatMessage.isMe()) {
                 JLabel senderLabel = new JLabel(chatMessage.getSenderName());
@@ -249,9 +236,11 @@ public class ChatWindowView extends JPanel {
 
             messageListPanel.add(messagePanel);
         }
-        revalidate();
-        repaint();
+        messageListPanel.revalidate();
+        messageListPanel.repaint();
     }
+
+
 
     private String formatTimestamp(Timestamp timestamp) {
         Calendar messageTime = Calendar.getInstance();
