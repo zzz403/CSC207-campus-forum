@@ -34,4 +34,3 @@ build/
 .vscode/
 
 database/academia_imperial.trace.db
-database/academia_imperial.mv.db
