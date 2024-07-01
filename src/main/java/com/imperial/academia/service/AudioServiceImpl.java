@@ -3,16 +3,19 @@ package com.imperial.academia.service;
 import javax.sound.sampled.*;
 
 
+import com.imperial.academia.entity.chat_message.WaveformData;
 import com.imperial.academia.session.SessionManager;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AudioServiceImpl implements AudioService{
-    private AudioRecorder audioRecorder;
-    private AudioPlayer audioPlayer;
+    private final AudioRecorder audioRecorder;
+    private final AudioPlayer audioPlayer;
     private boolean recording;
     private String outputFilePath;
 
@@ -58,8 +61,41 @@ public class AudioServiceImpl implements AudioService{
         return outputFilePath;
     }
 
-    class AudioRecorder {
-        private AudioFormat audioFormat;
+    @Override
+    public WaveformData processAudio(String audioFilePath) throws UnsupportedAudioFileException, IOException {
+        File audioFile = new File(audioFilePath);
+        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+        AudioFormat format = audioInputStream.getFormat();
+        byte[] audioBytes = audioInputStream.readAllBytes();
+        int frameSize = format.getFrameSize();
+        float frameRate = format.getFrameRate();
+        float durationInSeconds = ((float) audioBytes.length / frameSize) / frameRate;
+
+        // 每秒钟显示的像素数
+        int pixelsPerSecond = 10;
+        int targetWidth = (int) (durationInSeconds * pixelsPerSecond);
+
+        int samplesPerPixel = audioBytes.length / frameSize / targetWidth;
+        List<Integer> minValues = new ArrayList<>();
+        List<Integer> maxValues = new ArrayList<>();
+
+        for (int i = 0; i < targetWidth; i++) {
+            int min = Integer.MAX_VALUE;
+            int max = Integer.MIN_VALUE;
+            for (int j = 0; j < samplesPerPixel; j++) {
+                int sample = audioBytes[(i * samplesPerPixel + j) * frameSize];
+                if (sample < min) min = sample;
+                if (sample > max) max = sample;
+            }
+            minValues.add(min);
+            maxValues.add(max);
+        }
+
+        return new WaveformData(minValues, maxValues, durationInSeconds);
+    }
+
+    static class AudioRecorder {
+        private final AudioFormat audioFormat;
         private TargetDataLine targetDataLine;
         private String outputFilePath;
 
@@ -101,7 +137,7 @@ public class AudioServiceImpl implements AudioService{
         }
     }
 
-    class AudioPlayer {
+    static class AudioPlayer {
         private Clip audioClip;
 
         public void load(String audioFilePath) {

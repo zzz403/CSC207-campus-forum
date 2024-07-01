@@ -148,7 +148,6 @@ public class TopNavigationBar extends JPanel {
                 TopNavigationBarState state = topNavigationBarViewModel.getState();
                 String avatarUrlLambda = state.getAvatarUrl() != null ? state.getAvatarUrl()
                         : "resources/default_profile_icon.png";
-                System.out.println("TopNavigationBar: avatarUrlLambda = " + avatarUrlLambda);
                 rightPanel.remove(profileButton);
 
                 // Create and add the new AvatarComponent

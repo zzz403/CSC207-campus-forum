@@ -1,7 +1,10 @@
 package com.imperial.academia.data_access;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.chat_message.WaveformData;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -131,5 +134,26 @@ public class ChatMessageDAO implements ChatMessageDAI {
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
         }
+    }
+    @Override
+    public WaveformData getWaveformData(int messageId) throws SQLException {
+        String sql = "SELECT min_values, max_values, duration FROM audio_waveforms WHERE message_id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            System.out.println("ChatMessageDAO: getWaveformData: pstmt = " + pstmt);
+            pstmt.setInt(1, messageId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    ObjectMapper mapper = new ObjectMapper();
+                    List<Integer> minValues = mapper.readValue(rs.getString("min_values"), List.class);
+                    List<Integer> maxValues = mapper.readValue(rs.getString("max_values"), List.class);
+                    float duration = rs.getFloat("duration");
+                    return new WaveformData(minValues, maxValues, duration);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            throw new SQLException("Error parsing waveform data", e);
+        }
+        return null;
     }
 }

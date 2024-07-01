@@ -117,6 +117,17 @@ public class H2Setup {
                 ")";
             stmt.executeUpdate(createChatMessagesTable);
 
+            String createAudioWaveformsTable = "CREATE TABLE audio_waveforms (" +
+                    "waveform_id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "message_id INT NOT NULL, " +
+                    "min_values TEXT NOT NULL, " +
+                    "max_values TEXT NOT NULL, " +
+                    "duration FLOAT NOT NULL, " +
+                    "FOREIGN KEY (message_id) REFERENCES chat_messages(message_id) " +
+                    "ON DELETE CASCADE" +
+                    ")";
+            stmt.executeUpdate(createAudioWaveformsTable);
+
             String createGroupMembersTable = "CREATE TABLE group_members (" +
                 "group_id INT NOT NULL, " +
                 "user_id INT NOT NULL, " +

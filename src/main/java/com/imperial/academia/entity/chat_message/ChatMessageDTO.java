@@ -12,6 +12,7 @@ public class ChatMessageDTO {
     private String content;
     private boolean isMe;
     private Timestamp timestamp;
+    private WaveformData waveformData;
 
     public ChatMessageDTO(int id, int senderId, String senderName, String senderAvatarUrl, Integer groupId, String contentType, String content, boolean isMe, Timestamp timestamp) {
         this.id = id;
@@ -23,6 +24,7 @@ public class ChatMessageDTO {
         this.content = content;
         this.isMe = isMe;
         this.timestamp = timestamp;
+        waveformData = null;
     }
 
     public int getId() {
@@ -97,6 +99,12 @@ public class ChatMessageDTO {
         this.timestamp = timestamp;
     }
 
-    
+    public WaveformData getWaveformData() {
+        return waveformData;
+    }
+
+    public void setWaveformData(WaveformData waveformData) {
+        this.waveformData = waveformData;
+    }
     
 }

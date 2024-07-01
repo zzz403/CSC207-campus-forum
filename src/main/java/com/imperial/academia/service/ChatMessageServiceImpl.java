@@ -4,6 +4,7 @@ import com.imperial.academia.data_access.ChatMessageDAI;
 import com.imperial.academia.data_access.UserDAI;
 import com.imperial.academia.entity.chat_message.ChatMessage;
 import com.imperial.academia.entity.chat_message.ChatMessageDTO;
+import com.imperial.academia.entity.chat_message.WaveformData;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.cache.ChatMessageCache;
@@ -20,7 +21,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     private final UserCache userCache;
 
     public ChatMessageServiceImpl(ChatMessageDAI chatMessageDAO, UserDAI userDAO, ChatMessageCache chatMessageCache,
-            UserCache userCache) {
+                                  UserCache userCache) {
         this.chatMessageDAO = chatMessageDAO;
         this.userDAO = userDAO;
         this.chatMessageCache = chatMessageCache;
@@ -61,7 +62,8 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                     userCache.setUser("user:" + chatMessage.getSenderId(), user);
                 }
             }
-            return new ChatMessageDTO(
+            assert user != null;
+            ChatMessageDTO chatMessageDTO = new ChatMessageDTO(
                     chatMessage.getId(),
                     chatMessage.getSenderId(),
                     user.getUsername(),
@@ -71,6 +73,13 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                     chatMessage.getContent(),
                     chatMessage.getId() == SessionManager.getCurrentUser().getId(),
                     chatMessage.getTimestamp());
+
+            if ("audio".equals(chatMessage.getContentType())) {
+                WaveformData waveformData = chatMessageDAO.getWaveformData(chatMessage.getId());
+                chatMessageDTO.setWaveformData(waveformData);
+            }
+
+            return chatMessageDTO;
         }
         return null;
     }
@@ -118,7 +127,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                     userCache.setUser("user:" + chatMessage.getSenderId(), user);
                 }
             }
-            chatMessageDTOs.add(new ChatMessageDTO(
+            ChatMessageDTO chatMessageDTO = new ChatMessageDTO(
                     chatMessage.getId(),
                     chatMessage.getSenderId(),
                     user.getUsername(),
@@ -127,7 +136,14 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                     chatMessage.getContentType(),
                     chatMessage.getContent(),
                     chatMessage.getSenderId() == SessionManager.getCurrentUser().getId(),
-                    chatMessage.getTimestamp()));
+                    chatMessage.getTimestamp());
+
+            if ("audio".equals(chatMessage.getContentType())) {
+                WaveformData waveformData = chatMessageDAO.getWaveformData(chatMessage.getId());
+                chatMessageDTO.setWaveformData(waveformData);
+            }
+
+            chatMessageDTOs.add(chatMessageDTO);
         }
         return chatMessageDTOs;
     }
