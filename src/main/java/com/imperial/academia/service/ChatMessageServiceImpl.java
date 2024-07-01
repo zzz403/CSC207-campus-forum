@@ -43,6 +43,28 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         }
     }
 
+    @Override
+    public void insert(ChatMessage chatMessage, WaveformData waveformData) throws SQLException {
+        // 插入 ChatMessage
+        chatMessageDAO.insert(chatMessage);
+        // 更新单条消息缓存
+        chatMessageCache.setChatMessage("chatMessage:" + chatMessage.getId(), chatMessage);
+
+        // 如果消息类型为音频，则插入并缓存 WaveformData
+        if (waveformData != null) {
+            chatMessageDAO.insertWaveformData(chatMessage.getId(), waveformData);
+            chatMessageCache.setWaveformData("waveformData:" + chatMessage.getId(), waveformData);
+        }
+
+        // 更新群组消息列表缓存
+        String groupCacheKey = "chatMessages:group:" + chatMessage.getGroupId();
+        List<ChatMessage> chatMessages = chatMessageCache.getChatMessages(groupCacheKey);
+        if (chatMessages != null) {
+            chatMessages.add(chatMessage);
+            chatMessageCache.setChatMessages(groupCacheKey, chatMessages);
+        }
+    }
+
     @SuppressWarnings("null")
     @Override
     public ChatMessageDTO get(int id) throws SQLException {
@@ -75,7 +97,11 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                     chatMessage.getTimestamp());
 
             if ("audio".equals(chatMessage.getContentType())) {
-                WaveformData waveformData = chatMessageDAO.getWaveformData(chatMessage.getId());
+                WaveformData waveformData = chatMessageCache.getWaveformData("waveformData:" + chatMessage.getId());
+                if (waveformData == null) {
+                    waveformData = chatMessageDAO.getWaveformData(chatMessage.getId());
+                    chatMessageCache.setWaveformData("waveformData:" + chatMessage.getId(), waveformData);
+                }
                 chatMessageDTO.setWaveformData(waveformData);
             }
 
@@ -139,7 +165,11 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                     chatMessage.getTimestamp());
 
             if ("audio".equals(chatMessage.getContentType())) {
-                WaveformData waveformData = chatMessageDAO.getWaveformData(chatMessage.getId());
+                WaveformData waveformData = chatMessageCache.getWaveformData("waveformData:" + chatMessage.getId());
+                if (waveformData == null) {
+                    waveformData = chatMessageDAO.getWaveformData(chatMessage.getId());
+                    chatMessageCache.setWaveformData("waveformData:" + chatMessage.getId(), waveformData);
+                }
                 chatMessageDTO.setWaveformData(waveformData);
             }
 

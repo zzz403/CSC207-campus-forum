@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface ChatMessageDAI {
     void insert(ChatMessage chatMessage) throws SQLException;
+    void insertWaveformData(int messageId, WaveformData waveformData) throws SQLException;
     ChatMessage get(int id) throws SQLException;
     List<ChatMessage> getAll() throws SQLException;
     List<ChatMessage> getAllByGroupId(int groupId) throws SQLException;

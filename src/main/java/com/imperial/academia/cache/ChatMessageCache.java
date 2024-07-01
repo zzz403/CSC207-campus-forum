@@ -1,6 +1,7 @@
 package com.imperial.academia.cache;
 
 import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.chat_message.WaveformData;
 import java.util.List;
 
 /**
@@ -68,4 +69,35 @@ public interface ChatMessageCache {
      * @return true if the list of chat messages is cached, false otherwise
      */
     boolean existsChatMessages(String key);
+
+    /**
+     * Caches waveform data.
+     *
+     * @param key the key for the waveform data
+     * @param waveformData the waveform data to cache
+     */
+    void setWaveformData(String key, WaveformData waveformData);
+
+    /**
+     * Retrieves cached waveform data.
+     *
+     * @param key the key for the waveform data
+     * @return the cached waveform data, or null if not found
+     */
+    WaveformData getWaveformData(String key);
+
+    /**
+     * Deletes cached waveform data.
+     *
+     * @param key the key for the waveform data to delete
+     */
+    void deleteWaveformData(String key);
+
+    /**
+     * Checks if waveform data is cached.
+     *
+     * @param key the key for the waveform data
+     * @return true if the waveform data is cached, false otherwise
+     */
+    boolean existsWaveformData(String key);
 }

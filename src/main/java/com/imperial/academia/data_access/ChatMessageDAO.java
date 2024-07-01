@@ -44,6 +44,18 @@ public class ChatMessageDAO implements ChatMessageDAI {
     }
 
     @Override
+    public void insertWaveformData(int chatMessageId, WaveformData waveformData) throws SQLException {
+        String sql = "INSERT INTO audio_waveforms (message_id, min_values, max_values, duration) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, chatMessageId);
+            ps.setString(2, waveformData.getMinValues().toString());
+            ps.setString(3, waveformData.getMaxValues().toString());
+            ps.setFloat(4, waveformData.getDuration());
+            ps.executeUpdate();
+        }
+    }
+
+    @Override
     public ChatMessage get(int id) throws SQLException {
         String sql = "SELECT * FROM chat_messages WHERE message_id = ?";
         ChatMessage chatMessage = null;
@@ -135,6 +147,7 @@ public class ChatMessageDAO implements ChatMessageDAI {
             pstmt.executeUpdate();
         }
     }
+
     @Override
     public WaveformData getWaveformData(int messageId) throws SQLException {
         String sql = "SELECT min_values, max_values, duration FROM audio_waveforms WHERE message_id = ?";

@@ -17,7 +17,11 @@ public class ChatWindowController {
 
     public void sendMessage(String content, String contentType, int groupId) {
         ChatWindowInputData chatWindowInputData = new ChatWindowInputData(groupId, content, contentType);
-        chatWindowInteractor.sendMessage(chatWindowInputData);
+        try {
+            chatWindowInteractor.sendMessage(chatWindowInputData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void startRecording(int chatGroupId) {

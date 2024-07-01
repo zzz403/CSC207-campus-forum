@@ -250,9 +250,13 @@ public class ChatWindowView extends JPanel {
             } else if (chatMessage.getContentType().equals("audio")) {
                 WaveformData waveformData = chatMessage.getWaveformData();
                 if (waveformData != null) {
-                    WaveformPanel waveformPanel = new WaveformPanel(waveformData.getMaxValues(), 50); // 设置高度为50
+                    Component verticalStrut = Box.createVerticalStrut(-15); // 你可以更改这个值以满足你的需求
 
+                    contentPanel.add(verticalStrut);
+
+                    WaveformPanel waveformPanel = new WaveformPanel(waveformData.getMaxValues(), waveformData.getDuration(),chatMessage.isMe(),50); // 设置高度为50
                     waveformPanel.addPlayButtonActionListener(e -> chatWindowController.loadAudio(chatMessage.getContent()));
+
                     contentPanel.add(waveformPanel);
                 }
             }

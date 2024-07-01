@@ -8,6 +8,8 @@ import com.imperial.academia.session.SessionManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,38 +63,64 @@ public class AudioServiceImpl implements AudioService{
         return outputFilePath;
     }
 
-    @Override
-    public WaveformData processAudio(String audioFilePath) throws UnsupportedAudioFileException, IOException {
+    public WaveformData processAudio(String audioFilePath) {
         File audioFile = new File(audioFilePath);
-        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-        AudioFormat format = audioInputStream.getFormat();
-        byte[] audioBytes = audioInputStream.readAllBytes();
-        int frameSize = format.getFrameSize();
-        float frameRate = format.getFrameRate();
-        float durationInSeconds = ((float) audioBytes.length / frameSize) / frameRate;
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            AudioFormat format = audioInputStream.getFormat();
+            byte[] audioBytes = audioInputStream.readAllBytes();
+            int frameSize = format.getFrameSize();
+            float frameRate = format.getFrameRate();
+            float durationInSeconds = ((float) audioBytes.length / frameSize) / frameRate;
 
-        // 每秒钟显示的像素数
-        int pixelsPerSecond = 10;
-        int targetWidth = (int) (durationInSeconds * pixelsPerSecond);
+            // 计算目标存储数量
+            int numSegments = durationInSeconds >= 5 ? 30 : Math.min(Math.max((int) (durationInSeconds / 5.0 * 30), 15), 30);
+            int segmentSize = audioBytes.length / frameSize / numSegments;
 
-        int samplesPerPixel = audioBytes.length / frameSize / targetWidth;
-        List<Integer> minValues = new ArrayList<>();
-        List<Integer> maxValues = new ArrayList<>();
+            List<Integer> minValues = new ArrayList<>();
+            List<Integer> maxValues = new ArrayList<>();
 
-        for (int i = 0; i < targetWidth; i++) {
-            int min = Integer.MAX_VALUE;
-            int max = Integer.MIN_VALUE;
-            for (int j = 0; j < samplesPerPixel; j++) {
-                int sample = audioBytes[(i * samplesPerPixel + j) * frameSize];
-                if (sample < min) min = sample;
-                if (sample > max) max = sample;
+            for (int i = 0; i < numSegments; i++) {
+                int min = Integer.MAX_VALUE;
+                int max = Integer.MIN_VALUE;
+                for (int j = 0; j < segmentSize; j++) {
+                    int sampleIndex = (i * segmentSize + j) * frameSize;
+                    if (sampleIndex < audioBytes.length - frameSize) {
+                        int sample = getSample(audioBytes, sampleIndex, format);
+                        if (sample < min) min = sample;
+                        if (sample > max) max = sample;
+                    }
+                }
+                minValues.add(min);
+                maxValues.add(max);
             }
-            minValues.add(min);
-            maxValues.add(max);
+
+            return new WaveformData(minValues, maxValues, durationInSeconds);
+        } catch (UnsupportedAudioFileException | IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private int getSample(byte[] audioBytes, int sampleIndex, AudioFormat format) {
+        int sampleSizeInBytes = format.getSampleSizeInBits() / 8;
+        boolean isBigEndian = format.isBigEndian();
+        int sample = 0;
+
+        if (sampleSizeInBytes == 2) {
+            if (isBigEndian) {
+                sample = ByteBuffer.wrap(audioBytes, sampleIndex, sampleSizeInBytes).order(ByteOrder.BIG_ENDIAN).getShort();
+            } else {
+                sample = ByteBuffer.wrap(audioBytes, sampleIndex, sampleSizeInBytes).order(ByteOrder.LITTLE_ENDIAN).getShort();
+            }
+        } else {
+            // 处理其他样本大小（如 8 位）
+            sample = audioBytes[sampleIndex];
         }
 
-        return new WaveformData(minValues, maxValues, durationInSeconds);
+        return sample;
     }
+
 
     static class AudioRecorder {
         private final AudioFormat audioFormat;

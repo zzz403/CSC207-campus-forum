@@ -9,18 +9,25 @@ class WaveformPanel extends JPanel {
     private final List<Integer> maxValues;
     private final int height;
     private final JButton playButton;
+    private final boolean isMe;
+    private final float duration;
 
-    public WaveformPanel(List<Integer> maxValues, int height) {
+    public WaveformPanel(List<Integer> maxValues, float duration, boolean isMe ,int height) {
+        this.isMe = isMe;
+        this.duration = duration;
         this.maxValues = maxValues;
         this.height = height;
-        int width = maxValues.size() * 4 + 230; // 每个maxValues的宽度为6像素，增加100像素宽度用于播放按钮和留白
+        int width = maxValues.size() * (4+6) + 50 + 40; // 每个maxValues的宽度为6像素，增加100像素宽度用于播放按钮和留白
+        if (Math.round(duration) >= 10) {
+            width += 5; // 增加30像素宽度用于显示持续时间
+        }
         setPreferredSize(new Dimension(width, height + 20)); // 增加高度用于居中
 
         setBackground(new Color(0, 0, 0, 0)); // 透明背景以便绘制圆角矩形
 
         // 设置播放按钮
-
-        ImageIcon playIcon = new ImageIcon("resources/play_icon_light.png");
+        new ImageIcon();
+        ImageIcon playIcon = new ImageIcon(isMe ? "resources/play_icon_light.png" : "resources/play_icon_dark.png");
         playIcon.setImage(playIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH));
         playButton = new JButton(playIcon);
         playButton.setPreferredSize(new Dimension(25, 25));
@@ -47,28 +54,37 @@ class WaveformPanel extends JPanel {
         // Draw rounded rectangle background
         int rectHeight = height - 10;
         int rectY = (getHeight() - rectHeight) / 2;
-        g2.setColor(new Color(52, 152, 219));
+        g2.setColor(isMe ? new Color(52, 152, 219) : Color.WHITE);
         g2.fillRoundRect(0, rectY, getWidth(), rectHeight, 25, 25);
 
         int barWidth = 4; // Fixed width
         int barSpacing = 6; // Increased spacing between dots
         int centerY = getHeight() / 2;
-        int threshold = 225; // Threshold to distinguish between dots and rounded rectangles
+        int threshold = 500; // Threshold to distinguish between dots and rounded rectangles
 
         for (int i = 0; i < maxValues.size(); i++) {
             int value = maxValues.get(i);
+            g2.setColor(isMe ? Color.WHITE : Color.BLACK);
             if (value < threshold) {
                 // Draw dot
-                g2.setColor(Color.WHITE);
-                g2.fillOval(40 + i * (barWidth + barSpacing), centerY - 2, barWidth, barWidth);
+                g2.fillOval(45 + i * (barWidth + barSpacing), centerY - 2, barWidth, barWidth);
             } else {
                 // Draw rounded rectangle
-                int barHeight = Math.min((value * rectHeight) / 700, (int) (rectHeight * 0.9));
-                int arcSize = 3;
-                g2.setColor(Color.WHITE);
-                g2.fillRoundRect(40 + i * (barWidth + barSpacing), centerY - barHeight / 2, barWidth, barHeight, arcSize, arcSize);
+                int barHeight = Math.min((value * rectHeight) / 3000, (int) (rectHeight * 0.6));
+
+                int arcSize = 4;
+
+                g2.fillRoundRect(45 + i * (barWidth + barSpacing), centerY - barHeight / 2, barWidth, barHeight, arcSize, arcSize);
             }
         }
+
+        int minutes = (int) duration / 60;
+        int seconds = (int) duration % 60;
+        String durationText = String.format("%d:%02d", minutes, seconds); // 格式化持续时间为0:04这种形式
+        g2.setFont(new Font("Arial", Font.BOLD, 12));
+        g2.setColor(isMe ? Color.WHITE : Color.BLACK);
+        g2.drawString(durationText, getWidth() - 35, centerY + 5); // 调整位置，使其在波形图的末尾
+
 
         g2.dispose();
     }
