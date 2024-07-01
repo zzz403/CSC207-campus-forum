@@ -56,7 +56,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        application.setSize(800, 700); // 设置窗口大小
+        application.setSize(1100, 900); // 设置窗口大小
         application.setLocationRelativeTo(null); // 居中显示
 
         CardLayout cardLayout = new CardLayout();

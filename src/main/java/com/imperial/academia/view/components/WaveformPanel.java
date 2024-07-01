@@ -5,6 +5,10 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+/**
+ * The WaveformPanel class is a custom JPanel that displays a visual representation
+ * of an audio waveform along with a play button and the duration of the audio.
+ */
 class WaveformPanel extends JPanel {
     private final List<Integer> maxValues;
     private final int height;
@@ -12,21 +16,28 @@ class WaveformPanel extends JPanel {
     private final boolean isMe;
     private final float duration;
 
-    public WaveformPanel(List<Integer> maxValues, float duration, boolean isMe ,int height) {
+    /**
+     * Constructs a WaveformPanel with the specified parameters.
+     *
+     * @param maxValues List of maximum values representing the audio waveform.
+     * @param duration Duration of the audio in seconds.
+     * @param isMe Boolean indicating if the current user is the sender of the message.
+     * @param height Height of the waveform panel.
+     */
+    public WaveformPanel(List<Integer> maxValues, float duration, boolean isMe, int height) {
         this.isMe = isMe;
         this.duration = duration;
         this.maxValues = maxValues;
         this.height = height;
-        int width = maxValues.size() * (4+6) + 50 + 40; // 每个maxValues的宽度为6像素，增加100像素宽度用于播放按钮和留白
+        int width = maxValues.size() * (4 + 6) + 50 + 40; // Each maxValue width is 6 pixels, adding 90 pixels for play button and padding
         if (Math.round(duration) >= 10) {
-            width += 5; // 增加30像素宽度用于显示持续时间
+            width += 5; // Adding extra width to display longer durations
         }
-        setPreferredSize(new Dimension(width, height + 20)); // 增加高度用于居中
+        setPreferredSize(new Dimension(width, height + 20)); // Increase height for centering
 
-        setBackground(new Color(0, 0, 0, 0)); // 透明背景以便绘制圆角矩形
+        setBackground(new Color(0, 0, 0, 0)); // Transparent background for rounded rectangle drawing
 
-        // 设置播放按钮
-        new ImageIcon();
+        // Set up play button
         ImageIcon playIcon = new ImageIcon(isMe ? "resources/play_icon_light.png" : "resources/play_icon_dark.png");
         playIcon.setImage(playIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH));
         playButton = new JButton(playIcon);
@@ -36,11 +47,16 @@ class WaveformPanel extends JPanel {
         playButton.setFocusPainted(false);
         playButton.setOpaque(false);
         playButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        setLayout(null); // 使用null布局，以便手动设置播放按钮的位置
-        playButton.setBounds(5, (height - 30) / 2 + 10, 30, 30); // 手动设置按钮位置
+        setLayout(null); // Use null layout for manual positioning
+        playButton.setBounds(5, (height - 30) / 2 + 10, 30, 30); // Manually set button position
         add(playButton);
     }
 
+    /**
+     * Adds an ActionListener to the play button.
+     *
+     * @param listener The ActionListener to be added.
+     */
     public void addPlayButtonActionListener(ActionListener listener) {
         playButton.addActionListener(listener);
     }
@@ -71,20 +87,18 @@ class WaveformPanel extends JPanel {
             } else {
                 // Draw rounded rectangle
                 int barHeight = Math.min((value * rectHeight) / 3000, (int) (rectHeight * 0.6));
-
                 int arcSize = 4;
-
                 g2.fillRoundRect(45 + i * (barWidth + barSpacing), centerY - barHeight / 2, barWidth, barHeight, arcSize, arcSize);
             }
         }
 
+        // Draw duration text
         int minutes = (int) duration / 60;
         int seconds = (int) duration % 60;
-        String durationText = String.format("%d:%02d", minutes, seconds); // 格式化持续时间为0:04这种形式
+        String durationText = String.format("%d:%02d", minutes, seconds); // Format duration as 0:04
         g2.setFont(new Font("Arial", Font.BOLD, 12));
         g2.setColor(isMe ? Color.WHITE : Color.BLACK);
-        g2.drawString(durationText, getWidth() - 35, centerY + 5); // 调整位置，使其在波形图的末尾
-
+        g2.drawString(durationText, getWidth() - 35, centerY + 5); // Position at the end of waveform
 
         g2.dispose();
     }

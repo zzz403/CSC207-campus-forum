@@ -9,13 +9,25 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The ChatMessageDAO class implements the ChatMessageDAI interface and provides
+ * the data access operations for chat messages and their associated waveform data.
+ */
 public class ChatMessageDAO implements ChatMessageDAI {
     private Connection conn;
 
+    /**
+     * Constructs a ChatMessageDAO with the specified database connection.
+     *
+     * @param conn The database connection to be used by this DAO.
+     */
     public ChatMessageDAO(Connection conn) {
         this.conn = conn;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void insert(ChatMessage chatMessage) throws SQLException {
         System.out.println("ChatMessageDAO: insert");
@@ -43,6 +55,9 @@ public class ChatMessageDAO implements ChatMessageDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void insertWaveformData(int chatMessageId, WaveformData waveformData) throws SQLException {
         String sql = "INSERT INTO audio_waveforms (message_id, min_values, max_values, duration) VALUES (?, ?, ?, ?)";
@@ -55,6 +70,9 @@ public class ChatMessageDAO implements ChatMessageDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ChatMessage get(int id) throws SQLException {
         String sql = "SELECT * FROM chat_messages WHERE message_id = ?";
@@ -64,13 +82,13 @@ public class ChatMessageDAO implements ChatMessageDAI {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     chatMessage = new ChatMessage(
-                        rs.getInt("message_id"),
-                        rs.getInt("sender_id"),
-                        rs.getInt("recipient_id"),
-                        rs.getInt("group_id"),
-                        rs.getString("content_type"),
-                        rs.getString("content"),
-                        rs.getTimestamp("timestamp")
+                            rs.getInt("message_id"),
+                            rs.getInt("sender_id"),
+                            rs.getInt("recipient_id"),
+                            rs.getInt("group_id"),
+                            rs.getString("content_type"),
+                            rs.getString("content"),
+                            rs.getTimestamp("timestamp")
                     );
                 }
             }
@@ -78,6 +96,9 @@ public class ChatMessageDAO implements ChatMessageDAI {
         return chatMessage;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<ChatMessage> getAll() throws SQLException {
         String sql = "SELECT * FROM chat_messages";
@@ -86,19 +107,22 @@ public class ChatMessageDAO implements ChatMessageDAI {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 chatMessages.add(new ChatMessage(
-                    rs.getInt("message_id"),
-                    rs.getInt("sender_id"),
-                    rs.getInt("recipient_id"),
-                    rs.getInt("group_id"),
-                    rs.getString("content_type"),
-                    rs.getString("content"),
-                    rs.getTimestamp("timestamp")
+                        rs.getInt("message_id"),
+                        rs.getInt("sender_id"),
+                        rs.getInt("recipient_id"),
+                        rs.getInt("group_id"),
+                        rs.getString("content_type"),
+                        rs.getString("content"),
+                        rs.getTimestamp("timestamp")
                 ));
             }
         }
         return chatMessages;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<ChatMessage> getAllByGroupId(int groupId) throws SQLException {
         String sql = "SELECT * FROM chat_messages WHERE group_id = ?";
@@ -108,13 +132,13 @@ public class ChatMessageDAO implements ChatMessageDAI {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     chatMessages.add(new ChatMessage(
-                        rs.getInt("message_id"),
-                        rs.getInt("sender_id"),
-                        rs.getInt("recipient_id"),
-                        rs.getInt("group_id"),
-                        rs.getString("content_type"),
-                        rs.getString("content"),
-                        rs.getTimestamp("timestamp")
+                            rs.getInt("message_id"),
+                            rs.getInt("sender_id"),
+                            rs.getInt("recipient_id"),
+                            rs.getInt("group_id"),
+                            rs.getString("content_type"),
+                            rs.getString("content"),
+                            rs.getTimestamp("timestamp")
                     ));
                 }
             }
@@ -122,6 +146,9 @@ public class ChatMessageDAO implements ChatMessageDAI {
         return chatMessages;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(ChatMessage chatMessage) throws SQLException {
         String sql = "UPDATE chat_messages SET sender_id = ?, recipient_id = ?, group_id = ?, content = ?, timestamp = CURRENT_TIMESTAMP WHERE message_id = ?";
@@ -139,6 +166,9 @@ public class ChatMessageDAO implements ChatMessageDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(int id) throws SQLException {
         String sql = "DELETE FROM chat_messages WHERE message_id = ?";
@@ -148,6 +178,9 @@ public class ChatMessageDAO implements ChatMessageDAI {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public WaveformData getWaveformData(int messageId) throws SQLException {
         String sql = "SELECT min_values, max_values, duration FROM audio_waveforms WHERE message_id = ?";

@@ -21,6 +21,9 @@ import java.util.*;
 import java.util.List;
 import java.util.Timer;
 
+/**
+ * ChatWindowView class represents the chat window UI component.
+ */
 public class ChatWindowView extends JPanel {
     private final JPanel messageListPanel;
     private final JTextField messageInputField;
@@ -28,6 +31,11 @@ public class ChatWindowView extends JPanel {
     Image scaledOpenMicIconImage;
     Image scaledCloseMicIconImage;
 
+    /**
+     * Constructor for ChatWindowView.
+     * @param chatWindowController the chat window controller
+     * @param chatWindowViewModel the chat window view model
+     */
     public ChatWindowView(ChatWindowController chatWindowController, ChatWindowViewModel chatWindowViewModel) {
         setLayout(new BorderLayout());
 
@@ -53,6 +61,7 @@ public class ChatWindowView extends JPanel {
         attachmentsPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         attachmentsPanel.setOpaque(false); // Make panel transparent
 
+        // Adding attachment icon
         try {
             BufferedImage plusIconImage = ImageIO.read(new File("resources/plus_icon.png"));
             Image scaledPlusIconImage = plusIconImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
@@ -85,6 +94,7 @@ public class ChatWindowView extends JPanel {
         optionsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         optionsPanel.setOpaque(false); // Make panel transparent
 
+        // Adding option icons
         try {
             BufferedImage smileyIconImage = ImageIO.read(new File("resources/smiley_icon.png"));
             Image scaledSmileyIconImage = smileyIconImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
@@ -171,6 +181,10 @@ public class ChatWindowView extends JPanel {
         });
     }
 
+    /**
+     * Display chat messages in the message list panel.
+     * @param chatMessages the list of chat messages to display
+     */
     public void displayChatMessages(List<ChatMessageDTO> chatMessages) {
         messageListPanel.removeAll();
 
@@ -250,11 +264,11 @@ public class ChatWindowView extends JPanel {
             } else if (chatMessage.getContentType().equals("audio")) {
                 WaveformData waveformData = chatMessage.getWaveformData();
                 if (waveformData != null) {
-                    Component verticalStrut = Box.createVerticalStrut(-15); // 你可以更改这个值以满足你的需求
+                    Component verticalStrut = Box.createVerticalStrut(-15); // Adjust this value as needed
 
                     contentPanel.add(verticalStrut);
 
-                    WaveformPanel waveformPanel = new WaveformPanel(waveformData.getMaxValues(), waveformData.getDuration(),chatMessage.isMe(),50); // 设置高度为50
+                    WaveformPanel waveformPanel = new WaveformPanel(waveformData.getMaxValues(), waveformData.getDuration(), chatMessage.isMe(), 50); // Set height to 50
                     waveformPanel.addPlayButtonActionListener(e -> chatWindowController.loadAudio(chatMessage.getContent()));
 
                     contentPanel.add(waveformPanel);
@@ -279,6 +293,11 @@ public class ChatWindowView extends JPanel {
         SwingUtilities.invokeLater(() -> verticalScrollBar.setValue(verticalScrollBar.getMaximum()));
     }
 
+    /**
+     * Create a JLabel for the message content with custom rendering.
+     * @param chatMessage the chat message DTO
+     * @return a JLabel containing the message content
+     */
     private JLabel createMessageContent(ChatMessageDTO chatMessage) {
         JLabel messageContentLabel = new JLabel(chatMessage.getContent()) {
             @Override
@@ -298,8 +317,8 @@ public class ChatWindowView extends JPanel {
             @Override
             public Dimension getPreferredSize() {
                 Dimension size = super.getPreferredSize();
-                size.width += 10; // add padding to width
-                size.height += 10; // add padding to height
+                size.width += 10; // Add padding to width
+                size.height += 10; // Add padding to height
                 return size;
             }
         };
@@ -309,11 +328,16 @@ public class ChatWindowView extends JPanel {
         messageContentLabel.setOpaque(false); // We will paint the background ourselves
         messageContentLabel.setBackground(chatMessage.isMe() ? new Color(52, 152, 219) : Color.WHITE);
         messageContentLabel.setForeground(chatMessage.isMe() ? Color.WHITE : Color.BLACK);
-        messageContentLabel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15)); // add padding for text
+        messageContentLabel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15)); // Add padding for text
 
         return messageContentLabel;
     }
 
+    /**
+     * Format the timestamp for display.
+     * @param timestamp the timestamp to format
+     * @return a formatted timestamp string
+     */
     private String formatTimestamp(Timestamp timestamp) {
         Calendar messageTime = Calendar.getInstance();
         messageTime.setTimeInMillis(timestamp.getTime());
@@ -336,6 +360,13 @@ public class ChatWindowView extends JPanel {
         }
     }
 
+    /**
+     * Determine if a new timestamp should be shown.
+     * @param currentTimestamp the current message timestamp
+     * @param lastTimestamp the last message timestamp
+     * @param firstTimestamp the first message timestamp
+     * @return true if a new timestamp should be shown, false otherwise
+     */
     private boolean shouldShowTimestamp(Timestamp currentTimestamp, Timestamp lastTimestamp, Timestamp firstTimestamp) {
         if (lastTimestamp == null || firstTimestamp == null) {
             return true;
@@ -347,6 +378,4 @@ public class ChatWindowView extends JPanel {
 
         return differenceSinceLast > 300000 || differenceSinceFirst > 1200000;
     }
-
-
 }
