@@ -9,8 +9,8 @@ import com.imperial.academia.service.UserService;
 import com.imperial.academia.use_case.profile.ProfileInteractor;
 import com.imperial.academia.use_case.profile.ProfileOutputBoundry;
 
-public class ProfilUseCaseFactory {
-    private ProfilUseCaseFactory(){}
+public class ProfileUseCaseFactory {
+    private ProfileUseCaseFactory(){}
     private static ProfileController profileController;
 
     public static void create(ViewManagerModel viewManagerModel, ProfileViewModel profileViewModel){

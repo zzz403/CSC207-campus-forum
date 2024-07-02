@@ -1,5 +1,7 @@
 package com.imperial.academia.view.components;
 
+import com.imperial.academia.app.components_factory.AvatarFactory;
+import com.imperial.academia.entity.chat_message.WaveformData;
 import com.imperial.academia.interface_adapter.chat.ChatWindowController;
 import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
 import com.imperial.academia.entity.chat_message.ChatMessageDTO;
@@ -15,18 +17,25 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.*;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
+/**
+ * ChatWindowView class represents the chat window UI component.
+ */
 public class ChatWindowView extends JPanel {
-    private JPanel messageListPanel;
-    private JTextField messageInputField;
+    private final JPanel messageListPanel;
+    private final JTextField messageInputField;
     ChatWindowController chatWindowController;
     Image scaledOpenMicIconImage;
     Image scaledCloseMicIconImage;
 
+    /**
+     * Constructor for ChatWindowView.
+     * @param chatWindowController the chat window controller
+     * @param chatWindowViewModel the chat window view model
+     */
     public ChatWindowView(ChatWindowController chatWindowController, ChatWindowViewModel chatWindowViewModel) {
         setLayout(new BorderLayout());
 
@@ -35,7 +44,11 @@ public class ChatWindowView extends JPanel {
         // Message list panel
         messageListPanel = new JPanel();
         messageListPanel.setLayout(new BoxLayout(messageListPanel, BoxLayout.Y_AXIS));
+        messageListPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
         JScrollPane scrollPane = new JScrollPane(messageListPanel);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         add(scrollPane, BorderLayout.CENTER);
 
         // Message input panel
@@ -48,6 +61,7 @@ public class ChatWindowView extends JPanel {
         attachmentsPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         attachmentsPanel.setOpaque(false); // Make panel transparent
 
+        // Adding attachment icon
         try {
             BufferedImage plusIconImage = ImageIO.read(new File("resources/plus_icon.png"));
             Image scaledPlusIconImage = plusIconImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
@@ -80,6 +94,7 @@ public class ChatWindowView extends JPanel {
         optionsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         optionsPanel.setOpaque(false); // Make panel transparent
 
+        // Adding option icons
         try {
             BufferedImage smileyIconImage = ImageIO.read(new File("resources/smiley_icon.png"));
             Image scaledSmileyIconImage = smileyIconImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
@@ -116,10 +131,8 @@ public class ChatWindowView extends JPanel {
                     };
                     new Timer().schedule(enableButtonTask, 1000);
 
+                    int groupId = chatWindowViewModel.getState().getChatGroupId();
                     if (!recording) {
-                        // Get the current group ID and sender info
-                        int groupId = chatWindowViewModel.getState().getChatGroupId();
-
                         chatWindowController.startRecording(groupId);
                         recording = true;
                         micButton.setIcon(new ImageIcon(scaledOpenMicIconImage)); // Change icon if needed
@@ -137,7 +150,6 @@ public class ChatWindowView extends JPanel {
                             }
                         }, 60000);
                     } else {
-                        int groupId = chatWindowViewModel.getState().getChatGroupId();
                         chatWindowController.stopRecording(groupId);
                         recording = false;
                         micButton.setIcon(new ImageIcon(scaledCloseMicIconImage)); // Change icon if needed
@@ -169,53 +181,74 @@ public class ChatWindowView extends JPanel {
         });
     }
 
+    /**
+     * Display chat messages in the message list panel.
+     * @param chatMessages the list of chat messages to display
+     */
     public void displayChatMessages(List<ChatMessageDTO> chatMessages) {
         messageListPanel.removeAll();
+
+        Timestamp lastTimestamp = null;
+        Timestamp firstTimestamp = null;
+
         for (ChatMessageDTO chatMessage : chatMessages) {
+            // Check if a new timestamp should be displayed
+            Timestamp timestamp = chatMessage.getTimestamp();
+            if (shouldShowTimestamp(timestamp, lastTimestamp, firstTimestamp)) {
+                // Format timestamp
+                String formattedTimestamp = formatTimestamp(chatMessage.getTimestamp());
+                JLabel timeLabel = new JLabel(formattedTimestamp);
+                timeLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+                timeLabel.setForeground(new Color(189, 195, 199));
+                timeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+                JPanel timestampPanel = new JPanel();
+                timestampPanel.setLayout(new BoxLayout(timestampPanel, BoxLayout.X_AXIS));
+                timestampPanel.setBorder(new EmptyBorder(5, 0, 5, 0));
+                timestampPanel.add(Box.createHorizontalGlue());
+                timestampPanel.add(timeLabel);
+                timestampPanel.add(Box.createHorizontalGlue());
+
+                messageListPanel.add(timestampPanel);
+
+                lastTimestamp = timestamp;
+                firstTimestamp = timestamp;
+            }
+
             JPanel messagePanel = new JPanel();
             messagePanel.setLayout(new BorderLayout());
             messagePanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-            // Adjust background based on sender
-            if (chatMessage.isMe()) {
-                messagePanel.setBackground(new Color(200, 230, 201)); // Light green for self
-            } else {
-                messagePanel.setBackground(new Color(245, 245, 245)); // Light grey for others
-            }
+            // Main content panel to hold avatar and message content
+            JPanel mainContentPanel = new JPanel();
+            mainContentPanel.setLayout(new BoxLayout(mainContentPanel, BoxLayout.X_AXIS));
 
             if (!chatMessage.isMe()) {
                 // Avatar
-                JLabel avatarLabel = new JLabel();
-                try {
-                    BufferedImage avatarImage = ImageIO.read(new File(chatMessage.getSenderAvatarUrl()));
-                    Image scaledAvatarImage = avatarImage.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-                    avatarLabel.setIcon(new ImageIcon(scaledAvatarImage));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                AvatarComponent avatarLabel = AvatarFactory.create(chatMessage.getSenderId(), chatMessage.getSenderAvatarUrl(), 45);
                 avatarLabel.setBorder(new EmptyBorder(0, 0, 0, 10));
-                messagePanel.add(avatarLabel, BorderLayout.WEST);
+                avatarLabel.setAlignmentY(Component.TOP_ALIGNMENT); // Align avatar to the top
+                mainContentPanel.add(avatarLabel);
+
+                mainContentPanel.add(Box.createHorizontalStrut(10));
             }
 
             // Message content
             JPanel contentPanel = new JPanel();
             contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-            contentPanel.setBackground(chatMessage.isMe() ? new Color(200, 230, 201) : new Color(245, 245, 245));
+            contentPanel.setAlignmentY(Component.TOP_ALIGNMENT); // Align content to the top
 
             if (!chatMessage.isMe()) {
                 JLabel senderLabel = new JLabel(chatMessage.getSenderName());
                 senderLabel.setFont(new Font("Arial", Font.BOLD, 12));
                 senderLabel.setForeground(new Color(44, 62, 80));
                 contentPanel.add(senderLabel);
+
+                contentPanel.add(Box.createVerticalStrut(5));
             }
 
             if (chatMessage.getContentType().equals("text")) {
-                JLabel messageContentLabel = new JLabel(chatMessage.getContent());
-                messageContentLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-                messageContentLabel.setOpaque(true);
-                messageContentLabel.setBackground(chatMessage.isMe() ? new Color(76, 175, 80) : new Color(52, 152, 219));
-                messageContentLabel.setForeground(Color.WHITE);
-                messageContentLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                JLabel messageContentLabel = createMessageContent(chatMessage);
                 contentPanel.add(messageContentLabel);
             } else if (chatMessage.getContentType().equals("image")) {
                 JLabel messageImageLabel = new JLabel();
@@ -229,38 +262,90 @@ public class ChatWindowView extends JPanel {
                 messageImageLabel.setIcon(new ImageIcon(scaledMessageImage));
                 contentPanel.add(messageImageLabel);
             } else if (chatMessage.getContentType().equals("audio")) {
-                JButton playButton = new JButton("Play");
-                playButton.addActionListener(e -> chatWindowController.loadAudio(chatMessage.getContent()));
-                contentPanel.add(playButton);
+                WaveformData waveformData = chatMessage.getWaveformData();
+                if (waveformData != null) {
+                    Component verticalStrut = Box.createVerticalStrut(-15); // Adjust this value as needed
+
+                    contentPanel.add(verticalStrut);
+
+                    WaveformPanel waveformPanel = new WaveformPanel(waveformData.getMaxValues(), waveformData.getDuration(), chatMessage.isMe(), 50); // Set height to 50
+                    waveformPanel.addPlayButtonActionListener(e -> chatWindowController.loadAudio(chatMessage.getContent()));
+
+                    contentPanel.add(waveformPanel);
+                }
             }
 
-            // Format timestamp
-            String formattedTimestamp = formatTimestamp(chatMessage.getTimestamp());
-            JLabel timeLabel = new JLabel(formattedTimestamp);
-            timeLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-            timeLabel.setForeground(new Color(189, 195, 199));
-            contentPanel.add(timeLabel);
+            mainContentPanel.add(contentPanel);
 
             if (chatMessage.isMe()) {
-                messagePanel.add(contentPanel, BorderLayout.EAST);
+                messagePanel.add(mainContentPanel, BorderLayout.EAST);
             } else {
-                messagePanel.add(contentPanel, BorderLayout.CENTER);
+                messagePanel.add(mainContentPanel, BorderLayout.WEST);
             }
 
             messageListPanel.add(messagePanel);
         }
-        revalidate();
-        repaint();
+        messageListPanel.revalidate();
+        messageListPanel.repaint();
+
+        // Scroll to bottom
+        JScrollBar verticalScrollBar = ((JScrollPane) messageListPanel.getParent().getParent()).getVerticalScrollBar();
+        SwingUtilities.invokeLater(() -> verticalScrollBar.setValue(verticalScrollBar.getMaximum()));
     }
 
+    /**
+     * Create a JLabel for the message content with custom rendering.
+     * @param chatMessage the chat message DTO
+     * @return a JLabel containing the message content
+     */
+    private JLabel createMessageContent(ChatMessageDTO chatMessage) {
+        JLabel messageContentLabel = new JLabel(chatMessage.getContent()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // Draw the rounded background
+                g2.setColor(getBackground());
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
+
+                // Draw the label text
+                super.paintComponent(g2);
+                g2.dispose();
+            }
+
+            @Override
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.width += 10; // Add padding to width
+                size.height += 10; // Add padding to height
+                return size;
+            }
+        };
+
+        messageContentLabel.setFont(new Font("Arial", Font.BOLD, 15));
+
+        messageContentLabel.setOpaque(false); // We will paint the background ourselves
+        messageContentLabel.setBackground(chatMessage.isMe() ? new Color(52, 152, 219) : Color.WHITE);
+        messageContentLabel.setForeground(chatMessage.isMe() ? Color.WHITE : Color.BLACK);
+        messageContentLabel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15)); // Add padding for text
+
+        return messageContentLabel;
+    }
+
+    /**
+     * Format the timestamp for display.
+     * @param timestamp the timestamp to format
+     * @return a formatted timestamp string
+     */
     private String formatTimestamp(Timestamp timestamp) {
         Calendar messageTime = Calendar.getInstance();
         messageTime.setTimeInMillis(timestamp.getTime());
 
         Calendar now = Calendar.getInstance();
-        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, h:mm a");
-        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy MMM dd, h:mm a");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, h:mm a", Locale.ENGLISH);
+        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy MMM dd, h:mm a", Locale.ENGLISH);
 
         if (now.get(Calendar.YEAR) == messageTime.get(Calendar.YEAR)) {
             if (now.get(Calendar.DAY_OF_YEAR) == messageTime.get(Calendar.DAY_OF_YEAR)) {
@@ -273,5 +358,24 @@ public class ChatWindowView extends JPanel {
         } else {
             return yearFormat.format(messageTime.getTime()); // Different year
         }
+    }
+
+    /**
+     * Determine if a new timestamp should be shown.
+     * @param currentTimestamp the current message timestamp
+     * @param lastTimestamp the last message timestamp
+     * @param firstTimestamp the first message timestamp
+     * @return true if a new timestamp should be shown, false otherwise
+     */
+    private boolean shouldShowTimestamp(Timestamp currentTimestamp, Timestamp lastTimestamp, Timestamp firstTimestamp) {
+        if (lastTimestamp == null || firstTimestamp == null) {
+            return true;
+        }
+
+        // Calculate the difference in milliseconds
+        long differenceSinceLast = currentTimestamp.getTime() - lastTimestamp.getTime();
+        long differenceSinceFirst = currentTimestamp.getTime() - firstTimestamp.getTime();
+
+        return differenceSinceLast > 300000 || differenceSinceFirst > 1200000;
     }
 }
