@@ -28,7 +28,8 @@ public class ChatSideBarView extends JPanel {
      * Constructs a ChatSideBarView with the specified controller and view model.
      *
      * @param chatSideBarController The controller to handle user interactions.
-     * @param chatSideBarViewModel The view model to manage the state of the sidebar.
+     * @param chatSideBarViewModel  The view model to manage the state of the
+     *                              sidebar.
      */
     public ChatSideBarView(ChatSideBarController chatSideBarController, ChatSideBarViewModel chatSideBarViewModel) {
         this.chatSideBarController = chatSideBarController;
@@ -84,7 +85,7 @@ public class ChatSideBarView extends JPanel {
 
         // Load and add search icon
         try {
-            BufferedImage searchIconImage = ImageIO.read(new File("resources\\search_icon.png"));
+            BufferedImage searchIconImage = ImageIO.read(new File("resources/search_icon.png"));
             Image scaledSearchIconImage = searchIconImage.getScaledInstance(16, 16, Image.SCALE_SMOOTH);
             JLabel searchIcon = new JLabel(new ImageIcon(scaledSearchIconImage));
             searchIcon.setBorder(new EmptyBorder(0, 10, 0, 10));
@@ -179,7 +180,7 @@ public class ChatSideBarView extends JPanel {
      * Creates a chat item panel for a given chat group.
      *
      * @param chatGroup The chat group data transfer object.
-     * @param index The index of the chat group in the list.
+     * @param index     The index of the chat group in the list.
      * @return A JPanel representing the chat item.
      */
     private JPanel createChatItem(ChatGroupDTO chatGroup, int index) {
@@ -199,7 +200,7 @@ public class ChatSideBarView extends JPanel {
 
         // Load and resize avatar image
         try {
-            BufferedImage avatarImage = ImageIO.read(new File("resources\\avatar\\avatarExample.png"));
+            BufferedImage avatarImage = ImageIO.read(new File("resources/avatar/avatarExample.png"));
             Image scaledAvatarImage = avatarImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
             avatar.setIcon(new ImageIcon(scaledAvatarImage));
         } catch (IOException e) {
