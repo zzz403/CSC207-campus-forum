@@ -12,4 +12,6 @@ public interface ChatSideBarInputBoundary {
      * @param chatSideBarInputData the input data for the chat sidebar operation
      */
     void execute(ChatSideBarInputData chatSideBarInputData);
+
+    void execute();
 }

@@ -24,21 +24,25 @@ import com.imperial.academia.use_case.chat.ChatSideBarInteractor;
 import com.imperial.academia.entity.chat_message.ChatMessageFactory;
 
 /**
- * Factory class to create instances of the chat use cases and related components.
+ * Factory class to create instances of the chat use cases and related
+ * components.
  */
 public class ChatUseCaseFactory {
-    private ChatUseCaseFactory() {}
+    private ChatUseCaseFactory() {
+    }
 
     /**
      * Creates and sets up the chat view with all its components and dependencies.
      *
-     * @param viewManagerModel      the view manager model
-     * @param chatSideBarViewModel  the chat side bar view model
-     * @param chatWindowViewModel   the chat window view model
-     * @return                      an instance of ChatView
-     * @throws ClassNotFoundException if a class needed for creating services is not found
+     * @param viewManagerModel     the view manager model
+     * @param chatSideBarViewModel the chat side bar view model
+     * @param chatWindowViewModel  the chat window view model
+     * @return an instance of ChatView
+     * @throws ClassNotFoundException if a class needed for creating services is not
+     *                                found
      */
-    public static ChatView create(ViewManagerModel viewManagerModel, ChatSideBarViewModel chatSideBarViewModel, ChatWindowViewModel chatWindowViewModel) throws ClassNotFoundException {
+    public static ChatView create(ViewManagerModel viewManagerModel, ChatSideBarViewModel chatSideBarViewModel,
+            ChatWindowViewModel chatWindowViewModel) throws ClassNotFoundException {
 
         // Get required services
         ChatGroupService chatGroupService = ServiceFactory.getChatGroupService();
@@ -46,16 +50,19 @@ public class ChatUseCaseFactory {
         AudioService audioService = ServiceFactory.getAudioService();
 
         // Create presenters
-        ChatSideBarOutputBoundary chatPresenter = new ChatSideBarPresenter(chatSideBarViewModel);
+        ChatSideBarOutputBoundary chatSideBarPresenter = new ChatSideBarPresenter(chatSideBarViewModel);
         ChatWindowOutputBoundary chatWindowPresenter = new ChatWindowPresenter(chatWindowViewModel);
 
         // Create interactors
-        ChatSideBarInputBoundary chatSideBarInteractor = new ChatSideBarInteractor(chatGroupService, chatPresenter);
+        ChatSideBarInputBoundary chatSideBarInteractor = new ChatSideBarInteractor(chatGroupService,
+                chatSideBarPresenter);
         ChatMessageFactory chatMessageFactory = new CommonChatMessageFactory();
-        ChatWindowInputBoundary chatWindowInteractor = new ChatWindowInteractor(chatMessageService, audioService, chatWindowPresenter, chatMessageFactory);
+        ChatWindowInputBoundary chatWindowInteractor = new ChatWindowInteractor(chatMessageService, audioService,
+                chatWindowPresenter, chatMessageFactory);
 
         // Create controllers
-        ChatSideBarController chatSideBarController = new ChatSideBarController(chatSideBarInteractor, chatWindowInteractor);
+        ChatSideBarController chatSideBarController = new ChatSideBarController(chatSideBarInteractor,
+                chatWindowInteractor);
         ChatWindowController chatWindowController = new ChatWindowController(chatWindowInteractor);
 
         // Create views

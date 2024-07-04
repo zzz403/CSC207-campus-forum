@@ -16,7 +16,7 @@ public class ChatSideBarInteractor implements ChatSideBarInputBoundary {
      * Constructor for ChatSideBarInteractor.
      *
      * @param chatGroupService the service for chat group operations
-     * @param chatPresenter the presenter for chat sidebar output
+     * @param chatPresenter    the presenter for chat sidebar output
      */
     public ChatSideBarInteractor(ChatGroupService chatGroupService, ChatSideBarOutputBoundary chatPresenter) {
         this.chatGroupService = chatGroupService;
@@ -31,6 +31,21 @@ public class ChatSideBarInteractor implements ChatSideBarInputBoundary {
     @Override
     public void execute(ChatSideBarInputData chatSideBarInputData) {
         String searchQuery = chatSideBarInputData.getSearchQuery();
+        try {
+            List<ChatGroupDTO> chatGroups = chatGroupService.getChatGroupsByGroupName(searchQuery);
+            if (chatGroups.isEmpty()) {
+                chatSideBarPresenter.presentError("No chat groups found.");
+            } else {
+                ChatSideBarOutputData chatSideBarOutputData = new ChatSideBarOutputData(chatGroups);
+                chatSideBarPresenter.presentChatGroups(chatSideBarOutputData);
+            }
+        } catch (Exception e) {
+            chatSideBarPresenter.presentError("An error occurred while searching for chat groups.");
+        }
+    }
+
+    public void execute() {
+        String searchQuery = "";
         try {
             List<ChatGroupDTO> chatGroups = chatGroupService.getChatGroupsByGroupName(searchQuery);
             if (chatGroups.isEmpty()) {
