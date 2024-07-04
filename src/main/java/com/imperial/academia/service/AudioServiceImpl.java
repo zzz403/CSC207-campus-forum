@@ -166,7 +166,7 @@ public class AudioServiceImpl implements AudioService {
          * Constructs an AudioRecorder with default audio format settings.
          */
         public AudioRecorder() {
-            audioFormat = new AudioFormat(44100, 16, 2, true, true);
+            audioFormat = new AudioFormat(44100, 16, 1, true, true);
         }
 
         /**
@@ -184,13 +184,11 @@ public class AudioServiceImpl implements AudioService {
 
                 Thread recordingThread = new Thread(() -> {
                     AudioInputStream audioInputStream = new AudioInputStream(targetDataLine);
-                    System.out.println("Recording audio..." + outputFilePath);
                     File audioFile = new File(outputFilePath);
                     try {
                         AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, audioFile);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        System.out.println("Error writing audio file.");
                     }
                 });
 
