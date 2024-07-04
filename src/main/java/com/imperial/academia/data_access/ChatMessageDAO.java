@@ -11,7 +11,8 @@ import java.util.List;
 
 /**
  * The ChatMessageDAO class implements the ChatMessageDAI interface and provides
- * the data access operations for chat messages and their associated waveform data.
+ * the data access operations for chat messages and their associated waveform
+ * data.
  */
 public class ChatMessageDAO implements ChatMessageDAI {
     private Connection conn;
@@ -88,8 +89,7 @@ public class ChatMessageDAO implements ChatMessageDAI {
                             rs.getInt("group_id"),
                             rs.getString("content_type"),
                             rs.getString("content"),
-                            rs.getTimestamp("timestamp")
-                    );
+                            rs.getTimestamp("timestamp"));
                 }
             }
         }
@@ -113,8 +113,7 @@ public class ChatMessageDAO implements ChatMessageDAI {
                         rs.getInt("group_id"),
                         rs.getString("content_type"),
                         rs.getString("content"),
-                        rs.getTimestamp("timestamp")
-                ));
+                        rs.getTimestamp("timestamp")));
             }
         }
         return chatMessages;
@@ -138,8 +137,7 @@ public class ChatMessageDAO implements ChatMessageDAI {
                             rs.getInt("group_id"),
                             rs.getString("content_type"),
                             rs.getString("content"),
-                            rs.getTimestamp("timestamp")
-                    ));
+                            rs.getTimestamp("timestamp")));
                 }
             }
         }
@@ -190,7 +188,9 @@ public class ChatMessageDAO implements ChatMessageDAI {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     ObjectMapper mapper = new ObjectMapper();
+                    @SuppressWarnings("unchecked")
                     List<Integer> minValues = mapper.readValue(rs.getString("min_values"), List.class);
+                    @SuppressWarnings("unchecked")
                     List<Integer> maxValues = mapper.readValue(rs.getString("max_values"), List.class);
                     float duration = rs.getFloat("duration");
                     return new WaveformData(minValues, maxValues, duration);

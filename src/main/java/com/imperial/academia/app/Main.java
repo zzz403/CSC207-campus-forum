@@ -3,6 +3,7 @@ package com.imperial.academia.app;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Image;
+import java.awt.Taskbar;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -42,8 +43,14 @@ public class Main {
         try {
             Image logo = ImageIO.read(new File("resources/logo.png"));
             application.setIconImage(logo);
+
+            // Set macOS Dock icon if running on macOS
+            if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+                Taskbar.getTaskbar().setIconImage(logo);
+            }
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Failed to load logo image");
         }
 
         application.setSize(1100, 900); // 设置窗口大小
@@ -71,7 +78,8 @@ public class Main {
             SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel);
             views.add(signupView, signupView.viewName);
 
-            LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel,topNavigationBarViewModel);
+            LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel,
+                    topNavigationBarViewModel, chatSideBarViewModel);
             views.add(loginView, loginView.viewName);
 
             PostBoardView postBoardView = PostBoardUseCaseFactory.create(viewManagerModel, postBoardViewModel);
@@ -87,11 +95,12 @@ public class Main {
             views.add(profileView, profileView.viewName);
             // Add the top navigation bar to the post board view
             // postBoardView.addTopNavigationBar(topNavigationBar);
-            
+
             createPostView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
             postBoardView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
             chatView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
             profileView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
+
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -105,8 +114,7 @@ public class Main {
         viewManagerModel.firePropertyChanged();
 
         // Set size and center the window
-        
-        application.setVisible(true);
 
+        application.setVisible(true);
     }
 }

@@ -43,11 +43,11 @@ public class AudioServiceImpl implements AudioService {
             groupDir.mkdirs();
         }
 
-        String senderName = SessionManager.getCurrentUser().getUsername();
+        int senderId = SessionManager.getCurrentUser().getId();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
         String timestampStr = dateFormat.format(timestamp);
-        outputFilePath = "resources/audio/" + groupId + "/" + senderName + "_" + timestampStr + ".wav";
+        outputFilePath = "resources/audio/" + groupId + "/" + senderId + "_" + timestampStr + ".wav";
         audioRecorder.startRecording(outputFilePath);
         recording = true;
     }
@@ -95,7 +95,8 @@ public class AudioServiceImpl implements AudioService {
             float durationInSeconds = ((float) audioBytes.length / frameSize) / frameRate;
 
             // Calculate target number of segments
-            int numSegments = durationInSeconds >= 5 ? 30 : Math.min(Math.max((int) (durationInSeconds / 5.0 * 30), 15), 30);
+            int numSegments = durationInSeconds >= 5 ? 30
+                    : Math.min(Math.max((int) (durationInSeconds / 5.0 * 30), 15), 30);
             int segmentSize = audioBytes.length / frameSize / numSegments;
 
             List<Integer> minValues = new ArrayList<>();
@@ -108,8 +109,10 @@ public class AudioServiceImpl implements AudioService {
                     int sampleIndex = (i * segmentSize + j) * frameSize;
                     if (sampleIndex < audioBytes.length - frameSize) {
                         int sample = getSample(audioBytes, sampleIndex, format);
-                        if (sample < min) min = sample;
-                        if (sample > max) max = sample;
+                        if (sample < min)
+                            min = sample;
+                        if (sample > max)
+                            max = sample;
                     }
                 }
                 minValues.add(min);
@@ -126,9 +129,9 @@ public class AudioServiceImpl implements AudioService {
     /**
      * Extracts a sample value from the audio byte array at the specified index.
      *
-     * @param audioBytes The audio byte array.
+     * @param audioBytes  The audio byte array.
      * @param sampleIndex The index of the sample.
-     * @param format The audio format.
+     * @param format      The audio format.
      * @return The sample value.
      */
     private int getSample(byte[] audioBytes, int sampleIndex, AudioFormat format) {
@@ -138,12 +141,13 @@ public class AudioServiceImpl implements AudioService {
 
         if (sampleSizeInBytes == 2) {
             if (isBigEndian) {
-                sample = ByteBuffer.wrap(audioBytes, sampleIndex, sampleSizeInBytes).order(ByteOrder.BIG_ENDIAN).getShort();
+                sample = ByteBuffer.wrap(audioBytes, sampleIndex, sampleSizeInBytes).order(ByteOrder.BIG_ENDIAN)
+                        .getShort();
             } else {
-                sample = ByteBuffer.wrap(audioBytes, sampleIndex, sampleSizeInBytes).order(ByteOrder.LITTLE_ENDIAN).getShort();
+                sample = ByteBuffer.wrap(audioBytes, sampleIndex, sampleSizeInBytes).order(ByteOrder.LITTLE_ENDIAN)
+                        .getShort();
             }
         } else {
-            // Handle other sample sizes (e.g., 8-bit)
             sample = audioBytes[sampleIndex];
         }
 
@@ -162,7 +166,7 @@ public class AudioServiceImpl implements AudioService {
          * Constructs an AudioRecorder with default audio format settings.
          */
         public AudioRecorder() {
-            audioFormat = new AudioFormat(44100, 16, 2, true, true);
+            audioFormat = new AudioFormat(44100, 16, 1, true, true);
         }
 
         /**
