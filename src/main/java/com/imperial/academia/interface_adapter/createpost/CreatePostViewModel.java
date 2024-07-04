@@ -1,4 +1,4 @@
-package com.imperial.academia.interface_adapter.postboard;
+package com.imperial.academia.interface_adapter.createpost;
 
 import com.imperial.academia.interface_adapter.common.ViewModel;
 import java.beans.PropertyChangeListener;
@@ -31,7 +31,7 @@ public class CreatePostViewModel extends ViewModel {
      * @return The current state of the create post view.
      */
     public CreatePostState getState() {
-        return state;
+        return new CreatePostState(state);
     }
 
     /**
@@ -39,8 +39,8 @@ public class CreatePostViewModel extends ViewModel {
      * 
      * @param state The state to set.
      */
-    public void setState(CreatePostState state) {
-        this.state = state;
+    public void setState(CreatePostState newState) {
+        this.state = newState;
         support.firePropertyChange("state", null, state);
     }
 

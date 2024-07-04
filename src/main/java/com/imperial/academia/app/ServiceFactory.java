@@ -10,12 +10,15 @@ import java.sql.SQLException;
  * Factory class for managing and providing service instances.
  */
 public class ServiceFactory {
+    
+    private static AudioService audioService;
+    
     private static UserService userService;
     private static ChatGroupService chatGroupService;
     private static ChatMessageService chatMessageService;
+    private static BoardServiceImpl boardService;
 
-    private static AudioService audioService;
-
+    
     /**
      * Initializes the service factory by creating and configuring the necessary services.
      *
@@ -26,18 +29,31 @@ public class ServiceFactory {
         UserCache userCache = new UserCacheImpl();
         UserDAO userDAO = new UserDAO(DatabaseConnection.getConnection());
         userService = new UserServiceImpl(userCache, userDAO);
-
+        
         ChatGroupCache chatGroupCache = new ChatGroupCacheImpl();
         ChatGroupDAO chatGroupDAO = new ChatGroupDAO(DatabaseConnection.getConnection());
         chatGroupService = new ChatGroupServiceImpl(chatGroupCache, chatGroupDAO);
-
+        
         ChatMessageCache chatMessageCache = new ChatMessageCacheImpl();
         ChatMessageDAO chatMessageDAO = new ChatMessageDAO(DatabaseConnection.getConnection());
         chatMessageService = new ChatMessageServiceImpl(chatMessageDAO, userDAO, chatMessageCache, userCache);
-
+        
+        BoardCache boardCache = new BoardCacheImpl();
+        BoardDAO boardDAO = new BoardDAO(DatabaseConnection.getConnection());
+        boardService = new BoardServiceImpl(boardCache, boardDAO);
+        
         audioService = new AudioServiceImpl();
     }
 
+    /**
+     * Return the BoardService instance
+     * 
+     * @return BoardService
+     */
+    public static BoardService getBoardService() {
+        return boardService;
+    }
+    
     /**
      * Returns the UserService instance.
      *
@@ -46,7 +62,7 @@ public class ServiceFactory {
     public static UserService getUserService() {
         return userService;
     }
-
+    
     /**
      * Returns the ChatGroupService instance.
      *

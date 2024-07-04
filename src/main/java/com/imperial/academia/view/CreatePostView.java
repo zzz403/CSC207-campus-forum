@@ -3,6 +3,9 @@ package com.imperial.academia.view;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -10,36 +13,46 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import com.imperial.academia.interface_adapter.postboard.CreatePostController;
-import com.imperial.academia.interface_adapter.postboard.CreatePostViewModel;
+
+import com.imperial.academia.interface_adapter.createpost.CreatePostController;
+import com.imperial.academia.interface_adapter.createpost.CreatePostViewModel;
+
 import java.awt.GridLayout;
 
 public class CreatePostView extends JPanel {
+
     public final String viewName = "create post";
 
+    private final CreatePostController createPostController;
+    private final CreatePostViewModel createPostViewModel;
+
     public CreatePostView(CreatePostController createPostController, CreatePostViewModel createPostViewModel) {
+        this.createPostController = createPostController;
+        this.createPostViewModel = createPostViewModel;
+
         setLayout(new BorderLayout());
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
-        
+
         // Title Panel
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new BorderLayout());
         JTextField titleField = new JTextField();
         titleField.setBorder(BorderFactory.createTitledBorder("Title"));
         titlePanel.add(titleField, BorderLayout.CENTER);
-        
+
         // Body Panel
         JPanel bodyPanel = new JPanel();
         bodyPanel.setLayout(new BorderLayout());
         JTextArea bodyArea = new JTextArea();
         bodyArea.setBorder(BorderFactory.createTitledBorder("Body"));
         bodyPanel.add(new JScrollPane(bodyArea), BorderLayout.CENTER);
-        
+
         // Drop down box Panel
         JPanel boardSelectPanel = new JPanel();
         boardSelectPanel.setLayout(new BorderLayout());
-        JComboBox<String> boardSelect = new JComboBox<>(new String[] {"123","456"});
+
+        JComboBox<String> boardSelect = new JComboBox<>(getBoardsName());
         boardSelect.setBorder(BorderFactory.createTitledBorder("Select a Board"));
         boardSelect.addActionListener(new ActionListener() {
             @SuppressWarnings("rawtypes")
@@ -59,7 +72,7 @@ public class CreatePostView extends JPanel {
                 }
             }
         });
-        
+
         boardSelectPanel.add(boardSelect, BorderLayout.CENTER);
 
         // Buttons Panel
@@ -81,5 +94,17 @@ public class CreatePostView extends JPanel {
         mainPanel.add(southPanel, BorderLayout.SOUTH);
 
         add(mainPanel, BorderLayout.CENTER);
+    }
+
+    private String[] getBoardsName() {
+        try {
+            createPostController.updateBoardName();
+        } catch (SQLException e) {
+            System.out.println("No board name are find, error from CreatePostView");
+        }
+        List<String> boardsNameArr = createPostViewModel.getState().getBoardName();
+        String[] boardsName = new String[boardsNameArr.size()];
+        boardsName = boardsNameArr.toArray(boardsName);
+        return boardsName;
     }
 }
