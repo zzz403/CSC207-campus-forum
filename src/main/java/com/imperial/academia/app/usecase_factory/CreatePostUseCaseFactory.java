@@ -10,19 +10,38 @@ import com.imperial.academia.use_case.createpost.CreatePostInputBoundary;
 import com.imperial.academia.use_case.createpost.CreatePostInteractor;
 import com.imperial.academia.view.CreatePostView;
 
+/**
+ * Factory class for creating instances related to the Create Post use case.
+ */
 public class CreatePostUseCaseFactory {
-    /** Prevent instantiation. */
-    private CreatePostUseCaseFactory(){}
+    
+    /** Prevents instantiation of this utility class. */
+    private CreatePostUseCaseFactory() {}
 
-    public static CreatePostView create(ViewManagerModel viewManagerModel, CreatePostViewModel createPostViewModel) throws ClassNotFoundException{
+    /**
+     * Creates a new instance of {@link CreatePostView} with the specified view manager model and create post view model.
+     * 
+     * @param viewManagerModel the view manager model
+     * @param createPostViewModel the create post view model
+     * @return a new instance of {@link CreatePostView}
+     * @throws ClassNotFoundException if the class cannot be located
+     */
+    public static CreatePostView create(ViewManagerModel viewManagerModel, CreatePostViewModel createPostViewModel) throws ClassNotFoundException {
         CreatePostController createPostController = createController(viewManagerModel, createPostViewModel);
-        return new CreatePostView(createPostController,createPostViewModel);
+        return new CreatePostView(createPostController, createPostViewModel);
     }
 
-    private static CreatePostController createController(ViewManagerModel viewManagerModel, CreatePostViewModel createPostViewModel){
+    /**
+     * Creates a new instance of {@link CreatePostController} with the specified view manager model and create post view model.
+     * 
+     * @param viewManagerModel the view manager model
+     * @param createPostViewModel the create post view model
+     * @return a new instance of {@link CreatePostController}
+     */
+    private static CreatePostController createController(ViewManagerModel viewManagerModel, CreatePostViewModel createPostViewModel) {
         CreatePostPresenter createPostPresenter = new CreatePostPresenter(viewManagerModel, createPostViewModel);
         BoardService boardService = ServiceFactory.getBoardService();
-        CreatePostInputBoundary createPostInteractor = new CreatePostInteractor(createPostPresenter,boardService);
+        CreatePostInputBoundary createPostInteractor = new CreatePostInteractor(createPostPresenter, boardService);
         return new CreatePostController(createPostInteractor);
     }
 }

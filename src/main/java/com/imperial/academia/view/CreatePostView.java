@@ -19,13 +19,27 @@ import com.imperial.academia.interface_adapter.createpost.CreatePostViewModel;
 
 import java.awt.GridLayout;
 
+/**
+ * This class represents the view for creating a post in the application.
+ * It extends JPanel and sets up the layout and appearance of the Create Post view.
+ */
 public class CreatePostView extends JPanel {
 
+    /** The name of this view. */
     public final String viewName = "create post";
 
+    /** The controller associated with creating a post. */
     private final CreatePostController createPostController;
+    
+    /** The view model associated with creating a post. */
     private final CreatePostViewModel createPostViewModel;
 
+    /**
+     * Constructs a new CreatePostView with the specified controller and view model.
+     * 
+     * @param createPostController the controller associated with creating a post
+     * @param createPostViewModel the view model associated with creating a post
+     */
     public CreatePostView(CreatePostController createPostController, CreatePostViewModel createPostViewModel) {
         this.createPostController = createPostController;
         this.createPostViewModel = createPostViewModel;
@@ -61,7 +75,6 @@ public class CreatePostView extends JPanel {
                 try {
                     if (e.getSource() instanceof JComboBox) {
                         JComboBox selected = (JComboBox) e.getSource();
-
                         String boardName = (String) selected.getSelectedItem();
                         System.out.println("selected: " + boardName);
                     } else {
@@ -96,6 +109,11 @@ public class CreatePostView extends JPanel {
         add(mainPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Retrieves the names of the boards from the controller and view model.
+     * 
+     * @return an array of board names
+     */
     private String[] getBoardsName() {
         try {
             createPostController.updateBoardName();
