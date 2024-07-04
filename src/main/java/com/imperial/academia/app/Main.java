@@ -89,7 +89,7 @@ public class Main {
             views.add(signupView, signupView.viewName);
 
             LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel,
-                    topNavigationBarViewModel);
+                    topNavigationBarViewModel, chatSideBarViewModel);
             views.add(loginView, loginView.viewName);
 
             PostBoardView postBoardView = PostBoardUseCaseFactory.create(viewManagerModel, postBoardViewModel);
