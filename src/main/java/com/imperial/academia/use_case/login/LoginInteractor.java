@@ -18,11 +18,12 @@ public class LoginInteractor implements LoginInputBoundary {
     private final RememberMeDAI rememberMeDAO;
 
     /**
-     * Constructs a LoginInteractor with the specified UserService, LoginOutputBoundary, and RememberMeDAI.
+     * Constructs a LoginInteractor with the specified UserService,
+     * LoginOutputBoundary, and RememberMeDAI.
      * 
-     * @param userService The user service for user operations.
+     * @param userService    The user service for user operations.
      * @param loginPresenter The login presenter to present the results.
-     * @param rememberMeDAO The remember me DAO for managing saved credentials.
+     * @param rememberMeDAO  The remember me DAO for managing saved credentials.
      */
     public LoginInteractor(UserService userService, LoginOutputBoundary loginPresenter, RememberMeDAI rememberMeDAO) {
         this.userService = userService;
@@ -46,7 +47,8 @@ public class LoginInteractor implements LoginInputBoundary {
             } else if (!user.getPassword().equals(loginInputData.getPassword())) {
                 handleLoginFailure("Invalid password.");
             } else {
-                handleLoginSuccess(user, loginInputData.isRememberMe(), loginInputData.getUsername(), loginInputData.getPassword());
+                handleLoginSuccess(user, loginInputData.isRememberMe(), loginInputData.getUsername(),
+                        loginInputData.getPassword());
             }
         } catch (SQLException e) {
             handleLoginFailure("An error occurred during login: " + e.getMessage());
@@ -73,7 +75,8 @@ public class LoginInteractor implements LoginInputBoundary {
         }
 
         SessionManager.setCurrentUser(user);
-        LoginOutputData loginOutputData = new LoginOutputData(user.getUsername(), "Login successful.", user.getAvatarUrl(), user.getId());
+        LoginOutputData loginOutputData = new LoginOutputData(user.getUsername(), "Login successful.",
+                user.getAvatarUrl(), user.getId());
         loginPresenter.prepareSuccessView(loginOutputData);
     }
 
