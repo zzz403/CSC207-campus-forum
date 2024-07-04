@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.io.IOException;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import com.imperial.academia.app.componets_factory.AvatarFacory;
+import com.imperial.academia.app.components_factory.AvatarFactory;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarController;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarState;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
@@ -148,21 +148,16 @@ public class TopNavigationBar extends JPanel {
                 TopNavigationBarState state = topNavigationBarViewModel.getState();
                 String avatarUrlLambda = state.getAvatarUrl() != null ? state.getAvatarUrl()
                         : "resources/default_profile_icon.png";
-                try {
-                    System.out.println("TopNavigationBar: avatarUrlLambda = " + avatarUrlLambda);
-                    rightPanel.remove(profileButton);
+                rightPanel.remove(profileButton);
 
-                    // Create and add the new AvatarComponent
-                    profileButton = AvatarFacory.create(state.getUserId(), avatarUrlLambda);
-                    profileButton.setPreferredSize(new Dimension(60, 60));
-                    profileButton.setBorder(new LineBorder(Color.WHITE, 1, true)); // Circular border
+                // Create and add the new AvatarComponent
+                profileButton = AvatarFactory.create(state.getUserId(), avatarUrlLambda, 60);
+                profileButton.setPreferredSize(new Dimension(60, 60));
+                profileButton.setBorder(new LineBorder(Color.WHITE, 1, true)); // Circular border
 
-                    rightPanel.add(profileButton);
-                    rightPanel.revalidate();
-                    rightPanel.repaint();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                rightPanel.add(profileButton);
+                rightPanel.revalidate();
+                rightPanel.repaint();
             }
         });
 

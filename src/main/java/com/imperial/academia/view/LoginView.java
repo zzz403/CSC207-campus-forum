@@ -39,7 +39,7 @@ public class LoginView extends JPanel {
      * Constructs a LoginView instance and initializes the UI components.
      *
      * @param loginController the login controller
-     * @param loginViewModel the login view model
+     * @param loginViewModel  the login view model
      */
     public LoginView(LoginController loginController, LoginViewModel loginViewModel) {
         setLayout(new BorderLayout());
@@ -129,8 +129,12 @@ public class LoginView extends JPanel {
         loginButton.setForeground(Color.WHITE);
         loginButton.setFocusPainted(false);
         loginButton.setPreferredSize(new Dimension(usernameField.getPreferredSize().width, 40));
+        loginButton.setOpaque(true);
+        loginButton.setBorderPainted(false);
+        loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         loginButton.addActionListener(e -> {
-            loginController.execute(usernameField.getText(), new String(passwordField.getPassword()), rememberMeCheckBox.isSelected());
+            loginController.execute(usernameField.getText(), new String(passwordField.getPassword()),
+                    rememberMeCheckBox.isSelected());
         });
         leftPanel.add(loginButton, gbc);
 

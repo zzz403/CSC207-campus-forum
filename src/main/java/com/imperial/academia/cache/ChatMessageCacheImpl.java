@@ -3,6 +3,7 @@ package com.imperial.academia.cache;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.chat_message.WaveformData;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -11,8 +12,9 @@ import java.util.concurrent.TimeUnit;
  * Implementation of the ChatMessageCache interface using Guava Cache.
  */
 public class ChatMessageCacheImpl implements ChatMessageCache {
-    private Cache<String, ChatMessage> chatMessageCache;
-    private Cache<String, List<ChatMessage>> chatMessagesCache;
+    private final Cache<String, ChatMessage> chatMessageCache;
+    private final Cache<String, List<ChatMessage>> chatMessagesCache;
+    private final Cache<String, WaveformData> waveformDataCache;
 
     /**
      * Constructs a new ChatMessageCacheImpl with specific cache configurations.
@@ -26,6 +28,11 @@ public class ChatMessageCacheImpl implements ChatMessageCache {
         chatMessagesCache = CacheBuilder.newBuilder()
                 .expireAfterWrite(60, TimeUnit.MINUTES)
                 .maximumSize(100)
+                .build();
+
+        waveformDataCache = CacheBuilder.newBuilder()
+                .expireAfterWrite(60, TimeUnit.MINUTES)
+                .maximumSize(500)
                 .build();
     }
 
@@ -91,5 +98,37 @@ public class ChatMessageCacheImpl implements ChatMessageCache {
     @Override
     public boolean existsChatMessages(String key) {
         return chatMessagesCache.getIfPresent(key) != null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setWaveformData(String key, WaveformData waveformData) {
+        waveformDataCache.put(key, waveformData);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public WaveformData getWaveformData(String key) {
+        return waveformDataCache.getIfPresent(key);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteWaveformData(String key) {
+        waveformDataCache.invalidate(key);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean existsWaveformData(String key) {
+        return waveformDataCache.getIfPresent(key) != null;
     }
 }

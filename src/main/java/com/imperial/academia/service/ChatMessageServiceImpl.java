@@ -4,6 +4,7 @@ import com.imperial.academia.data_access.ChatMessageDAI;
 import com.imperial.academia.data_access.UserDAI;
 import com.imperial.academia.entity.chat_message.ChatMessage;
 import com.imperial.academia.entity.chat_message.ChatMessageDTO;
+import com.imperial.academia.entity.chat_message.WaveformData;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.cache.ChatMessageCache;
@@ -20,7 +21,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     private final UserCache userCache;
 
     public ChatMessageServiceImpl(ChatMessageDAI chatMessageDAO, UserDAI userDAO, ChatMessageCache chatMessageCache,
-            UserCache userCache) {
+                                  UserCache userCache) {
         this.chatMessageDAO = chatMessageDAO;
         this.userDAO = userDAO;
         this.chatMessageCache = chatMessageCache;
@@ -32,6 +33,28 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         chatMessageDAO.insert(chatMessage);
         // 更新单条消息缓存
         chatMessageCache.setChatMessage("chatMessage:" + chatMessage.getId(), chatMessage);
+
+        // 更新群组消息列表缓存
+        String groupCacheKey = "chatMessages:group:" + chatMessage.getGroupId();
+        List<ChatMessage> chatMessages = chatMessageCache.getChatMessages(groupCacheKey);
+        if (chatMessages != null) {
+            chatMessages.add(chatMessage);
+            chatMessageCache.setChatMessages(groupCacheKey, chatMessages);
+        }
+    }
+
+    @Override
+    public void insert(ChatMessage chatMessage, WaveformData waveformData) throws SQLException {
+        // 插入 ChatMessage
+        chatMessageDAO.insert(chatMessage);
+        // 更新单条消息缓存
+        chatMessageCache.setChatMessage("chatMessage:" + chatMessage.getId(), chatMessage);
+
+        // 如果消息类型为音频，则插入并缓存 WaveformData
+        if (waveformData != null) {
+            chatMessageDAO.insertWaveformData(chatMessage.getId(), waveformData);
+            chatMessageCache.setWaveformData("waveformData:" + chatMessage.getId(), waveformData);
+        }
 
         // 更新群组消息列表缓存
         String groupCacheKey = "chatMessages:group:" + chatMessage.getGroupId();
@@ -61,7 +84,8 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                     userCache.setUser("user:" + chatMessage.getSenderId(), user);
                 }
             }
-            return new ChatMessageDTO(
+            assert user != null;
+            ChatMessageDTO chatMessageDTO = new ChatMessageDTO(
                     chatMessage.getId(),
                     chatMessage.getSenderId(),
                     user.getUsername(),
@@ -71,6 +95,17 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                     chatMessage.getContent(),
                     chatMessage.getId() == SessionManager.getCurrentUser().getId(),
                     chatMessage.getTimestamp());
+
+            if ("audio".equals(chatMessage.getContentType())) {
+                WaveformData waveformData = chatMessageCache.getWaveformData("waveformData:" + chatMessage.getId());
+                if (waveformData == null) {
+                    waveformData = chatMessageDAO.getWaveformData(chatMessage.getId());
+                    chatMessageCache.setWaveformData("waveformData:" + chatMessage.getId(), waveformData);
+                }
+                chatMessageDTO.setWaveformData(waveformData);
+            }
+
+            return chatMessageDTO;
         }
         return null;
     }
@@ -118,7 +153,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                     userCache.setUser("user:" + chatMessage.getSenderId(), user);
                 }
             }
-            chatMessageDTOs.add(new ChatMessageDTO(
+            ChatMessageDTO chatMessageDTO = new ChatMessageDTO(
                     chatMessage.getId(),
                     chatMessage.getSenderId(),
                     user.getUsername(),
@@ -127,7 +162,18 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                     chatMessage.getContentType(),
                     chatMessage.getContent(),
                     chatMessage.getSenderId() == SessionManager.getCurrentUser().getId(),
-                    chatMessage.getTimestamp()));
+                    chatMessage.getTimestamp());
+
+            if ("audio".equals(chatMessage.getContentType())) {
+                WaveformData waveformData = chatMessageCache.getWaveformData("waveformData:" + chatMessage.getId());
+                if (waveformData == null) {
+                    waveformData = chatMessageDAO.getWaveformData(chatMessage.getId());
+                    chatMessageCache.setWaveformData("waveformData:" + chatMessage.getId(), waveformData);
+                }
+                chatMessageDTO.setWaveformData(waveformData);
+            }
+
+            chatMessageDTOs.add(chatMessageDTO);
         }
         return chatMessageDTOs;
     }

@@ -8,14 +8,18 @@ import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
 import com.imperial.academia.service.UserService;
 import com.imperial.academia.use_case.profile.ProfileInteractor;
 import com.imperial.academia.use_case.profile.ProfileOutputBoundry;
+import com.imperial.academia.view.ProfileView;
 
-public class ProfilUseCaseFactory {
-    private ProfilUseCaseFactory(){}
+import javax.swing.*;
+import java.sql.SQLException;
+
+public class ProfileUseCaseFactory {
+    private ProfileUseCaseFactory(){}
     private static ProfileController profileController;
 
-    public static void create(ViewManagerModel viewManagerModel, ProfileViewModel profileViewModel){
+    public static ProfileView create(ViewManagerModel viewManagerModel, ProfileViewModel profileViewModel){
         profileController = createController(viewManagerModel, profileViewModel);
-        // TODO: return profileview
+        return new ProfileView(profileController, profileViewModel);
     }
 
     private static ProfileController createController(ViewManagerModel viewManagerModel, ProfileViewModel profileViewModel){

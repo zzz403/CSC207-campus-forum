@@ -16,11 +16,21 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * ChatSideBarView class represents the sidebar for displaying chat groups.
+ */
 public class ChatSideBarView extends JPanel {
     private JPanel chatListPanel;
     private JTextField searchField;
     private ChatSideBarController chatSideBarController;
 
+    /**
+     * Constructs a ChatSideBarView with the specified controller and view model.
+     *
+     * @param chatSideBarController The controller to handle user interactions.
+     * @param chatSideBarViewModel  The view model to manage the state of the
+     *                              sidebar.
+     */
     public ChatSideBarView(ChatSideBarController chatSideBarController, ChatSideBarViewModel chatSideBarViewModel) {
         this.chatSideBarController = chatSideBarController;
         setLayout(new BorderLayout());
@@ -73,8 +83,9 @@ public class ChatSideBarView extends JPanel {
         searchContainer.setOpaque(false);
         searchContainer.setBorder(new EmptyBorder(5, 5, 5, 5));
 
+        // Load and add search icon
         try {
-            BufferedImage searchIconImage = ImageIO.read(new File("resources\\search_icon.png"));
+            BufferedImage searchIconImage = ImageIO.read(new File("resources/search_icon.png"));
             Image scaledSearchIconImage = searchIconImage.getScaledInstance(16, 16, Image.SCALE_SMOOTH);
             JLabel searchIcon = new JLabel(new ImageIcon(scaledSearchIconImage));
             searchIcon.setBorder(new EmptyBorder(0, 10, 0, 10));
@@ -85,6 +96,7 @@ public class ChatSideBarView extends JPanel {
 
         searchContainer.add(searchField, BorderLayout.CENTER);
 
+        // Add focus listener to search field
         searchField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent e) {
                 if (searchField.getText().equals("Search...")) {
@@ -101,6 +113,7 @@ public class ChatSideBarView extends JPanel {
             }
         });
 
+        // Add document listener to search field
         searchField.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
                 searchChatGroups();
@@ -136,6 +149,7 @@ public class ChatSideBarView extends JPanel {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         add(scrollPane, BorderLayout.CENTER);
 
+        // Add property change listener to view model
         chatSideBarViewModel.addPropertyChangeListener(evt -> {
             if (evt.getPropertyName().equals("chatSideBarState")) {
                 displayChatGroups(chatSideBarViewModel.getState().getChatGroups());
@@ -145,6 +159,11 @@ public class ChatSideBarView extends JPanel {
         });
     }
 
+    /**
+     * Displays the list of chat groups in the sidebar.
+     *
+     * @param chatGroups The list of chat groups to display.
+     */
     public void displayChatGroups(List<ChatGroupDTO> chatGroups) {
         chatListPanel.removeAll();
         int index = 0;
@@ -157,6 +176,13 @@ public class ChatSideBarView extends JPanel {
         repaint();
     }
 
+    /**
+     * Creates a chat item panel for a given chat group.
+     *
+     * @param chatGroup The chat group data transfer object.
+     * @param index     The index of the chat group in the list.
+     * @return A JPanel representing the chat item.
+     */
     private JPanel createChatItem(ChatGroupDTO chatGroup, int index) {
         JPanel chatItem = new JPanel(new BorderLayout());
         chatItem.setPreferredSize(new Dimension(350, 80));
@@ -174,7 +200,7 @@ public class ChatSideBarView extends JPanel {
 
         // Load and resize avatar image
         try {
-            BufferedImage avatarImage = ImageIO.read(new File("resources\\avatar\\avatarExample.png"));
+            BufferedImage avatarImage = ImageIO.read(new File("resources/avatar/avatarExample.png"));
             Image scaledAvatarImage = avatarImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
             avatar.setIcon(new ImageIcon(scaledAvatarImage));
         } catch (IOException e) {
@@ -202,7 +228,7 @@ public class ChatSideBarView extends JPanel {
         nameTimePanel.add(timeLabel, BorderLayout.EAST);
 
         nameTimePanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
-        
+
         chatInfoPanel.add(nameTimePanel, BorderLayout.NORTH);
 
         // Last Message

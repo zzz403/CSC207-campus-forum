@@ -3,6 +3,7 @@ package com.imperial.academia.app;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Image;
+import java.awt.Taskbar;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -12,27 +13,17 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import com.imperial.academia.app.usecase_factory.ChatUseCaseFactory;
-import com.imperial.academia.app.usecase_factory.CreatePostUseCaseFactory;
-import com.imperial.academia.app.usecase_factory.LoginUseCaseFactory;
-import com.imperial.academia.app.usecase_factory.PostBoardUseCaseFactory;
-import com.imperial.academia.app.usecase_factory.SignupUseCaseFactory;
-import com.imperial.academia.app.usecase_factory.TopNavigationBarUseCaseFacory;
+import com.imperial.academia.app.usecase_factory.*;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarViewModel;
 import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.interface_adapter.createpost.CreatePostViewModel;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
+import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
 import com.imperial.academia.interface_adapter.signup.SignupViewModel;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
-import com.imperial.academia.view.ChatView;
-import com.imperial.academia.view.CreatePostView;
-import com.imperial.academia.view.ForumView;
-import com.imperial.academia.view.LoginView;
-import com.imperial.academia.view.PostBoardView;
-import com.imperial.academia.view.SignupView;
-import com.imperial.academia.view.ViewManager;
+import com.imperial.academia.view.*;
 
 public class Main {
     public static void main(String[] args) throws SQLException, IOException {
@@ -52,11 +43,17 @@ public class Main {
         try {
             Image logo = ImageIO.read(new File("resources/logo.png"));
             application.setIconImage(logo);
+
+            // Set macOS Dock icon if running on macOS
+            if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+                Taskbar.getTaskbar().setIconImage(logo);
+            }
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Failed to load logo image");
         }
 
-        application.setSize(800, 700); // 设置窗口大小
+        application.setSize(1100, 900); // 设置窗口大小
         application.setLocationRelativeTo(null); // 居中显示
 
         CardLayout cardLayout = new CardLayout();
@@ -74,14 +71,15 @@ public class Main {
         ChatSideBarViewModel chatSideBarViewModel = new ChatSideBarViewModel();
         ChatWindowViewModel chatWindowViewModel = new ChatWindowViewModel();
         TopNavigationBarViewModel topNavigationBarViewModel = new TopNavigationBarViewModel();
-
+        ProfileViewModel profileViewModel = new ProfileViewModel();
         try {
             ServiceFactory.initialize();
 
             SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel);
             views.add(signupView, signupView.viewName);
 
-            LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel,topNavigationBarViewModel);
+            LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel,
+                    topNavigationBarViewModel, chatSideBarViewModel);
             views.add(loginView, loginView.viewName);
 
             PostBoardView postBoardView = PostBoardUseCaseFactory.create(viewManagerModel, postBoardViewModel);
@@ -93,13 +91,16 @@ public class Main {
             ChatView chatView = ChatUseCaseFactory.create(viewManagerModel, chatSideBarViewModel, chatWindowViewModel);
             views.add(chatView, chatView.viewName);
 
+            ProfileView profileView = ProfileUseCaseFactory.create(viewManagerModel, profileViewModel);
+            views.add(profileView, profileView.viewName);
             // Add the top navigation bar to the post board view
             // postBoardView.addTopNavigationBar(topNavigationBar);
-            
+
             createPostView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
             postBoardView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
             chatView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
-            
+            profileView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
+
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -113,8 +114,7 @@ public class Main {
         viewManagerModel.firePropertyChanged();
 
         // Set size and center the window
-        
-        application.setVisible(true);
 
+        application.setVisible(true);
     }
 }

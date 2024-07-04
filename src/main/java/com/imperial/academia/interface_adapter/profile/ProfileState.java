@@ -9,7 +9,6 @@ public class ProfileState {
     private String role = "";
     private String avatarUrl = "";
     private Timestamp registrationDate = new Timestamp(System.currentTimeMillis());
-    private String previousViewName = "forum";
 
     public ProfileState (ProfileState copy){
         this.id = copy.id;
@@ -18,7 +17,6 @@ public class ProfileState {
         this.role = copy.role;
         this.avatarUrl = copy.avatarUrl;
         this.registrationDate = copy.registrationDate;
-        this.previousViewName = copy.previousViewName;
     }
     public ProfileState(){}
 
@@ -46,9 +44,7 @@ public class ProfileState {
         return registrationDate;
     }
 
-    public String getPreviousViewName() {
-        return previousViewName;
-    }
+
 
     public void setId(int id) {
         this.id = id;
@@ -74,8 +70,6 @@ public class ProfileState {
         this.registrationDate = registrationDate;
     }
 
-    public void setPreviousViewName(String previousViewName) {
-        this.previousViewName = previousViewName;
-    }
+
 
 }

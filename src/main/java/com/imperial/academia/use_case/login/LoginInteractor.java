@@ -1,6 +1,7 @@
 package com.imperial.academia.use_case.login;
 
 import com.imperial.academia.session.SessionManager;
+import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
 import com.imperial.academia.service.UserService;
 import com.imperial.academia.data_access.RememberMeDAI;
 import com.imperial.academia.entity.user.User;
@@ -16,18 +17,24 @@ public class LoginInteractor implements LoginInputBoundary {
     private final UserService userService;
     private final LoginOutputBoundary loginPresenter;
     private final RememberMeDAI rememberMeDAO;
+    private final ChatSideBarInputBoundary chatSideBarInteractor;
 
     /**
-     * Constructs a LoginInteractor with the specified UserService, LoginOutputBoundary, and RememberMeDAI.
+     * Constructs a LoginInteractor with the specified UserService,
+     * LoginOutputBoundary, and RememberMeDAI.
      * 
-     * @param userService The user service for user operations.
-     * @param loginPresenter The login presenter to present the results.
-     * @param rememberMeDAO The remember me DAO for managing saved credentials.
+     * @param userService           The user service for user operations.
+     * @param loginPresenter        The login presenter to present the results.
+     * @param rememberMeDAO         The remember me DAO for managing saved
+     *                              credentials.
+     * @param chatSideBarInteractor The chat sidebar interactor for chat operations.
      */
-    public LoginInteractor(UserService userService, LoginOutputBoundary loginPresenter, RememberMeDAI rememberMeDAO) {
+    public LoginInteractor(UserService userService, LoginOutputBoundary loginPresenter, RememberMeDAI rememberMeDAO,
+            ChatSideBarInputBoundary chatSideBarInteractor) {
         this.userService = userService;
         this.loginPresenter = loginPresenter;
         this.rememberMeDAO = rememberMeDAO;
+        this.chatSideBarInteractor = chatSideBarInteractor;
     }
 
     /**
@@ -46,7 +53,8 @@ public class LoginInteractor implements LoginInputBoundary {
             } else if (!user.getPassword().equals(loginInputData.getPassword())) {
                 handleLoginFailure("Invalid password.");
             } else {
-                handleLoginSuccess(user, loginInputData.isRememberMe(), loginInputData.getUsername(), loginInputData.getPassword());
+                handleLoginSuccess(user, loginInputData.isRememberMe(), loginInputData.getUsername(),
+                        loginInputData.getPassword());
             }
         } catch (SQLException e) {
             handleLoginFailure("An error occurred during login: " + e.getMessage());
@@ -73,7 +81,9 @@ public class LoginInteractor implements LoginInputBoundary {
         }
 
         SessionManager.setCurrentUser(user);
-        LoginOutputData loginOutputData = new LoginOutputData(user.getUsername(), "Login successful.", user.getAvatarUrl(), user.getId());
+        LoginOutputData loginOutputData = new LoginOutputData(user.getUsername(), "Login successful.",
+                user.getAvatarUrl(), user.getId());
+        chatSideBarInteractor.execute();
         loginPresenter.prepareSuccessView(loginOutputData);
     }
 

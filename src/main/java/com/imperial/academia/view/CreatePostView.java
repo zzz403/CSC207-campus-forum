@@ -61,6 +61,7 @@ public class CreatePostView extends JPanel {
                 try {
                     if (e.getSource() instanceof JComboBox) {
                         JComboBox selected = (JComboBox) e.getSource();
+
                         String boardName = (String) selected.getSelectedItem();
                         System.out.println("selected: " + boardName);
                     } else {
