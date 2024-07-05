@@ -8,16 +8,14 @@ import java.sql.Timestamp;
 public class ChatMessage {
     private int id;
     private int senderId;
-    private int recipientId;
     private Integer groupId;
     private String contentType;
     private String content;
     private Timestamp timestamp;
 
-    public ChatMessage(int id, int senderId, int recipientId, Integer groupId, String contentType, String content, Timestamp timestamp) {
+    public ChatMessage(int id, int senderId, Integer groupId, String contentType, String content, Timestamp timestamp) {
         this.id = id;
         this.senderId = senderId;
-        this.recipientId = recipientId;
         this.groupId = groupId;
         this.contentType = contentType;
         this.content = content;
@@ -31,8 +29,8 @@ public class ChatMessage {
      * 
      * @return The unique identifier of the chat message.
      */
-    public int getId() { 
-        return id; 
+    public int getId() {
+        return id;
     }
 
     /**
@@ -40,8 +38,8 @@ public class ChatMessage {
      * 
      * @param id The unique identifier of the chat message.
      */
-    public void setId(int id) { 
-        this.id = id; 
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**
@@ -49,8 +47,8 @@ public class ChatMessage {
      * 
      * @return The ID of the user who sent the message.
      */
-    public int getSenderId() { 
-        return senderId; 
+    public int getSenderId() {
+        return senderId;
     }
 
     /**
@@ -58,26 +56,8 @@ public class ChatMessage {
      * 
      * @param senderId The ID of the user who sent the message.
      */
-    public void setSenderId(int senderId) { 
-        this.senderId = senderId; 
-    }
-
-    /**
-     * Gets the ID of the user who received the message.
-     * 
-     * @return The ID of the user who received the message.
-     */
-    public int getRecipientId() { 
-        return recipientId; 
-    }
-
-    /**
-     * Sets the ID of the user who received the message.
-     * 
-     * @param recipientId The ID of the user who received the message.
-     */
-    public void setRecipientId(int recipientId) { 
-        this.recipientId = recipientId; 
+    public void setSenderId(int senderId) {
+        this.senderId = senderId;
     }
 
     /**
@@ -85,8 +65,8 @@ public class ChatMessage {
      * 
      * @return The ID of the group the message was sent to, if applicable.
      */
-    public Integer getGroupId() { 
-        return groupId; 
+    public Integer getGroupId() {
+        return groupId;
     }
 
     /**
@@ -94,8 +74,8 @@ public class ChatMessage {
      * 
      * @param groupId The ID of the group the message was sent to, if applicable.
      */
-    public void setGroupId(Integer groupId) { 
-        this.groupId = groupId; 
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
     }
 
     /**
@@ -103,8 +83,8 @@ public class ChatMessage {
      * 
      * @return The content of the chat message.
      */
-    public String getContent() { 
-        return content; 
+    public String getContent() {
+        return content;
     }
 
     /**
@@ -112,8 +92,8 @@ public class ChatMessage {
      * 
      * @param content The content of the chat message.
      */
-    public void setContent(String content) { 
-        this.content = content; 
+    public void setContent(String content) {
+        this.content = content;
     }
 
     /**
@@ -121,8 +101,8 @@ public class ChatMessage {
      * 
      * @return The timestamp when the message was sent.
      */
-    public Timestamp getTimestamp() { 
-        return timestamp; 
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
     /**
@@ -130,8 +110,8 @@ public class ChatMessage {
      * 
      * @param timestamp The timestamp when the message was sent.
      */
-    public void setTimestamp(Timestamp timestamp) { 
-        this.timestamp = timestamp; 
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     public void setContentType(String contentType) {

@@ -22,7 +22,7 @@ public class ChatGroupServiceImpl implements ChatGroupService {
      * Constructs a new ChatGroupServiceImpl with the specified cache and DAO.
      *
      * @param chatGroupCache the cache to use
-     * @param chatGroupDAO the DAO to use
+     * @param chatGroupDAO   the DAO to use
      */
     public ChatGroupServiceImpl(ChatGroupCache chatGroupCache, ChatGroupDAI chatGroupDAO) {
         this.chatGroupCache = chatGroupCache;
@@ -76,11 +76,12 @@ public class ChatGroupServiceImpl implements ChatGroupService {
     private List<ChatGroupDTO> convertToDTO(List<ChatGroup> chatGroups) {
         List<ChatGroupDTO> chatGroupDTOs = new ArrayList<>();
         for (ChatGroup chatGroup : chatGroups) {
-            chatGroupDTOs.add(new ChatGroupDTO(chatGroup.getId(),chatGroup.getGroupName(), chatGroup.getLastModified()));
+            chatGroupDTOs.add(new ChatGroupDTO(chatGroup.getId(), chatGroup.getGroupName(), chatGroup.isGroup(),
+                    chatGroup.getLastModified()));
         }
         return chatGroupDTOs;
     }
-    
+
     /**
      * {@inheritDoc}
      */
