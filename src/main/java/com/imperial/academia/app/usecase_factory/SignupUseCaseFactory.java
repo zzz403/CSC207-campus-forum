@@ -56,10 +56,9 @@ public class SignupUseCaseFactory {
      * @throws ClassNotFoundException if the UserDAO class is not found
      */
     private static SignupController createUserSignupUseCase(ViewManagerModel viewManagerModel, SignupViewModel signupViewModel, LoginViewModel loginViewModel) throws SQLException, ClassNotFoundException {
-        UserService userService = ServiceFactory.getUserService();
         SignupOutputBoundary signupOutputBoundary = new SignupPresenter(viewManagerModel, signupViewModel, loginViewModel);
         UserFactory userFactory = new CommonUserFactory();
-        SignupInputBoundary userSignupInteractor = new SignupInteractor(userService, signupOutputBoundary, userFactory);
+        SignupInputBoundary userSignupInteractor = new SignupInteractor(signupOutputBoundary, userFactory);
 
         return new SignupController(userSignupInteractor);
     }
