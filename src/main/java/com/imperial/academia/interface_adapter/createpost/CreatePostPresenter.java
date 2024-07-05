@@ -36,7 +36,15 @@ public class CreatePostPresenter implements CreatePostOutputBoundary {
     @Override
     public void updateBoardsName(List<String> boardsName) {
         CreatePostState createPostState = createPostViewModel.getState();
-        createPostState.setBoardName(boardsName);
+        createPostState.setBoardsName(boardsName);
         createPostViewModel.setState(createPostState);
+    }
+
+    /**
+     * Submit post seccuess, change the view to postboard
+     */
+    @Override
+    public void submitSeccuss(){
+        viewManagerModel.setActiveView("post board");
     }
 }

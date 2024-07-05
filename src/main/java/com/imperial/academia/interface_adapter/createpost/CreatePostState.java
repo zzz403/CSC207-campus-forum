@@ -5,18 +5,23 @@ import java.util.List;
 
 /**
  * Represents the state of the Create Post view model.
- * This class holds the data required for creating a post, including the title, body, and list of board names.
+ * This class holds the data required for creating a post, 
+ * including the title, content, list of board names, and current board name.
  */
 public class CreatePostState {
     
     /** The title of the post. */
     private String title;
     
-    /** The body of the post. */
-    private String body;
+    /** The content of the post. */
+    private String content;
     
+    /** The current select board name */
+    private String currentBoardName;
+
     /** The list of board names. */
-    private List<String> boardName;
+    private List<String> boardsName;
+
 
     /**
      * Constructs a new CreatePostState by copying the state from another instance.
@@ -25,8 +30,8 @@ public class CreatePostState {
      */
     public CreatePostState(CreatePostState other) {
         this.title = other.getTitle();
-        this.body = other.getBody();
-        this.boardName = other.getBoardName();
+        this.content = other.getContent();
+        this.boardsName = other.getBoardsName();
     }
 
     /**
@@ -34,8 +39,9 @@ public class CreatePostState {
      */
     public CreatePostState() {
         this.title = "";
-        this.body = "";
-        this.boardName = new ArrayList<>();
+        this.content = "";
+        this.currentBoardName = "";
+        this.boardsName = new ArrayList<>();
     }
 
     /**
@@ -57,21 +63,21 @@ public class CreatePostState {
     }
 
     /**
-     * Gets the body of the post.
+     * Gets the content of the post.
      * 
-     * @return the body of the post
+     * @return the content of the post
      */
-    public String getBody() {
-        return body;
+    public String getContent() {
+        return content;
     }
 
     /**
-     * Sets the body of the post.
+     * Sets the content of the post.
      * 
-     * @param body the body of the post
+     * @param body the content of the post
      */
-    public void setBody(String body) {
-        this.body = body;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     /**
@@ -79,8 +85,8 @@ public class CreatePostState {
      * 
      * @return the list of board names
      */
-    public List<String> getBoardName() {
-        return boardName;
+    public List<String> getBoardsName() {
+        return boardsName;
     }
 
     /**
@@ -88,7 +94,26 @@ public class CreatePostState {
      * 
      * @param boardName the list of board names
      */
-    public void setBoardName(List<String> boardName) {
-        this.boardName = new ArrayList<>(boardName);
+    public void setBoardsName(List<String> boardName) {
+        this.boardsName = new ArrayList<>(boardName);
+    }
+
+    
+    /**
+     * Get the current board name
+     * 
+     * @return the current selected board name
+     */
+    public String getCurrentBoardName() {
+        return currentBoardName;
+    }
+
+    /**
+     * Set the current selected board name
+     * 
+     * @param currentBoardName the current selected board name
+     */
+    public void setCurrentBoardName(String currentBoardName) {
+        this.currentBoardName = currentBoardName;
     }
 }

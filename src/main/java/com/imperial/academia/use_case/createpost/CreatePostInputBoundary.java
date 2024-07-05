@@ -7,12 +7,21 @@ import java.sql.SQLException;
  * It defines the method required to update the list of board names.
  */
 public interface CreatePostInputBoundary {
-   
-   /**
-     * Updates the list of board names by fetching them from the board service
-     * and passing them to the presenter.
-     * 
-     * @throws SQLException if a database access error occurs
-     */
-   void updateBoardsName() throws SQLException;
+
+  /**
+   * Updates the list of board names by fetching them from the board service
+   * and passing them to the presenter.
+   * 
+   * @throws SQLException if a database access error occurs
+   */
+  void updateBoardsName() throws SQLException;
+
+  /**
+   * Save the post to the database
+   * 
+   * @param post
+   * @return true if save success otherwise false
+   * @throws SQLException
+   */
+  boolean submitPost(String titile, String content, String boardName);
 }

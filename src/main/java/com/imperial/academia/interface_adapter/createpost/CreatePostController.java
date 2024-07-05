@@ -29,4 +29,8 @@ public class CreatePostController {
     public void updateBoardName() throws SQLException {
         createPostInteractor.updateBoardsName();
     }
+
+    public boolean submitPost(String titile, String content, String boardName) {
+        return createPostInteractor.submitPost(titile, content, boardName);
+    }
 }
