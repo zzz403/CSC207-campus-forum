@@ -2,6 +2,8 @@ package com.imperial.academia.use_case.chat;
 
 import com.imperial.academia.service.ChatGroupService;
 import java.util.List;
+
+import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.entity.chat_group.ChatGroupDTO;
 
 /**
@@ -15,11 +17,10 @@ public class ChatSideBarInteractor implements ChatSideBarInputBoundary {
     /**
      * Constructor for ChatSideBarInteractor.
      *
-     * @param chatGroupService the service for chat group operations
-     * @param chatPresenter    the presenter for chat sidebar output
+     * @param chatPresenter the presenter for chat sidebar output
      */
-    public ChatSideBarInteractor(ChatGroupService chatGroupService, ChatSideBarOutputBoundary chatPresenter) {
-        this.chatGroupService = chatGroupService;
+    public ChatSideBarInteractor(ChatSideBarOutputBoundary chatPresenter) {
+        this.chatGroupService = ServiceFactory.getChatGroupService();
         this.chatSideBarPresenter = chatPresenter;
     }
 

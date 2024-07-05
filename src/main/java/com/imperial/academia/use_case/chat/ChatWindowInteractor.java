@@ -4,6 +4,7 @@ import com.imperial.academia.entity.chat_message.WaveformData;
 import com.imperial.academia.service.AudioService;
 import com.imperial.academia.service.ChatMessageService;
 import com.imperial.academia.session.SessionManager;
+import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.entity.chat_message.ChatMessage;
 import com.imperial.academia.entity.chat_message.ChatMessageDTO;
 import com.imperial.academia.entity.chat_message.ChatMessageFactory;
@@ -15,7 +16,8 @@ import java.util.List;
 
 /**
  * Interactor class for handling chat window operations.
- * Implements the ChatWindowInputBoundary interface to process input data and perform actions.
+ * Implements the ChatWindowInputBoundary interface to process input data and
+ * perform actions.
  */
 public class ChatWindowInteractor implements ChatWindowInputBoundary {
     private final ChatMessageService chatMessageService;
@@ -26,14 +28,12 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
     /**
      * Constructor for ChatWindowInteractor.
      *
-     * @param chatMessageService the service for chat message operations
-     * @param audioService the service for audio operations
      * @param chatWindowPresenter the presenter for chat window output
-     * @param chatMessageFactory the factory for creating chat messages
+     * @param chatMessageFactory  the factory for creating chat messages
      */
-    public ChatWindowInteractor(ChatMessageService chatMessageService, AudioService audioService, ChatWindowOutputBoundary chatWindowPresenter, ChatMessageFactory chatMessageFactory) {
-        this.chatMessageService = chatMessageService;
-        this.audioService = audioService;
+    public ChatWindowInteractor(ChatWindowOutputBoundary chatWindowPresenter, ChatMessageFactory chatMessageFactory) {
+        this.chatMessageService = ServiceFactory.getChatMessageService();
+        this.audioService = ServiceFactory.getAudioService();
         this.chatWindowPresenter = chatWindowPresenter;
         this.chatMessageFactory = chatMessageFactory;
     }
@@ -77,7 +77,8 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
     public void stopRecording(int chatGroupId) {
         try {
             audioService.stopRecording();
-            ChatWindowInputData chatWindowInputData = new ChatWindowInputData(chatGroupId, audioService.getOutputFilePath(), "audio");
+            ChatWindowInputData chatWindowInputData = new ChatWindowInputData(chatGroupId,
+                    audioService.getOutputFilePath(), "audio");
             sendMessage(chatWindowInputData);
         } catch (Exception e) {
             chatWindowPresenter.presentError("An error occurred while stopping recording.");
@@ -102,12 +103,14 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
      * Sends a chat message.
      *
      * @param chatWindowInputData the input data for the chat message
-     * @throws UnsupportedAudioFileException if the audio file format is not supported
-     * @throws IOException if an I/O error occurs
-     * @throws SQLException if a database access error occurs
+     * @throws UnsupportedAudioFileException if the audio file format is not
+     *                                       supported
+     * @throws IOException                   if an I/O error occurs
+     * @throws SQLException                  if a database access error occurs
      */
     @Override
-    public void sendMessage(ChatWindowInputData chatWindowInputData) throws UnsupportedAudioFileException, IOException, SQLException {
+    public void sendMessage(ChatWindowInputData chatWindowInputData)
+            throws UnsupportedAudioFileException, IOException, SQLException {
         int senderId = SessionManager.getCurrentUser().getId();
         int groupId = chatWindowInputData.getChatGroupId();
         String contentType = chatWindowInputData.getContentType();

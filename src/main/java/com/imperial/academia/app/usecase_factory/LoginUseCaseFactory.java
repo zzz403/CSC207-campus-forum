@@ -4,13 +4,10 @@ import com.imperial.academia.interface_adapter.login.LoginController;
 import com.imperial.academia.interface_adapter.login.LoginPresenter;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
-import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.data_access.RememberMeDAO;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarPresenter;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarViewModel;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
-import com.imperial.academia.service.ChatGroupService;
-import com.imperial.academia.service.UserService;
 import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
 import com.imperial.academia.use_case.chat.ChatSideBarInteractor;
 import com.imperial.academia.use_case.chat.ChatSideBarOutputBoundary;
@@ -65,9 +62,6 @@ public class LoginUseCaseFactory {
     private static LoginController createUserLoginUseCase(ViewManagerModel viewManagerModel,
             LoginViewModel loginViewModel, TopNavigationBarViewModel topNavigationBarViewModel,
             ChatSideBarViewModel chatSideBarViewModel) throws SQLException, ClassNotFoundException {
-        // Get the UserService instance from the ServiceFactory
-        UserService userService = ServiceFactory.getUserService();
-        ChatGroupService chatGroupService = ServiceFactory.getChatGroupService();
 
         // Create the presenter for the login use case
         LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, loginViewModel,
@@ -77,12 +71,12 @@ public class LoginUseCaseFactory {
         RememberMeDAO rememberMeDAO = new RememberMeDAO();
 
         ChatSideBarOutputBoundary chatSideBarPresenter = new ChatSideBarPresenter(chatSideBarViewModel);
-        ChatSideBarInputBoundary chatSideBarInteractor = new ChatSideBarInteractor(chatGroupService,
+        ChatSideBarInputBoundary chatSideBarInteractor = new ChatSideBarInteractor(
                 chatSideBarPresenter);
 
         // Create the interactor for the login use case
-        LoginInputBoundary userLoginInteractor = new LoginInteractor(
-                userService, loginOutputBoundary, rememberMeDAO, chatSideBarInteractor);
+        LoginInputBoundary userLoginInteractor = new LoginInteractor(loginOutputBoundary, rememberMeDAO,
+                chatSideBarInteractor);
 
         // Return the login controller
         return new LoginController(userLoginInteractor);

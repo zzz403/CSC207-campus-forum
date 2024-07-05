@@ -3,6 +3,7 @@ package com.imperial.academia.use_case.login;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
 import com.imperial.academia.service.UserService;
+import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.data_access.RememberMeDAI;
 import com.imperial.academia.entity.user.User;
 
@@ -23,15 +24,14 @@ public class LoginInteractor implements LoginInputBoundary {
      * Constructs a LoginInteractor with the specified UserService,
      * LoginOutputBoundary, and RememberMeDAI.
      * 
-     * @param userService           The user service for user operations.
      * @param loginPresenter        The login presenter to present the results.
      * @param rememberMeDAO         The remember me DAO for managing saved
      *                              credentials.
      * @param chatSideBarInteractor The chat sidebar interactor for chat operations.
      */
-    public LoginInteractor(UserService userService, LoginOutputBoundary loginPresenter, RememberMeDAI rememberMeDAO,
+    public LoginInteractor(LoginOutputBoundary loginPresenter, RememberMeDAI rememberMeDAO,
             ChatSideBarInputBoundary chatSideBarInteractor) {
-        this.userService = userService;
+        this.userService = ServiceFactory.getUserService();
         this.loginPresenter = loginPresenter;
         this.rememberMeDAO = rememberMeDAO;
         this.chatSideBarInteractor = chatSideBarInteractor;

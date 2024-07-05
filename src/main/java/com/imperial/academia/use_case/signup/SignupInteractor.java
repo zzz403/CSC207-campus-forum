@@ -1,9 +1,9 @@
 package com.imperial.academia.use_case.signup;
 
 import com.imperial.academia.service.UserService;
+import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.entity.user.UserFactory;
-
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.regex.Pattern;
@@ -12,19 +12,19 @@ import java.util.regex.Pattern;
  * Interactor class for handling the signup use case.
  */
 public class SignupInteractor implements SignupInputBoundary {
-    private final UserService userService;
     private final SignupOutputBoundary signupPresenter;
     private final UserFactory userFactory;
+    private final UserService userService;
 
     /**
      * Constructs a SignupInteractor with the given dependencies.
      *
-     * @param userService the user service
+     * @param userService     the user service
      * @param signupPresenter the signup presenter
-     * @param userFactory the user factory
+     * @param userFactory     the user factory
      */
-    public SignupInteractor(UserService userService, SignupOutputBoundary signupPresenter, UserFactory userFactory) {
-        this.userService = userService;
+    public SignupInteractor(SignupOutputBoundary signupPresenter, UserFactory userFactory) {
+        this.userService = ServiceFactory.getUserService();
         this.signupPresenter = signupPresenter;
         this.userFactory = userFactory;
     }
