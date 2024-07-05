@@ -96,10 +96,17 @@ public class Main {
             // Add the top navigation bar to the post board view
             // postBoardView.addTopNavigationBar(topNavigationBar);
 
-            createPostView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
-            postBoardView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
-            chatView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
-            profileView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
+            createPostView.add(
+                    TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel, application),
+                    BorderLayout.NORTH);
+            postBoardView.add(
+                    TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel, application),
+                    BorderLayout.NORTH);
+            chatView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel, application),
+                    BorderLayout.NORTH);
+            profileView.add(
+                    TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel, application),
+                    BorderLayout.NORTH);
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
