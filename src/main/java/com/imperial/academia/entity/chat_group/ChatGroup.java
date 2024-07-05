@@ -9,19 +9,21 @@ public class ChatGroup {
     private int id;
     private String groupName;
     private Timestamp creationDate;
+    private boolean isGroup;
     private Timestamp lastModified;
 
     /**
      * Constructs a new ChatGroup with the specified details.
      * 
-     * @param id The unique identifier of the chat group.
-     * @param groupName The name of the chat group.
+     * @param id           The unique identifier of the chat group.
+     * @param groupName    The name of the chat group.
      * @param creationDate The timestamp when the chat group was created.
      * @param lastModified The timestamp when the chat group was last modified.
      */
-    public ChatGroup(int id, String groupName, Timestamp creationDate, Timestamp lastModified) {
+    public ChatGroup(int id, String groupName, boolean isGroup, Timestamp creationDate, Timestamp lastModified) {
         this.id = id;
         this.groupName = groupName;
+        this.isGroup = isGroup;
         this.creationDate = creationDate;
         this.lastModified = lastModified;
     }
@@ -33,8 +35,8 @@ public class ChatGroup {
      * 
      * @return The unique identifier of the chat group.
      */
-    public int getId() { 
-        return id; 
+    public int getId() {
+        return id;
     }
 
     /**
@@ -42,8 +44,8 @@ public class ChatGroup {
      * 
      * @param id The unique identifier of the chat group.
      */
-    public void setId(int id) { 
-        this.id = id; 
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**
@@ -51,8 +53,8 @@ public class ChatGroup {
      * 
      * @return The name of the chat group.
      */
-    public String getGroupName() { 
-        return groupName; 
+    public String getGroupName() {
+        return groupName;
     }
 
     /**
@@ -60,8 +62,8 @@ public class ChatGroup {
      * 
      * @param groupName The name of the chat group.
      */
-    public void setGroupName(String groupName) { 
-        this.groupName = groupName; 
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     /**
@@ -69,8 +71,8 @@ public class ChatGroup {
      * 
      * @return The timestamp when the chat group was created.
      */
-    public Timestamp getCreationDate() { 
-        return creationDate; 
+    public Timestamp getCreationDate() {
+        return creationDate;
     }
 
     /**
@@ -78,8 +80,8 @@ public class ChatGroup {
      * 
      * @param creationDate The timestamp when the chat group was created.
      */
-    public void setCreationDate(Timestamp creationDate) { 
-        this.creationDate = creationDate; 
+    public void setCreationDate(Timestamp creationDate) {
+        this.creationDate = creationDate;
     }
 
     /**
@@ -87,8 +89,8 @@ public class ChatGroup {
      * 
      * @return The timestamp when the chat group was last modified.
      */
-    public Timestamp getLastModified() { 
-        return lastModified; 
+    public Timestamp getLastModified() {
+        return lastModified;
     }
 
     /**
@@ -96,7 +98,25 @@ public class ChatGroup {
      * 
      * @param lastModified The timestamp when the chat group was last modified.
      */
-    public void setLastModified(Timestamp lastModified) { 
-        this.lastModified = lastModified; 
+    public void setLastModified(Timestamp lastModified) {
+        this.lastModified = lastModified;
+    }
+
+    /**
+     * Gets whether the chat group is a group or not.
+     * 
+     * @return True if the chat group is a group, false otherwise.
+     */
+    public boolean isGroup() {
+        return isGroup;
+    }
+
+    /**
+     * Sets whether the chat group is a group or not.
+     * 
+     * @param isGroup True if the chat group is a group, false otherwise.
+     */
+    public void setGroup(boolean isGroup) {
+        this.isGroup = isGroup;
     }
 }

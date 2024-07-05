@@ -32,17 +32,16 @@ public class ChatMessageDAO implements ChatMessageDAI {
     @Override
     public void insert(ChatMessage chatMessage) throws SQLException {
         System.out.println("ChatMessageDAO: insert");
-        String sql = "INSERT INTO chat_messages (sender_id, recipient_id, group_id, content_type, content, timestamp) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+        String sql = "INSERT INTO chat_messages (sender_id, group_id, content_type, content, timestamp) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, chatMessage.getSenderId());
-            pstmt.setInt(2, chatMessage.getRecipientId());
             if (chatMessage.getGroupId() != null) {
-                pstmt.setInt(3, chatMessage.getGroupId());
+                pstmt.setInt(2, chatMessage.getGroupId());
             } else {
-                pstmt.setNull(3, Types.INTEGER);
+                pstmt.setNull(2, Types.INTEGER);
             }
-            pstmt.setString(4, chatMessage.getContentType());
-            pstmt.setString(5, chatMessage.getContent());
+            pstmt.setString(3, chatMessage.getContentType());
+            pstmt.setString(4, chatMessage.getContent());
             System.out.println("ChatMessageDAO: insert: pstmt = " + pstmt);
             pstmt.executeUpdate();
             System.out.println("ChatMessageDAO: insert: pstmt.executeUpdate()");
@@ -85,7 +84,6 @@ public class ChatMessageDAO implements ChatMessageDAI {
                     chatMessage = new ChatMessage(
                             rs.getInt("message_id"),
                             rs.getInt("sender_id"),
-                            rs.getInt("recipient_id"),
                             rs.getInt("group_id"),
                             rs.getString("content_type"),
                             rs.getString("content"),
@@ -109,7 +107,6 @@ public class ChatMessageDAO implements ChatMessageDAI {
                 chatMessages.add(new ChatMessage(
                         rs.getInt("message_id"),
                         rs.getInt("sender_id"),
-                        rs.getInt("recipient_id"),
                         rs.getInt("group_id"),
                         rs.getString("content_type"),
                         rs.getString("content"),
@@ -133,7 +130,6 @@ public class ChatMessageDAO implements ChatMessageDAI {
                     chatMessages.add(new ChatMessage(
                             rs.getInt("message_id"),
                             rs.getInt("sender_id"),
-                            rs.getInt("recipient_id"),
                             rs.getInt("group_id"),
                             rs.getString("content_type"),
                             rs.getString("content"),
@@ -149,17 +145,16 @@ public class ChatMessageDAO implements ChatMessageDAI {
      */
     @Override
     public void update(ChatMessage chatMessage) throws SQLException {
-        String sql = "UPDATE chat_messages SET sender_id = ?, recipient_id = ?, group_id = ?, content = ?, timestamp = CURRENT_TIMESTAMP WHERE message_id = ?";
+        String sql = "UPDATE chat_messages SET sender_id = ?, group_id = ?, content = ?, timestamp = CURRENT_TIMESTAMP WHERE message_id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, chatMessage.getSenderId());
-            pstmt.setInt(2, chatMessage.getRecipientId());
             if (chatMessage.getGroupId() != null) {
-                pstmt.setInt(3, chatMessage.getGroupId());
+                pstmt.setInt(2, chatMessage.getGroupId());
             } else {
-                pstmt.setNull(3, Types.INTEGER);
+                pstmt.setNull(2, Types.INTEGER);
             }
-            pstmt.setString(4, chatMessage.getContent());
-            pstmt.setInt(5, chatMessage.getId());
+            pstmt.setString(3, chatMessage.getContent());
+            pstmt.setInt(4, chatMessage.getId());
             pstmt.executeUpdate();
         }
     }
