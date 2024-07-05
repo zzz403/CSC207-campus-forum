@@ -9,8 +9,6 @@ import com.imperial.academia.interface_adapter.chat.ChatWindowPresenter;
 import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.service.AudioService;
-import com.imperial.academia.service.ChatGroupService;
-import com.imperial.academia.service.ChatMessageService;
 import com.imperial.academia.use_case.chat.ChatSideBarOutputBoundary;
 import com.imperial.academia.use_case.chat.ChatWindowInputBoundary;
 import com.imperial.academia.use_case.chat.ChatWindowInteractor;
@@ -45,8 +43,6 @@ public class ChatUseCaseFactory {
             ChatWindowViewModel chatWindowViewModel) throws ClassNotFoundException {
 
         // Get required services
-        ChatGroupService chatGroupService = ServiceFactory.getChatGroupService();
-        ChatMessageService chatMessageService = ServiceFactory.getChatMessageService();
         AudioService audioService = ServiceFactory.getAudioService();
 
         // Create presenters
@@ -54,10 +50,10 @@ public class ChatUseCaseFactory {
         ChatWindowOutputBoundary chatWindowPresenter = new ChatWindowPresenter(chatWindowViewModel);
 
         // Create interactors
-        ChatSideBarInputBoundary chatSideBarInteractor = new ChatSideBarInteractor(chatGroupService,
+        ChatSideBarInputBoundary chatSideBarInteractor = new ChatSideBarInteractor(
                 chatSideBarPresenter);
         ChatMessageFactory chatMessageFactory = new CommonChatMessageFactory();
-        ChatWindowInputBoundary chatWindowInteractor = new ChatWindowInteractor(chatMessageService, audioService,
+        ChatWindowInputBoundary chatWindowInteractor = new ChatWindowInteractor(
                 chatWindowPresenter, chatMessageFactory);
 
         // Create controllers

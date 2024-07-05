@@ -65,9 +65,6 @@ public class LoginUseCaseFactory {
     private static LoginController createUserLoginUseCase(ViewManagerModel viewManagerModel,
             LoginViewModel loginViewModel, TopNavigationBarViewModel topNavigationBarViewModel,
             ChatSideBarViewModel chatSideBarViewModel) throws SQLException, ClassNotFoundException {
-        // Get the UserService instance from the ServiceFactory
-        UserService userService = ServiceFactory.getUserService();
-        ChatGroupService chatGroupService = ServiceFactory.getChatGroupService();
 
         // Create the presenter for the login use case
         LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, loginViewModel,
@@ -77,12 +74,11 @@ public class LoginUseCaseFactory {
         RememberMeDAO rememberMeDAO = new RememberMeDAO();
 
         ChatSideBarOutputBoundary chatSideBarPresenter = new ChatSideBarPresenter(chatSideBarViewModel);
-        ChatSideBarInputBoundary chatSideBarInteractor = new ChatSideBarInteractor(chatGroupService,
+        ChatSideBarInputBoundary chatSideBarInteractor = new ChatSideBarInteractor(
                 chatSideBarPresenter);
 
         // Create the interactor for the login use case
-        LoginInputBoundary userLoginInteractor = new LoginInteractor(
-                userService, loginOutputBoundary, rememberMeDAO, chatSideBarInteractor);
+        LoginInputBoundary userLoginInteractor = new LoginInteractor(loginOutputBoundary, rememberMeDAO, chatSideBarInteractor);
 
         // Return the login controller
         return new LoginController(userLoginInteractor);

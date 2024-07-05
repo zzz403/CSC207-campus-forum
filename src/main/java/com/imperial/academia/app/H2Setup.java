@@ -98,6 +98,7 @@ public class H2Setup {
             String createChatGroupsTable = "CREATE TABLE chat_groups (" +
                 "group_id INT AUTO_INCREMENT PRIMARY KEY, " +
                 "group_name VARCHAR(100) NOT NULL, " +
+                    "is_group BOOLEAN DEFAULT FALSE, " +
                 "creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
                 "last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" +
                 ")";
@@ -106,13 +107,11 @@ public class H2Setup {
             String createChatMessagesTable = "CREATE TABLE chat_messages (" +
                 "message_id INT AUTO_INCREMENT PRIMARY KEY, " +
                 "sender_id INT NOT NULL, " +
-                "recipient_id INT NOT NULL, " +
                 "group_id INT DEFAULT NULL, " +
                 "content_type VARCHAR(20) DEFAULT 'text'," +
                 "content TEXT NOT NULL, " +
                 "timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
                 "FOREIGN KEY (sender_id) REFERENCES users(user_id), " +
-                "FOREIGN KEY (recipient_id) REFERENCES users(user_id), " +
                 "FOREIGN KEY (group_id) REFERENCES chat_groups(group_id)" +
                 ")";
             stmt.executeUpdate(createChatMessagesTable);
