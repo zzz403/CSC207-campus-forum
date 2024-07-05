@@ -16,7 +16,8 @@ public class ServiceFactory {
     private static UserService userService;
     private static ChatGroupService chatGroupService;
     private static ChatMessageService chatMessageService;
-    private static BoardServiceImpl boardService;
+    private static BoardService boardService;
+    private static PostService postService;
 
     
     /**
@@ -41,6 +42,10 @@ public class ServiceFactory {
         BoardCache boardCache = new BoardCacheImpl();
         BoardDAO boardDAO = new BoardDAO(DatabaseConnection.getConnection());
         boardService = new BoardServiceImpl(boardCache, boardDAO);
+
+        PostCache postCache = new PostCacheImpl();
+        PostDAO postDAO = new PostDAO(DatabaseConnection.getConnection());
+        postService = new PostServiceImpl(postCache, postDAO);
         
         audioService = new AudioServiceImpl();
     }
@@ -89,5 +94,14 @@ public class ServiceFactory {
 
     public static AudioService getAudioService() {
         return audioService;
+    }
+
+    /**
+     * Return the PostService instance
+     * 
+     * @return PostService
+     */
+    public static PostService getPostService() {
+        return postService;
     }
 }

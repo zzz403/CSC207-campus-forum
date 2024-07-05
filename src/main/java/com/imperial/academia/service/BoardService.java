@@ -42,6 +42,13 @@ public interface BoardService {
     List<String> getAllBoardsName() throws SQLException;
 
     /**
+     * @param boardName the name of the board
+     * @return the boardId
+     * @throws SQLException
+     */
+    int getBoardIdByName(String boardName) throws SQLException;
+
+    /**
      * Updates an existing board in the database.
      *
      * @param board the board to update

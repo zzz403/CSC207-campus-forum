@@ -67,7 +67,23 @@ public class BoardServiceImpl implements BoardService {
     /**
      * {@inheritDoc}
      */
+    @Override
+    public int getBoardIdByName(String boardName) throws SQLException{
+        // TODO: do using SQL not by this
+        List<Board> boards = getAllBoards();
+        for(Board board : boards){
+            if(board.getName().equals(boardName)){
+                return board.getId();
+            }
+        }
+        throw new SQLException("error board not found");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<String> getAllBoardsName() throws SQLException{
+        // TODO: do using SQL not by this
         List<Board> allBoard = getAllBoards();
         List<String> boardsName = new ArrayList<>();
         if(allBoard != null){

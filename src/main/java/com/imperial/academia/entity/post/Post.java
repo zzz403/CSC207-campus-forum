@@ -17,15 +17,16 @@ public class Post {
     /**
      * Constructs a new Post with the specified details.
      * 
-     * @param id The unique identifier of the post.
-     * @param title The title of the post.
-     * @param content The content of the post.
-     * @param authorId The ID of the user who authored the post.
-     * @param boardId The ID of the board the post is associated with.
-     * @param creationDate The timestamp when the post was created.
+     * @param id               The unique identifier of the post.
+     * @param title            The title of the post.
+     * @param content          The content of the post.
+     * @param authorId         The ID of the user who authored the post.
+     * @param boardId          The ID of the board the post is associated with.
+     * @param creationDate     The timestamp when the post was created.
      * @param lastModifiedDate The timestamp when the post was last modified.
      */
-    public Post(int id, String title, String content, int authorId, int boardId, Timestamp creationDate, Timestamp lastModifiedDate) {
+    public Post(int id, String title, String content, int authorId, int boardId, Timestamp creationDate,
+            Timestamp lastModifiedDate) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -42,8 +43,8 @@ public class Post {
      * 
      * @return The unique identifier of the post.
      */
-    public int getId() { 
-        return id; 
+    public int getId() {
+        return id;
     }
 
     /**
@@ -51,8 +52,8 @@ public class Post {
      * 
      * @param id The unique identifier of the post.
      */
-    public void setId(int id) { 
-        this.id = id; 
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**
@@ -60,8 +61,8 @@ public class Post {
      * 
      * @return The title of the post.
      */
-    public String getTitle() { 
-        return title; 
+    public String getTitle() {
+        return title;
     }
 
     /**
@@ -69,8 +70,8 @@ public class Post {
      * 
      * @param title The title of the post.
      */
-    public void setTitle(String title) { 
-        this.title = title; 
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     /**
@@ -78,8 +79,8 @@ public class Post {
      * 
      * @return The content of the post.
      */
-    public String getContent() { 
-        return content; 
+    public String getContent() {
+        return content;
     }
 
     /**
@@ -87,8 +88,8 @@ public class Post {
      * 
      * @param content The content of the post.
      */
-    public void setContent(String content) { 
-        this.content = content; 
+    public void setContent(String content) {
+        this.content = content;
     }
 
     /**
@@ -96,8 +97,8 @@ public class Post {
      * 
      * @return The ID of the user who authored the post.
      */
-    public int getAuthorId() { 
-        return authorId; 
+    public int getAuthorId() {
+        return authorId;
     }
 
     /**
@@ -105,8 +106,8 @@ public class Post {
      * 
      * @param authorId The ID of the user who authored the post.
      */
-    public void setAuthorId(int authorId) { 
-        this.authorId = authorId; 
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
     }
 
     /**
@@ -114,8 +115,8 @@ public class Post {
      * 
      * @return The ID of the board the post is associated with.
      */
-    public int getBoardId() { 
-        return boardId; 
+    public int getBoardId() {
+        return boardId;
     }
 
     /**
@@ -123,8 +124,8 @@ public class Post {
      * 
      * @param boardId The ID of the board the post is associated with.
      */
-    public void setBoardId(int boardId) { 
-        this.boardId = boardId; 
+    public void setBoardId(int boardId) {
+        this.boardId = boardId;
     }
 
     /**
@@ -132,8 +133,8 @@ public class Post {
      * 
      * @return The timestamp when the post was created.
      */
-    public Timestamp getCreationDate() { 
-        return creationDate; 
+    public Timestamp getCreationDate() {
+        return creationDate;
     }
 
     /**
@@ -141,8 +142,8 @@ public class Post {
      * 
      * @param creationDate The timestamp when the post was created.
      */
-    public void setCreationDate(Timestamp creationDate) { 
-        this.creationDate = creationDate; 
+    public void setCreationDate(Timestamp creationDate) {
+        this.creationDate = creationDate;
     }
 
     /**
@@ -150,8 +151,8 @@ public class Post {
      * 
      * @return The timestamp when the post was last modified.
      */
-    public Timestamp getLastModifiedDate() { 
-        return lastModifiedDate; 
+    public Timestamp getLastModifiedDate() {
+        return lastModifiedDate;
     }
 
     /**
@@ -159,7 +160,120 @@ public class Post {
      * 
      * @param lastModifiedDate The timestamp when the post was last modified.
      */
-    public void setLastModifiedDate(Timestamp lastModifiedDate) { 
-        this.lastModifiedDate = lastModifiedDate; 
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+
+
+    // Post calss builder
+
+    
+    /**
+     * Return a PostBuilder
+     * 
+     * @return PostBuilder
+     */
+    public static PostBuilder builder(){
+        return new PostBuilder();
+    }
+
+    /**
+     * The PostBuilder class helps in building Post objects.
+     */
+    public static class PostBuilder {
+        private int id;
+        private String title;
+        private String content;
+        private int authorId;
+        private int boardId;
+        private Timestamp creationDate;
+        private Timestamp lastModifiedDate;
+
+        /**
+         * Sets the unique identifier of the post.
+         * 
+         * @param id The unique identifier of the post.
+         * @return The current instance of PostBuilder.
+         */
+        public PostBuilder setId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        /**
+         * Sets the title of the post.
+         * 
+         * @param title The title of the post.
+         * @return The current instance of PostBuilder.
+         */
+        public PostBuilder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        /**
+         * Sets the content of the post.
+         * 
+         * @param content The content of the post.
+         * @return The current instance of PostBuilder.
+         */
+        public PostBuilder setContent(String content) {
+            this.content = content;
+            return this;
+        }
+
+        /**
+         * Sets the ID of the user who authored the post.
+         * 
+         * @param authorId The ID of the user who authored the post.
+         * @return The current instance of PostBuilder.
+         */
+        public PostBuilder setAuthorId(int authorId) {
+            this.authorId = authorId;
+            return this;
+        }
+
+        /**
+         * Sets the ID of the board the post is associated with.
+         * 
+         * @param boardId The ID of the board the post is associated with.
+         * @return The current instance of PostBuilder.
+         */
+        public PostBuilder setBoardId(int boardId) {
+            this.boardId = boardId;
+            return this;
+        }
+
+        /**
+         * Sets the timestamp when the post was created.
+         * 
+         * @param creationDate The timestamp when the post was created.
+         * @return The current instance of PostBuilder.
+         */
+        public PostBuilder setCreationDate(Timestamp creationDate) {
+            this.creationDate = creationDate;
+            return this;
+        }
+
+        /**
+         * Sets the timestamp when the post was last modified.
+         * 
+         * @param lastModifiedDate The timestamp when the post was last modified.
+         * @return The current instance of PostBuilder.
+         */
+        public PostBuilder setLastModifiedDate(Timestamp lastModifiedDate) {
+            this.lastModifiedDate = lastModifiedDate;
+            return this;
+        }
+
+        /**
+         * Builds and returns a Post object.
+         * 
+         * @return The built Post object.
+         */
+        public Post build() {
+            return new Post(id, title, content, authorId, boardId, creationDate, lastModifiedDate);
+        }
     }
 }
