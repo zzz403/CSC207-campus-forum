@@ -1,6 +1,9 @@
 package com.imperial.academia.cache;
 
 import com.imperial.academia.entity.chat_group.ChatGroup;
+import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.user.User;
+
 import java.util.List;
 
 /**
@@ -68,4 +71,20 @@ public interface ChatGroupCache {
      * @return true if the list of chat groups is cached, false otherwise
      */
     boolean existsChatGroups(String key);
+
+    void setLastMessage(String key, ChatMessage lastMessage);
+
+    ChatMessage getLastMessage(String key);
+
+    void deleteLastMessage(String key);
+
+    boolean existsLastMessage(String key);
+
+    void setUser(String key, User avatarUrl);
+
+    User getUser(String key);
+
+    void deleteUser(String key);
+
+    boolean existsUser(String key);
 }

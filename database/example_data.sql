@@ -34,18 +34,19 @@ INSERT INTO comments (content, author_id, post_id, parent_comment_id, creation_d
 
 -- Insert chat groups
 INSERT INTO chat_groups (group_name, creation_date, is_group,last_modified) VALUES
-('Developers Group', CURRENT_TIMESTAMP, TRUE, CURRENT_TIMESTAMP),
-('Gaming Group', CURRENT_TIMESTAMP, TRUE, CURRENT_TIMESTAMP),
-('Fitness Enthusiasts', CURRENT_TIMESTAMP, TRUE, CURRENT_TIMESTAMP),
-('Travel Lovers', CURRENT_TIMESTAMP, TRUE, CURRENT_TIMESTAMP),
-('Book Club', CURRENT_TIMESTAMP, TRUE, CURRENT_TIMESTAMP),
-('Testing', CURRENT_TIMESTAMP, TRUE, CURRENT_TIMESTAMP),
-('Music Lovers', CURRENT_TIMESTAMP, TRUE, CURRENT_TIMESTAMP),
-('Photography Enthusiasts', CURRENT_TIMESTAMP, TRUE, CURRENT_TIMESTAMP),
-('Cooking Club', CURRENT_TIMESTAMP, TRUE, CURRENT_TIMESTAMP),
-('Outdoor Activities', CURRENT_TIMESTAMP, TRUE, CURRENT_TIMESTAMP),
-('Movie Buffs', CURRENT_TIMESTAMP, TRUE, CURRENT_TIMESTAMP),
-('Pet Lovers', CURRENT_TIMESTAMP, TRUE, CURRENT_TIMESTAMP);
+('Developers Group', '2024-06-01 10:00:00', TRUE, '2024-06-01 10:00:00'),
+('Gaming Group', '2024-06-01 10:00:00', TRUE, '2024-06-01 10:00:00'),
+('Fitness Enthusiasts', '2024-06-01 10:00:00', TRUE, '2024-06-01 10:00:00'),
+('Travel Lovers', '2024-06-01 10:00:00', TRUE, '2024-06-01 10:00:00'),
+('Book Club', '2024-06-01 10:00:00', TRUE, '2024-06-01 10:00:00'),
+('Testing', '2024-06-01 10:00:00', TRUE, '2024-06-01 10:00:00'),
+('Music Lovers', '2024-06-01 10:00:00', TRUE, '2024-06-01 10:00:00'),
+('Photography Enthusiasts', '2024-06-01 10:00:00', TRUE, '2024-06-01 10:00:00'),
+('Cooking Club', '2024-06-01 10:00:00', TRUE, '2024-06-01 10:00:00'),
+('Outdoor Activities', '2024-06-01 10:00:00', TRUE, '2024-06-01 10:00:00'),
+('Movie Buffs', '2024-06-01 10:00:00', TRUE, '2024-06-01 10:00:00'),
+('Pet Lovers', '2024-06-01 10:00:00', TRUE, '2024-06-01 10:00:00'),
+('Private Chat', '2024-06-01 10:00:00', FALSE, '2024-06-01 10:00:00');
 
 -- Insert chat messages
 INSERT INTO chat_messages (sender_id, group_id, content_type, content, timestamp) VALUES
@@ -131,7 +132,8 @@ INSERT INTO chat_messages (sender_id, group_id, content_type, content, timestamp
 (5, 11, 'text', 'I second that, Dr. Smith is awesome.', '2024-06-01 15:59:00'),
 (1, 9, 'text', 'What gear do you recommend for a beginner hiker?', '2024-06-01 16:03:35'),
 (2, 9, 'text', 'Comfortable shoes and a good backpack are essential.', '2024-06-01 16:08:13'),
-(3, 9, 'text', 'Don''t forget a water bottle and some snacks.', '2024-06-01 16:13:00');
+(3, 9, 'text', 'Don''t forget a water bottle and some snacks.', '2024-06-01 16:13:00'),
+(1, 13, 'text', 'Hello', '2024-07-01 16:13:00');
 
 -- (1, 1, 'audio', 'resources/audio/1/admin_20240701_174611.wav', '2024-07-01 17:46:11'),
 -- (3, 1, 'audio', 'resources/audio/1/john_doe_20240701_180149.wav', '2024-07-01 18:01:49'),
@@ -165,7 +167,9 @@ INSERT INTO group_members (group_id, user_id, role, joined_date, last_modified) 
 (10, 5, 'member', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (11, 1, 'admin', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (11, 2, 'member', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(11, 5, 'member', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(11, 5, 'member', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(13, 1, 'admin', CURRENT_TIMESTAMP,CURRENT_TIMESTAMP),
+(13, 2, 'admin', CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
 
 -- Insert post likes
 INSERT INTO post_likes (user_id, post_id, liked_at) VALUES
