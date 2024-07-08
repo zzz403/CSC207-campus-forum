@@ -8,6 +8,8 @@ import com.imperial.academia.entity.chat_message.ChatMessage;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.session.SessionManager;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -100,7 +102,7 @@ public class ChatGroupServiceImpl implements ChatGroupService {
             }
         }
 
-        return matchingChatGroups;
+        return sortChatGroupsByTime(matchingChatGroups);
     }
 
     /**
@@ -148,7 +150,7 @@ public class ChatGroupServiceImpl implements ChatGroupService {
         return lastMessage;
     }
 
-    public User getUser(int groupId) throws SQLException {
+    private User getUser(int groupId) throws SQLException {
         String key = "user:" + groupId;
         User user = chatGroupCache.getUser(key);
         if (user == null) {
@@ -158,5 +160,24 @@ public class ChatGroupServiceImpl implements ChatGroupService {
             }
         }
         return user;
+    }
+
+    private List<ChatGroupDTO> sortChatGroupsByTime(List<ChatGroupDTO> chatGroups) {
+        chatGroups.sort(new Comparator<ChatGroupDTO>() {
+            @Override
+            public int compare(ChatGroupDTO cg1, ChatGroupDTO cg2) {
+                if (cg1.getLastMessageTime() == null && cg2.getLastMessageTime() == null) {
+                    return 0;
+                }
+                if (cg1.getLastMessageTime() == null) {
+                    return 1;
+                }
+                if (cg2.getLastMessageTime() == null) {
+                    return -1;
+                }
+                return cg2.getLastMessageTime().compareTo(cg1.getLastMessageTime());
+            }
+        });
+        return chatGroups;
     }
 }

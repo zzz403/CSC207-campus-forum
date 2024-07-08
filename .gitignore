@@ -36,3 +36,7 @@ build/
 database/academia_imperial.trace.db
 database/academia_imperial.mv.db
 database/*.mv.db
+
+# Ignore apiKeyConfig.java file
+#CSC207-campus-forum/src/main/java/com/imperial/academia/config/apiKeyConfig.java
+
