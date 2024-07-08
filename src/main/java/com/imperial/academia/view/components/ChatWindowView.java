@@ -9,12 +9,15 @@ import com.imperial.academia.entity.chat_message.ChatMessageDTO;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -30,6 +33,7 @@ public class ChatWindowView extends JPanel {
     ChatWindowController chatWindowController;
     Image scaledOpenMicIconImage;
     Image scaledCloseMicIconImage;
+    private Map<String, BufferedImage> mapCache = new HashMap<>();
 
     /**
      * Constructor for ChatWindowView.
@@ -62,11 +66,44 @@ public class ChatWindowView extends JPanel {
         attachmentsPanel.setOpaque(false); // Make panel transparent
 
         // Adding attachment icon
+        // Adding attachment icon
         try {
-            BufferedImage plusIconImage = ImageIO.read(new File("resources/plus_icon.png"));
+            BufferedImage plusIconImage = ImageIO.read(new File("resources/icons/plus_icon.png"));
             Image scaledPlusIconImage = plusIconImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
             JLabel plusIcon = new JLabel(new ImageIcon(scaledPlusIconImage));
             attachmentsPanel.add(plusIcon);
+
+            // Create RoundedPopupMenu
+            RoundedPopupMenu popupMenu = new RoundedPopupMenu();
+            popupMenu.setLayout(new GridLayout(2,1)); // 2 rows and 1 column
+            popupMenu.setBorder(new LineBorder(Color.black, 4, true));
+
+            // Load icons
+            ImageIcon locationIcon = popupIconSize("resources/icons/location_icon.png", 30);
+            ImageIcon reviewIcon = popupIconSize("resources/icons/ai_review_icon.png", 33);
+
+            JPanel locationButton = new IconTextMenuItem(locationIcon, "send location");
+            locationButton.addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent e) {
+                    if (SwingUtilities.isLeftMouseButton(e)) {
+                        int groupId = chatWindowViewModel.getState().getChatGroupId();
+                        chatWindowController.sendLocation(groupId);
+                    }
+                }
+            });
+
+            // Add custom menu items
+            popupMenu.add(locationButton);
+            popupMenu.add(new IconTextMenuItem(reviewIcon, "AI review"));
+
+            plusIcon.addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent e) {
+                    if (SwingUtilities.isLeftMouseButton(e)) {
+                        Point location = plusIcon.getLocationOnScreen();
+                        popupMenu.show(plusIcon, -20, -popupMenu.getPreferredSize().height - 15);
+                    }
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -96,16 +133,16 @@ public class ChatWindowView extends JPanel {
 
         // Adding option icons
         try {
-            BufferedImage smileyIconImage = ImageIO.read(new File("resources/smiley_icon.png"));
-            Image scaledSmileyIconImage = smileyIconImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+            BufferedImage smileyIconImage = ImageIO.read(new File("resources/icons/smiley_icon.png"));
+            Image scaledSmileyIconImage = smileyIconImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
             JLabel smileyIcon = new JLabel(new ImageIcon(scaledSmileyIconImage));
             optionsPanel.add(smileyIcon);
 
-            BufferedImage micCloseIconImage = ImageIO.read(new File("resources/mic_close_icon.png"));
-            scaledCloseMicIconImage = micCloseIconImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+            BufferedImage micCloseIconImage = ImageIO.read(new File("resources/icons/mic_close_icon.png"));
+            scaledCloseMicIconImage = micCloseIconImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 
-            BufferedImage micOpenIconImage = ImageIO.read(new File("resources/mic_open_icon.png"));
-            scaledOpenMicIconImage = micOpenIconImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+            BufferedImage micOpenIconImage = ImageIO.read(new File("resources/icons/mic_open_icon.png"));
+            scaledOpenMicIconImage = micOpenIconImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 
             JButton micButton = new JButton(new ImageIcon(scaledCloseMicIconImage));
             micButton.setBorder(BorderFactory.createEmptyBorder());
@@ -161,8 +198,8 @@ public class ChatWindowView extends JPanel {
             });
             optionsPanel.add(micButton);
 
-            BufferedImage cameraIconImage = ImageIO.read(new File("resources/camera_icon.png"));
-            Image scaledCameraIconImage = cameraIconImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+            BufferedImage cameraIconImage = ImageIO.read(new File("resources/icons/camera_icon.png"));
+            Image scaledCameraIconImage = cameraIconImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
             JLabel cameraIcon = new JLabel(new ImageIcon(scaledCameraIconImage));
             optionsPanel.add(cameraIcon);
         } catch (IOException e) {
@@ -256,7 +293,7 @@ public class ChatWindowView extends JPanel {
                 try {
                     messageImage = ImageIO.read(new File(chatMessage.getContent()));
                 } catch (IOException e) {
-                    messageImage = (BufferedImage) new ImageIcon("resources/image_not_found.png").getImage();
+                    messageImage = (BufferedImage) new ImageIcon("resources/default/image_not_found.png").getImage();
                 }
                 Image scaledMessageImage = messageImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
                 messageImageLabel.setIcon(new ImageIcon(scaledMessageImage));
@@ -273,6 +310,39 @@ public class ChatWindowView extends JPanel {
 
                     contentPanel.add(waveformPanel);
                 }
+            } else if (chatMessage.getContentType().equals("map")) {
+                BufferedImage mapImage;
+                if (mapCache.containsKey(chatMessage.getContent())) {
+                    mapImage = mapCache.get(chatMessage.getContent());
+                } else {
+                    try {
+                        mapImage = ImageIO.read(new File(chatMessage.getContent()));
+                        mapImage = mapResizeImage(mapImage, 300, 200); // Resize to desired dimensions
+                        mapImage = mapMakeRoundedCorner(mapImage);
+                        mapCache.put(chatMessage.getContent(), mapImage);
+                    } catch (IOException e) {
+                        mapImage = null;
+                    }
+                }
+
+                MapPanel mapPanel = new MapPanel(chatMessage.getMapData(), mapImage, chatMessage.isMe());
+                mapPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+                mapPanel.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        if (SwingUtilities.isLeftMouseButton(e)) {
+                            double latitude = chatMessage.getMapData().getLatitude();
+                            double longitude = chatMessage.getMapData().getLongitude();
+                            String url = String.format("https://www.google.com/maps/search/?api=1&query=%s,%s", latitude, longitude);
+                            try {
+                                Desktop.getDesktop().browse(new URI(url));
+                            } catch (IOException | URISyntaxException evt) {
+                                evt.printStackTrace();
+                            }
+                        }
+                    }
+                });
+                contentPanel.add(mapPanel);
             }
 
             mainContentPanel.add(contentPanel);
@@ -377,5 +447,103 @@ public class ChatWindowView extends JPanel {
         long differenceSinceFirst = currentTimestamp.getTime() - firstTimestamp.getTime();
 
         return differenceSinceLast > 300000 || differenceSinceFirst > 1200000;
+    }
+
+    private ImageIcon popupIconSize(String path, int size) {
+        try {
+            BufferedImage iconImage = ImageIO.read(new File(path));
+            Image scaledIconImage = iconImage.getScaledInstance(size, size, Image.SCALE_SMOOTH);
+            return new ImageIcon(scaledIconImage);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private BufferedImage mapResizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) {
+        Image resultingImage = originalImage.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = outputImage.createGraphics();
+        g2d.drawImage(resultingImage, 0, 0, null);
+        g2d.dispose();
+        return outputImage;
+    }
+
+    private static BufferedImage mapMakeRoundedCorner(BufferedImage image) {
+        int cornerRadius = 25; // The radius for the rounded corners
+        int w = image.getWidth();
+        int h = image.getHeight();
+        BufferedImage output = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2 = output.createGraphics();
+
+        // Enable anti-aliasing for smooth corners
+        g2.setComposite(AlphaComposite.Src);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setColor(Color.WHITE);
+
+        // Create a shape with rounded top corners and sharp bottom corners
+        g2.fill(new RoundRectangle2D.Float(0, 0, w, h, cornerRadius, cornerRadius));
+        g2.fillRect(0, h / 2, w, h / 2);
+
+        // Composite the image on top using the white shape as the alpha source
+        g2.setComposite(AlphaComposite.SrcAtop);
+        g2.drawImage(image, 0, 0, null);
+
+        g2.dispose();
+
+        try {
+            File outputFile = new File("rounded_corners_image.png");
+            ImageIO.write(output, "png", outputFile);
+            System.out.println("Saved rounded corners image to: " + outputFile.getAbsolutePath());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return output;
+    }
+
+    static class IconTextMenuItem extends JPanel {
+        public IconTextMenuItem(ImageIcon icon, String text) {
+            setLayout(new BorderLayout());
+            setBackground(Color.WHITE);
+            setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+            JLabel iconLabel = new JLabel(icon);
+            iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+            JLabel textLabel = new JLabel(text);
+            textLabel.setFont(new Font("Arial", Font.BOLD, 12));
+            textLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+            setCursor(new Cursor(Cursor.HAND_CURSOR));
+            add(iconLabel, BorderLayout.CENTER);
+            add(textLabel, BorderLayout.SOUTH);
+        }
+    }
+
+    static class RoundedPopupMenu extends JPopupMenu {
+
+        public RoundedPopupMenu() {
+            setOpaque(false);
+        }
+
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            int arc = 20; // Arc width and height for rounded corners
+            Shape roundedRect = new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), arc, arc);
+
+            g2.setColor(getBackground());
+            g2.fill(roundedRect);
+
+            g2.setColor(getForeground());
+            g2.draw(roundedRect);
+
+            g2.dispose();
+        }
     }
 }

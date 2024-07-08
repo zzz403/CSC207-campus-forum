@@ -4,6 +4,7 @@ import com.imperial.academia.data_access.ChatMessageDAI;
 import com.imperial.academia.data_access.UserDAI;
 import com.imperial.academia.entity.chat_message.ChatMessage;
 import com.imperial.academia.entity.chat_message.ChatMessageDTO;
+import com.imperial.academia.entity.chat_message.MapData;
 import com.imperial.academia.entity.chat_message.WaveformData;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.session.SessionManager;
@@ -57,6 +58,27 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         }
 
         // 更新群组消息列表缓存
+        String groupCacheKey = "chatMessages:group:" + chatMessage.getGroupId();
+        List<ChatMessage> chatMessages = chatMessageCache.getChatMessages(groupCacheKey);
+        if (chatMessages != null) {
+            chatMessages.add(chatMessage);
+            chatMessageCache.setChatMessages(groupCacheKey, chatMessages);
+        }
+    }
+
+    @Override
+    public void insert(ChatMessage chatMessage, MapData mapData) throws SQLException {
+        // 插入 ChatMessage
+        chatMessageDAO.insert(chatMessage);
+        // 更新单条消息缓存
+        chatMessageCache.setChatMessage("chatMessage:" + chatMessage.getId(), chatMessage);
+
+        // 如果消息类型为地图，则插入并缓存 MapData
+        if (mapData != null) {
+            chatMessageDAO.insertMapData(chatMessage.getId(), mapData);
+            chatMessageCache.setMapData("mapData:" + chatMessage.getId(), mapData);
+        }
+
         String groupCacheKey = "chatMessages:group:" + chatMessage.getGroupId();
         List<ChatMessage> chatMessages = chatMessageCache.getChatMessages(groupCacheKey);
         if (chatMessages != null) {
@@ -171,6 +193,15 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                     chatMessageCache.setWaveformData("waveformData:" + chatMessage.getId(), waveformData);
                 }
                 chatMessageDTO.setWaveformData(waveformData);
+            }
+
+            if ("map".equals(chatMessage.getContentType())) {
+                MapData mapData = chatMessageCache.getMapData("mapData:" + chatMessage.getId());
+                if (mapData == null) {
+                    mapData = chatMessageDAO.getMapData(chatMessage.getId());
+                    chatMessageCache.setMapData("mapData:" + chatMessage.getId(), mapData);
+                }
+                chatMessageDTO.setMapData(mapData);
             }
 
             chatMessageDTOs.add(chatMessageDTO);

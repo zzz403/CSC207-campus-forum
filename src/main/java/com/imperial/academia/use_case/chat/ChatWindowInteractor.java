@@ -1,13 +1,11 @@
 package com.imperial.academia.use_case.chat;
 
-import com.imperial.academia.entity.chat_message.WaveformData;
+import com.imperial.academia.entity.chat_message.*;
 import com.imperial.academia.service.AudioService;
 import com.imperial.academia.service.ChatMessageService;
+import com.imperial.academia.service.MapService;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.app.ServiceFactory;
-import com.imperial.academia.entity.chat_message.ChatMessage;
-import com.imperial.academia.entity.chat_message.ChatMessageDTO;
-import com.imperial.academia.entity.chat_message.ChatMessageFactory;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
@@ -22,8 +20,10 @@ import java.util.List;
 public class ChatWindowInteractor implements ChatWindowInputBoundary {
     private final ChatMessageService chatMessageService;
     private final AudioService audioService;
+    private final MapService mapService;
     private final ChatWindowOutputBoundary chatWindowPresenter;
     private final ChatMessageFactory chatMessageFactory;
+
 
     /**
      * Constructor for ChatWindowInteractor.
@@ -33,6 +33,7 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
      */
     public ChatWindowInteractor(ChatWindowOutputBoundary chatWindowPresenter, ChatMessageFactory chatMessageFactory) {
         this.chatMessageService = ServiceFactory.getChatMessageService();
+        this.mapService = ServiceFactory.getMapService();
         this.audioService = ServiceFactory.getAudioService();
         this.chatWindowPresenter = chatWindowPresenter;
         this.chatMessageFactory = chatMessageFactory;
@@ -99,6 +100,26 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
         }
     }
 
+    @Override
+    public void sendLocation(int groupId){
+        double[] location = mapService.getUserLocation();
+        double latitude = location[0];
+        double longitude = location[1];
+
+        mapService.generateMapImage(groupId, latitude, longitude);
+
+        String filePath = mapService.getFilePath();
+
+
+        ChatWindowInputData chatWindowInputData = new ChatWindowInputData(groupId, filePath, "map");
+        try {
+            sendMessage(chatWindowInputData);
+        } catch (UnsupportedAudioFileException | IOException | SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     /**
      * Sends a chat message.
      *
@@ -116,18 +137,29 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
         String contentType = chatWindowInputData.getContentType();
         String content = chatWindowInputData.getContent();
         ChatMessage chatMessage = chatMessageFactory.createChatMessage(senderId, 1, groupId, contentType, content);
-        try {
-            if (contentType.equals("audio")) {
-                WaveformData waveformData = audioService.processAudio(chatMessage.getContent());
-                chatMessageService.insert(chatMessage, waveformData);
-            } else {
-                chatMessageService.insert(chatMessage);
-            }
-        } catch (Exception e) {
-            chatWindowPresenter.presentError("An error occurred while sending the message.");
+
+        if (contentType.equals("audio")) {
+            WaveformData waveformData = audioService.processAudio(chatMessage.getContent());
+            chatMessageService.insert(chatMessage, waveformData);
+        } else if(contentType.equals("map")){
+            String locationInfo = "Unknown location";
+            double[] location = mapService.getUserLocation();
+            double latitude = location[0];
+            double longitude = location[1];
+
+
+            locationInfo = mapService.getLocationInfo(latitude, longitude);
+
+            MapData mapData = new MapData(latitude, longitude,locationInfo);
+            chatMessageService.insert(chatMessage, mapData);
+            System.out.println("Map data inserted" + mapData.getLocationInfo());
+        } else {
+            chatMessageService.insert(chatMessage);
         }
 
         // Refresh the chat messages after sending the message
         execute(groupId);
     }
+
+
 }

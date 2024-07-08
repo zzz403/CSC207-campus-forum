@@ -17,6 +17,7 @@ public class ChatMessageDTO {
     private boolean isMe;
     private Timestamp timestamp;
     private WaveformData waveformData;
+    private MapData mapData;
 
     /**
      * Constructs a ChatMessageDTO with the specified parameters.
@@ -42,6 +43,7 @@ public class ChatMessageDTO {
         this.isMe = isMe;
         this.timestamp = timestamp;
         this.waveformData = null;
+        this.mapData = null;
     }
 
     /**
@@ -222,5 +224,23 @@ public class ChatMessageDTO {
      */
     public void setWaveformData(WaveformData waveformData) {
         this.waveformData = waveformData;
+    }
+
+    /**
+     * Returns the map data associated with the message (if any).
+     *
+     * @return The map data or null if there is no map data.
+     */
+    public MapData getMapData() {
+        return mapData;
+    }
+
+    /**
+     * Sets the map data associated with the message.
+     *
+     * @param mapData The map data to set.
+     */
+    public void setMapData(MapData mapData) {
+        this.mapData = mapData;
     }
 }

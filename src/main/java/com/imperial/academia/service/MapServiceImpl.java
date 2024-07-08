@@ -1,5 +1,9 @@
 package com.imperial.academia.service;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -12,27 +16,34 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
+import java.util.Objects;
 import javax.imageio.ImageIO;
+
+import com.imperial.academia.config.ApiKeyConfig;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class MapServiceImpl implements MapService {
-    private String apiKey;
+    private final String API_KEY;
+    private String filePath;
 
     public MapServiceImpl() {
-
+        if (Objects.equals(ApiKeyConfig.getMapBoxApiKey(), "")) {
+            throw new IllegalArgumentException("API key not found.");
+        }else{
+            API_KEY = ApiKeyConfig.getMapBoxApiKey();
+        }
+        filePath = "";
     }
 
-    public void generateMapImage(String groupId){
+    @Override
+    public void generateMapImage(int groupId, double latitude, double longitude){
         try {
             // 获取用户位置
-            double[] location = getUserLocation();
-            double latitude = location[0];
-            double longitude = location[1];
-            int zoom = 14; // 增加缩放级别以放大图片
+//            double[] location = getUserLocation();
+            int zoom = 16; // 增加缩放级别以放大图片
             int width = 800; // 图片宽度
             int height = 600; // 图片高度
-            String apiKey = "pk.eyJ1IjoiYXVndXN0LXRlc3RpbmciLCJhIjoiY2x5YXozNjY4MTdkNTJrb20zZHIzZXNoMyJ9.kqlhF0lk9MiaYqa9acJG1A";
-
             // 调整地图中心，使标记点不在中心位置
             double centerLatitude = latitude + (Math.random() - 0.5) * 0.01;
             double centerLongitude = longitude + (Math.random() - 0.5) * 0.01;
@@ -40,7 +51,7 @@ public class MapServiceImpl implements MapService {
             // 获取地图瓦片
             String url = String.format(
                     "https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/pin-l-embassy+f74e4e(%f,%f)/%f,%f,%d/%dx%d?access_token=%s",
-                    longitude, latitude, centerLongitude, centerLatitude, zoom, width, height, apiKey
+                    longitude, latitude, centerLongitude, centerLatitude, zoom, width, height, API_KEY
             );
             InputStream input = new URL(url).openStream();
             BufferedImage mapImage = ImageIO.read(input);
@@ -48,15 +59,14 @@ public class MapServiceImpl implements MapService {
             // 处理图片（裁剪和缩放）
             mapImage = processImage(mapImage);
 
-            saveImage(mapImage, groupId, longitude, latitude);
+            saveImage(mapImage, String.valueOf(groupId), longitude, latitude);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private BufferedImage processImage(BufferedImage image) {
-        // 裁剪图片底部的水印部分
-        int cropHeight = image.getHeight() - 50; // 裁掉50像素
+        int cropHeight = image.getHeight() - 50;
         BufferedImage croppedImage = image.getSubimage(0, 0, image.getWidth(), cropHeight);
 
         // 放大图片
@@ -79,18 +89,20 @@ public class MapServiceImpl implements MapService {
 
             // 生成文件名
             int userId = 1; // 替换为实际的用户ID
-            String fileName = String.format("%s/%s_%f_%f_%d.png", dirPath, userId, longitude, latitude, Instant.now().getEpochSecond());
-            File outputfile = new File(fileName);
+            filePath = String.format("%s/%s_%f_%f_%d.png", dirPath, userId, longitude, latitude, Instant.now().getEpochSecond());
+            System.out.println("File path: " + filePath);
+            File outputfile = new File(filePath);
 
             // 保存图片
             ImageIO.write(image, "png", outputfile);
-            System.out.println("Image saved as " + fileName);
+            System.out.println("Image saved as " + filePath);
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
 
-    private double[] getUserLocation() {
+    @Override
+    public double[] getUserLocation() {
         double[] location = new double[2];
         try {
             String ipApiUrl = "http://ip-api.com/json/";
@@ -117,7 +129,42 @@ public class MapServiceImpl implements MapService {
         return location;
     }
 
-    public static void main(String[] args) {
-        new MapServiceImpl();
+    @Override
+    public String getLocationInfo(double latitude, double longitude) throws IOException {
+//        double[] location = getUserLocation();
+        OkHttpClient client = new OkHttpClient();
+
+
+        String url = String.format(
+                "https://api.mapbox.com/geocoding/v5/mapbox.places/%f,%f.json?access_token=%s",
+                longitude, latitude, API_KEY
+        );
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("Unexpected code " + response);
+            }
+
+            JSONObject jsonResponse = new JSONObject(response.body().string());
+            JSONArray features = jsonResponse.getJSONArray("features");
+            if (!features.isEmpty()) {
+                JSONObject place = features.getJSONObject(0);
+                System.out.println("Location: " + place.getString("place_name"));
+                return place.getString("place_name");
+            } else {
+                return "No location information found.";
+            }
+        } catch (Exception e) {
+            return "An error occurred while retrieving the location.";
+        }
+    }
+
+    @Override
+    public String getFilePath() {
+        return filePath;
     }
 }

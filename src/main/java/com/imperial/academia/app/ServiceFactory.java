@@ -12,6 +12,7 @@ import java.sql.SQLException;
 public class ServiceFactory {
     
     private static AudioService audioService;
+    private static MapService mapService;
     
     private static UserService userService;
     private static ChatGroupService chatGroupService;
@@ -48,6 +49,8 @@ public class ServiceFactory {
         postService = new PostServiceImpl(postCache, postDAO);
         
         audioService = new AudioServiceImpl();
+
+        mapService = new MapServiceImpl();
     }
 
     /**
@@ -103,5 +106,14 @@ public class ServiceFactory {
      */
     public static PostService getPostService() {
         return postService;
+    }
+
+    /**
+     * Returns the MapService instance.
+     *
+     * @return the map service
+     */
+    public static MapService getMapService() {
+        return mapService;
     }
 }

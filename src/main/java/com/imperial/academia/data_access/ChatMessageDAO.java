@@ -3,6 +3,7 @@ package com.imperial.academia.data_access;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imperial.academia.entity.chat_message.ChatMessage;
 import com.imperial.academia.entity.chat_message.WaveformData;
+import com.imperial.academia.entity.chat_message.MapData;
 
 import java.io.IOException;
 import java.sql.*;
@@ -66,6 +67,21 @@ public class ChatMessageDAO implements ChatMessageDAI {
             ps.setString(2, waveformData.getMinValues().toString());
             ps.setString(3, waveformData.getMaxValues().toString());
             ps.setFloat(4, waveformData.getDuration());
+            ps.executeUpdate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void insertMapData(int chatMessageId, MapData mapData) throws SQLException {
+        String sql = "INSERT INTO map_data (message_id, latitude, longitude, location_info) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, chatMessageId);
+            ps.setDouble(2, mapData.getLatitude());
+            ps.setDouble(3, mapData.getLongitude());
+            ps.setString(4, mapData.getLocationInfo());
             ps.executeUpdate();
         }
     }
@@ -194,6 +210,26 @@ public class ChatMessageDAO implements ChatMessageDAI {
         } catch (IOException e) {
             System.out.println(e.getMessage());
             throw new SQLException("Error parsing waveform data", e);
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MapData getMapData(int messageId) throws SQLException {
+        String sql = "SELECT latitude, longitude, location_info FROM map_data WHERE message_id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, messageId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    double latitude = rs.getDouble("latitude");
+                    double longitude = rs.getDouble("longitude");
+                    String locationInfo = rs.getString("location_info");
+                    return new MapData(latitude, longitude, locationInfo);
+                }
+            }
         }
         return null;
     }

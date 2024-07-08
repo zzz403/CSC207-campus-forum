@@ -133,7 +133,8 @@ INSERT INTO chat_messages (sender_id, group_id, content_type, content, timestamp
 (1, 9, 'text', 'What gear do you recommend for a beginner hiker?', '2024-06-01 16:03:35'),
 (2, 9, 'text', 'Comfortable shoes and a good backpack are essential.', '2024-06-01 16:08:13'),
 (3, 9, 'text', 'Don''t forget a water bottle and some snacks.', '2024-06-01 16:13:00'),
-(1, 13, 'text', 'Hello', '2024-07-01 16:13:00');
+(1, 13, 'text', 'Hello', '2024-07-01 16:13:00'),
+(1,1, 'map', 'resources/map/1/1_-80.554000_43.474000_1720424928.png','2024-07-05 16:13:00');
 
 -- (1, 1, 'audio', 'resources/audio/1/admin_20240701_174611.wav', '2024-07-01 17:46:11'),
 -- (3, 1, 'audio', 'resources/audio/1/john_doe_20240701_180149.wav', '2024-07-01 18:01:49'),
@@ -219,3 +220,6 @@ INSERT INTO audio_waveforms (message_id, min_values, max_values, duration) VALUE
  '[-502, -607, -540, -471, -501, -669, -547, -2040, -1358, -1383, -1241, -1306, -1366, -1021, -1238, -1482, -820, -753, -1021, -688, -583, -740, -507, -546, -469, -512, -578, -645, -498, -569]',
  '[481, 506, 504, 584, 570, 660, 661, 1915, 1736, 1518, 1222, 1396, 1665, 1218, 1268, 1379, 997, 830, 1004, 634, 495, 647, 463, 734, 551, 751, 520, 671, 586, 557]',
  5.374875283446712);
+
+INSERT INTO map_data (message_id, latitude, longitude, location_info) VALUES
+(85, 43.474, -80.554, 'Columbia Lake Firepit, Waterloo, Ontario N2L 6J7, Canada');

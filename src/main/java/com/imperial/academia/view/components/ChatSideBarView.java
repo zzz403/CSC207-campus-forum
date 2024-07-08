@@ -98,7 +98,7 @@ public class ChatSideBarView extends JPanel {
 
         // Load and add search icon
         try {
-            BufferedImage searchIconImage = ImageIO.read(new File("resources/search_icon.png"));
+            BufferedImage searchIconImage = ImageIO.read(new File("resources/icons/search_icon.png"));
             Image scaledSearchIconImage = searchIconImage.getScaledInstance(16, 16, Image.SCALE_SMOOTH);
             JLabel searchIcon = new JLabel(new ImageIcon(scaledSearchIconImage));
             searchIcon.setBorder(new EmptyBorder(0, 10, 0, 10));
