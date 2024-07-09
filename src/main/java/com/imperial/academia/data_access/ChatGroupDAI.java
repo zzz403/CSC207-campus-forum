@@ -1,13 +1,12 @@
 package com.imperial.academia.data_access;
 
-import com.imperial.academia.entity.chat_group.ChatGroup;
-import com.imperial.academia.entity.chat_message.ChatMessage;
-import com.imperial.academia.entity.user.User;
-
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
+
+import com.imperial.academia.entity.chat_group.ChatGroup;
+import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.user.User;
 
 /**
  * Interface for Data Access Object for ChatGroup entities.

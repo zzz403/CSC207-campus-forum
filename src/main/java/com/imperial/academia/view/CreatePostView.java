@@ -56,28 +56,28 @@ public class CreatePostView extends JPanel {
         JTextField titleField = new JTextField();
         titleField.setBorder(BorderFactory.createTitledBorder("Title"));
         // add a listener to titleField
-        titleField.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                handleTextChanged();
-            }
+        // titleField.getDocument().addDocumentListener(new DocumentListener() {
+        //     @Override
+        //     public void insertUpdate(DocumentEvent e) {
+        //         handleTextChanged();
+        //     }
 
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                handleTextChanged();
-            }
+        //     @Override
+        //     public void removeUpdate(DocumentEvent e) {
+        //         handleTextChanged();
+        //     }
 
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                handleTextChanged();
-            }
+        //     @Override
+        //     public void changedUpdate(DocumentEvent e) {
+        //         handleTextChanged();
+        //     }
 
-            private void handleTextChanged() {
-                String title = titleField.getText();
-                System.out.println("Title: " + title);
-                createPostViewModel.setStateTitle(title);
-            }
-        });
+        //     private void handleTextChanged() {
+        //         String title = titleField.getText();
+        //         System.out.println("Title: " + title);
+        //         createPostViewModel.setStateTitle(title);
+        //     }
+        // });
         titlePanel.add(titleField, BorderLayout.CENTER);
 
         // content Panel
@@ -86,28 +86,28 @@ public class CreatePostView extends JPanel {
         JTextArea contentArea = new JTextArea();
         contentArea.setBorder(BorderFactory.createTitledBorder("Content"));
         // add a listener to contenntArea
-        contentArea.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                handleTextChanged();
-            }
+        // contentArea.getDocument().addDocumentListener(new DocumentListener() {
+        //     @Override
+        //     public void insertUpdate(DocumentEvent e) {
+        //         handleTextChanged();
+        //     }
 
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                handleTextChanged();
-            }
+        //     @Override
+        //     public void removeUpdate(DocumentEvent e) {
+        //         handleTextChanged();
+        //     }
 
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                handleTextChanged();
-            }
+        //     @Override
+        //     public void changedUpdate(DocumentEvent e) {
+        //         handleTextChanged();
+        //     }
 
-            private void handleTextChanged() {
-                String content = contentArea.getText();
-                System.out.println("Content: " + content);
-                createPostViewModel.setStateContent(content);
-            }
-        });
+        //     private void handleTextChanged() {
+        //         String content = contentArea.getText();
+        //         System.out.println("Content: " + content);
+        //         createPostViewModel.setStateContent(content);
+        //     }
+        // });
         contentPanel.add(new JScrollPane(contentArea), BorderLayout.CENTER);
 
         // Drop down box Panel
@@ -143,28 +143,56 @@ public class CreatePostView extends JPanel {
         JPanel buttonsPanel = new JPanel();
 
         // save Draft Button
-        JButton saveDraftButton = new JButton("Save Draft"); //TODO: 改为手动save，目前是自动监听改变并save
-        buttonsPanel.add(saveDraftButton);
-
+        JButton saveDraftButton = new JButton("Save Draft"); // TODO: 改为手动save，目前是自动监听改变并save
+        
         // post button
         JButton postButton = new JButton("Post");
         postButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                
                 String title = createPostViewModel.getStateTitle().strip();
                 String content = createPostViewModel.getStateContent().strip();
                 String boardName = createPostViewModel.getStateCurrentBoardName().strip();
-                if(title.equals("") || content.equals("")){
+                if (title.equals("") || content.equals("")) {
                     System.out.println("Post submit unseccuss due to illegal/empty input for title or content");
                     return;
                 }
-                System.out.println("Post submit | Title: " + title + " | Content: " + content + " | BoardName: " + boardName);
-                createPostController.submitPost(title, content, boardName);
+                System.out.println(
+                    "Post submit | Title: " + title + " | Content: " + content + " | BoardName: " + boardName);
+                    createPostController.submitPost(title, content, boardName);
+                }
+            });
+            
+            // enhance content button
+            JButton enhanceContentButton = new JButton("Enhance Content");
+            
+            enhanceContentButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String content = contentArea.getText();
+                    if (content.strip().isEmpty()) {
+                        System.out.println("Content is empty, cannot enhance.");
+                        return;
+                    }
+                    
+                // Call the method to enhance content using ChatGPT
+                createPostController.enhanceContentUsingChatGPT(content);
             }
         });
-        buttonsPanel.add(postButton);
 
+        // Add property change listener to update the view when the model changes
+        createPostViewModel.addPropertyChangeListener(evt -> {
+            if("content".equals(evt.getPropertyName())){
+                contentArea.setText(createPostViewModel.getStateContent());
+            }
+        });
+
+        // add button to the buttonsPanel
+        buttonsPanel.add(enhanceContentButton);
+        buttonsPanel.add(saveDraftButton);
+        buttonsPanel.add(postButton);
+        
         // Combine boardSelectPanel and buttonsPanel into one panel
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new GridLayout(2, 1));

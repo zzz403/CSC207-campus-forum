@@ -115,4 +115,12 @@ public class CreatePostViewModel extends ViewModel {
     public String getStateCurrentBoardName(){
         return state.getCurrentBoardName();
     }
+
+
+    /**
+     * reset the state
+     */
+    public void resetState() {
+        this.state = new CreatePostState();
+    }
 }
