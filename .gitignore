@@ -38,10 +38,6 @@ build/
 ./database/*.mv.db
 
 # Ignore apiKeyConfig.java file
-./src/main/java/com/imperial/academia/config/ApiKeyConfig.java
-
-# Ignore TOKEN file
-GPT_TOKEN.txt
-
+src/main/java/com/imperial/academia/config/ApiKeyConfig.java
 
 
