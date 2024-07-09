@@ -13,6 +13,7 @@ public class ServiceFactory {
     
     private static AudioService audioService;
     private static MapService mapService;
+    private static FileService fileService;
     
     private static UserService userService;
     private static ChatGroupService chatGroupService;
@@ -51,6 +52,8 @@ public class ServiceFactory {
         audioService = new AudioServiceImpl();
 
         mapService = new MapServiceImpl();
+
+        fileService = new FileServiceImpl();
     }
 
     /**
@@ -115,5 +118,14 @@ public class ServiceFactory {
      */
     public static MapService getMapService() {
         return mapService;
+    }
+
+    /**
+     * Returns the FileService instance.
+     *
+     * @return the file service
+     */
+    public static FileService getFileService() {
+        return fileService;
     }
 }

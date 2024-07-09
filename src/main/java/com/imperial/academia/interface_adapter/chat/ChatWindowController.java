@@ -3,6 +3,8 @@ package com.imperial.academia.interface_adapter.chat;
 import com.imperial.academia.use_case.chat.ChatWindowInputBoundary;
 import com.imperial.academia.use_case.chat.ChatWindowInputData;
 
+import java.io.File;
+
 /**
  * Controller for handling actions related to the chat window.
  */
@@ -73,5 +75,10 @@ public class ChatWindowController {
 
     public void sendLocation(int groupId){
         chatWindowInteractor.sendLocation(groupId);
+    }
+
+    public void sendFile(int groupId, File selectedFile){
+        chatWindowInteractor.sendFile(groupId, selectedFile);
+        System.out.println("File size: " + (double) selectedFile.length() / (1024 * 1024) + " mb");
     }
 }

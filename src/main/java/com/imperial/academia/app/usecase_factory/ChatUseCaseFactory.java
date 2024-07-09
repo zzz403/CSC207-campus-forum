@@ -21,6 +21,8 @@ import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
 import com.imperial.academia.use_case.chat.ChatSideBarInteractor;
 import com.imperial.academia.entity.chat_message.ChatMessageFactory;
 
+import javax.swing.*;
+
 /**
  * Factory class to create instances of the chat use cases and related
  * components.
@@ -40,7 +42,7 @@ public class ChatUseCaseFactory {
      *                                found
      */
     public static ChatView create(ViewManagerModel viewManagerModel, ChatSideBarViewModel chatSideBarViewModel,
-            ChatWindowViewModel chatWindowViewModel) throws ClassNotFoundException {
+                                  ChatWindowViewModel chatWindowViewModel, JFrame application) throws ClassNotFoundException {
 
         // Get required services
         AudioService audioService = ServiceFactory.getAudioService();
@@ -63,7 +65,7 @@ public class ChatUseCaseFactory {
 
         // Create views
         ChatSideBarView chatSideBarView = new ChatSideBarView(chatSideBarController, chatSideBarViewModel);
-        ChatWindowView chatWindowView = new ChatWindowView(chatWindowController, chatWindowViewModel);
+        ChatWindowView chatWindowView = new ChatWindowView(chatWindowController, chatWindowViewModel, application);
 
         // Return the combined chat view
         return new ChatView(chatSideBarView, chatWindowView);

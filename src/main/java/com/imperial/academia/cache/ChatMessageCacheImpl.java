@@ -3,6 +3,7 @@ package com.imperial.academia.cache;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.chat_message.FileData;
 import com.imperial.academia.entity.chat_message.MapData;
 import com.imperial.academia.entity.chat_message.WaveformData;
 
@@ -17,6 +18,7 @@ public class ChatMessageCacheImpl implements ChatMessageCache {
     private final Cache<String, List<ChatMessage>> chatMessagesCache;
     private final Cache<String, WaveformData> waveformDataCache;
     private final Cache<String, MapData> mapDataCache;
+    private final Cache<String, FileData> fileDataCache;
 
     /**
      * Constructs a new ChatMessageCacheImpl with specific cache configurations.
@@ -38,6 +40,11 @@ public class ChatMessageCacheImpl implements ChatMessageCache {
                 .build();
 
         mapDataCache = CacheBuilder.newBuilder()
+                .expireAfterWrite(60, TimeUnit.MINUTES)
+                .maximumSize(500)
+                .build();
+
+        fileDataCache = CacheBuilder.newBuilder()
                 .expireAfterWrite(60, TimeUnit.MINUTES)
                 .maximumSize(500)
                 .build();
@@ -169,5 +176,37 @@ public class ChatMessageCacheImpl implements ChatMessageCache {
     @Override
     public boolean existsMapData(String key) {
         return mapDataCache.getIfPresent(key) != null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setFileData(String key, FileData fileData) {
+        fileDataCache.put(key, fileData);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public FileData getFileData(String key) {
+        return fileDataCache.getIfPresent(key);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteFileData(String key) {
+        fileDataCache.invalidate(key);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean existsFileData(String key) {
+        return fileDataCache.getIfPresent(key) != null;
     }
 }

@@ -2,10 +2,7 @@ package com.imperial.academia.service;
 
 import com.imperial.academia.data_access.ChatMessageDAI;
 import com.imperial.academia.data_access.UserDAI;
-import com.imperial.academia.entity.chat_message.ChatMessage;
-import com.imperial.academia.entity.chat_message.ChatMessageDTO;
-import com.imperial.academia.entity.chat_message.MapData;
-import com.imperial.academia.entity.chat_message.WaveformData;
+import com.imperial.academia.entity.chat_message.*;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.cache.ChatMessageCache;
@@ -77,6 +74,27 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         if (mapData != null) {
             chatMessageDAO.insertMapData(chatMessage.getId(), mapData);
             chatMessageCache.setMapData("mapData:" + chatMessage.getId(), mapData);
+        }
+
+        String groupCacheKey = "chatMessages:group:" + chatMessage.getGroupId();
+        List<ChatMessage> chatMessages = chatMessageCache.getChatMessages(groupCacheKey);
+        if (chatMessages != null) {
+            chatMessages.add(chatMessage);
+            chatMessageCache.setChatMessages(groupCacheKey, chatMessages);
+        }
+    }
+
+    @Override
+    public void insert(ChatMessage chatMessage, FileData fileData) throws SQLException {
+        // 插入 ChatMessage
+        chatMessageDAO.insert(chatMessage);
+        // 更新单条消息缓存
+        chatMessageCache.setChatMessage("chatMessage:" + chatMessage.getId(), chatMessage);
+
+        // 如果消息类型为文件，则插入并缓存 FileData
+        if (fileData != null) {
+            chatMessageDAO.insertFileData(chatMessage.getId(), fileData);
+            chatMessageCache.setFileData("fileData:" + chatMessage.getId(), fileData);
         }
 
         String groupCacheKey = "chatMessages:group:" + chatMessage.getGroupId();
@@ -202,6 +220,15 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                     chatMessageCache.setMapData("mapData:" + chatMessage.getId(), mapData);
                 }
                 chatMessageDTO.setMapData(mapData);
+            }
+
+            if ("file".equals(chatMessage.getContentType())) {
+                FileData fileData = chatMessageCache.getFileData("fileData:" + chatMessage.getId());
+                if (fileData == null) {
+                    fileData = chatMessageDAO.getFileData(chatMessage.getId());
+                    chatMessageCache.setFileData("fileData:" + chatMessage.getId(), fileData);
+                }
+                chatMessageDTO.setFileData(fileData);
             }
 
             chatMessageDTOs.add(chatMessageDTO);

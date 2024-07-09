@@ -1,6 +1,7 @@
 package com.imperial.academia.cache;
 
 import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.chat_message.FileData;
 import com.imperial.academia.entity.chat_message.MapData;
 import com.imperial.academia.entity.chat_message.WaveformData;
 import java.util.List;
@@ -134,4 +135,35 @@ public interface ChatMessageCache {
      */
 
     boolean existsMapData(String key);
+
+    /**
+     * Caches a single chat message.
+     *
+     * @param key the key for the chat message
+     * @param fileData the chat message to cache
+     */
+    void setFileData(String key, FileData fileData);
+
+    /**
+     * Retrieves a single cached chat message.
+     *
+     * @param key the key for the chat message
+     * @return the cached chat message, or null if not found
+     */
+    FileData getFileData(String key);
+
+    /**
+     * Deletes a single cached chat message.
+     *
+     * @param key the key for the chat message to delete
+     */
+    void deleteFileData(String key);
+
+    /**
+     * Checks if a single chat message is cached.
+     *
+     * @param key the key for the chat message
+     * @return true if the chat message is cached, false otherwise
+     */
+    boolean existsFileData(String key);
 }

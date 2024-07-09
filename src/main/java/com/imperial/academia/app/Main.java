@@ -88,7 +88,7 @@ public class Main {
             CreatePostView createPostView = CreatePostUseCaseFactory.create(viewManagerModel, createPostViewModel);
             views.add(createPostView, createPostView.viewName);
 
-            ChatView chatView = ChatUseCaseFactory.create(viewManagerModel, chatSideBarViewModel, chatWindowViewModel);
+            ChatView chatView = ChatUseCaseFactory.create(viewManagerModel, chatSideBarViewModel, chatWindowViewModel,application);
             views.add(chatView, chatView.viewName);
 
             ProfileView profileView = ProfileUseCaseFactory.create(viewManagerModel, profileViewModel);

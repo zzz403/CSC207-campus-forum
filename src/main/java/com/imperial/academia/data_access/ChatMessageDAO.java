@@ -2,6 +2,7 @@ package com.imperial.academia.data_access;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.chat_message.FileData;
 import com.imperial.academia.entity.chat_message.WaveformData;
 import com.imperial.academia.entity.chat_message.MapData;
 
@@ -16,7 +17,7 @@ import java.util.List;
  * data.
  */
 public class ChatMessageDAO implements ChatMessageDAI {
-    private Connection conn;
+    private final Connection conn;
 
     /**
      * Constructs a ChatMessageDAO with the specified database connection.
@@ -85,6 +86,22 @@ public class ChatMessageDAO implements ChatMessageDAI {
             ps.executeUpdate();
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void insertFileData(int chatMessageId, FileData fileData) throws SQLException {
+        String sql = "INSERT INTO file_data (message_id, file_name, file_size, file_type) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, chatMessageId);
+            ps.setString(2, fileData.getFileName());
+            ps.setString(3, fileData.getFileSize());
+            ps.setString(4, fileData.getFileType());
+            ps.executeUpdate();
+        }
+    }
+
 
     /**
      * {@inheritDoc}
@@ -228,6 +245,26 @@ public class ChatMessageDAO implements ChatMessageDAI {
                     double longitude = rs.getDouble("longitude");
                     String locationInfo = rs.getString("location_info");
                     return new MapData(latitude, longitude, locationInfo);
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public FileData getFileData(int messageId) throws SQLException {
+        String sql = "SELECT file_name, file_size, file_type FROM file_data WHERE message_id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, messageId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    String fileName = rs.getString("file_name");
+                    String fileSize = rs.getString("file_size");
+                    String fileType = rs.getString("file_type");
+                    return new FileData(fileName, fileSize, fileType);
                 }
             }
         }

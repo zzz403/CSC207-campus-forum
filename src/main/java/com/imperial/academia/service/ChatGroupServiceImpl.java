@@ -8,12 +8,9 @@ import com.imperial.academia.entity.chat_message.ChatMessage;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.session.SessionManager;
 
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Implementation of the ChatGroupService interface.
@@ -90,12 +87,28 @@ public class ChatGroupServiceImpl implements ChatGroupService {
                     assert user != null;
                     avatarUrl = user.getAvatarUrl();
                 }
+                String lastMessageContent;
+                if (lastMessage != null) {
+                    if (Objects.equals(lastMessage.getContentType(), "image")) {
+                        lastMessageContent = "[Image]";
+                    } else if (Objects.equals(lastMessage.getContentType(), "file")) {
+                        lastMessageContent = "[File]";
+                    } else if (Objects.equals(lastMessage.getContentType(), "audio")) {
+                        lastMessageContent = "[Audio]";
+                    } else if (Objects.equals(lastMessage.getContentType(), "map")) {
+                        lastMessageContent = "[Location]";
+                    } else {
+                        lastMessageContent = lastMessage.getContent();
+                    }
+                } else {
+                    lastMessageContent = "";
+                }
                 matchingChatGroups.add(new ChatGroupDTO(
                         chatGroup.getId(),
                         groupName,
                         chatGroup.isGroup(),
                         chatGroup.getLastModified(),
-                        lastMessage != null ? lastMessage.getContent() : "",
+                        lastMessageContent,
                         lastMessageTime,
                         avatarUrl
                 ));

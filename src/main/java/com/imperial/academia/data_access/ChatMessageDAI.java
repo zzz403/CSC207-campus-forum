@@ -1,6 +1,7 @@
 package com.imperial.academia.data_access;
 
 import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.chat_message.FileData;
 import com.imperial.academia.entity.chat_message.MapData;
 import com.imperial.academia.entity.chat_message.WaveformData;
 
@@ -39,6 +40,14 @@ public interface ChatMessageDAI {
      */
     void insertMapData(int messageId, MapData mapData) throws SQLException;
 
+    /**
+     * Inserts file data associated with a specific chat message.
+     *
+     * @param messageId The ID of the chat message.
+     * @param fileData The FileData object to be inserted.
+     * @throws SQLException If an SQL error occurs during the insertion.
+     */
+    void insertFileData(int messageId, FileData fileData) throws SQLException;
     /**
      * Retrieves a chat message by its ID.
      *
@@ -98,4 +107,13 @@ public interface ChatMessageDAI {
      * @throws SQLException If an SQL error occurs during the retrieval.
      */
     MapData getMapData(int messageId) throws SQLException;
+
+    /**
+     * Retrieves file data associated with a specific chat message.
+     *
+     * @param messageId The ID of the chat message whose file data is to be retrieved.
+     * @return The FileData object associated with the specified chat message ID.
+     * @throws SQLException If an SQL error occurs during the retrieval.
+     */
+    FileData getFileData(int messageId) throws SQLException;
 }
