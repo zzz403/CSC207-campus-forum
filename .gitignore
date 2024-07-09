@@ -41,7 +41,7 @@ build/
 ./src/main/java/com/imperial/academia/config/ApiKeyConfig.java
 
 # Ignore TOKEN file
-./GPT_TOKEN.txt
+GPT_TOKEN.txt
 
 
 
