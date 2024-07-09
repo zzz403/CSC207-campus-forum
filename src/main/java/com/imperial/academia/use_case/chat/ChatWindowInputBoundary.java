@@ -47,4 +47,6 @@ public interface ChatWindowInputBoundary {
      * @throws SQLException If a database access error occurs.
      */
     void sendMessage(ChatWindowInputData chatWindowInputData) throws UnsupportedAudioFileException, IOException, SQLException;
+
+    void sendLocation(int groupId);
 }

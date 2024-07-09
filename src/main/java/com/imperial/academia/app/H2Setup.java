@@ -127,6 +127,17 @@ public class H2Setup {
                     ")";
             stmt.executeUpdate(createAudioWaveformsTable);
 
+            String createMapLocationTable = "CREATE TABLE map_data (" +
+                    "location_id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "message_id INT NOT NULL, " +
+                    "longitude FLOAT NOT NULL, " +
+                    "latitude FLOAT NOT NULL, " +
+                    "location_info VARCHAR(255) NOT NULL, " +
+                    "FOREIGN KEY (message_id) REFERENCES chat_messages(message_id) " +
+                    "ON DELETE CASCADE" +
+                    ")";
+            stmt.executeUpdate(createMapLocationTable);
+
             String createGroupMembersTable = "CREATE TABLE group_members (" +
                 "group_id INT NOT NULL, " +
                 "user_id INT NOT NULL, " +

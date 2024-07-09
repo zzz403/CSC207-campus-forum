@@ -3,6 +3,7 @@ package com.imperial.academia.cache;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.chat_message.MapData;
 import com.imperial.academia.entity.chat_message.WaveformData;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class ChatMessageCacheImpl implements ChatMessageCache {
     private final Cache<String, ChatMessage> chatMessageCache;
     private final Cache<String, List<ChatMessage>> chatMessagesCache;
     private final Cache<String, WaveformData> waveformDataCache;
+    private final Cache<String, MapData> mapDataCache;
 
     /**
      * Constructs a new ChatMessageCacheImpl with specific cache configurations.
@@ -31,6 +33,11 @@ public class ChatMessageCacheImpl implements ChatMessageCache {
                 .build();
 
         waveformDataCache = CacheBuilder.newBuilder()
+                .expireAfterWrite(60, TimeUnit.MINUTES)
+                .maximumSize(500)
+                .build();
+
+        mapDataCache = CacheBuilder.newBuilder()
                 .expireAfterWrite(60, TimeUnit.MINUTES)
                 .maximumSize(500)
                 .build();
@@ -130,5 +137,37 @@ public class ChatMessageCacheImpl implements ChatMessageCache {
     @Override
     public boolean existsWaveformData(String key) {
         return waveformDataCache.getIfPresent(key) != null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setMapData(String key, MapData mapData) {
+        mapDataCache.put(key, mapData);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MapData getMapData(String key) {
+        return mapDataCache.getIfPresent(key);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteMapData(String key) {
+        mapDataCache.invalidate(key);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean existsMapData(String key) {
+        return mapDataCache.getIfPresent(key) != null;
     }
 }

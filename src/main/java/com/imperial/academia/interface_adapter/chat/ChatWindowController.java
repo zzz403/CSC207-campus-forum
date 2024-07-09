@@ -69,4 +69,9 @@ public class ChatWindowController {
     public void loadAudio(String audioPath) {
         chatWindowInteractor.loadAudio(audioPath);
     }
+
+
+    public void sendLocation(int groupId){
+        chatWindowInteractor.sendLocation(groupId);
+    }
 }

@@ -4,9 +4,14 @@ import com.imperial.academia.cache.ChatGroupCache;
 import com.imperial.academia.data_access.ChatGroupDAI;
 import com.imperial.academia.entity.chat_group.ChatGroup;
 import com.imperial.academia.entity.chat_group.ChatGroupDTO;
+import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.user.User;
 import com.imperial.academia.session.SessionManager;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +20,8 @@ import java.util.List;
  * Uses caching to reduce database access.
  */
 public class ChatGroupServiceImpl implements ChatGroupService {
-    private ChatGroupCache chatGroupCache;
-    private ChatGroupDAI chatGroupDAO;
+    private final ChatGroupCache chatGroupCache;
+    private final ChatGroupDAI chatGroupDAO;
 
     /**
      * Constructs a new ChatGroupServiceImpl with the specified cache and DAO.
@@ -57,29 +62,47 @@ public class ChatGroupServiceImpl implements ChatGroupService {
      * {@inheritDoc}
      */
     @Override
-    public List<ChatGroupDTO> getChatGroupsByGroupName(String groupName) throws SQLException {
+    public List<ChatGroupDTO> getChatGroupsByGroupName(String serchGroupName) throws SQLException {
         List<ChatGroup> allChatGroups = chatGroupCache.getChatGroups("chatgroups:all");
         if (allChatGroups == null) {
             allChatGroups = getAll();
         }
 
-        List<ChatGroup> matchingChatGroups = new ArrayList<>();
+        List<ChatGroupDTO> matchingChatGroups = new ArrayList<>();
         for (ChatGroup chatGroup : allChatGroups) {
-            if (chatGroup.getGroupName().contains(groupName)) {
-                matchingChatGroups.add(chatGroup);
+            User user;
+            String groupName;
+            if (chatGroup.isGroup()) {
+                user = null;
+                groupName = chatGroup.getGroupName();
+            } else {
+                user = getUser(chatGroup.getId());
+                groupName = chatGroup.isGroup() ? chatGroup.getGroupName() : user.getUsername();
+            }
+
+            if (groupName.contains(serchGroupName)) {
+                ChatMessage lastMessage = getLastMessage(chatGroup.getId());
+                Timestamp lastMessageTime = lastMessage != null ? lastMessage.getTimestamp() : null;
+                String avatarUrl;
+                if (chatGroup.isGroup()) {
+                    avatarUrl = "group_chat_avatar.png";
+                } else {
+                    assert user != null;
+                    avatarUrl = user.getAvatarUrl();
+                }
+                matchingChatGroups.add(new ChatGroupDTO(
+                        chatGroup.getId(),
+                        groupName,
+                        chatGroup.isGroup(),
+                        chatGroup.getLastModified(),
+                        lastMessage != null ? lastMessage.getContent() : "",
+                        lastMessageTime,
+                        avatarUrl
+                ));
             }
         }
 
-        return convertToDTO(matchingChatGroups);
-    }
-
-    private List<ChatGroupDTO> convertToDTO(List<ChatGroup> chatGroups) {
-        List<ChatGroupDTO> chatGroupDTOs = new ArrayList<>();
-        for (ChatGroup chatGroup : chatGroups) {
-            chatGroupDTOs.add(new ChatGroupDTO(chatGroup.getId(), chatGroup.getGroupName(), chatGroup.isGroup(),
-                    chatGroup.getLastModified()));
-        }
-        return chatGroupDTOs;
+        return sortChatGroupsByTime(matchingChatGroups);
     }
 
     /**
@@ -112,5 +135,49 @@ public class ChatGroupServiceImpl implements ChatGroupService {
     public void delete(int id) throws SQLException {
         chatGroupDAO.delete(id);
         chatGroupCache.deleteChatGroup("chatgroup:" + id);
+    }
+
+    @Override
+    public ChatMessage getLastMessage(int groupId) throws SQLException {
+        String key = "lastMessage:" + groupId;
+        ChatMessage lastMessage = chatGroupCache.getLastMessage(key);
+        if (lastMessage == null) {
+            lastMessage = chatGroupDAO.getLastMessage(groupId);
+            if (lastMessage != null) {
+                chatGroupCache.setLastMessage(key, lastMessage);
+            }
+        }
+        return lastMessage;
+    }
+
+    private User getUser(int groupId) throws SQLException {
+        String key = "user:" + groupId;
+        User user = chatGroupCache.getUser(key);
+        if (user == null) {
+            user = chatGroupDAO.getMember(groupId, SessionManager.getCurrentUser().getId());
+            if (user != null) {
+                chatGroupCache.setUser(key, user);
+            }
+        }
+        return user;
+    }
+
+    private List<ChatGroupDTO> sortChatGroupsByTime(List<ChatGroupDTO> chatGroups) {
+        chatGroups.sort(new Comparator<ChatGroupDTO>() {
+            @Override
+            public int compare(ChatGroupDTO cg1, ChatGroupDTO cg2) {
+                if (cg1.getLastMessageTime() == null && cg2.getLastMessageTime() == null) {
+                    return 0;
+                }
+                if (cg1.getLastMessageTime() == null) {
+                    return 1;
+                }
+                if (cg2.getLastMessageTime() == null) {
+                    return -1;
+                }
+                return cg2.getLastMessageTime().compareTo(cg1.getLastMessageTime());
+            }
+        });
+        return chatGroups;
     }
 }

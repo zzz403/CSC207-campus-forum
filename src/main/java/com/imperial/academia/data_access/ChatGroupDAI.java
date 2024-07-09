@@ -1,9 +1,13 @@
 package com.imperial.academia.data_access;
 
 import com.imperial.academia.entity.chat_group.ChatGroup;
+import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.user.User;
+
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Interface for Data Access Object for ChatGroup entities.
@@ -58,4 +62,23 @@ public interface ChatGroupDAI {
      * @throws SQLException if a database access error occurs
      */
     void delete(int id) throws SQLException;
+
+    /**
+     * Retrieves the last message in a chat group.
+     *
+     * @param groupId the ID of the chat group
+     * @return the last message in the chat group, or null if the group is empty
+     * @throws SQLException if a database access error occurs
+     */
+    ChatMessage getLastMessage(int groupId) throws SQLException;
+
+    /**
+     * Retrieves the avatar URL of a member of a chat group.
+     *
+     * @param groupId      the ID of the chat group
+     * @param excludeUserId the ID of the user to exclude
+     * @return user of a member of the chat group, or null if no member is found
+     * @throws SQLException if a database access error occurs
+     */
+    User getMember(int groupId, int excludeUserId) throws SQLException;
 }

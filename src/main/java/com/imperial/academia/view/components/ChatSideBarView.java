@@ -11,18 +11,23 @@ import javax.swing.event.DocumentListener;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.List;
 
 /**
  * ChatSideBarView class represents the sidebar for displaying chat groups.
  */
 public class ChatSideBarView extends JPanel {
-    private JPanel chatListPanel;
-    private JTextField searchField;
-    private ChatSideBarController chatSideBarController;
+    private final JPanel chatListPanel;
+    private final JTextField searchField;
+    private final ChatSideBarController chatSideBarController;
+    private final Map<Integer,ImageIcon> avatarCache = new HashMap<>();
 
     /**
      * Constructs a ChatSideBarView with the specified controller and view model.
@@ -33,6 +38,14 @@ public class ChatSideBarView extends JPanel {
      */
     public ChatSideBarView(ChatSideBarController chatSideBarController, ChatSideBarViewModel chatSideBarViewModel) {
         this.chatSideBarController = chatSideBarController;
+        try {
+            BufferedImage avatarImage = ImageIO.read(new File("resources/avatar/default/group_chat.png"));
+            Image scaledAvatarImage = avatarImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+            avatarCache.put(0, new ImageIcon(scaledAvatarImage));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         setLayout(new BorderLayout());
 
         // Create search panel
@@ -85,7 +98,7 @@ public class ChatSideBarView extends JPanel {
 
         // Load and add search icon
         try {
-            BufferedImage searchIconImage = ImageIO.read(new File("resources/search_icon.png"));
+            BufferedImage searchIconImage = ImageIO.read(new File("resources/icons/search_icon.png"));
             Image scaledSearchIconImage = searchIconImage.getScaledInstance(16, 16, Image.SCALE_SMOOTH);
             JLabel searchIcon = new JLabel(new ImageIcon(scaledSearchIconImage));
             searchIcon.setBorder(new EmptyBorder(0, 10, 0, 10));
@@ -199,12 +212,22 @@ public class ChatSideBarView extends JPanel {
         chatItem.add(avatar, BorderLayout.WEST);
 
         // Load and resize avatar image
-        try {
-            BufferedImage avatarImage = ImageIO.read(new File("resources/avatar/avatarExample.png"));
-            Image scaledAvatarImage = avatarImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-            avatar.setIcon(new ImageIcon(scaledAvatarImage));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (chatGroup.isGroup()){
+            avatar.setIcon(avatarCache.get(0));
+        }else{
+            if (avatarCache.containsKey(chatGroup.getId())){
+                avatar.setIcon(avatarCache.get(chatGroup.getId()));
+            }else{
+                try {
+                    BufferedImage avatarImage = ImageIO.read(new File(chatGroup.getAvatarUrl()));
+                    BufferedImage roundedAvatarImage = makeRoundedCorner(avatarImage);
+                    Image scaledAvatarImage = roundedAvatarImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+                    avatar.setIcon(new ImageIcon(scaledAvatarImage));
+                    avatarCache.put(chatGroup.getId(), new ImageIcon(scaledAvatarImage));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         // Chat Info
@@ -221,7 +244,7 @@ public class ChatSideBarView extends JPanel {
         groupNameLabel.setFont(new Font("Arial", Font.BOLD, 14));
         groupNameLabel.setForeground(new Color(44, 62, 80));
 
-        JLabel timeLabel = new JLabel("12:00 PM");
+        JLabel timeLabel = new JLabel(formatTimestamp(chatGroup.getLastMessageTime()));
         timeLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         timeLabel.setForeground(new Color(189, 195, 199));
         nameTimePanel.add(groupNameLabel, BorderLayout.WEST);
@@ -232,7 +255,7 @@ public class ChatSideBarView extends JPanel {
         chatInfoPanel.add(nameTimePanel, BorderLayout.NORTH);
 
         // Last Message
-        JLabel lastMessageLabel = new JLabel("Last message snippet...");
+        JLabel lastMessageLabel = new JLabel(chatGroup.getLastMessage());
         lastMessageLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         lastMessageLabel.setForeground(new Color(127, 140, 141));
         chatInfoPanel.add(lastMessageLabel, BorderLayout.SOUTH);
@@ -261,5 +284,61 @@ public class ChatSideBarView extends JPanel {
         });
 
         return chatItem;
+    }
+
+    /**
+     * Format the timestamp for display.
+     * @param timestamp the timestamp to format
+     * @return a formatted timestamp string
+     */
+    private String formatTimestamp(Timestamp timestamp) {
+        Calendar messageTime = Calendar.getInstance();
+        messageTime.setTimeInMillis(timestamp.getTime());
+
+        Calendar now = Calendar.getInstance();
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, h:mm a", Locale.ENGLISH);
+        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy MMM dd, h:mm a", Locale.ENGLISH);
+
+        if (now.get(Calendar.YEAR) == messageTime.get(Calendar.YEAR)) {
+            if (now.get(Calendar.DAY_OF_YEAR) == messageTime.get(Calendar.DAY_OF_YEAR)) {
+                return timeFormat.format(messageTime.getTime()); // Today
+            } else if (now.get(Calendar.DAY_OF_YEAR) - messageTime.get(Calendar.DAY_OF_YEAR) == 1) {
+                return "Yesterday, " + timeFormat.format(messageTime.getTime()); // Yesterday
+            } else {
+                return dateFormat.format(messageTime.getTime()); // This year but not today or yesterday
+            }
+        } else {
+            return yearFormat.format(messageTime.getTime()); // Different year
+        }
+    }
+
+    /**
+     * Makes the corners of the image rounded.
+     *
+     * @param image the image to make rounded
+     * @return the image with rounded corners
+     */
+    private BufferedImage makeRoundedCorner(BufferedImage image) {
+        int cornerRadius = 275; // The radius for the rounded corners
+        int w = image.getWidth();
+        int h = image.getHeight();
+        BufferedImage output = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2 = output.createGraphics();
+
+        // Enable anti-aliasing for smooth corners
+        g2.setComposite(AlphaComposite.Src);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setColor(Color.WHITE);
+        g2.fill(new RoundRectangle2D.Float(0, 0, w, h, cornerRadius, cornerRadius));
+
+        // Composite the image on top using the white shape as the alpha source
+        g2.setComposite(AlphaComposite.SrcAtop);
+        g2.drawImage(image, 0, 0, null);
+
+        g2.dispose();
+
+        return output;
     }
 }

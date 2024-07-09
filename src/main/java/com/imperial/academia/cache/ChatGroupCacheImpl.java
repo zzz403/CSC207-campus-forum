@@ -3,6 +3,8 @@ package com.imperial.academia.cache;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.imperial.academia.entity.chat_group.ChatGroup;
+import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.user.User;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -11,8 +13,10 @@ import java.util.concurrent.TimeUnit;
  * Implementation of the ChatGroupCache interface using Guava Cache.
  */
 public class ChatGroupCacheImpl implements ChatGroupCache {
-    private Cache<String, ChatGroup> chatGroupCache;
-    private Cache<String, List<ChatGroup>> chatGroupsCache;
+    private final Cache<String, ChatGroup> chatGroupCache;
+    private final Cache<String, List<ChatGroup>> chatGroupsCache;
+    private final Cache<String, ChatMessage> lastMessageCache;
+    private final Cache<String, User> avatarUrlCache;
 
     /**
      * Constructs a new ChatGroupCacheImpl with specific cache configurations.
@@ -26,6 +30,16 @@ public class ChatGroupCacheImpl implements ChatGroupCache {
         chatGroupsCache = CacheBuilder.newBuilder()
                 .expireAfterWrite(60, TimeUnit.MINUTES)
                 .maximumSize(100)
+                .build();
+
+        lastMessageCache = CacheBuilder.newBuilder()
+                .expireAfterWrite(60, TimeUnit.MINUTES)
+                .maximumSize(1000)
+                .build();
+
+        avatarUrlCache = CacheBuilder.newBuilder()
+                .expireAfterWrite(60, TimeUnit.MINUTES)
+                .maximumSize(1000)
                 .build();
     }
 
@@ -92,4 +106,45 @@ public class ChatGroupCacheImpl implements ChatGroupCache {
     public boolean existsChatGroups(String key) {
         return chatGroupsCache.getIfPresent(key) != null;
     }
+
+    @Override
+    public void setLastMessage(String key, ChatMessage lastMessage) {
+        lastMessageCache.put(key, lastMessage);
+    }
+
+    @Override
+    public ChatMessage getLastMessage(String key) {
+        return lastMessageCache.getIfPresent(key);
+    }
+
+    @Override
+    public void deleteLastMessage(String key) {
+        lastMessageCache.invalidate(key);
+    }
+
+    @Override
+    public boolean existsLastMessage(String key) {
+        return lastMessageCache.getIfPresent(key) != null;
+    }
+
+    @Override
+    public void setUser(String key, User user) {
+        avatarUrlCache.put(key, user);
+    }
+
+    @Override
+    public User getUser(String key) {
+        return avatarUrlCache.getIfPresent(key);
+    }
+
+    @Override
+    public void deleteUser(String key) {
+        avatarUrlCache.invalidate(key);
+    }
+
+    @Override
+    public boolean existsUser(String key) {
+        return avatarUrlCache.getIfPresent(key) != null;
+    }
+
 }
