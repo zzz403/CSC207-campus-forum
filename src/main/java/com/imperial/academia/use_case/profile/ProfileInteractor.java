@@ -2,6 +2,7 @@ package com.imperial.academia.use_case.profile;
 
 import java.sql.SQLException;
 
+import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.service.UserService;
 
@@ -9,8 +10,9 @@ public class ProfileInteractor implements ProfileInputBoundry {
     private final UserService userService;
     private final ProfileOutputBoundry profilepresenter;
 
-    public ProfileInteractor(UserService userService, ProfileOutputBoundry profilepresenter) {
-        this.userService = userService;
+    public ProfileInteractor( ProfileOutputBoundry profilepresenter) {
+        this.userService = ServiceFactory.getUserService();
+
         this.profilepresenter = profilepresenter;
     }
 

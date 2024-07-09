@@ -6,6 +6,8 @@ import com.imperial.academia.interface_adapter.profile.ProfileController;
 import com.imperial.academia.interface_adapter.profile.ProfilePresenter;
 import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
 import com.imperial.academia.service.UserService;
+import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
+import com.imperial.academia.use_case.chat.ChatSideBarInteractor;
 import com.imperial.academia.use_case.profile.ProfileInteractor;
 import com.imperial.academia.use_case.profile.ProfileOutputBoundry;
 import com.imperial.academia.view.ProfileView;
@@ -23,12 +25,12 @@ public class ProfileUseCaseFactory {
     }
 
     private static ProfileController createController(ViewManagerModel viewManagerModel, ProfileViewModel profileViewModel){
-        UserService userService = ServiceFactory.getUserService();
         ProfileOutputBoundry profileOutputBoundry = new ProfilePresenter(profileViewModel, viewManagerModel);
 
-        ProfileInteractor profileInteractor = new ProfileInteractor(userService, profileOutputBoundry);
-
-        return new ProfileController(profileInteractor);
+        ProfileInteractor profileInteractor = new ProfileInteractor(profileOutputBoundry);
+//        ChatSideBarInputBoundary chatSideBarInteractor = new ChatSideBarInteractor(chatSideBarPresenter);
+//        return new ProfileController(profileInteractor,chatSideBarIterator);
+        //TODO chatSidePresenter need to be modified
     }
     public static ProfileController getProfileController(){
         return profileController;
