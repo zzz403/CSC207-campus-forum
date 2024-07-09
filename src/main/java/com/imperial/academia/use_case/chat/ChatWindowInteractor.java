@@ -3,11 +3,13 @@ package com.imperial.academia.use_case.chat;
 import com.imperial.academia.entity.chat_message.*;
 import com.imperial.academia.service.AudioService;
 import com.imperial.academia.service.ChatMessageService;
+import com.imperial.academia.service.FileService;
 import com.imperial.academia.service.MapService;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.app.ServiceFactory;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -21,6 +23,7 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
     private final ChatMessageService chatMessageService;
     private final AudioService audioService;
     private final MapService mapService;
+    private final FileService fileService;
     private final ChatWindowOutputBoundary chatWindowPresenter;
     private final ChatMessageFactory chatMessageFactory;
 
@@ -34,6 +37,7 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
     public ChatWindowInteractor(ChatWindowOutputBoundary chatWindowPresenter, ChatMessageFactory chatMessageFactory) {
         this.chatMessageService = ServiceFactory.getChatMessageService();
         this.mapService = ServiceFactory.getMapService();
+        this.fileService = ServiceFactory.getFileService();
         this.audioService = ServiceFactory.getAudioService();
         this.chatWindowPresenter = chatWindowPresenter;
         this.chatMessageFactory = chatMessageFactory;
@@ -110,7 +114,6 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
 
         String filePath = mapService.getFilePath();
 
-
         ChatWindowInputData chatWindowInputData = new ChatWindowInputData(groupId, filePath, "map");
         try {
             sendMessage(chatWindowInputData);
@@ -118,6 +121,25 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void sendFile(int groupId, File file){
+        String type = isImageFile(file) ? "image" : "file";
+        fileService.saveFile(groupId, file, type);
+        String filePath = fileService.getOutputFilePath();
+        ChatWindowInputData chatWindowInputData = new ChatWindowInputData(groupId, filePath, type);
+        try {
+            sendMessage(chatWindowInputData);
+        } catch (UnsupportedAudioFileException | IOException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean isImageFile(File file) {
+        String fileName = file.getName();
+        String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+        return extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png") || extension.equals("gif")|| extension.equals("bmp");
     }
 
     /**
@@ -142,17 +164,21 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
             WaveformData waveformData = audioService.processAudio(chatMessage.getContent());
             chatMessageService.insert(chatMessage, waveformData);
         } else if(contentType.equals("map")){
-            String locationInfo = "Unknown location";
             double[] location = mapService.getUserLocation();
             double latitude = location[0];
             double longitude = location[1];
 
-
-            locationInfo = mapService.getLocationInfo(latitude, longitude);
+            String locationInfo = mapService.getLocationInfo(latitude, longitude);
+            if (locationInfo == null) {
+                locationInfo = "Unknown location";
+            }
 
             MapData mapData = new MapData(latitude, longitude,locationInfo);
             chatMessageService.insert(chatMessage, mapData);
             System.out.println("Map data inserted" + mapData.getLocationInfo());
+        } else if (contentType.equals("file")) {
+            FileData fileData = fileService.getFileData(chatMessage.getContent());
+            chatMessageService.insert(chatMessage, fileData);
         } else {
             chatMessageService.insert(chatMessage);
         }
@@ -160,6 +186,4 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
         // Refresh the chat messages after sending the message
         execute(groupId);
     }
-
-
 }

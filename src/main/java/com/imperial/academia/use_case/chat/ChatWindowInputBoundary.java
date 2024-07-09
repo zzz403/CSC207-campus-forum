@@ -1,6 +1,7 @@
 package com.imperial.academia.use_case.chat;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -49,4 +50,6 @@ public interface ChatWindowInputBoundary {
     void sendMessage(ChatWindowInputData chatWindowInputData) throws UnsupportedAudioFileException, IOException, SQLException;
 
     void sendLocation(int groupId);
+
+    void sendFile(int groupId, File file);
 }

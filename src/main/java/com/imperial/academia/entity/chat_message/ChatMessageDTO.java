@@ -18,6 +18,7 @@ public class ChatMessageDTO {
     private Timestamp timestamp;
     private WaveformData waveformData;
     private MapData mapData;
+    private FileData fileData;
 
     /**
      * Constructs a ChatMessageDTO with the specified parameters.
@@ -44,6 +45,7 @@ public class ChatMessageDTO {
         this.timestamp = timestamp;
         this.waveformData = null;
         this.mapData = null;
+        this.fileData = null;
     }
 
     /**
@@ -242,5 +244,23 @@ public class ChatMessageDTO {
      */
     public void setMapData(MapData mapData) {
         this.mapData = mapData;
+    }
+
+    /**
+     * Returns the file data associated with the message (if any).
+     *
+     * @return The file data or null if there is no file data.
+     */
+    public FileData getFileData() {
+        return fileData;
+    }
+
+    /**
+     * Sets the file data associated with the message.
+     *
+     * @param fileData The file data to set.
+     */
+    public void setFileData(FileData fileData) {
+        this.fileData = fileData;
     }
 }
