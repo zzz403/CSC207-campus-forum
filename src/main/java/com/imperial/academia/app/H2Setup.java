@@ -98,6 +98,7 @@ public class H2Setup {
             String createChatGroupsTable = "CREATE TABLE chat_groups (" +
                 "group_id INT AUTO_INCREMENT PRIMARY KEY, " +
                 "group_name VARCHAR(100) NOT NULL, " +
+                    "is_group BOOLEAN DEFAULT FALSE, " +
                 "creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
                 "last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" +
                 ")";
@@ -106,13 +107,11 @@ public class H2Setup {
             String createChatMessagesTable = "CREATE TABLE chat_messages (" +
                 "message_id INT AUTO_INCREMENT PRIMARY KEY, " +
                 "sender_id INT NOT NULL, " +
-                "recipient_id INT NOT NULL, " +
                 "group_id INT DEFAULT NULL, " +
                 "content_type VARCHAR(20) DEFAULT 'text'," +
                 "content TEXT NOT NULL, " +
                 "timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
                 "FOREIGN KEY (sender_id) REFERENCES users(user_id), " +
-                "FOREIGN KEY (recipient_id) REFERENCES users(user_id), " +
                 "FOREIGN KEY (group_id) REFERENCES chat_groups(group_id)" +
                 ")";
             stmt.executeUpdate(createChatMessagesTable);
@@ -127,6 +126,17 @@ public class H2Setup {
                     "ON DELETE CASCADE" +
                     ")";
             stmt.executeUpdate(createAudioWaveformsTable);
+
+            String createMapLocationTable = "CREATE TABLE map_data (" +
+                    "location_id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "message_id INT NOT NULL, " +
+                    "longitude FLOAT NOT NULL, " +
+                    "latitude FLOAT NOT NULL, " +
+                    "location_info VARCHAR(255) NOT NULL, " +
+                    "FOREIGN KEY (message_id) REFERENCES chat_messages(message_id) " +
+                    "ON DELETE CASCADE" +
+                    ")";
+            stmt.executeUpdate(createMapLocationTable);
 
             String createGroupMembersTable = "CREATE TABLE group_members (" +
                 "group_id INT NOT NULL, " +

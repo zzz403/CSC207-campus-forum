@@ -5,6 +5,7 @@ import com.imperial.academia.data_access.BoardDAI;
 import com.imperial.academia.entity.board.Board;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,13 +55,43 @@ public class BoardServiceImpl implements BoardService {
      * {@inheritDoc}
      */
     @Override
-    public List<Board> getAll() throws SQLException {
+    public List<Board> getAllBoards() throws SQLException {
         List<Board> boards = boardCache.getBoards("boards:all");
         if (boards == null) {
             boards = boardDAO.getAll();
             boardCache.setBoards("boards:all", boards);
         }
         return boards;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getBoardIdByName(String boardName) throws SQLException{
+        // TODO: do using SQL not by this
+        List<Board> boards = getAllBoards();
+        for(Board board : boards){
+            if(board.getName().equals(boardName)){
+                return board.getId();
+            }
+        }
+        throw new SQLException("error board not found");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<String> getAllBoardsName() throws SQLException{
+        // TODO: do using SQL not by this
+        List<Board> allBoard = getAllBoards();
+        List<String> boardsName = new ArrayList<>();
+        if(allBoard != null){
+            for(Board board : allBoard){
+                boardsName.add(board.getName());
+            }
+        }
+        return boardsName;
     }
 
     /**

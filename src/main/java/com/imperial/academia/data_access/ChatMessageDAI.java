@@ -1,6 +1,7 @@
 package com.imperial.academia.data_access;
 
 import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.chat_message.MapData;
 import com.imperial.academia.entity.chat_message.WaveformData;
 
 import java.sql.SQLException;
@@ -28,6 +29,15 @@ public interface ChatMessageDAI {
      * @throws SQLException If an SQL error occurs during the insertion.
      */
     void insertWaveformData(int messageId, WaveformData waveformData) throws SQLException;
+
+    /**
+     * Inserts map data associated with a specific chat message.
+     *
+     * @param messageId The ID of the chat message.
+     * @param mapData The MapData object to be inserted.
+     * @throws SQLException If an SQL error occurs during the insertion.
+     */
+    void insertMapData(int messageId, MapData mapData) throws SQLException;
 
     /**
      * Retrieves a chat message by its ID.
@@ -79,4 +89,13 @@ public interface ChatMessageDAI {
      * @throws SQLException If an SQL error occurs during the retrieval.
      */
     WaveformData getWaveformData(int messageId) throws SQLException;
+
+    /**
+     * Retrieves map data associated with a specific chat message.
+     *
+     * @param messageId The ID of the chat message whose map data is to be retrieved.
+     * @return The MapData object associated with the specified chat message ID.
+     * @throws SQLException If an SQL error occurs during the retrieval.
+     */
+    MapData getMapData(int messageId) throws SQLException;
 }

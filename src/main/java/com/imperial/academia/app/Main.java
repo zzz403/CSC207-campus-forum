@@ -17,8 +17,8 @@ import com.imperial.academia.app.usecase_factory.*;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarViewModel;
 import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
+import com.imperial.academia.interface_adapter.createpost.CreatePostViewModel;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
-import com.imperial.academia.interface_adapter.postboard.CreatePostViewModel;
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
 import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
 import com.imperial.academia.interface_adapter.signup.SignupViewModel;
@@ -53,7 +53,7 @@ public class Main {
             System.out.println("Failed to load logo image");
         }
 
-        application.setSize(1100, 900); // 设置窗口大小
+        application.setSize(800, 700); // 设置窗口大小
         application.setLocationRelativeTo(null); // 居中显示
 
         CardLayout cardLayout = new CardLayout();
@@ -96,10 +96,10 @@ public class Main {
             // Add the top navigation bar to the post board view
             // postBoardView.addTopNavigationBar(topNavigationBar);
 
-            createPostView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
-            postBoardView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
-            chatView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
-            profileView.add(TopNavigationBarUseCaseFacory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
+            createPostView.add(TopNavigationBarUseCaseFactory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
+            postBoardView.add(TopNavigationBarUseCaseFactory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
+            chatView.add(TopNavigationBarUseCaseFactory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
+            profileView.add(TopNavigationBarUseCaseFactory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

@@ -12,9 +12,6 @@ import com.imperial.academia.use_case.profile.ProfileInteractor;
 import com.imperial.academia.use_case.profile.ProfileOutputBoundry;
 import com.imperial.academia.view.ProfileView;
 
-import javax.swing.*;
-import java.sql.SQLException;
-
 public class ProfileUseCaseFactory {
     private ProfileUseCaseFactory(){}
     private static ProfileController profileController;

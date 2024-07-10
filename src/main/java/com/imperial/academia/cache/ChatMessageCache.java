@@ -1,6 +1,7 @@
 package com.imperial.academia.cache;
 
 import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.chat_message.MapData;
 import com.imperial.academia.entity.chat_message.WaveformData;
 import java.util.List;
 
@@ -100,4 +101,37 @@ public interface ChatMessageCache {
      * @return true if the waveform data is cached, false otherwise
      */
     boolean existsWaveformData(String key);
+
+    /**
+     * Caches map data.
+     *
+     * @param key the key for the map data
+     * @param mapData the map data to cache
+     */
+    void setMapData(String key, MapData mapData);
+
+    /**
+     * Retrieves cached map data.
+     *
+     * @param key the key for the map data
+     * @return the cached map data, or null if not found
+     */
+    MapData getMapData(String key);
+
+    /**
+     * Deletes cached map data.
+     *
+     * @param key the key for the map data to delete
+     */
+
+    void deleteMapData(String key);
+
+    /**
+     * Checks if map data is cached.
+     *
+     * @param key the key for the map data
+     * @return true if the map data is cached, false otherwise
+     */
+
+    boolean existsMapData(String key);
 }

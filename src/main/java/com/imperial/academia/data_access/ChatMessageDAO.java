@@ -3,6 +3,7 @@ package com.imperial.academia.data_access;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imperial.academia.entity.chat_message.ChatMessage;
 import com.imperial.academia.entity.chat_message.WaveformData;
+import com.imperial.academia.entity.chat_message.MapData;
 
 import java.io.IOException;
 import java.sql.*;
@@ -32,17 +33,16 @@ public class ChatMessageDAO implements ChatMessageDAI {
     @Override
     public void insert(ChatMessage chatMessage) throws SQLException {
         System.out.println("ChatMessageDAO: insert");
-        String sql = "INSERT INTO chat_messages (sender_id, recipient_id, group_id, content_type, content, timestamp) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+        String sql = "INSERT INTO chat_messages (sender_id, group_id, content_type, content, timestamp) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, chatMessage.getSenderId());
-            pstmt.setInt(2, chatMessage.getRecipientId());
             if (chatMessage.getGroupId() != null) {
-                pstmt.setInt(3, chatMessage.getGroupId());
+                pstmt.setInt(2, chatMessage.getGroupId());
             } else {
-                pstmt.setNull(3, Types.INTEGER);
+                pstmt.setNull(2, Types.INTEGER);
             }
-            pstmt.setString(4, chatMessage.getContentType());
-            pstmt.setString(5, chatMessage.getContent());
+            pstmt.setString(3, chatMessage.getContentType());
+            pstmt.setString(4, chatMessage.getContent());
             System.out.println("ChatMessageDAO: insert: pstmt = " + pstmt);
             pstmt.executeUpdate();
             System.out.println("ChatMessageDAO: insert: pstmt.executeUpdate()");
@@ -75,6 +75,21 @@ public class ChatMessageDAO implements ChatMessageDAI {
      * {@inheritDoc}
      */
     @Override
+    public void insertMapData(int chatMessageId, MapData mapData) throws SQLException {
+        String sql = "INSERT INTO map_data (message_id, latitude, longitude, location_info) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, chatMessageId);
+            ps.setDouble(2, mapData.getLatitude());
+            ps.setDouble(3, mapData.getLongitude());
+            ps.setString(4, mapData.getLocationInfo());
+            ps.executeUpdate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ChatMessage get(int id) throws SQLException {
         String sql = "SELECT * FROM chat_messages WHERE message_id = ?";
         ChatMessage chatMessage = null;
@@ -85,7 +100,6 @@ public class ChatMessageDAO implements ChatMessageDAI {
                     chatMessage = new ChatMessage(
                             rs.getInt("message_id"),
                             rs.getInt("sender_id"),
-                            rs.getInt("recipient_id"),
                             rs.getInt("group_id"),
                             rs.getString("content_type"),
                             rs.getString("content"),
@@ -109,7 +123,6 @@ public class ChatMessageDAO implements ChatMessageDAI {
                 chatMessages.add(new ChatMessage(
                         rs.getInt("message_id"),
                         rs.getInt("sender_id"),
-                        rs.getInt("recipient_id"),
                         rs.getInt("group_id"),
                         rs.getString("content_type"),
                         rs.getString("content"),
@@ -133,7 +146,6 @@ public class ChatMessageDAO implements ChatMessageDAI {
                     chatMessages.add(new ChatMessage(
                             rs.getInt("message_id"),
                             rs.getInt("sender_id"),
-                            rs.getInt("recipient_id"),
                             rs.getInt("group_id"),
                             rs.getString("content_type"),
                             rs.getString("content"),
@@ -149,17 +161,16 @@ public class ChatMessageDAO implements ChatMessageDAI {
      */
     @Override
     public void update(ChatMessage chatMessage) throws SQLException {
-        String sql = "UPDATE chat_messages SET sender_id = ?, recipient_id = ?, group_id = ?, content = ?, timestamp = CURRENT_TIMESTAMP WHERE message_id = ?";
+        String sql = "UPDATE chat_messages SET sender_id = ?, group_id = ?, content = ?, timestamp = CURRENT_TIMESTAMP WHERE message_id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, chatMessage.getSenderId());
-            pstmt.setInt(2, chatMessage.getRecipientId());
             if (chatMessage.getGroupId() != null) {
-                pstmt.setInt(3, chatMessage.getGroupId());
+                pstmt.setInt(2, chatMessage.getGroupId());
             } else {
-                pstmt.setNull(3, Types.INTEGER);
+                pstmt.setNull(2, Types.INTEGER);
             }
-            pstmt.setString(4, chatMessage.getContent());
-            pstmt.setInt(5, chatMessage.getId());
+            pstmt.setString(3, chatMessage.getContent());
+            pstmt.setInt(4, chatMessage.getId());
             pstmt.executeUpdate();
         }
     }
@@ -199,6 +210,26 @@ public class ChatMessageDAO implements ChatMessageDAI {
         } catch (IOException e) {
             System.out.println(e.getMessage());
             throw new SQLException("Error parsing waveform data", e);
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MapData getMapData(int messageId) throws SQLException {
+        String sql = "SELECT latitude, longitude, location_info FROM map_data WHERE message_id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, messageId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    double latitude = rs.getDouble("latitude");
+                    double longitude = rs.getDouble("longitude");
+                    String locationInfo = rs.getString("location_info");
+                    return new MapData(latitude, longitude, locationInfo);
+                }
+            }
         }
         return null;
     }

@@ -31,7 +31,22 @@ public interface BoardService {
      * @return a list of all boards
      * @throws SQLException if a database access error occurs
      */
-    List<Board> getAll() throws SQLException;
+    List<Board> getAllBoards() throws SQLException;
+
+    /**
+     * Retrives all boards name from the datebase.
+     * 
+     * @return a list of all boards name
+     * @throws SQLException
+     */
+    List<String> getAllBoardsName() throws SQLException;
+
+    /**
+     * @param boardName the name of the board
+     * @return the boardId
+     * @throws SQLException
+     */
+    int getBoardIdByName(String boardName) throws SQLException;
 
     /**
      * Updates an existing board in the database.

@@ -3,6 +3,7 @@ package com.imperial.academia.view.components;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import com.imperial.academia.app.components_factory.AvatarFactory;
@@ -109,7 +110,7 @@ public class TopNavigationBar extends JPanel {
         rightPanel.setBackground(Color.WHITE);
 
         // Chat Button
-        JButton chatButton = createIconButton("resources/chat_icon.png", 40, 40, "Go to Chat");
+        JButton chatButton = createIconButton("resources/icons/chat_icon.png", 40, 40, "Go to Chat");
         chatButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -119,7 +120,7 @@ public class TopNavigationBar extends JPanel {
         rightPanel.add(chatButton);
 
         // Add Create button
-        JButton createButton = createTextIconButton("resources/create_post_icon.png", "Create", "Create Post");
+        JButton createButton = createTextIconButton("resources/icons/create_post_icon.png", "Create", "Create Post");
         createButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 topNavigationBarController.changeView("create post");
@@ -128,7 +129,7 @@ public class TopNavigationBar extends JPanel {
         rightPanel.add(createButton, gbc);
 
         // Notification Button
-        JButton notificationButton = createIconButton("resources/notification_icon.png", 40, 40, "Notifications");
+        JButton notificationButton = createIconButton("resources/icons/notification_icon.png", 40, 40, "Notifications");
         rightPanel.add(notificationButton);
 
         // Profile Button
@@ -147,7 +148,7 @@ public class TopNavigationBar extends JPanel {
             if ("state".equals(e.getPropertyName())) {
                 TopNavigationBarState state = topNavigationBarViewModel.getState();
                 String avatarUrlLambda = state.getAvatarUrl() != null ? state.getAvatarUrl()
-                        : "resources/default_profile_icon.png";
+                        : "resources/icons/default_profile_icon.png";
                 rightPanel.remove(profileButton);
 
                 // Create and add the new AvatarComponent
@@ -292,7 +293,7 @@ public class TopNavigationBar extends JPanel {
 
         public CustomSearchBar(int columns) {
             super(columns);
-            Image searchImage = new ImageIcon("resources/search_icon.png").getImage().getScaledInstance(20, 20,
+            Image searchImage = new ImageIcon("resources/icons/search_icon.png").getImage().getScaledInstance(20, 20,
                     Image.SCALE_SMOOTH);
             searchIcon = new ImageIcon(searchImage);
             setOpaque(false);

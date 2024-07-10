@@ -38,7 +38,7 @@ class WaveformPanel extends JPanel {
         setBackground(new Color(0, 0, 0, 0)); // Transparent background for rounded rectangle drawing
 
         // Set up play button
-        ImageIcon playIcon = new ImageIcon(isMe ? "resources/play_icon_light.png" : "resources/play_icon_dark.png");
+        ImageIcon playIcon = new ImageIcon(isMe ? "resources/icons/play_icon_light.png" : "resources/icons/play_icon_dark.png");
         playIcon.setImage(playIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH));
         playButton = new JButton(playIcon);
         playButton.setPreferredSize(new Dimension(25, 25));
