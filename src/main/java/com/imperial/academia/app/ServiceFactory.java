@@ -13,6 +13,7 @@ public class ServiceFactory {
     
     private static AudioService audioService;
     private static MapService mapService;
+    private static FileService fileService;
     
     private static UserService userService;
     private static ChatGroupService chatGroupService;
@@ -33,8 +34,10 @@ public class ServiceFactory {
         userService = new UserServiceImpl(userCache, userDAO);
         
         ChatGroupCache chatGroupCache = new ChatGroupCacheImpl();
-        ChatGroupDAO chatGroupDAO = new ChatGroupDAO(DatabaseConnection.getConnection());
-        chatGroupService = new ChatGroupServiceImpl(chatGroupCache, chatGroupDAO);
+        ChatGroupDAI chatGroupDAO = new ChatGroupDAO(DatabaseConnection.getConnection());
+        GroupMemberCache groupMemberCache = new GroupMemberCacheImpl();
+        GroupMemberDAI groupMemberDAO = new GroupMemberDAO(DatabaseConnection.getConnection());
+        chatGroupService = new ChatGroupServiceImpl(chatGroupCache, chatGroupDAO,groupMemberCache,groupMemberDAO);
         
         ChatMessageCache chatMessageCache = new ChatMessageCacheImpl();
         ChatMessageDAO chatMessageDAO = new ChatMessageDAO(DatabaseConnection.getConnection());
@@ -51,6 +54,8 @@ public class ServiceFactory {
         audioService = new AudioServiceImpl();
 
         mapService = new MapServiceImpl();
+
+        fileService = new FileServiceImpl();
     }
 
     /**
@@ -115,5 +120,14 @@ public class ServiceFactory {
      */
     public static MapService getMapService() {
         return mapService;
+    }
+
+    /**
+     * Returns the FileService instance.
+     *
+     * @return the file service
+     */
+    public static FileService getFileService() {
+        return fileService;
     }
 }

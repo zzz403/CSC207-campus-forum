@@ -1,16 +1,17 @@
 package com.imperial.academia.app.usecase_factory;
 
-import com.imperial.academia.interface_adapter.login.LoginController;
-import com.imperial.academia.interface_adapter.login.LoginPresenter;
-import com.imperial.academia.interface_adapter.login.LoginViewModel;
-import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
-import com.imperial.academia.app.ServiceFactory;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
 import com.imperial.academia.data_access.RememberMeDAO;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarPresenter;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarViewModel;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
-import com.imperial.academia.service.ChatGroupService;
-import com.imperial.academia.service.UserService;
+import com.imperial.academia.interface_adapter.login.LoginController;
+import com.imperial.academia.interface_adapter.login.LoginPresenter;
+import com.imperial.academia.interface_adapter.login.LoginViewModel;
+import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
 import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
 import com.imperial.academia.use_case.chat.ChatSideBarInteractor;
 import com.imperial.academia.use_case.chat.ChatSideBarOutputBoundary;
@@ -18,9 +19,6 @@ import com.imperial.academia.use_case.login.LoginInputBoundary;
 import com.imperial.academia.use_case.login.LoginInteractor;
 import com.imperial.academia.use_case.login.LoginOutputBoundary;
 import com.imperial.academia.view.LoginView;
-
-import javax.swing.*;
-import java.sql.SQLException;
 
 /**
  * Factory class for creating the Login use case and its related components.

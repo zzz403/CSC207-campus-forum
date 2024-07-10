@@ -60,4 +60,6 @@ public interface GroupMemberDAI {
      * @throws SQLException if a database access error occurs
      */
     void delete(int groupId, int userId) throws SQLException;
+
+    int getPrivateChatId(int userId1, int userId2) throws SQLException;
 }

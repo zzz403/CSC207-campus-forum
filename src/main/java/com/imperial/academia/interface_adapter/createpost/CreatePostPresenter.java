@@ -45,6 +45,13 @@ public class CreatePostPresenter implements CreatePostOutputBoundary {
      */
     @Override
     public void submitSeccuss(){
+        createPostViewModel.resetState();
         viewManagerModel.setActiveView("post board");
+    }
+
+    @Override
+    public void updateContent(String content) {
+        createPostViewModel.setStateContent(content);
+        
     }
 }

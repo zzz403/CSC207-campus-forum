@@ -1,12 +1,11 @@
 package com.imperial.academia.service;
 
+import java.sql.SQLException;
+import java.util.List;
+
 import com.imperial.academia.entity.chat_group.ChatGroup;
 import com.imperial.academia.entity.chat_group.ChatGroupDTO;
 import com.imperial.academia.entity.chat_message.ChatMessage;
-
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.List;
 
 /**
  * Interface for Chat Group Service.
@@ -62,6 +61,7 @@ public interface ChatGroupService {
      */
     void delete(int id) throws SQLException;
 
-
     ChatMessage getLastMessage(int groupId) throws SQLException;
+
+    int getPrivateChatId(int userId1, int userId2) throws SQLException;
 }

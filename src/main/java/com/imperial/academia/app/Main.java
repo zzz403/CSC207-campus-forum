@@ -53,7 +53,7 @@ public class Main {
             System.out.println("Failed to load logo image");
         }
 
-        application.setSize(800, 700); // 设置窗口大小
+        application.setSize(1000, 700); // 设置窗口大小
         application.setLocationRelativeTo(null); // 居中显示
 
         CardLayout cardLayout = new CardLayout();
@@ -88,7 +88,7 @@ public class Main {
             CreatePostView createPostView = CreatePostUseCaseFactory.create(viewManagerModel, createPostViewModel);
             views.add(createPostView, createPostView.viewName);
 
-            ChatView chatView = ChatUseCaseFactory.create(viewManagerModel, chatSideBarViewModel, chatWindowViewModel);
+            ChatView chatView = ChatUseCaseFactory.create(viewManagerModel, chatSideBarViewModel, chatWindowViewModel,application);
             views.add(chatView, chatView.viewName);
 
             ProfileView profileView = ProfileUseCaseFactory.create(viewManagerModel, profileViewModel);

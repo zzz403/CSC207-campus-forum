@@ -33,14 +33,14 @@ public class ChatWindowView extends JPanel {
     ChatWindowController chatWindowController;
     Image scaledOpenMicIconImage;
     Image scaledCloseMicIconImage;
-    private Map<String, BufferedImage> mapCache = new HashMap<>();
+    private final Map<String, BufferedImage> mapCache = new HashMap<>();
 
     /**
      * Constructor for ChatWindowView.
      * @param chatWindowController the chat window controller
      * @param chatWindowViewModel the chat window view model
      */
-    public ChatWindowView(ChatWindowController chatWindowController, ChatWindowViewModel chatWindowViewModel) {
+    public ChatWindowView(ChatWindowController chatWindowController, ChatWindowViewModel chatWindowViewModel, JFrame application) {
         setLayout(new BorderLayout());
 
         this.chatWindowController = chatWindowController;
@@ -99,7 +99,7 @@ public class ChatWindowView extends JPanel {
             plusIcon.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
                     if (SwingUtilities.isLeftMouseButton(e)) {
-                        Point location = plusIcon.getLocationOnScreen();
+//                        Point location = plusIcon.getLocationOnScreen();
                         popupMenu.show(plusIcon, -20, -popupMenu.getPreferredSize().height - 15);
                     }
                 }
@@ -108,13 +108,41 @@ public class ChatWindowView extends JPanel {
             e.printStackTrace();
         }
 
-        inputPanel.add(attachmentsPanel, BorderLayout.WEST);
+        JPanel spacerPanel = new JPanel();
+        spacerPanel.setLayout(new BoxLayout(spacerPanel, BoxLayout.X_AXIS));
+        spacerPanel.add(attachmentsPanel);
+        spacerPanel.add(Box.createHorizontalStrut(10)); // spacer
+        inputPanel.add(spacerPanel, BorderLayout.WEST);
+
+        JPanel roundedPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // 绘制圆角矩形背景
+                g2.setColor(new Color(245, 245, 245));
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+
+                // 绘制圆角矩形边框
+                g2.setColor(Color.GRAY);
+                g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+
+                g2.dispose();
+            }
+        };
+        roundedPanel.setLayout(new BorderLayout());
+        roundedPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         // Message input field
         messageInputField = new JTextField();
         messageInputField.setFont(new Font("Arial", Font.PLAIN, 14));
         messageInputField.setBackground(new Color(245, 245, 245));
-        messageInputField.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        messageInputField.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        messageInputField.setPreferredSize(new Dimension(400, 30));
+//        messageInputField.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+
         messageInputField.addActionListener(e -> {
             String messageContent = messageInputField.getText();
             int groupId = chatWindowViewModel.getState().getChatGroupId();
@@ -124,12 +152,16 @@ public class ChatWindowView extends JPanel {
             }
         });
 
-        inputPanel.add(messageInputField, BorderLayout.CENTER);
+        roundedPanel.add(messageInputField, BorderLayout.CENTER);
+
+        inputPanel.add(roundedPanel, BorderLayout.CENTER);
 
         // Options icons panel
         JPanel optionsPanel = new JPanel();
         optionsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         optionsPanel.setOpaque(false); // Make panel transparent
+
+        optionsPanel.add(Box.createHorizontalStrut(5));
 
         // Adding option icons
         try {
@@ -137,74 +169,110 @@ public class ChatWindowView extends JPanel {
             Image scaledSmileyIconImage = smileyIconImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
             JLabel smileyIcon = new JLabel(new ImageIcon(scaledSmileyIconImage));
             optionsPanel.add(smileyIcon);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load smiley icon");
+        }
 
+        optionsPanel.add(Box.createHorizontalStrut(5));
+        try {
             BufferedImage micCloseIconImage = ImageIO.read(new File("resources/icons/mic_close_icon.png"));
             scaledCloseMicIconImage = micCloseIconImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 
             BufferedImage micOpenIconImage = ImageIO.read(new File("resources/icons/mic_open_icon.png"));
             scaledOpenMicIconImage = micOpenIconImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-
-            JButton micButton = new JButton(new ImageIcon(scaledCloseMicIconImage));
-            micButton.setBorder(BorderFactory.createEmptyBorder());
-            micButton.setContentAreaFilled(false);
-            micButton.addActionListener(new ActionListener() {
-                private boolean recording = false;
-                private Timer timer;
-                private boolean isClickable = true;
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (!isClickable) {
-                        return;
-                    }
-                    isClickable = false;
-
-                    // Re-enable the button after 1 second
-                    TimerTask enableButtonTask = new TimerTask() {
-                        @Override
-                        public void run() {
-                            isClickable = true;
-                        }
-                    };
-                    new Timer().schedule(enableButtonTask, 1000);
-
-                    int groupId = chatWindowViewModel.getState().getChatGroupId();
-                    if (!recording) {
-                        chatWindowController.startRecording(groupId);
-                        recording = true;
-                        micButton.setIcon(new ImageIcon(scaledOpenMicIconImage)); // Change icon if needed
-
-                        // Start a timer to stop recording after 60 seconds
-                        timer = new Timer();
-                        timer.schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                if (recording) {
-                                    chatWindowController.stopRecording(groupId);
-                                    recording = false;
-                                    micButton.setIcon(new ImageIcon(scaledCloseMicIconImage)); // Change icon if needed
-                                }
-                            }
-                        }, 60000);
-                    } else {
-                        chatWindowController.stopRecording(groupId);
-                        recording = false;
-                        micButton.setIcon(new ImageIcon(scaledCloseMicIconImage)); // Change icon if needed
-                        if (timer != null) {
-                            timer.cancel(); // Cancel the timer if recording is stopped manually
-                        }
-                    }
-                }
-            });
-            optionsPanel.add(micButton);
-
-            BufferedImage cameraIconImage = ImageIO.read(new File("resources/icons/camera_icon.png"));
-            Image scaledCameraIconImage = cameraIconImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-            JLabel cameraIcon = new JLabel(new ImageIcon(scaledCameraIconImage));
-            optionsPanel.add(cameraIcon);
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Failed to load mic icon");
         }
+
+        JButton micButton = new JButton(new ImageIcon(scaledCloseMicIconImage));
+        micButton.setBorder(BorderFactory.createEmptyBorder());
+        micButton.setContentAreaFilled(false);
+        micButton.addActionListener(new ActionListener() {
+            private boolean recording = false;
+            private Timer timer;
+            private boolean isClickable = true;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!isClickable) {
+                    return;
+                }
+                isClickable = false;
+
+                // Re-enable the button after 1 second
+                TimerTask enableButtonTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        isClickable = true;
+                    }
+                };
+                new Timer().schedule(enableButtonTask, 1000);
+
+                int groupId = chatWindowViewModel.getState().getChatGroupId();
+                if (!recording) {
+                    chatWindowController.startRecording(groupId);
+                    recording = true;
+                    micButton.setIcon(new ImageIcon(scaledOpenMicIconImage)); // Change icon if needed
+
+                    // Start a timer to stop recording after 60 seconds
+                    timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (recording) {
+                                chatWindowController.stopRecording(groupId);
+                                recording = false;
+                                micButton.setIcon(new ImageIcon(scaledCloseMicIconImage)); // Change icon if needed
+                            }
+                        }
+                    }, 60000);
+                } else {
+                    chatWindowController.stopRecording(groupId);
+                    recording = false;
+                    micButton.setIcon(new ImageIcon(scaledCloseMicIconImage)); // Change icon if needed
+                    if (timer != null) {
+                        timer.cancel(); // Cancel the timer if recording is stopped manually
+                    }
+                }
+            }
+        });
+        optionsPanel.add(micButton);
+
+        optionsPanel.add(Box.createHorizontalStrut(5));
+        Image scaledSendFileIconImage = null;
+        try {
+            BufferedImage sendFileIconImage = ImageIO.read(new File("resources/icons/send_file.png"));
+            scaledSendFileIconImage = sendFileIconImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load send file icon");
+        }
+        assert scaledSendFileIconImage != null;
+        JLabel sendFileIcon = new JLabel(new ImageIcon(scaledSendFileIconImage));
+
+        sendFileIcon.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
+                    // Open system file chooser dialog
+                    ChatWindowView.this.setEnabled(false);
+                    FileDialog fileDialog = new FileDialog(application, "Select a file");
+                    fileDialog.setVisible(true);
+                    String directory = fileDialog.getDirectory();
+                    String file = fileDialog.getFile();
+                    if (directory != null && file != null) {
+                        File selectedFile = new File(directory, file);
+                        // Send file to chatWindowController
+                        int groupId = chatWindowViewModel.getState().getChatGroupId();
+                        chatWindowController.sendFile(groupId, selectedFile);
+                    }
+                }
+            }
+        });
+
+        optionsPanel.add(sendFileIcon);
 
         inputPanel.add(optionsPanel, BorderLayout.EAST);
 
@@ -308,7 +376,12 @@ public class ChatWindowView extends JPanel {
                     WaveformPanel waveformPanel = new WaveformPanel(waveformData.getMaxValues(), waveformData.getDuration(), chatMessage.isMe(), 50); // Set height to 50
                     waveformPanel.addPlayButtonActionListener(e -> chatWindowController.loadAudio(chatMessage.getContent()));
 
-                    contentPanel.add(waveformPanel);
+                    JPanel outerPanel = new JPanel();
+                    outerPanel.setLayout(new BoxLayout(outerPanel, BoxLayout.Y_AXIS));
+                    outerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+                    outerPanel.add(waveformPanel);
+
+                    contentPanel.add(outerPanel);
                 }
             } else if (chatMessage.getContentType().equals("map")) {
                 BufferedImage mapImage;
@@ -343,6 +416,21 @@ public class ChatWindowView extends JPanel {
                     }
                 });
                 contentPanel.add(mapPanel);
+            } else if (chatMessage.getContentType().equals("file")) {
+                FilePanel filePanel = new FilePanel(chatMessage.getFileData(), chatMessage.isMe());
+                filePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+                filePanel.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        openFileLocation(chatMessage.getContent());
+                    }
+                });
+                JPanel outerPanel = new JPanel();
+                outerPanel.setLayout(new BoxLayout(outerPanel, BoxLayout.Y_AXIS));
+                outerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+                outerPanel.add(filePanel);
+
+                contentPanel.add(outerPanel);
             }
 
             mainContentPanel.add(contentPanel);
@@ -522,12 +610,35 @@ public class ChatWindowView extends JPanel {
         }
     }
 
+    private void openFileLocation(String filePath) {
+        try {
+            File file = new File(filePath);
+            if (!file.exists()) {
+                JOptionPane.showMessageDialog(this, "file not exit: " + filePath, "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // 获取文件的父目录
+            File parentDir = file.getParentFile();
+            if (parentDir == null) {
+                JOptionPane.showMessageDialog(this, "can't get file path", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // 使用 Desktop 类打开文件夹
+            Desktop desktop = Desktop.getDesktop();
+            desktop.open(parentDir);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "can't open " + filePath, "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     static class RoundedPopupMenu extends JPopupMenu {
 
         public RoundedPopupMenu() {
             setOpaque(false);
         }
-
 
         @Override
         protected void paintComponent(Graphics g) {

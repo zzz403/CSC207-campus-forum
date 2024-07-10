@@ -138,6 +138,17 @@ public class H2Setup {
                     ")";
             stmt.executeUpdate(createMapLocationTable);
 
+            String createMessageFilesTable = "CREATE TABLE file_data (" +
+                    "file_id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "message_id INT NOT NULL, " +
+                    "file_name VARCHAR(255) NOT NULL," +
+                    "file_size VARCHAR(255) NOT NULL, " +
+                    "file_type VARCHAR(255) NOT NULL, " +
+                    "FOREIGN KEY (message_id) REFERENCES chat_messages(message_id) " +
+                    "ON DELETE CASCADE" +
+                    ")";
+            stmt.executeUpdate(createMessageFilesTable);
+
             String createGroupMembersTable = "CREATE TABLE group_members (" +
                 "group_id INT NOT NULL, " +
                 "user_id INT NOT NULL, " +
