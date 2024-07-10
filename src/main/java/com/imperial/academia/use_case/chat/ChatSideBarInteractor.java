@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.entity.chat_group.ChatGroupDTO;
+import com.imperial.academia.session.SessionManager;
 
 /**
  * Interactor class for handling chat sidebar operations.
