@@ -34,6 +34,7 @@ public class ViewManagerModel {
             viewStack.push(activeViewName); // Push the current view to the stack
         }
         this.activeViewName = activeView;
+        firePropertyChanged();
     }
 
     /**

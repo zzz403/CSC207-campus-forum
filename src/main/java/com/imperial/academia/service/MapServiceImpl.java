@@ -19,9 +19,10 @@ import java.time.Instant;
 import java.util.Objects;
 import javax.imageio.ImageIO;
 
-import com.imperial.academia.config.ApiKeyConfig;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.imperial.academia.config.ApiKeyConfig;
 
 public class MapServiceImpl implements MapService {
     private final String API_KEY;

@@ -11,6 +11,8 @@ import com.imperial.academia.entity.user.User;
 import com.imperial.academia.service.BoardService;
 import com.imperial.academia.service.PostService;
 import com.imperial.academia.session.SessionManager;
+import com.imperial.academia.use_case.other.ChatGPTApiImp;
+import com.imperial.academia.use_case.other.LLMApi;
 
 /**
  * The interactor that handles the logic for creating a post.
@@ -77,4 +79,14 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
         createPostPresenter.submitSeccuss();
         return true;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void enhanceContent(String content) {
+        LLMApi llmApi = new ChatGPTApiImp();
+        String enhancedContent = llmApi.enhanceContent(content);
+        createPostPresenter.updateContent(enhancedContent);
+    }    
 }

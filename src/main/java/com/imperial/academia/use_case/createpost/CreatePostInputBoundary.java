@@ -24,4 +24,11 @@ public interface CreatePostInputBoundary {
    * @throws SQLException
    */
   boolean submitPost(String titile, String content, String boardName);
+
+  /**
+   * Enhance the input content using LLM
+   * 
+   * @param content the content need to be enhance
+   */
+  void enhanceContent(String content);
 }

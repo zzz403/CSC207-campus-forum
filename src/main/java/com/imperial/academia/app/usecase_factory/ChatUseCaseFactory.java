@@ -1,14 +1,18 @@
 package com.imperial.academia.app.usecase_factory;
 
-import com.imperial.academia.app.ServiceFactory;
+import javax.swing.JFrame;
+
+import com.imperial.academia.entity.chat_message.ChatMessageFactory;
 import com.imperial.academia.entity.chat_message.CommonChatMessageFactory;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarController;
+import com.imperial.academia.interface_adapter.chat.ChatSideBarPresenter;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarViewModel;
 import com.imperial.academia.interface_adapter.chat.ChatWindowController;
 import com.imperial.academia.interface_adapter.chat.ChatWindowPresenter;
 import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
-import com.imperial.academia.service.AudioService;
+import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
+import com.imperial.academia.use_case.chat.ChatSideBarInteractor;
 import com.imperial.academia.use_case.chat.ChatSideBarOutputBoundary;
 import com.imperial.academia.use_case.chat.ChatWindowInputBoundary;
 import com.imperial.academia.use_case.chat.ChatWindowInteractor;
@@ -16,12 +20,6 @@ import com.imperial.academia.use_case.chat.ChatWindowOutputBoundary;
 import com.imperial.academia.view.ChatView;
 import com.imperial.academia.view.components.ChatSideBarView;
 import com.imperial.academia.view.components.ChatWindowView;
-import com.imperial.academia.interface_adapter.chat.ChatSideBarPresenter;
-import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
-import com.imperial.academia.use_case.chat.ChatSideBarInteractor;
-import com.imperial.academia.entity.chat_message.ChatMessageFactory;
-
-import javax.swing.*;
 
 /**
  * Factory class to create instances of the chat use cases and related
@@ -45,7 +43,7 @@ public class ChatUseCaseFactory {
                                   ChatWindowViewModel chatWindowViewModel, JFrame application) throws ClassNotFoundException {
 
         // Get required services
-        AudioService audioService = ServiceFactory.getAudioService();
+        // AudioService audioService = ServiceFactory.getAudioService();
 
         // Create presenters
         ChatSideBarOutputBoundary chatSideBarPresenter = new ChatSideBarPresenter(chatSideBarViewModel);

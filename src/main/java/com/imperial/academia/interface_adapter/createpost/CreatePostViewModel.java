@@ -3,9 +3,11 @@ package com.imperial.academia.interface_adapter.createpost;
 import com.imperial.academia.interface_adapter.common.ViewModel;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.List;
 
 /**
- * The CreatePostViewModel class represents the view model for the create post view.
+ * The CreatePostViewModel class represents the view model for the create post
+ * view.
  */
 public class CreatePostViewModel extends ViewModel {
     public final String TITLE_LABEL = "Title";
@@ -74,7 +76,7 @@ public class CreatePostViewModel extends ViewModel {
     /**
      * @return the current title stored in state
      */
-    public String getStateTitle(){
+    public String getStateTitle() {
         return state.getTitle();
     }
 
@@ -92,27 +94,40 @@ public class CreatePostViewModel extends ViewModel {
     /**
      * @return the current content stored in state
      */
-    public String getStateContent(){
+    public String getStateContent() {
         return state.getContent();
     }
-
 
     /**
      * Set the current board name selected
      * 
      * @param newBoardName The newBoardName to set
      */
-    public void setStateCurrentBoardName(String newBoardName){
+    public void setStateCurrentBoardName(String newBoardName) {
         String oldBoardName = state.getCurrentBoardName();
         state.setCurrentBoardName(newBoardName);
         support.firePropertyChange("currentBoardName", oldBoardName, newBoardName);
     }
 
-
     /**
      * @return the current board name
      */
-    public String getStateCurrentBoardName(){
+    public String getStateCurrentBoardName() {
         return state.getCurrentBoardName();
+    }
+
+    /**
+     * reset the state
+     */
+    public void resetState() {
+        this.state.setTitle("");
+        this.state.setContent("");
+        List<String> boardNames = state.getBoardsName();
+        if(boardNames.size() <= 0){
+            this.state.setCurrentBoardName("");
+            return;
+        }
+        this.state.setCurrentBoardName(boardNames.get(0));
+        support.firePropertyChange("reset", null, this.state);
     }
 }
