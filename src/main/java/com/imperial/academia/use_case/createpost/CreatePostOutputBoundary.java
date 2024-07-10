@@ -19,4 +19,9 @@ public interface CreatePostOutputBoundary {
      * Submit post seccuess, change the view to postboard
      */
     void submitSeccuss();
+
+    /**
+     * Updates the content to the create post view model
+     */
+    void updateContent(String content);
 }

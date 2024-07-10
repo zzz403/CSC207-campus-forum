@@ -1,5 +1,12 @@
 package com.imperial.academia.service;
 
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+
 import com.imperial.academia.cache.ChatGroupCache;
 import com.imperial.academia.data_access.ChatGroupDAI;
 import com.imperial.academia.entity.chat_group.ChatGroup;
@@ -12,10 +19,6 @@ import com.imperial.academia.entity.user.User;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.cache.GroupMemberCache;
 import com.imperial.academia.data_access.GroupMemberDAI;
-
-import java.util.*;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 
 /**
  * Implementation of the ChatGroupService interface.
@@ -67,6 +70,7 @@ public class ChatGroupServiceImpl implements ChatGroupService {
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("null")
     @Override
     public List<ChatGroupDTO> getChatGroupsByGroupName(String serchGroupName) throws SQLException {
         List<ChatGroup> allChatGroups = chatGroupCache.getChatGroups("chatgroups:all");

@@ -30,7 +30,19 @@ public class CreatePostController {
         createPostInteractor.updateBoardsName();
     }
 
-    public boolean submitPost(String titile, String content, String boardName) {
-        return createPostInteractor.submitPost(titile, content, boardName);
+    /**
+     * Submit the post
+     * 
+     * @param title title of the post
+     * @param content content of the post
+     * @param boardName which board name this post is create in
+     * @return true if submit post success, otherwise false
+     */
+    public boolean submitPost(String title, String content, String boardName) {
+        return createPostInteractor.submitPost(title, content, boardName);
+    }
+
+    public void enhanceContentUsingChatGPT(String content) {
+        createPostInteractor.enhanceContent(content);
     }
 }
