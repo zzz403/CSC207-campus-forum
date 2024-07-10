@@ -68,4 +68,7 @@ public interface GroupMemberCache {
      * @return true if the list of group members is cached, false otherwise
      */
     boolean existsGroupMembers(String key);
+
+    int getChatGroupId(int userId1, int userId2);
+
 }
