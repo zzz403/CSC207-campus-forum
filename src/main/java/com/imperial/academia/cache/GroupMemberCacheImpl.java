@@ -99,17 +99,19 @@ public class GroupMemberCacheImpl implements GroupMemberCache {
     @Override
     public int getChatGroupId(int userId1, int userId2) {
         for (List<GroupMember> groupMembers : groupMembersCache.asMap().values()) {
-            boolean foundPerson1 = false;
-            boolean foundPerson2 = false;
-            for (GroupMember member : groupMembers) {
-                if (member.getUserId() == userId1) {
-                    foundPerson1 = true;
-                }
-                if (member.getUserId() == userId2){
-                    foundPerson2 = true;
-                }
-                if (foundPerson1 && foundPerson2) {
-                    return member.getGroupId();
+            if (groupMembers.size() == 2){
+                boolean foundPerson1 = false;
+                boolean foundPerson2 = false;
+                for (GroupMember member : groupMembers) {
+                    if (member.getUserId() == userId1) {
+                        foundPerson1 = true;
+                    }
+                    if (member.getUserId() == userId2){
+                        foundPerson2 = true;
+                    }
+                    if (foundPerson1 && foundPerson2) {
+                        return member.getGroupId();
+                    }
                 }
             }
         }

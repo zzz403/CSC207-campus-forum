@@ -73,6 +73,7 @@ public class ChatGroupServiceImpl implements ChatGroupService {
     @SuppressWarnings("null")
     @Override
     public List<ChatGroupDTO> getChatGroupsByGroupName(String serchGroupName) throws SQLException {
+
         List<ChatGroup> allChatGroups = chatGroupCache.getChatGroups("chatgroups:all");
         if (allChatGroups == null) {
             allChatGroups = getAll();
@@ -126,6 +127,7 @@ public class ChatGroupServiceImpl implements ChatGroupService {
                         avatarUrl
                 ));
             }
+//            System.out.println(chatGroup.getId() + "done");
         }
 
         return sortChatGroupsByTime(matchingChatGroups);
