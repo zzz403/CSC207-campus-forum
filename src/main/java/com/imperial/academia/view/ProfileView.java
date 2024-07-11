@@ -14,6 +14,7 @@ import java.util.Map;
 public class ProfileView extends JPanel {
     public final String viewName = "profile";
     private final Map<String, ImageIcon> imageCache= new HashMap<>();
+
     // Constructor
     public ProfileView(ProfileController profileController, ProfileViewModel profileViewModel) {
         super(new BorderLayout());  // Set the layout of ProfileView to BorderLayout for simplicity
@@ -34,17 +35,20 @@ public class ProfileView extends JPanel {
         avatarPanel.add(imageLabel);
         topPanel.add(avatarPanel, BorderLayout.WEST);
 
-        JButton chatOrMofify = new JButton();
-        chatOrMofify.addMouseListener(new java.awt.event.MouseAdapter() {
-
+        JButton chatOrModify = new JButton("Edit");
+        chatOrModify.addMouseListener(new java.awt.event.MouseAdapter() {
 
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-//                profileController.
+                if (profileViewModel.getProfileState().isMe()){
+                    profileController.edit();
+                }else{
+                    profileController.chat(profileViewModel.getProfileState().getId());
+                }
             }
         });
 
-
+        topPanel.add(chatOrModify, BorderLayout.EAST);
 
         JPanel infoPanel = new JPanel(new GridLayout(0, 1));
         infoPanel.setBackground(new Color(255, 225, 120));
@@ -113,8 +117,8 @@ public class ProfileView extends JPanel {
                 idLabel.setText("User ID: " + state.getId());
                 roleLabel.setText("Role : " + state.getRole());
                 registrationDateLabel.setText("Member since " + state.getRegistrationDate().toString().substring(0,10));
-//                state.getRegistrationDate();
-                // TODO info and post need to be done
+                chatOrModify.setText(state.isMe()? "Edit" : "Chat");
+                // TODO profile edit view
             }
         });
     }

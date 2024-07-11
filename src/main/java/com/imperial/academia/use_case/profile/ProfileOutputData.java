@@ -9,14 +9,16 @@ public class ProfileOutputData {
     private final String role;
     private final String avatarUrl;
     private final Timestamp registrationDate;
+    private final boolean isMe;
 
-    public ProfileOutputData(int id, String username, String email, String role, String avatarUrl, Timestamp registrationDate) {
+    public ProfileOutputData(int id, String username, String email, String role, String avatarUrl, Timestamp registrationDate, boolean isMe) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.role = role;
         this.avatarUrl = avatarUrl;
         this.registrationDate = registrationDate;
+        this.isMe = isMe;
     }
 
     public int getId() {
@@ -42,4 +44,6 @@ public class ProfileOutputData {
     public String getUsername() {
         return username;
     }
+
+    public boolean isMe(){ return isMe;}
 }

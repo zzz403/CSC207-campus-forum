@@ -5,15 +5,16 @@ import java.sql.SQLException;
 import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.service.UserService;
+import com.imperial.academia.session.SessionManager;
 
 public class ProfileInteractor implements ProfileInputBoundry {
     private final UserService userService;
-    private final ProfileOutputBoundry profilepresenter;
+    private final ProfileOutputBoundry profilePresenter;
 
-    public ProfileInteractor( ProfileOutputBoundry profilepresenter) {
+    public ProfileInteractor( ProfileOutputBoundry profilePresenter) {
         this.userService = ServiceFactory.getUserService();
 
-        this.profilepresenter = profilepresenter;
+        this.profilePresenter = profilePresenter;
     }
 
     public void excute(ProfileInputData profileInputData) {
@@ -26,13 +27,15 @@ public class ProfileInteractor implements ProfileInputBoundry {
                         user.getEmail(),
                         user.getRole(),
                         user.getAvatarUrl(),
-                        user.getRegistrationDate());
-                profilepresenter.present(profileOutputData);
+                        user.getRegistrationDate(),
+                        SessionManager.getCurrentUser().getId() == user.getId()
+                );
+                profilePresenter.present(profileOutputData);
             } else {
-                profilepresenter.presentError("User not found");
+                profilePresenter.presentError("User not found");
             }
         } catch (SQLException e) {
-            profilepresenter.presentError(e.getMessage());
+            profilePresenter.presentError(e.getMessage());
         }
     }
 }

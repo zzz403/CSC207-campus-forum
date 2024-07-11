@@ -9,6 +9,7 @@ public class ProfileState {
     private String role = "";
     private String avatarUrl = "";
     private Timestamp registrationDate = new Timestamp(System.currentTimeMillis());
+    private boolean isMe = true;
 
     public ProfileState (ProfileState copy){
         this.id = copy.id;
@@ -17,6 +18,7 @@ public class ProfileState {
         this.role = copy.role;
         this.avatarUrl = copy.avatarUrl;
         this.registrationDate = copy.registrationDate;
+        this.isMe = copy.isMe;
     }
     public ProfileState(){}
 
@@ -42,6 +44,10 @@ public class ProfileState {
 
     public Timestamp getRegistrationDate() {
         return registrationDate;
+    }
+
+    public boolean isMe(){
+        return isMe;
     }
 
 
@@ -70,6 +76,8 @@ public class ProfileState {
         this.registrationDate = registrationDate;
     }
 
-
+    public void setIsMe(boolean isMe){
+        this.isMe = isMe;
+    }
 
 }

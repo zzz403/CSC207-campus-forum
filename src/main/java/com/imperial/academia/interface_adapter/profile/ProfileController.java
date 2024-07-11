@@ -1,17 +1,16 @@
 package com.imperial.academia.interface_adapter.profile;
 
-import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
-import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
+import com.imperial.academia.use_case.chat.ChatCoordinatorInputBoundary;
 import com.imperial.academia.use_case.profile.ProfileInputBoundry;
 import com.imperial.academia.use_case.profile.ProfileInputData;
 
 public class ProfileController{
     private final ProfileInputBoundry profileInteractor;
-    private final ChatSideBarInputBoundary chatSideBarIteractor;
+    private final ChatCoordinatorInputBoundary chatCoordinatorInteractor;
 
-    public ProfileController(ProfileInputBoundry profileInteractor, ChatSideBarInputBoundary chatSideBarIterator) {
+    public ProfileController(ProfileInputBoundry profileInteractor, ChatCoordinatorInputBoundary chatCoordinatorInteractor) {
         this.profileInteractor = profileInteractor;
-        this.chatSideBarIteractor = chatSideBarIterator;
+        this.chatCoordinatorInteractor = chatCoordinatorInteractor;
     }
 
 
@@ -21,7 +20,10 @@ public class ProfileController{
     }
 
     public void chat(int userId){
-//        chatSideBarIteractor.chatWith(userId);
-        // TODO chatWith need to be done
+        chatCoordinatorInteractor.toPrivateChat(userId);
+    }
+
+    public void edit(){
+        //TODO  edit need to be done
     }
 }
