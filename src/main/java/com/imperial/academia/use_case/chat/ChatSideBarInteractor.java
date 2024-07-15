@@ -1,11 +1,10 @@
 package com.imperial.academia.use_case.chat;
 
-import com.imperial.academia.service.ChatGroupService;
 import java.util.List;
 
 import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.entity.chat_group.ChatGroupDTO;
-import com.imperial.academia.session.SessionManager;
+import com.imperial.academia.service.ChatGroupService;
 
 /**
  * Interactor class for handling chat sidebar operations.

@@ -45,6 +45,9 @@ import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewMod
  * components of the top navigation bar.
  */
 public class TopNavigationBar extends JPanel {
+
+    private final TopNavigationBarController topNavigationBarController = new TopNavigationBarController();
+
     private JPanel topNavPanel;
     private JLabel logoText;
     private JFrame applicationFrame;
@@ -53,13 +56,11 @@ public class TopNavigationBar extends JPanel {
     /**
      * Constructor to initialize the top navigation bar component.
      *
-     * @param topNavigationBarController The top navigation bar controller.
      * @param topNavigationBarViewModel  The top navigation bar view model.
      * @param applicationFrame           The main application frame.
      * @throws IOException If an error occurs while reading resources.
      */
-    public TopNavigationBar(TopNavigationBarController topNavigationBarController,
-            TopNavigationBarViewModel topNavigationBarViewModel, JFrame applicationFrame) throws IOException {
+    public TopNavigationBar(TopNavigationBarViewModel topNavigationBarViewModel, JFrame applicationFrame) throws IOException {
         this.applicationFrame = applicationFrame;
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);

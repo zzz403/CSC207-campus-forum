@@ -1,16 +1,13 @@
 package com.imperial.academia.interface_adapter.profile;
 
-import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.use_case.profile.ProfileOutputBoundry;
 import com.imperial.academia.use_case.profile.ProfileOutputData;
 
 public class ProfilePresenter implements ProfileOutputBoundry {
     private final ProfileViewModel profileViewModel;
-    private final ViewManagerModel viewManagerModel;
 
-    public ProfilePresenter(ProfileViewModel profileViewModel, ViewManagerModel viewManagerModel) {
+    public ProfilePresenter(ProfileViewModel profileViewModel) {
         this.profileViewModel = profileViewModel;
-        this.viewManagerModel = viewManagerModel;
     }
 
 
@@ -27,22 +24,12 @@ public class ProfilePresenter implements ProfileOutputBoundry {
 
         profileViewModel.setProfileState(profileState);
         profileViewModel.firePropertyChanged();
-        viewManagerModel.setActiveView("profile");
-        viewManagerModel.firePropertyChanged();
     }
 
-
-    @Override
-    public void changeView(String viewName){
-        viewManagerModel.setActiveView(viewName);
-        viewManagerModel.firePropertyChanged();
-    }
 
     @Override
     public void presentError(String error){
         profileViewModel.setProfileState(new ProfileState());
         profileViewModel.firePropertyChanged();
-        viewManagerModel.setActiveView("profile");
-        viewManagerModel.firePropertyChanged();
     }
 }

@@ -1,5 +1,6 @@
 package com.imperial.academia.interface_adapter.signup;
 
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.use_case.signup.SignupInputBoundary;
 import com.imperial.academia.use_case.signup.SignupInputData;
 
@@ -13,10 +14,9 @@ public class SignupController {
     /**
      * Constructs a SignupController with the specified SignupInputBoundary.
      * 
-     * @param signupInteractor The signup interactor to handle signup logic.
      */
-    public SignupController(SignupInputBoundary signupInteractor) {
-        this.signupInteractor = signupInteractor;
+    public SignupController() {
+        this.signupInteractor = UsecaseFactory.getSignupInteractor();
     }
 
     /**

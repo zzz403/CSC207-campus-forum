@@ -17,9 +17,4 @@ public interface LoginOutputBoundary {
      * @param error The error message.
      */
     void prepareFailView(String error);
-
-    /**
-     * Navigates to the signup view.
-     */
-    void navigateToSignup();
 }

@@ -29,7 +29,7 @@ public class CreatePostView extends JPanel {
     public final String viewName = "create post";
 
     /** The controller associated with creating a post. */
-    private final CreatePostController createPostController;
+    private final CreatePostController createPostController = new CreatePostController();
 
     /** The view model associated with creating a post. */
     private final CreatePostViewModel createPostViewModel;
@@ -37,11 +37,9 @@ public class CreatePostView extends JPanel {
     /**
      * Constructs a new CreatePostView with the specified controller and view model.
      * 
-     * @param createPostController the controller associated with creating a post
      * @param createPostViewModel  the view model associated with creating a post
      */
-    public CreatePostView(CreatePostController createPostController, CreatePostViewModel createPostViewModel) {
-        this.createPostController = createPostController;
+    public CreatePostView(CreatePostViewModel createPostViewModel) {
         this.createPostViewModel = createPostViewModel;
 
         setLayout(new BorderLayout());
@@ -114,7 +112,6 @@ public class CreatePostView extends JPanel {
         postButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
                 String title = titleField.getText().strip();
                 String content = contentArea.getText().strip();
                 String boardName = createPostViewModel.getStateCurrentBoardName().strip();
@@ -122,24 +119,23 @@ public class CreatePostView extends JPanel {
                     System.out.println("Post submit unseccuss due to illegal/empty input for title or content");
                     return;
                 }
-                System.out.println(
-                    "Post submit | Title: " + title + " | Content: " + content + " | BoardName: " + boardName);
-                    createPostController.submitPost(title, content, boardName);
+                System.out.println("Post submit | Title: " + title + " | Content: " + content + " | BoardName: " + boardName);
+                createPostController.submitPost(title, content, boardName);
+            }
+        });
+            
+        // enhance content button
+        JButton enhanceContentButton = new JButton("Enhance Content");
+            
+        enhanceContentButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String content = contentArea.getText();
+                if (content.strip().isEmpty()) {
+                    System.out.println("Content is empty, cannot enhance.");
+                    return;
                 }
-            });
-            
-            // enhance content button
-            JButton enhanceContentButton = new JButton("Enhance Content");
-            
-            enhanceContentButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    String content = contentArea.getText();
-                    if (content.strip().isEmpty()) {
-                        System.out.println("Content is empty, cannot enhance.");
-                        return;
-                    }
-                    
+                
                 // Call the method to enhance content using ChatGPT
                 createPostController.enhanceContentUsingChatGPT(content);
             }
