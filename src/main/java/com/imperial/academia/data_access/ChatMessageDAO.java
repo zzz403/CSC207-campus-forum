@@ -1,5 +1,6 @@
 package com.imperial.academia.data_access;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imperial.academia.entity.chat_message.ChatMessage;
 import com.imperial.academia.entity.chat_message.FileData;
@@ -223,6 +224,8 @@ public class ChatMessageDAO implements ChatMessageDAI {
                     float duration = rs.getFloat("duration");
                     return new WaveformData(minValues, maxValues, duration);
                 }
+            } catch (JsonMappingException e) {
+                System.out.println("ChatMessageDAO: getWaveformData: JsonMappingException");
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());

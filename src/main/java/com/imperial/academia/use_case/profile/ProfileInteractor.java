@@ -2,19 +2,24 @@ package com.imperial.academia.use_case.profile;
 
 import java.sql.SQLException;
 
+import com.imperial.academia.app.ServiceFactory;
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.service.UserService;
+import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 
 public class ProfileInteractor implements ProfileInputBoundry {
-    private final UserService userService;
+
+    private final ChangeViewInputBoundary changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
+
     private final ProfileOutputBoundry profilepresenter;
 
-    public ProfileInteractor(UserService userService, ProfileOutputBoundry profilepresenter) {
-        this.userService = userService;
+    public ProfileInteractor(ProfileOutputBoundry profilepresenter) {
         this.profilepresenter = profilepresenter;
     }
 
     public void excute(ProfileInputData profileInputData) {
+        UserService userService = ServiceFactory.getUserService();
         try {
             User user = userService.get(profileInputData.getUserId());
             if (user != null) {
@@ -29,6 +34,9 @@ public class ProfileInteractor implements ProfileInputBoundry {
             } else {
                 profilepresenter.presentError("User not found");
             }
+
+            changeViewInteractor.changeView("profile");
+            
         } catch (SQLException e) {
             profilepresenter.presentError(e.getMessage());
         }

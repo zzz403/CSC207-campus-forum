@@ -1,5 +1,6 @@
 package com.imperial.academia.interface_adapter.topnavbar;
 
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.session.SessionInputBoundary;
 import com.imperial.academia.use_case.session.SessionOutputData;
@@ -25,12 +26,10 @@ public class TopNavigationBarController implements PropertyChangeListener {
     /**
      * Constructs a new TopNavigationBarController with the specified interactor and session input boundary.
      * 
-     * @param changeViewInteractor the interactor that handles the logic for changing the view
-     * @param sessionInputBoundary the input boundary for session-related operations
      */
-    public TopNavigationBarController(ChangeViewInputBoundary changeViewInteractor, SessionInputBoundary sessionInputBoundary) {
-        this.changeViewInteractor = changeViewInteractor;
-        this.sessionInputBoundary = sessionInputBoundary;
+    public TopNavigationBarController() {
+        this.changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
+        this.sessionInputBoundary = UsecaseFactory.getSessionInteractor();
         this.currentSession = sessionInputBoundary.getSessionInfo();
         sessionInputBoundary.addSessionChangeListener(this);
     }

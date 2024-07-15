@@ -1,18 +1,21 @@
 package com.imperial.academia.app.components_factory;
 
-import com.imperial.academia.app.usecase_factory.ProfileUseCaseFactory;
-import com.imperial.academia.interface_adapter.profile.ProfileController;
-import com.imperial.academia.view.components.AvatarComponent;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+
+import com.imperial.academia.view.components.AvatarComponent;
 
 /**
  * The AvatarFactory class is responsible for creating avatar components with rounded corners.
@@ -33,9 +36,8 @@ public class AvatarFactory {
      * @return An AvatarComponent for the specified user.
      */
     public static AvatarComponent create(int userId, String avatarUrl, int height) {
-        ProfileController profileController = ProfileUseCaseFactory.getProfileController();
         ImageIcon avatarIcon = createAvatarIcon(avatarUrl, height);
-        return new AvatarComponent(profileController, userId, avatarIcon);
+        return new AvatarComponent(userId, avatarIcon);
     }
 
     /**

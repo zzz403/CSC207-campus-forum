@@ -30,20 +30,20 @@ import java.util.Timer;
 public class ChatWindowView extends JPanel {
     private final JPanel messageListPanel;
     private final JTextField messageInputField;
-    ChatWindowController chatWindowController;
-    Image scaledOpenMicIconImage;
-    Image scaledCloseMicIconImage;
+    private final ChatWindowController chatWindowController = new ChatWindowController();
     private final Map<String, BufferedImage> mapCache = new HashMap<>();
+    
+    private Image scaledOpenMicIconImage;
+    private Image scaledCloseMicIconImage;
 
     /**
      * Constructor for ChatWindowView.
-     * @param chatWindowController the chat window controller
+     * 
      * @param chatWindowViewModel the chat window view model
+     * @param application the application window view model
      */
-    public ChatWindowView(ChatWindowController chatWindowController, ChatWindowViewModel chatWindowViewModel, JFrame application) {
+    public ChatWindowView(ChatWindowViewModel chatWindowViewModel, JFrame application) {
         setLayout(new BorderLayout());
-
-        this.chatWindowController = chatWindowController;
 
         // Message list panel
         messageListPanel = new JPanel();

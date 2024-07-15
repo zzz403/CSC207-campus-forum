@@ -33,8 +33,9 @@ public class ViewManagerModel {
         if (activeViewName != null && !activeViewName.equals(activeView)) {
             viewStack.push(activeViewName); // Push the current view to the stack
         }
+        String oldView = this.activeViewName;
         this.activeViewName = activeView;
-        firePropertyChanged();
+        support.firePropertyChange("changeView", oldView, activeViewName);
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.imperial.academia.interface_adapter.chat;
 
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.use_case.chat.ChatWindowInputBoundary;
 import com.imperial.academia.use_case.chat.ChatWindowInputData;
 
@@ -14,10 +15,9 @@ public class ChatWindowController {
     /**
      * Constructor for ChatWindowController.
      *
-     * @param chatWindowInteractor the interactor for chat window operations
      */
-    public ChatWindowController(ChatWindowInputBoundary chatWindowInteractor) {
-        this.chatWindowInteractor = chatWindowInteractor;
+    public ChatWindowController() {
+        this.chatWindowInteractor = UsecaseFactory.getChatWindowInteractor();
     }
 
     /**

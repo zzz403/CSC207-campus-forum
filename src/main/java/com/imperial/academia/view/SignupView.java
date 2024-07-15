@@ -13,6 +13,8 @@ import java.awt.*;
 public class SignupView extends JPanel {
     public final String viewName = "sign up";
 
+    private final SignupController signupController = new SignupController();
+
     private JLabel usernameErrorLabel;
     private JLabel passwordErrorLabel;
     private JLabel repeatPasswordErrorLabel;
@@ -21,10 +23,9 @@ public class SignupView extends JPanel {
     /**
      * Constructs a SignupView instance and initializes the UI components.
      *
-     * @param signupController the signup controller
      * @param signupViewModel the signup view model
      */
-    public SignupView(SignupController signupController, SignupViewModel signupViewModel) {
+    public SignupView(SignupViewModel signupViewModel) {
         setLayout(new BorderLayout());
 
         // Left panel setup

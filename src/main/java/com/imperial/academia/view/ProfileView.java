@@ -17,16 +17,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import com.imperial.academia.interface_adapter.profile.ProfileController;
 import com.imperial.academia.interface_adapter.profile.ProfileState;
 import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
 
 public class ProfileView extends JPanel {
+    
+    // private final ProfileController profileController = new ProfileController();
+
     public final String viewName = "profile";
-    private final Map<String, ImageIcon> imageCache= new HashMap<>();
+    private final Map<String, ImageIcon> imageCache = new HashMap<>();
+
     // Constructor
-    public ProfileView(ProfileController profileController, ProfileViewModel profileViewModel) {
-        super(new BorderLayout());  // Set the layout of ProfileView to BorderLayout for simplicity
+    public ProfileView(ProfileViewModel profileViewModel) {
+        super(new BorderLayout()); // Set the layout of ProfileView to BorderLayout for simplicity
 
         JPanel mainPanel = new JPanel(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -89,20 +92,20 @@ public class ProfileView extends JPanel {
         constraints.weighty = 0.8;
         mainPanel.add(scrollPane, constraints);
 
-        this.add(mainPanel, BorderLayout.CENTER);  // Add mainPanel to ProfileView
+        this.add(mainPanel, BorderLayout.CENTER); // Add mainPanel to ProfileView
 
-        profileViewModel.addPropertyChangeListener(evt ->{
-            if ("state".equals((evt.getPropertyName()))){
+        profileViewModel.addPropertyChangeListener(evt -> {
+            if ("state".equals((evt.getPropertyName()))) {
                 ProfileState state = (ProfileState) evt.getNewValue();
                 // set the new image
-                if (imageCache.containsKey(state.getAvatarUrl())){
+                if (imageCache.containsKey(state.getAvatarUrl())) {
                     imageLabel.setIcon(imageCache.get(state.getAvatarUrl()));
-                }else{
-                ImageIcon UserIcon = new ImageIcon(state.getAvatarUrl());
-                Image resizedUserImage = UserIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-                ImageIcon resizedUserIcon = new ImageIcon(resizedUserImage);
-                imageLabel.setIcon(resizedUserIcon);
-                imageCache.put(state.getAvatarUrl(), resizedUserIcon);
+                } else {
+                    ImageIcon UserIcon = new ImageIcon(state.getAvatarUrl());
+                    Image resizedUserImage = UserIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                    ImageIcon resizedUserIcon = new ImageIcon(resizedUserImage);
+                    imageLabel.setIcon(resizedUserIcon);
+                    imageCache.put(state.getAvatarUrl(), resizedUserIcon);
                 }
 
                 // set the user info
@@ -110,9 +113,10 @@ public class ProfileView extends JPanel {
                 emailLabel.setText("          Email: " + state.getEmail());
                 idLabel.setText("          User ID: " + state.getId());
                 roleLabel.setText("          Role : " + state.getRole());
-                registrationDateLabel.setText("          Member since " + state.getRegistrationDate().toString().substring(0,10));
-                //TODO  date formate need to be fixed
-//                state.getRegistrationDate();
+                registrationDateLabel
+                        .setText("          Member since " + state.getRegistrationDate().toString().substring(0, 10));
+                // TODO date formate need to be fixed
+                // state.getRegistrationDate();
                 // TODO info and post need to be done
             }
         });

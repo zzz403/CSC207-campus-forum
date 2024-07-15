@@ -2,6 +2,7 @@ package com.imperial.academia.interface_adapter.createpost;
 
 import java.sql.SQLException;
 
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.use_case.createpost.CreatePostInputBoundary;
 
 /**
@@ -15,10 +16,9 @@ public class CreatePostController {
     /**
      * Constructs a new CreatePostController with the specified interactor.
      * 
-     * @param createPostInteractor the interactor that handles the business logic for creating a post
      */
-    public CreatePostController(CreatePostInputBoundary createPostInteractor) {
-        this.createPostInteractor = createPostInteractor;
+    public CreatePostController() {
+        this.createPostInteractor = UsecaseFactory.getCreatePostInteractor();
     }
 
     /**
