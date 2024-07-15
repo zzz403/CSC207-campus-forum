@@ -34,8 +34,10 @@ public class ServiceFactory {
         userService = new UserServiceImpl(userCache, userDAO);
         
         ChatGroupCache chatGroupCache = new ChatGroupCacheImpl();
-        ChatGroupDAO chatGroupDAO = new ChatGroupDAO(DatabaseConnection.getConnection());
-        chatGroupService = new ChatGroupServiceImpl(chatGroupCache, chatGroupDAO);
+        ChatGroupDAI chatGroupDAO = new ChatGroupDAO(DatabaseConnection.getConnection());
+        GroupMemberCache groupMemberCache = new GroupMemberCacheImpl();
+        GroupMemberDAI groupMemberDAO = new GroupMemberDAO(DatabaseConnection.getConnection());
+        chatGroupService = new ChatGroupServiceImpl(chatGroupCache, chatGroupDAO,groupMemberCache,groupMemberDAO);
         
         ChatMessageCache chatMessageCache = new ChatMessageCacheImpl();
         ChatMessageDAO chatMessageDAO = new ChatMessageDAO(DatabaseConnection.getConnection());

@@ -11,9 +11,14 @@ import com.imperial.academia.cache.ChatGroupCache;
 import com.imperial.academia.data_access.ChatGroupDAI;
 import com.imperial.academia.entity.chat_group.ChatGroup;
 import com.imperial.academia.entity.chat_group.ChatGroupDTO;
+import com.imperial.academia.entity.chat_group.ChatGroupFactory;
 import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.group_member.GroupMember;
+import com.imperial.academia.entity.group_member.GroupMemberFactory;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.session.SessionManager;
+import com.imperial.academia.cache.GroupMemberCache;
+import com.imperial.academia.data_access.GroupMemberDAI;
 
 /**
  * Implementation of the ChatGroupService interface.
@@ -22,6 +27,8 @@ import com.imperial.academia.session.SessionManager;
 public class ChatGroupServiceImpl implements ChatGroupService {
     private final ChatGroupCache chatGroupCache;
     private final ChatGroupDAI chatGroupDAO;
+    private final GroupMemberCache groupMemberCache;
+    private final GroupMemberDAI groupMemberDAO;
 
     /**
      * Constructs a new ChatGroupServiceImpl with the specified cache and DAO.
@@ -29,9 +36,11 @@ public class ChatGroupServiceImpl implements ChatGroupService {
      * @param chatGroupCache the cache to use
      * @param chatGroupDAO   the DAO to use
      */
-    public ChatGroupServiceImpl(ChatGroupCache chatGroupCache, ChatGroupDAI chatGroupDAO) {
+    public ChatGroupServiceImpl(ChatGroupCache chatGroupCache, ChatGroupDAI chatGroupDAO, GroupMemberCache groupMemberCache, GroupMemberDAI groupMemberDAO) {
         this.chatGroupCache = chatGroupCache;
         this.chatGroupDAO = chatGroupDAO;
+        this.groupMemberCache = groupMemberCache;
+        this.groupMemberDAO = groupMemberDAO;
     }
 
     /**
@@ -64,6 +73,7 @@ public class ChatGroupServiceImpl implements ChatGroupService {
     @SuppressWarnings("null")
     @Override
     public List<ChatGroupDTO> getChatGroupsByGroupName(String serchGroupName) throws SQLException {
+
         List<ChatGroup> allChatGroups = chatGroupCache.getChatGroups("chatgroups:all");
         if (allChatGroups == null) {
             allChatGroups = getAll();
@@ -117,6 +127,7 @@ public class ChatGroupServiceImpl implements ChatGroupService {
                         avatarUrl
                 ));
             }
+//            System.out.println(chatGroup.getId() + "done");
         }
 
         return sortChatGroupsByTime(matchingChatGroups);
@@ -196,5 +207,36 @@ public class ChatGroupServiceImpl implements ChatGroupService {
             }
         });
         return chatGroups;
+    }
+
+    @Override
+    public int getPrivateChatId(int userId1, int userId2) throws SQLException {
+        int chatGroupId = groupMemberCache.getChatGroupId(userId1, userId2);
+        if (chatGroupId == -1) {
+            chatGroupId = groupMemberDAO.getPrivateChatId(userId1, userId2);
+            GroupMemberFactory groupMemberFactory = new GroupMemberFactory();
+            if (chatGroupId == -1) {
+                ChatGroup chatGroup = new ChatGroupFactory().createPrivateChatGroup();
+                insert(chatGroup);
+                chatGroupId = chatGroup.getId();
+
+                GroupMember groupMember1 = groupMemberFactory.createGroupMember(chatGroupId, userId1, "member");
+                GroupMember groupMember2 = groupMemberFactory.createGroupMember(chatGroupId, userId2, "member");
+
+                groupMemberDAO.insert(groupMember1);
+                groupMemberDAO.insert(groupMember2);
+
+                groupMemberCache.setGroupMember("groupmember:" + groupMember1.getGroupId() + ":" + groupMember1.getUserId(), groupMember1);
+                groupMemberCache.setGroupMember("groupmember:" + groupMember2.getGroupId() + ":" + groupMember2.getUserId(), groupMember2);
+            }else{
+                GroupMember groupMember1 = groupMemberFactory.createGroupMember(chatGroupId, userId1, "member");
+                GroupMember groupMember2 = groupMemberFactory.createGroupMember(chatGroupId, userId2, "member");
+
+                groupMemberCache.setGroupMember("groupmember:" + groupMember1.getGroupId() + ":" + groupMember1.getUserId(), groupMember1);
+                groupMemberCache.setGroupMember("groupmember:" + groupMember2.getGroupId() + ":" + groupMember2.getUserId(), groupMember2);
+            }
+
+        }
+        return chatGroupId;
     }
 }

@@ -9,6 +9,7 @@ public class GroupMember {
     private int groupId;
     private int userId;
     private String role;
+//    private boolean isPrevent;
     private Timestamp joinedDate;
     private Timestamp lastModified;
 
@@ -25,6 +26,7 @@ public class GroupMember {
         this.groupId = groupId;
         this.userId = userId;
         this.role = role;
+//        this.isPrevent = isPrevent;
         this.joinedDate = joinedDate;
         this.lastModified = lastModified;
     }
@@ -120,4 +122,12 @@ public class GroupMember {
     public void setLastModified(Timestamp lastModified) { 
         this.lastModified = lastModified; 
     }
+//
+//    public void setPrevent(boolean isPrevent){
+//        this.isPrevent = isPrevent;
+//    }
+//
+//    public boolean isPrevent(){
+//        return isPrevent;
+//    }
 }

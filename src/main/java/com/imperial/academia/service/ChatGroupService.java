@@ -61,6 +61,7 @@ public interface ChatGroupService {
      */
     void delete(int id) throws SQLException;
 
-
     ChatMessage getLastMessage(int groupId) throws SQLException;
+
+    int getPrivateChatId(int userId1, int userId2) throws SQLException;
 }

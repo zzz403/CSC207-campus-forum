@@ -1,2 +1,2 @@
-john_doe
-hashed_password1
+admin
+admin123

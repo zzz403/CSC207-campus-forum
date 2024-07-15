@@ -39,7 +39,7 @@ public class GroupMemberDAO implements GroupMemberDAI {
      */
     @Override
     public GroupMember get(int groupId, int userId) throws SQLException {
-        String sql = "SELECT * FROM group_members WHERE group_id = ? AND user_id = ?";
+        String sql = "SELECT * FROM group_members  WHERE group_id = ? AND user_id = ?";
         GroupMember groupMember = null;
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, groupId);
@@ -130,5 +130,24 @@ public class GroupMemberDAO implements GroupMemberDAI {
             pstmt.setInt(2, userId);
             pstmt.executeUpdate();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getPrivateChatId(int userId1, int userId2) throws SQLException {
+        String sql = "SELECT group_id FROM group_members WHERE (user_id = ? OR user_id = ?) AND is_group = false GROUP BY group_id HAVING COUNT(*) = 2";
+        int chatGroupId = -1;
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId1);
+            pstmt.setInt(2, userId2);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    chatGroupId = rs.getInt("group_id");
+                }
+            }
+        }
+        return chatGroupId;
     }
 }

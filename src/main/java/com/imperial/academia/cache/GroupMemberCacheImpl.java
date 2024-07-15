@@ -11,8 +11,8 @@ import java.util.concurrent.TimeUnit;
  * Implementation of the GroupMemberCache interface using Guava Cache.
  */
 public class GroupMemberCacheImpl implements GroupMemberCache {
-    private Cache<String, GroupMember> groupMemberCache;
-    private Cache<String, List<GroupMember>> groupMembersCache;
+    private final Cache<String, GroupMember> groupMemberCache;
+    private final Cache<String, List<GroupMember>> groupMembersCache;
 
     /**
      * Constructs a new GroupMemberCacheImpl with specific cache configurations.
@@ -91,5 +91,30 @@ public class GroupMemberCacheImpl implements GroupMemberCache {
     @Override
     public boolean existsGroupMembers(String key) {
         return groupMembersCache.getIfPresent(key) != null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getChatGroupId(int userId1, int userId2) {
+        for (List<GroupMember> groupMembers : groupMembersCache.asMap().values()) {
+            if (groupMembers.size() == 2){
+                boolean foundPerson1 = false;
+                boolean foundPerson2 = false;
+                for (GroupMember member : groupMembers) {
+                    if (member.getUserId() == userId1) {
+                        foundPerson1 = true;
+                    }
+                    if (member.getUserId() == userId2){
+                        foundPerson2 = true;
+                    }
+                    if (foundPerson1 && foundPerson2) {
+                        return member.getGroupId();
+                    }
+                }
+            }
+        }
+        return -1;
     }
 }
