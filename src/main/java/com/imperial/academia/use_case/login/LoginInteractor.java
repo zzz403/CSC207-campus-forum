@@ -1,9 +1,11 @@
 package com.imperial.academia.use_case.login;
 
 import com.imperial.academia.session.SessionManager;
+import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
 import com.imperial.academia.service.UserService;
 import com.imperial.academia.app.ServiceFactory;
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.data_access.RememberMeDAI;
 import com.imperial.academia.entity.user.User;
 
@@ -20,6 +22,8 @@ public class LoginInteractor implements LoginInputBoundary {
     private final RememberMeDAI rememberMeDAO;
     private final ChatSideBarInputBoundary chatSideBarInteractor;
 
+    private final ChangeViewInputBoundary changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
+
     /**
      * Constructs a LoginInteractor with the specified UserService,
      * LoginOutputBoundary, and RememberMeDAI.
@@ -29,12 +33,11 @@ public class LoginInteractor implements LoginInputBoundary {
      *                              credentials.
      * @param chatSideBarInteractor The chat sidebar interactor for chat operations.
      */
-    public LoginInteractor(LoginOutputBoundary loginPresenter, RememberMeDAI rememberMeDAO,
-            ChatSideBarInputBoundary chatSideBarInteractor) {
+    public LoginInteractor(LoginOutputBoundary loginPresenter, RememberMeDAI rememberMeDAO) {
         this.userService = ServiceFactory.getUserService();
         this.loginPresenter = loginPresenter;
         this.rememberMeDAO = rememberMeDAO;
-        this.chatSideBarInteractor = chatSideBarInteractor;
+        this.chatSideBarInteractor = UsecaseFactory.getChatSideBarInteractor();
     }
 
     /**
@@ -83,8 +86,10 @@ public class LoginInteractor implements LoginInputBoundary {
         SessionManager.setCurrentUser(user);
         LoginOutputData loginOutputData = new LoginOutputData(user.getUsername(), "Login successful.",
                 user.getAvatarUrl(), user.getId());
+
         chatSideBarInteractor.execute();
         loginPresenter.prepareSuccessView(loginOutputData);
+        changeViewInteractor.changeView("post board");
     }
 
     /**
@@ -122,6 +127,6 @@ public class LoginInteractor implements LoginInputBoundary {
      */
     @Override
     public void navigateToSignup() {
-        loginPresenter.navigateToSignup();
+        changeViewInteractor.changeView("sign up");
     }
 }

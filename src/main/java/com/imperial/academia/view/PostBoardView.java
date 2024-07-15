@@ -7,7 +7,6 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-import com.imperial.academia.interface_adapter.postboard.PostBoardController;
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
 
 /**
@@ -21,18 +20,15 @@ public class PostBoardView extends JPanel {
     /** The main panel that holds the components of this view. */
     private JPanel mainPanel;
 
-    // private final PostBoardViewModel posterViewModel;
-    // private final PostBoardController posterController;
+    // private final PostBoardController posterController = new PostBoardController();
 
     /**
      * Constructs a new PostBoardView with the specified view model and controller.
      * 
      * @param posterViewModel the view model associated with the post board
-     * @param posterController the controller associated with the post board
      */
-    public PostBoardView(PostBoardViewModel posterViewModel, PostBoardController posterController) {
+    public PostBoardView(PostBoardViewModel posterViewModel) {
         // this.posterViewModel = posterViewModel;
-        // this.posterController = posterController;
 
         setLayout(new BorderLayout());
 

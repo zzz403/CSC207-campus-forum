@@ -1,14 +1,17 @@
 package com.imperial.academia.service;
 
-import com.imperial.academia.entity.chat_message.WaveformData;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+
+import javax.sound.sampled.LineUnavailableException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.sound.sampled.LineUnavailableException;
-import java.io.File;
-
-import static org.junit.Assert.*;
+import com.imperial.academia.entity.chat_message.WaveformData;
 
 public class AudioServiceImplTest {
 

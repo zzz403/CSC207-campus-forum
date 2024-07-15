@@ -1,13 +1,11 @@
 package com.imperial.academia.service;
 
-import com.imperial.academia.cache.GroupMemberCache;
-import com.imperial.academia.data_access.GroupMemberDAI;
-import com.imperial.academia.entity.chat_group.ChatGroup;
-import com.imperial.academia.entity.chat_group.ChatGroupFactory;
-import com.imperial.academia.entity.group_member.GroupMember;
-
 import java.sql.SQLException;
 import java.util.List;
+
+import com.imperial.academia.cache.GroupMemberCache;
+import com.imperial.academia.data_access.GroupMemberDAI;
+import com.imperial.academia.entity.group_member.GroupMember;
 
 /**
  * Implementation of the GroupMemberService interface.

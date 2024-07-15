@@ -1,23 +1,35 @@
 package com.imperial.academia.view;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.imperial.academia.interface_adapter.profile.ProfileController;
-import com.imperial.academia.interface_adapter.profile.ProfileState;
-import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
-
-import javax.sound.midi.MidiChannel;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import com.imperial.academia.interface_adapter.profile.ProfileState;
+import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
+
 public class ProfileView extends JPanel {
+    
+    // private final ProfileController profileController = new ProfileController();
+
     public final String viewName = "profile";
-    private final Map<String, ImageIcon> imageCache= new HashMap<>();
+    private final Map<String, ImageIcon> imageCache = new HashMap<>();
 
     // Constructor
-    public ProfileView(ProfileController profileController, ProfileViewModel profileViewModel) {
-        super(new BorderLayout());  // Set the layout of ProfileView to BorderLayout for simplicity
+    public ProfileView(ProfileViewModel profileViewModel) {
+        super(new BorderLayout()); // Set the layout of ProfileView to BorderLayout for simplicity
 
         JPanel mainPanel = new JPanel(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -35,32 +47,17 @@ public class ProfileView extends JPanel {
         avatarPanel.add(imageLabel);
         topPanel.add(avatarPanel, BorderLayout.WEST);
 
-        JButton chatOrModify = new JButton("Edit");
-        chatOrModify.addMouseListener(new java.awt.event.MouseAdapter() {
-
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (profileViewModel.getProfileState().isMe()){
-                    profileController.edit();
-                }else{
-                    profileController.chat(profileViewModel.getProfileState().getId());
-                }
-            }
-        });
-
-        topPanel.add(chatOrModify, BorderLayout.EAST);
-
         JPanel infoPanel = new JPanel(new GridLayout(0, 1));
         infoPanel.setBackground(new Color(255, 225, 120));
-        JLabel nameLabel = new JLabel("UserName: UserName");
+        JLabel nameLabel = new JLabel("          UserName: UserName");// TODO need fix
         nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        JLabel emailLabel = new JLabel("Email: xxx@mail.com");
+        JLabel emailLabel = new JLabel("          Email: xxx@mail.com");
         emailLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        JLabel idLabel = new JLabel("User ID: UserId");
+        JLabel idLabel = new JLabel("          User ID: UserId");
         idLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        JLabel roleLabel = new JLabel("Role : ");
+        JLabel roleLabel = new JLabel("          Role : ");
         roleLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        JLabel registrationDateLabel = new JLabel("Member since ");
+        JLabel registrationDateLabel = new JLabel("          Member since ");
         registrationDateLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
         infoPanel.add(nameLabel, BorderLayout.CENTER);
@@ -68,7 +65,7 @@ public class ProfileView extends JPanel {
         infoPanel.add(idLabel, BorderLayout.CENTER);
         infoPanel.add(roleLabel, BorderLayout.CENTER);
         infoPanel.add(registrationDateLabel, BorderLayout.CENTER);
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(0, 100, 0, 0));
+
         topPanel.add(infoPanel, BorderLayout.CENTER);
 
         // TODO change bottom to user's post
@@ -95,30 +92,32 @@ public class ProfileView extends JPanel {
         constraints.weighty = 0.8;
         mainPanel.add(scrollPane, constraints);
 
-        this.add(mainPanel, BorderLayout.CENTER);  // Add mainPanel to ProfileView
+        this.add(mainPanel, BorderLayout.CENTER); // Add mainPanel to ProfileView
 
-        profileViewModel.addPropertyChangeListener(evt ->{
-            if ("state".equals((evt.getPropertyName()))){
+        profileViewModel.addPropertyChangeListener(evt -> {
+            if ("state".equals((evt.getPropertyName()))) {
                 ProfileState state = (ProfileState) evt.getNewValue();
                 // set the new image
-                if (imageCache.containsKey(state.getAvatarUrl())){
+                if (imageCache.containsKey(state.getAvatarUrl())) {
                     imageLabel.setIcon(imageCache.get(state.getAvatarUrl()));
-                }else{
-                ImageIcon UserIcon = new ImageIcon(state.getAvatarUrl());
-                Image resizedUserImage = UserIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-                ImageIcon resizedUserIcon = new ImageIcon(resizedUserImage);
-                imageLabel.setIcon(resizedUserIcon);
-                imageCache.put(state.getAvatarUrl(), resizedUserIcon);
+                } else {
+                    ImageIcon UserIcon = new ImageIcon(state.getAvatarUrl());
+                    Image resizedUserImage = UserIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                    ImageIcon resizedUserIcon = new ImageIcon(resizedUserImage);
+                    imageLabel.setIcon(resizedUserIcon);
+                    imageCache.put(state.getAvatarUrl(), resizedUserIcon);
                 }
 
                 // set the user info
-                nameLabel.setText("UserName: " + state.getUsername());
-                emailLabel.setText("Email: " + state.getEmail());
-                idLabel.setText("User ID: " + state.getId());
-                roleLabel.setText("Role : " + state.getRole());
-                registrationDateLabel.setText("Member since " + state.getRegistrationDate().toString().substring(0,10));
-                chatOrModify.setText(state.isMe()? "Edit" : "Chat");
-                // TODO profile edit view
+                nameLabel.setText("          UserName: " + state.getUsername());
+                emailLabel.setText("          Email: " + state.getEmail());
+                idLabel.setText("          User ID: " + state.getId());
+                roleLabel.setText("          Role : " + state.getRole());
+                registrationDateLabel
+                        .setText("          Member since " + state.getRegistrationDate().toString().substring(0, 10));
+                // TODO date formate need to be fixed
+                // state.getRegistrationDate();
+                // TODO info and post need to be done
             }
         });
     }

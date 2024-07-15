@@ -13,7 +13,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import com.imperial.academia.app.usecase_factory.*;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarViewModel;
 import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
@@ -23,7 +22,17 @@ import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
 import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
 import com.imperial.academia.interface_adapter.signup.SignupViewModel;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
-import com.imperial.academia.view.*;
+import com.imperial.academia.view.ChatView;
+import com.imperial.academia.view.CreatePostView;
+import com.imperial.academia.view.ForumView;
+import com.imperial.academia.view.LoginView;
+import com.imperial.academia.view.PostBoardView;
+import com.imperial.academia.view.ProfileView;
+import com.imperial.academia.view.SignupView;
+import com.imperial.academia.view.ViewManager;
+import com.imperial.academia.view.components.ChatSideBarView;
+import com.imperial.academia.view.components.ChatWindowView;
+import com.imperial.academia.view.components.TopNavigationBar;
 
 public class Main {
     public static void main(String[] args) throws SQLException, IOException {
@@ -64,42 +73,46 @@ public class Main {
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
 
-        LoginViewModel loginViewModel = new LoginViewModel();
-        SignupViewModel signupViewModel = new SignupViewModel();
-        PostBoardViewModel postBoardViewModel = new PostBoardViewModel();
-        CreatePostViewModel createPostViewModel = new CreatePostViewModel();
-        ChatSideBarViewModel chatSideBarViewModel = new ChatSideBarViewModel();
-        ChatWindowViewModel chatWindowViewModel = new ChatWindowViewModel();
-        TopNavigationBarViewModel topNavigationBarViewModel = new TopNavigationBarViewModel();
-        ProfileViewModel profileViewModel = new ProfileViewModel();
+        ViewModels viewModels = new ViewModels();
+
+        LoginViewModel loginViewModel = viewModels.getLoginViewModel();
+        SignupViewModel signupViewModel = viewModels.getSignupViewModel();
+        PostBoardViewModel postBoardViewModel = viewModels.getPostBoardViewModel();
+        CreatePostViewModel createPostViewModel = viewModels.getCreatePostViewModel();
+        ChatSideBarViewModel chatSideBarViewModel = viewModels.getChatSideBarViewModel();
+        ChatWindowViewModel chatWindowViewModel = viewModels.getChatWindowViewModel();
+        TopNavigationBarViewModel topNavigationBarViewModel = viewModels.getTopNavigationBarViewModel();
+        ProfileViewModel profileViewModel = viewModels.getProfileViewModel();
         try {
             ServiceFactory.initialize();
+            UsecaseFactory.initialize(viewManagerModel, viewModels);
 
-            SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel);
+            SignupView signupView = new SignupView(signupViewModel);
             views.add(signupView, signupView.viewName);
 
-            LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel,
-                    topNavigationBarViewModel, chatSideBarViewModel);
+            LoginView loginView = new LoginView(loginViewModel);
             views.add(loginView, loginView.viewName);
 
-            PostBoardView postBoardView = PostBoardUseCaseFactory.create(viewManagerModel, postBoardViewModel);
+            PostBoardView postBoardView = new PostBoardView(postBoardViewModel);
             views.add(postBoardView, postBoardView.viewName);
 
-            CreatePostView createPostView = CreatePostUseCaseFactory.create(viewManagerModel, createPostViewModel);
+            CreatePostView createPostView = new CreatePostView(createPostViewModel);
             views.add(createPostView, createPostView.viewName);
 
-            ChatView chatView = ChatUseCaseFactory.create(viewManagerModel, chatSideBarViewModel, chatWindowViewModel,application);
+            ChatSideBarView chatSideBarView = new ChatSideBarView(chatSideBarViewModel);
+            ChatWindowView chatWindowView = new ChatWindowView(chatWindowViewModel, application);
+            ChatView chatView = new ChatView(chatSideBarView, chatWindowView);
             views.add(chatView, chatView.viewName);
 
-            ProfileView profileView = ProfileUseCaseFactory.create(viewManagerModel, profileViewModel,chatSideBarViewModel,chatWindowViewModel);
+            ProfileView profileView = new ProfileView(profileViewModel);
             views.add(profileView, profileView.viewName);
             // Add the top navigation bar to the post board view
             // postBoardView.addTopNavigationBar(topNavigationBar);
 
-            createPostView.add(TopNavigationBarUseCaseFactory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
-            postBoardView.add(TopNavigationBarUseCaseFactory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
-            chatView.add(TopNavigationBarUseCaseFactory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
-            profileView.add(TopNavigationBarUseCaseFactory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
+            createPostView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
+            postBoardView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
+            chatView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
+            profileView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

@@ -37,7 +37,7 @@ public class CreatePostUseCaseFactory {
      * @return a new instance of {@link CreatePostController}
      */
     private static CreatePostController createController(ViewManagerModel viewManagerModel, CreatePostViewModel createPostViewModel) {
-        CreatePostPresenter createPostPresenter = new CreatePostPresenter(viewManagerModel, createPostViewModel);
+        CreatePostPresenter createPostPresenter = new CreatePostPresenter(createPostViewModel);
         CreatePostInputBoundary createPostInteractor = new CreatePostInteractor(createPostPresenter);
         return new CreatePostController(createPostInteractor);
     }
