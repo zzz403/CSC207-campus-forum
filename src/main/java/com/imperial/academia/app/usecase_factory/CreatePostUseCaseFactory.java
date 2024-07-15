@@ -26,7 +26,7 @@ public class CreatePostUseCaseFactory {
      */
     public static CreatePostView create(ViewManagerModel viewManagerModel, CreatePostViewModel createPostViewModel) throws ClassNotFoundException {
         CreatePostController createPostController = createController(viewManagerModel, createPostViewModel);
-        return new CreatePostView(createPostController, createPostViewModel);
+        return new CreatePostView(createPostViewModel);
     }
 
     /**
@@ -39,6 +39,6 @@ public class CreatePostUseCaseFactory {
     private static CreatePostController createController(ViewManagerModel viewManagerModel, CreatePostViewModel createPostViewModel) {
         CreatePostPresenter createPostPresenter = new CreatePostPresenter(createPostViewModel);
         CreatePostInputBoundary createPostInteractor = new CreatePostInteractor(createPostPresenter);
-        return new CreatePostController(createPostInteractor);
+        return new CreatePostController();
     }
 }

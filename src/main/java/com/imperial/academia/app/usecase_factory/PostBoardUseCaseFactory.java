@@ -28,7 +28,7 @@ public class PostBoardUseCaseFactory {
      */
     public static PostBoardView create(ViewManagerModel viewManagerModel, PostBoardViewModel posterViewModel) throws ClassNotFoundException {
         PostBoardController posterController = createController(viewManagerModel);
-        return new PostBoardView(posterViewModel, posterController);
+        return new PostBoardView(posterViewModel);
     }
 
     /**

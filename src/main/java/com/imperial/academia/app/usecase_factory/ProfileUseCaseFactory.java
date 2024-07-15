@@ -18,7 +18,7 @@ public class ProfileUseCaseFactory {
 
     public static ProfileView create(ViewManagerModel viewManagerModel, ProfileViewModel profileViewModel){
         profileController = createController(viewManagerModel, profileViewModel);
-        return new ProfileView(profileController, profileViewModel);
+        return new ProfileView(profileViewModel);
     }
 
     private static ProfileController createController(ViewManagerModel viewManagerModel, ProfileViewModel profileViewModel){
@@ -27,7 +27,7 @@ public class ProfileUseCaseFactory {
 
         ProfileInputBoundry profileInteractor = UsecaseFactory.getProfileInteractor();
 
-        return new ProfileController(profileInteractor);
+        return new ProfileController();
     }
     
     public static ProfileController getProfileController(){

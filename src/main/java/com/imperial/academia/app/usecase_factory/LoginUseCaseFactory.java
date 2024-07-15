@@ -44,7 +44,7 @@ public class LoginUseCaseFactory {
         try {
             LoginController loginController = createUserLoginUseCase(viewManagerModel, loginViewModel,
                     topNavigationBarViewModel, chatSideBarViewModel);
-            return new LoginView(loginController, loginViewModel);
+            return new LoginView(loginViewModel);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
         }
@@ -80,6 +80,6 @@ public class LoginUseCaseFactory {
         LoginInputBoundary userLoginInteractor = UsecaseFactory.getLoginInteractor();
 
         // Return the login controller
-        return new LoginController(userLoginInteractor);
+        return new LoginController();
     }
 }

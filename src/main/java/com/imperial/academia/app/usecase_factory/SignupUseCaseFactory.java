@@ -37,7 +37,7 @@ public class SignupUseCaseFactory {
     public static SignupView create(ViewManagerModel viewManagerModel, LoginViewModel loginViewModel, SignupViewModel signupViewModel) throws ClassNotFoundException {
         try {
             SignupController signupController = createUserSignupUseCase(viewManagerModel, signupViewModel, loginViewModel);
-            return new SignupView(signupController, signupViewModel);
+            return new SignupView(signupViewModel);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
         }
@@ -59,6 +59,6 @@ public class SignupUseCaseFactory {
         UserFactory userFactory = new CommonUserFactory();
         SignupInputBoundary userSignupInteractor = UsecaseFactory.getSignupInteractor();
 
-        return new SignupController(userSignupInteractor);
+        return new SignupController();
     }
 }
