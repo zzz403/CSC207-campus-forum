@@ -7,6 +7,7 @@ import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.service.UserService;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
+import com.imperial.academia.session.SessionManager;
 
 public class ProfileInteractor implements ProfileInputBoundry {
 
@@ -29,7 +30,9 @@ public class ProfileInteractor implements ProfileInputBoundry {
                         user.getEmail(),
                         user.getRole(),
                         user.getAvatarUrl(),
-                        user.getRegistrationDate());
+                        user.getRegistrationDate(),
+                        SessionManager.getCurrentUser().getId() == user.getId()
+                );
                 profilepresenter.present(profileOutputData);
             } else {
                 profilepresenter.presentError("User not found");
