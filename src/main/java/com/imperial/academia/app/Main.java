@@ -93,8 +93,6 @@ public class Main {
 
             ProfileView profileView = ProfileUseCaseFactory.create(viewManagerModel, profileViewModel,chatSideBarViewModel,chatWindowViewModel);
             views.add(profileView, profileView.viewName);
-            // Add the top navigation bar to the post board view
-            // postBoardView.addTopNavigationBar(topNavigationBar);
 
             createPostView.add(TopNavigationBarUseCaseFactory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);
             postBoardView.add(TopNavigationBarUseCaseFactory.create(viewManagerModel, topNavigationBarViewModel,application), BorderLayout.NORTH);

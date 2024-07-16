@@ -27,8 +27,7 @@ public class ProfilePresenter implements ProfileOutputBoundry {
 
         profileViewModel.setProfileState(profileState);
         profileViewModel.firePropertyChanged();
-        viewManagerModel.setActiveView("profile");
-        viewManagerModel.firePropertyChanged();
+        changeView("profile");
     }
 
 

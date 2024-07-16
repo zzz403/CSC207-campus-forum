@@ -24,6 +24,6 @@ public class ProfileController{
     }
 
     public void edit(){
-        //TODO  edit need to be done
+//        editInteractor.set
     }
 }
