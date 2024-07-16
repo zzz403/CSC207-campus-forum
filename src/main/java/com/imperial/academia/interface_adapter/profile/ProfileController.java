@@ -1,19 +1,30 @@
 package com.imperial.academia.interface_adapter.profile;
 
 import com.imperial.academia.app.UsecaseFactory;
+import com.imperial.academia.use_case.chat.ChatCoordinatorInputBoundary;
 import com.imperial.academia.use_case.profile.ProfileInputBoundry;
 import com.imperial.academia.use_case.profile.ProfileInputData;
 
 public class ProfileController{
     private final ProfileInputBoundry profileInteractor;
+    private final ChatCoordinatorInputBoundary chatCoordinatorInteractor;
 
     public ProfileController() {
         this.profileInteractor = UsecaseFactory.getProfileInteractor();
+        this.chatCoordinatorInteractor = UsecaseFactory.getChatCoordinatorInteractor();
     }
 
 
     public void showProfile(int userId){
         ProfileInputData profileInputData = new ProfileInputData(userId);
         profileInteractor.excute(profileInputData);
+    }
+
+    public void chat(int userId){
+        chatCoordinatorInteractor.toPrivateChat(userId);
+    }
+
+    public void edit(){
+//        editInteractor.set
     }
 }

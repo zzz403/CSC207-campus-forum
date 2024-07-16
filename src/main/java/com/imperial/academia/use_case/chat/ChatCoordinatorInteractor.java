@@ -1,21 +1,21 @@
 package com.imperial.academia.use_case.chat;
 
 import com.imperial.academia.app.ServiceFactory;
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.service.ChatGroupService;
 import com.imperial.academia.session.SessionManager;
+import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 
 public class ChatCoordinatorInteractor implements ChatCoordinatorInputBoundary{
     private final ChatSideBarInputBoundary chatSidebarInteractor;
     private final ChatWindowInputBoundary chatWindowInteractor;
     private final ChatGroupService chatGroupService;
-    private final ViewManagerModel viewManagerModel;
+    private final ChangeViewInputBoundary changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
 
-    public ChatCoordinatorInteractor(ChatSideBarInputBoundary chatSidebarInteractor,
-                                     ChatWindowInputBoundary chatWindowInteractor, ViewManagerModel viewManagerModel) {
-        this.chatSidebarInteractor = chatSidebarInteractor;
-        this.chatWindowInteractor = chatWindowInteractor;
-        this.viewManagerModel = viewManagerModel;
+    public ChatCoordinatorInteractor() {
+        this.chatSidebarInteractor = UsecaseFactory.getChatSideBarInteractor();
+        this.chatWindowInteractor = UsecaseFactory.getChatWindowInteractor();
         this.chatGroupService = ServiceFactory.getChatGroupService();
     }
 
@@ -28,8 +28,7 @@ public class ChatCoordinatorInteractor implements ChatCoordinatorInputBoundary{
                     "Hi, nice to meet you I'm" + SessionManager.getCurrentUser().getUsername(), "text");
             chatWindowInteractor.sendMessage(chatWindowInputData);
             chatWindowInteractor.execute(chatGroupId);
-            viewManagerModel.setActiveView("chat");
-            viewManagerModel.firePropertyChanged();
+            changeViewInteractor.changeView("chat");
         } catch (Exception e) {
             System.out.println("An error occurred while loading chat messages.");
         }

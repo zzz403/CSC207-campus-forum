@@ -23,12 +23,7 @@ import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewMod
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.changeview.ChangeViewInteractor;
 import com.imperial.academia.use_case.changeview.ChangeViewOutputBoundary;
-import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
-import com.imperial.academia.use_case.chat.ChatSideBarInteractor;
-import com.imperial.academia.use_case.chat.ChatSideBarOutputBoundary;
-import com.imperial.academia.use_case.chat.ChatWindowInputBoundary;
-import com.imperial.academia.use_case.chat.ChatWindowInteractor;
-import com.imperial.academia.use_case.chat.ChatWindowOutputBoundary;
+import com.imperial.academia.use_case.chat.*;
 import com.imperial.academia.use_case.createpost.CreatePostInputBoundary;
 import com.imperial.academia.use_case.createpost.CreatePostInteractor;
 import com.imperial.academia.use_case.createpost.CreatePostOutputBoundary;
@@ -59,6 +54,7 @@ public class UsecaseFactory {
     private static SessionInputBoundary sessionInteractor;
     private static ProfileInputBoundry profileInteractor;
     private static ChatWindowInputBoundary chatWindowInteractor;
+    private static ChatCoordinatorInputBoundary chatCoordinatorInteractor;
 
     /** Prevents instantiation of this utility class. */
     private UsecaseFactory() {
@@ -101,6 +97,8 @@ public class UsecaseFactory {
         ChatWindowOutputBoundary chatWindowPresenter = new ChatWindowPresenter(chatWindowViewModel);
         ChatMessageFactory chatMessageFactory = new CommonChatMessageFactory();
         chatWindowInteractor = new ChatWindowInteractor(chatWindowPresenter, chatMessageFactory);
+
+        chatCoordinatorInteractor = new ChatCoordinatorInteractor();
 
         RememberMeDAO rememberMeDAO = new RememberMeDAO();
         LoginOutputBoundary loginPresenter = new LoginPresenter(loginViewModel, topNavigationBarViewModel);
@@ -185,4 +183,6 @@ public class UsecaseFactory {
     public static ChatWindowInputBoundary getChatWindowInteractor() {
         return chatWindowInteractor;
     }
+
+    public static ChatCoordinatorInputBoundary getChatCoordinatorInteractor(){return chatCoordinatorInteractor;}
 }

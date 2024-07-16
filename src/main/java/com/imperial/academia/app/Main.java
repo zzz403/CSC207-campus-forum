@@ -24,7 +24,6 @@ import com.imperial.academia.interface_adapter.signup.SignupViewModel;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
 import com.imperial.academia.view.ChatView;
 import com.imperial.academia.view.CreatePostView;
-import com.imperial.academia.view.ForumView;
 import com.imperial.academia.view.LoginView;
 import com.imperial.academia.view.PostBoardView;
 import com.imperial.academia.view.ProfileView;
@@ -106,8 +105,6 @@ public class Main {
 
             ProfileView profileView = new ProfileView(profileViewModel);
             views.add(profileView, profileView.viewName);
-            // Add the top navigation bar to the post board view
-            // postBoardView.addTopNavigationBar(topNavigationBar);
 
             createPostView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
             postBoardView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
@@ -117,10 +114,6 @@ public class Main {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-        ForumView forumView = new ForumView();
-
-        views.add(forumView, forumView.viewName);
 
         // Set the initial view to "log in"
         viewManagerModel.setActiveView("log in");
