@@ -12,6 +12,9 @@ import java.awt.event.MouseEvent;
  * It displays the user's avatar and handles clicks to show the user's profile.
  */
 public class AvatarComponent extends JLabel {
+
+    private final ProfileController profileController = new ProfileController();
+
     /**
      * Constructor to initialize the AvatarComponent.
      *
@@ -19,7 +22,7 @@ public class AvatarComponent extends JLabel {
      * @param userId The ID of the user.
      * @param avatarIcon The ImageIcon of the user's avatar image.
      */
-    public AvatarComponent(ProfileController profileController, int userId, ImageIcon avatarIcon) {
+    public AvatarComponent(int userId, ImageIcon avatarIcon) {
         setIcon(avatarIcon);
         setPreferredSize(new Dimension(50, 50));
 

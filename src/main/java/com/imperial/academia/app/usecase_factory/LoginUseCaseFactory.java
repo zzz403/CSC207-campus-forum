@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.data_access.RememberMeDAO;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarPresenter;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarViewModel;
@@ -43,7 +44,7 @@ public class LoginUseCaseFactory {
         try {
             LoginController loginController = createUserLoginUseCase(viewManagerModel, loginViewModel,
                     topNavigationBarViewModel, chatSideBarViewModel);
-            return new LoginView(loginController, loginViewModel);
+            return new LoginView(loginViewModel);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
         }
@@ -65,7 +66,7 @@ public class LoginUseCaseFactory {
             ChatSideBarViewModel chatSideBarViewModel) throws SQLException, ClassNotFoundException {
 
         // Create the presenter for the login use case
-        LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, loginViewModel,
+        LoginOutputBoundary loginOutputBoundary = new LoginPresenter(loginViewModel,
                 topNavigationBarViewModel);
 
         // Create the RememberMeDAO
@@ -76,9 +77,9 @@ public class LoginUseCaseFactory {
                 chatSideBarPresenter);
 
         // Create the interactor for the login use case
-        LoginInputBoundary userLoginInteractor = new LoginInteractor(loginOutputBoundary, rememberMeDAO, chatSideBarInteractor);
+        LoginInputBoundary userLoginInteractor = UsecaseFactory.getLoginInteractor();
 
         // Return the login controller
-        return new LoginController(userLoginInteractor);
+        return new LoginController();
     }
 }

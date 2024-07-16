@@ -40,7 +40,7 @@ public class TopNavigationBarUseCaseFactory {
         if (topNavigationBarController == null) {
             topNavigationBarController = createController(viewManagerModel, topNavigationBarViewModel);
         }
-        return new TopNavigationBar(topNavigationBarController, topNavigationBarViewModel, frame);
+        return new TopNavigationBar(topNavigationBarViewModel, frame);
     }
 
     /**
@@ -55,6 +55,6 @@ public class TopNavigationBarUseCaseFactory {
         ChangeViewOutputBoundary changeViewPresenter = new TopNavigationBarPresenter(viewManagerModel, topNavigationBarViewModel);
         ChangeViewInputBoundary changeViewInteractor = new ChangeViewInteractor(changeViewPresenter);
         SessionInputBoundary sessionInputBoundary = new SessionInteractor();
-        return new TopNavigationBarController(changeViewInteractor, sessionInputBoundary);
+        return new TopNavigationBarController();
     }
 }

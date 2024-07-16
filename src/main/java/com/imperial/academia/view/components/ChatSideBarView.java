@@ -26,18 +26,16 @@ import java.util.List;
 public class ChatSideBarView extends JPanel {
     private final JPanel chatListPanel;
     private final JTextField searchField;
-    private final ChatSideBarController chatSideBarController;
+    private final ChatSideBarController chatSideBarController = new ChatSideBarController();
     private final Map<Integer,ImageIcon> avatarCache = new HashMap<>();
 
     /**
      * Constructs a ChatSideBarView with the specified controller and view model.
      *
-     * @param chatSideBarController The controller to handle user interactions.
      * @param chatSideBarViewModel  The view model to manage the state of the
      *                              sidebar.
      */
-    public ChatSideBarView(ChatSideBarController chatSideBarController, ChatSideBarViewModel chatSideBarViewModel) {
-        this.chatSideBarController = chatSideBarController;
+    public ChatSideBarView(ChatSideBarViewModel chatSideBarViewModel) {
         try {
             BufferedImage avatarImage = ImageIO.read(new File("resources/avatar/default/group_chat.png"));
             Image scaledAvatarImage = avatarImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);

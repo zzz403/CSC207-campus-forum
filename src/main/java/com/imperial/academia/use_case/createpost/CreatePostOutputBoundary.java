@@ -16,7 +16,7 @@ public interface CreatePostOutputBoundary {
     void updateBoardsName(List<String> boardNames);
 
     /**
-     * Submit post seccuess, change the view to postboard
+     * Submit post seccuess, and reset the view model
      */
     void submitSeccuss();
 

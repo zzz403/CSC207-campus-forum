@@ -1,12 +1,15 @@
 package com.imperial.academia.use_case.signup;
 
-import com.imperial.academia.service.UserService;
-import com.imperial.academia.app.ServiceFactory;
-import com.imperial.academia.entity.user.User;
-import com.imperial.academia.entity.user.UserFactory;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.regex.Pattern;
+
+import com.imperial.academia.app.ServiceFactory;
+import com.imperial.academia.app.UsecaseFactory;
+import com.imperial.academia.entity.user.User;
+import com.imperial.academia.entity.user.UserFactory;
+import com.imperial.academia.service.UserService;
+import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 
 /**
  * Interactor class for handling the signup use case.
@@ -15,6 +18,8 @@ public class SignupInteractor implements SignupInputBoundary {
     private final SignupOutputBoundary signupPresenter;
     private final UserFactory userFactory;
     private final UserService userService;
+
+    private final ChangeViewInputBoundary changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
 
     /**
      * Constructs a SignupInteractor with the given dependencies.
@@ -57,6 +62,7 @@ public class SignupInteractor implements SignupInputBoundary {
                 userService.insert(user);
                 SignupOutputData signupOutputData = new SignupOutputData(user.getUsername(), now.toString());
                 signupPresenter.prepareSuccessView(signupOutputData);
+                changeViewInteractor.changeView("log in");
             }
         } catch (SQLException e) {
             signupPresenter.prepareFailView("An error occurred during signup: " + e.getMessage());
@@ -77,6 +83,6 @@ public class SignupInteractor implements SignupInputBoundary {
 
     @Override
     public void navigateToLogin() {
-        signupPresenter.navigateToLogin();
+        changeViewInteractor.changeView("log in");
     }
 }

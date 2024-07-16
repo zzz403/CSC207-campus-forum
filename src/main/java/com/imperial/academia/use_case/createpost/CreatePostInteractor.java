@@ -6,11 +6,13 @@ import java.time.Instant;
 import java.util.List;
 
 import com.imperial.academia.app.ServiceFactory;
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.entity.post.Post;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.service.BoardService;
 import com.imperial.academia.service.PostService;
 import com.imperial.academia.session.SessionManager;
+import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.other.ChatGPTApiImp;
 import com.imperial.academia.use_case.other.LLMApi;
 
@@ -20,6 +22,9 @@ import com.imperial.academia.use_case.other.LLMApi;
  */
 public class CreatePostInteractor implements CreatePostInputBoundary {
     
+    /** The interactor that handles the logic for changing the view */
+    private final ChangeViewInputBoundary changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
+
     /** The presenter */
     private final CreatePostOutputBoundary createPostPresenter;
 
@@ -77,6 +82,7 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
         }
 
         createPostPresenter.submitSeccuss();
+        changeViewInteractor.changeView("post board");
         return true;
     }
 

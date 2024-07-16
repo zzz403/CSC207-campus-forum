@@ -1,5 +1,6 @@
 package com.imperial.academia.interface_adapter.chat;
 
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
 import com.imperial.academia.use_case.chat.ChatSideBarInputData;
 import com.imperial.academia.use_case.chat.ChatWindowInputBoundary;
@@ -14,12 +15,10 @@ public class ChatSideBarController {
     /**
      * Constructor for ChatSideBarController.
      *
-     * @param chatSideBarInteractor the interactor for chat sidebar operations
-     * @param chatWindowInteractor the interactor for chat window operations
      */
-    public ChatSideBarController(ChatSideBarInputBoundary chatSideBarInteractor, ChatWindowInputBoundary chatWindowInteractor) {
-        this.chatSideBarInteractor = chatSideBarInteractor;
-        this.chatWindowInteractor = chatWindowInteractor;
+    public ChatSideBarController() {
+        chatSideBarInteractor = UsecaseFactory.getChatSideBarInteractor();
+        chatWindowInteractor = UsecaseFactory.getChatWindowInteractor();
     }
 
     /**

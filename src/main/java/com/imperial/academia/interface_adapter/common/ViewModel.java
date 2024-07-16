@@ -39,4 +39,6 @@ public abstract class ViewModel {
      * @param listener The PropertyChangeListener to be added.
      */
     public abstract void addPropertyChangeListener(PropertyChangeListener listener);
+
+    
 }

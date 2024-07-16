@@ -7,7 +7,7 @@ package com.imperial.academia.use_case.changeview;
 public class ChangeViewInteractor implements ChangeViewInputBoundary {
     
     /** The presenter that handles the view change logic. */
-    private final ChangeViewOutputBoundary changeViewPresenter; 
+    private final ChangeViewOutputBoundary changeViewPresenter;
     
     /**
      * Constructs a new ChangeViewInteractor with the specified presenter.

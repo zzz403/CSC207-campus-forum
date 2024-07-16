@@ -1,5 +1,6 @@
 package com.imperial.academia.app.usecase_factory;
 
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.interface_adapter.postboard.PostBoardController;
 import com.imperial.academia.interface_adapter.postboard.PostBoardPresenter;
@@ -27,7 +28,7 @@ public class PostBoardUseCaseFactory {
      */
     public static PostBoardView create(ViewManagerModel viewManagerModel, PostBoardViewModel posterViewModel) throws ClassNotFoundException {
         PostBoardController posterController = createController(viewManagerModel);
-        return new PostBoardView(posterViewModel, posterController);
+        return new PostBoardView(posterViewModel);
     }
 
     /**
@@ -37,8 +38,6 @@ public class PostBoardUseCaseFactory {
      * @return a new instance of {@link PostBoardController}
      */
     private static PostBoardController createController(ViewManagerModel viewManagerModel) {
-        ChangeViewOutputBoundary postBoardPresenter = new PostBoardPresenter(viewManagerModel);
-        ChangeViewInputBoundary changeViewInteractor = new ChangeViewInteractor(postBoardPresenter);
-        return new PostBoardController(changeViewInteractor);
+        return new PostBoardController();
     }
 }

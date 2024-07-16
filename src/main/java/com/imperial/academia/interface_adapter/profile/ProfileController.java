@@ -1,5 +1,6 @@
 package com.imperial.academia.interface_adapter.profile;
 
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.use_case.chat.ChatCoordinatorInputBoundary;
 import com.imperial.academia.use_case.profile.ProfileInputBoundry;
 import com.imperial.academia.use_case.profile.ProfileInputData;
@@ -8,9 +9,9 @@ public class ProfileController{
     private final ProfileInputBoundry profileInteractor;
     private final ChatCoordinatorInputBoundary chatCoordinatorInteractor;
 
-    public ProfileController(ProfileInputBoundry profileInteractor, ChatCoordinatorInputBoundary chatCoordinatorInteractor) {
-        this.profileInteractor = profileInteractor;
-        this.chatCoordinatorInteractor = chatCoordinatorInteractor;
+    public ProfileController() {
+        this.profileInteractor = UsecaseFactory.getProfileInteractor();
+        this.chatCoordinatorInteractor = UsecaseFactory.getChatCoordinatorInteractor();
     }
 
 

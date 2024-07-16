@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.entity.user.CommonUserFactory;
 import com.imperial.academia.entity.user.UserFactory;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
@@ -36,7 +37,7 @@ public class SignupUseCaseFactory {
     public static SignupView create(ViewManagerModel viewManagerModel, LoginViewModel loginViewModel, SignupViewModel signupViewModel) throws ClassNotFoundException {
         try {
             SignupController signupController = createUserSignupUseCase(viewManagerModel, signupViewModel, loginViewModel);
-            return new SignupView(signupController, signupViewModel);
+            return new SignupView(signupViewModel);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
         }
@@ -54,10 +55,10 @@ public class SignupUseCaseFactory {
      * @throws ClassNotFoundException if the UserDAO class is not found
      */
     private static SignupController createUserSignupUseCase(ViewManagerModel viewManagerModel, SignupViewModel signupViewModel, LoginViewModel loginViewModel) throws SQLException, ClassNotFoundException {
-        SignupOutputBoundary signupOutputBoundary = new SignupPresenter(viewManagerModel, signupViewModel, loginViewModel);
+        // SignupOutputBoundary signupOutputBoundary = new SignupPresenter(viewManagerModel, signupViewModel, loginViewModel);
         UserFactory userFactory = new CommonUserFactory();
-        SignupInputBoundary userSignupInteractor = new SignupInteractor(signupOutputBoundary, userFactory);
+        SignupInputBoundary userSignupInteractor = UsecaseFactory.getSignupInteractor();
 
-        return new SignupController(userSignupInteractor);
+        return new SignupController();
     }
 }

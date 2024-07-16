@@ -2,6 +2,7 @@ package com.imperial.academia.interface_adapter.login;
 
 import java.io.IOException;
 
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.use_case.login.LoginInputBoundary;
 import com.imperial.academia.use_case.login.LoginInputData;
 
@@ -17,8 +18,8 @@ public class LoginController {
      * 
      * @param loginInteractor The login interactor to handle login logic.
      */
-    public LoginController(LoginInputBoundary loginInteractor) {
-        this.loginInteractor = loginInteractor;
+    public LoginController() {
+        this.loginInteractor = UsecaseFactory.getLoginInteractor();
     }
 
     /**

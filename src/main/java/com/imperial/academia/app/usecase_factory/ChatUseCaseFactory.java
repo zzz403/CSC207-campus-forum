@@ -50,20 +50,19 @@ public class ChatUseCaseFactory {
         ChatWindowOutputBoundary chatWindowPresenter = new ChatWindowPresenter(chatWindowViewModel);
 
         // Create interactors
+        ChatSideBarInputBoundary chatSideBarInteractor = new ChatSideBarInteractor(
+                chatSideBarPresenter);
         ChatMessageFactory chatMessageFactory = new CommonChatMessageFactory();
         ChatWindowInputBoundary chatWindowInteractor = new ChatWindowInteractor(
                 chatWindowPresenter, chatMessageFactory);
-        ChatSideBarInputBoundary chatSideBarInteractor = new ChatSideBarInteractor(
-                chatSideBarPresenter);
 
         // Create controllers
-        ChatSideBarController chatSideBarController = new ChatSideBarController(chatSideBarInteractor,
-                chatWindowInteractor);
-        ChatWindowController chatWindowController = new ChatWindowController(chatWindowInteractor);
+        ChatSideBarController chatSideBarController = new ChatSideBarController();
+        ChatWindowController chatWindowController = new ChatWindowController();
 
         // Create views
-        ChatSideBarView chatSideBarView = new ChatSideBarView(chatSideBarController, chatSideBarViewModel);
-        ChatWindowView chatWindowView = new ChatWindowView(chatWindowController, chatWindowViewModel, application);
+        ChatSideBarView chatSideBarView = new ChatSideBarView(chatSideBarViewModel);
+        ChatWindowView chatWindowView = new ChatWindowView(chatWindowViewModel, application);
 
         // Return the combined chat view
         return new ChatView(chatSideBarView, chatWindowView);
