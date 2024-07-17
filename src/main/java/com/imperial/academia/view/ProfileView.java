@@ -1,15 +1,27 @@
 package com.imperial.academia.view;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 import com.imperial.academia.interface_adapter.profile.ProfileController;
 import com.imperial.academia.interface_adapter.profile.ProfileState;
 import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
-
-import javax.sound.midi.MidiChannel;
-import javax.swing.*;
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ProfileView extends JPanel {
     public final String viewName = "profile";
