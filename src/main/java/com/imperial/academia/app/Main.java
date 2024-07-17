@@ -1,18 +1,5 @@
 package com.imperial.academia.app;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Image;
-import java.awt.Taskbar;
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
-
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
-
 import com.imperial.academia.interface_adapter.chat.ChatSideBarViewModel;
 import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
@@ -22,16 +9,17 @@ import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
 import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
 import com.imperial.academia.interface_adapter.signup.SignupViewModel;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
-import com.imperial.academia.view.ChatView;
-import com.imperial.academia.view.CreatePostView;
-import com.imperial.academia.view.LoginView;
-import com.imperial.academia.view.PostBoardView;
-import com.imperial.academia.view.ProfileView;
-import com.imperial.academia.view.SignupView;
-import com.imperial.academia.view.ViewManager;
+import com.imperial.academia.view.*;
 import com.imperial.academia.view.components.ChatSideBarView;
 import com.imperial.academia.view.components.ChatWindowView;
 import com.imperial.academia.view.components.TopNavigationBar;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) throws SQLException, IOException {

@@ -1,6 +1,6 @@
-package com.imperial.academia.use_case.other;
+package com.imperial.academia.use_case.LLM;
 
-public interface LLMApi {
+public interface LLMInputBoundary {
 
 
     /**
