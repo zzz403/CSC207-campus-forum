@@ -111,7 +111,7 @@ public class Main {
         }
 
         // Set the initial view to "log in"
-       viewManagerModel.setActiveView("log in");
+        viewManagerModel.setActiveView("log in");
         // viewManagerModel.setActiveView("post");
         viewManagerModel.firePropertyChanged();
 
