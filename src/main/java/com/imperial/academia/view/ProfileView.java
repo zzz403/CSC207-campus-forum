@@ -23,12 +23,33 @@ import com.imperial.academia.interface_adapter.profile.ProfileController;
 import com.imperial.academia.interface_adapter.profile.ProfileState;
 import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
 
+/**
+ * The ProfileView class represents the UI for displaying a user's profile.
+ * It includes user information, an avatar, and options to edit or chat with the user.
+ */
 public class ProfileView extends JPanel {
+
+    /**
+     * The name of the view.
+     */
     public final String viewName = "profile";
-    private final Map<String, ImageIcon> imageCache= new HashMap<>();
-    private final ProfileController profileController =new ProfileController();
-    // Constructor
-    public ProfileView( ProfileViewModel profileViewModel) {
+
+    /**
+     * A cache for storing user avatar images.
+     */
+    private final Map<String, ImageIcon> imageCache = new HashMap<>();
+
+    /**
+     * The controller for profile operations.
+     */
+    private final ProfileController profileController = new ProfileController();
+
+    /**
+     * Constructs a new ProfileView with the specified profile view model.
+     *
+     * @param profileViewModel the view model for the profile data
+     */
+    public ProfileView(ProfileViewModel profileViewModel) {
         super(new BorderLayout());  // Set the layout of ProfileView to BorderLayout for simplicity
 
         JPanel mainPanel = new JPanel(new GridBagLayout());
@@ -49,12 +70,11 @@ public class ProfileView extends JPanel {
 
         JButton chatOrModify = new JButton("Edit");
         chatOrModify.addMouseListener(new java.awt.event.MouseAdapter() {
-
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (profileViewModel.getProfileState().isMe()){
+                if (profileViewModel.getProfileState().isMe()) {
                     profileController.edit();
-                }else{
+                } else {
                     profileController.chat(profileViewModel.getProfileState().getId());
                 }
             }
@@ -109,15 +129,15 @@ public class ProfileView extends JPanel {
 
         this.add(mainPanel, BorderLayout.CENTER);  // Add mainPanel to ProfileView
 
-        profileViewModel.addPropertyChangeListener(evt ->{
-            if ("state".equals((evt.getPropertyName()))){
+        profileViewModel.addPropertyChangeListener(evt -> {
+            if ("state".equals(evt.getPropertyName())) {
                 ProfileState state = (ProfileState) evt.getNewValue();
                 // set the new image
-                if (imageCache.containsKey(state.getAvatarUrl())){
+                if (imageCache.containsKey(state.getAvatarUrl())) {
                     imageLabel.setIcon(imageCache.get(state.getAvatarUrl()));
-                }else{
-                    ImageIcon UserIcon = new ImageIcon(state.getAvatarUrl());
-                    Image resizedUserImage = UserIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                } else {
+                    ImageIcon userIcon = new ImageIcon(state.getAvatarUrl());
+                    Image resizedUserImage = userIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
                     ImageIcon resizedUserIcon = new ImageIcon(resizedUserImage);
                     imageLabel.setIcon(resizedUserIcon);
                     imageCache.put(state.getAvatarUrl(), resizedUserIcon);
@@ -128,8 +148,8 @@ public class ProfileView extends JPanel {
                 emailLabel.setText("Email: " + state.getEmail());
                 idLabel.setText("User ID: " + state.getId());
                 roleLabel.setText("Role : " + state.getRole());
-                registrationDateLabel.setText("Member since " + state.getRegistrationDate().toString().substring(0,10));
-                chatOrModify.setText(state.isMe()? "Edit" : "Chat");
+                registrationDateLabel.setText("Member since " + state.getRegistrationDate().toString().substring(0, 10));
+                chatOrModify.setText(state.isMe() ? "Edit" : "Chat");
                 // TODO profile edit view
             }
         });
