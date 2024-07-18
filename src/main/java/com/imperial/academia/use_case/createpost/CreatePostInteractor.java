@@ -15,6 +15,8 @@ import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.use_case.LLM.ChatGPTInteractor;
 import com.imperial.academia.use_case.LLM.LLMInputBoundary;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
+import com.imperial.academia.use_case.post.PostInfoData;
+import com.imperial.academia.use_case.post.PostInputBoundary;
 
 /**
  * The interactor that handles the logic for creating a post.
@@ -24,6 +26,9 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
     
     /** The interactor that handles the logic for changing the view */
     private final ChangeViewInputBoundary changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
+
+    /** The interactor that handles the logic for update post view */
+    private final PostInputBoundary postInteractor = UsecaseFactory.getPostInteractor();
 
     /** The presenter */
     private final CreatePostOutputBoundary createPostPresenter;
@@ -84,7 +89,17 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
         }
 
         createPostPresenter.submitSeccuss();
-        changeViewInteractor.changeView("post board");
+
+        PostInfoData postInfoData = PostInfoData.builder()
+                                                .setTitle(title)
+                                                .setContent(content)
+                                                .setUsername(user.getUsername())
+                                                .setAvatarUrl(user.getAvatarUrl())
+                                                .setDate(post.getLastModifiedDate())
+                                                .build();
+
+        postInteractor.initPostPage(postInfoData);
+        changeViewInteractor.changeView("post");
         return true;
     }
 
