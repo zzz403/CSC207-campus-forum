@@ -5,6 +5,7 @@ import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.interface_adapter.createpost.CreatePostViewModel;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
+import com.imperial.academia.interface_adapter.post.PostViewModel;
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
 import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
 import com.imperial.academia.interface_adapter.signup.SignupViewModel;
@@ -70,6 +71,8 @@ public class Main {
         ChatWindowViewModel chatWindowViewModel = viewModels.getChatWindowViewModel();
         TopNavigationBarViewModel topNavigationBarViewModel = viewModels.getTopNavigationBarViewModel();
         ProfileViewModel profileViewModel = viewModels.getProfileViewModel();
+        PostViewModel postViewModel = viewModels.getPostViewModel();
+
         try {
             ServiceFactory.initialize();
             UsecaseFactory.initialize(viewManagerModel, viewModels);
@@ -94,17 +97,22 @@ public class Main {
             ProfileView profileView = new ProfileView(profileViewModel);
             views.add(profileView, profileView.viewName);
 
+            PostView postView = new PostView(postViewModel);
+            views.add(postView, postView.viewName);
+
             createPostView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
             postBoardView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
             chatView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
             profileView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
+            postView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         // Set the initial view to "log in"
-        viewManagerModel.setActiveView("log in");
+       viewManagerModel.setActiveView("log in");
+        // viewManagerModel.setActiveView("post");
         viewManagerModel.firePropertyChanged();
 
         // Set size and center the window

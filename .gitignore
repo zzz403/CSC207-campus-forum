@@ -40,4 +40,6 @@ build/
 # Ignore apiKeyConfig.java file
 src/main/java/com/imperial/academia/config/ApiKeyConfig.java
 
+UML/
+
 
