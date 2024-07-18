@@ -15,21 +15,35 @@ import com.imperial.academia.interface_adapter.createpost.CreatePostPresenter;
 import com.imperial.academia.interface_adapter.createpost.CreatePostViewModel;
 import com.imperial.academia.interface_adapter.login.LoginPresenter;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
+import com.imperial.academia.interface_adapter.post.PostPresenter;
+import com.imperial.academia.interface_adapter.post.PostViewModel;
 import com.imperial.academia.interface_adapter.profile.ProfilePresenter;
 import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
 import com.imperial.academia.interface_adapter.signup.SignupPresenter;
 import com.imperial.academia.interface_adapter.signup.SignupViewModel;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
+import com.imperial.academia.use_case.LLM.ChatGPTInteractor;
+import com.imperial.academia.use_case.LLM.LLMInputBoundary;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.changeview.ChangeViewInteractor;
 import com.imperial.academia.use_case.changeview.ChangeViewOutputBoundary;
-import com.imperial.academia.use_case.chat.*;
+import com.imperial.academia.use_case.chat.ChatCoordinatorInputBoundary;
+import com.imperial.academia.use_case.chat.ChatCoordinatorInteractor;
+import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
+import com.imperial.academia.use_case.chat.ChatSideBarInteractor;
+import com.imperial.academia.use_case.chat.ChatSideBarOutputBoundary;
+import com.imperial.academia.use_case.chat.ChatWindowInputBoundary;
+import com.imperial.academia.use_case.chat.ChatWindowInteractor;
+import com.imperial.academia.use_case.chat.ChatWindowOutputBoundary;
 import com.imperial.academia.use_case.createpost.CreatePostInputBoundary;
 import com.imperial.academia.use_case.createpost.CreatePostInteractor;
 import com.imperial.academia.use_case.createpost.CreatePostOutputBoundary;
 import com.imperial.academia.use_case.login.LoginInputBoundary;
 import com.imperial.academia.use_case.login.LoginInteractor;
 import com.imperial.academia.use_case.login.LoginOutputBoundary;
+import com.imperial.academia.use_case.post.PostInputBoundary;
+import com.imperial.academia.use_case.post.PostInteractor;
+import com.imperial.academia.use_case.post.PostOutputBoundary;
 import com.imperial.academia.use_case.profile.ProfileInputBoundry;
 import com.imperial.academia.use_case.profile.ProfileInteractor;
 import com.imperial.academia.use_case.profile.ProfileOutputBoundry;
@@ -55,6 +69,8 @@ public class UsecaseFactory {
     private static ProfileInputBoundry profileInteractor;
     private static ChatWindowInputBoundary chatWindowInteractor;
     private static ChatCoordinatorInputBoundary chatCoordinatorInteractor;
+    private static PostInputBoundary postInteractor;
+    private static LLMInputBoundary LLMInteractor;
 
     /** Prevents instantiation of this utility class. */
     private UsecaseFactory() {
@@ -70,6 +86,8 @@ public class UsecaseFactory {
         // init change view usecase
         ChangeViewOutputBoundary changeViewPresenter = new ChangeViewPresenter(viewManagerModel);
         changeViewInteractor = new ChangeViewInteractor(changeViewPresenter);
+
+        sessionInteractor = new SessionInteractor();
         
         
         LoginViewModel loginViewModel = viewModels.getLoginViewModel();
@@ -79,8 +97,11 @@ public class UsecaseFactory {
         ChatWindowViewModel chatWindowViewModel = viewModels.getChatWindowViewModel();
         TopNavigationBarViewModel topNavigationBarViewModel = viewModels.getTopNavigationBarViewModel();
         ProfileViewModel profileViewModel = viewModels.getProfileViewModel();
+        PostViewModel postViewModel = viewModels.getPostViewModel();
         
-        
+        PostOutputBoundary postPresenter = new PostPresenter(postViewModel);
+        postInteractor = new PostInteractor(postPresenter);
+
         CreatePostOutputBoundary createPostPresenter = new CreatePostPresenter(createPostViewModel);
         createPostInteractor = new CreatePostInteractor(createPostPresenter);
 
@@ -88,8 +109,8 @@ public class UsecaseFactory {
         SignupOutputBoundary signupPresenter = new SignupPresenter(signupViewModel, loginViewModel);
         signupInteractor = new SignupInteractor(signupPresenter, userFactory);
 
-        ProfileOutputBoundry profileOutputBoundry = new ProfilePresenter(profileViewModel);
-        profileInteractor = new ProfileInteractor(profileOutputBoundry);
+        ProfileOutputBoundry profilePresenter = new ProfilePresenter(profileViewModel);
+        profileInteractor = new ProfileInteractor(profilePresenter);
 
         ChatSideBarOutputBoundary chatSideBarPresenter = new ChatSideBarPresenter(chatSideBarViewModel);
         chatSideBarInteractor = new ChatSideBarInteractor(chatSideBarPresenter);
@@ -104,9 +125,18 @@ public class UsecaseFactory {
         LoginOutputBoundary loginPresenter = new LoginPresenter(loginViewModel, topNavigationBarViewModel);
         loginInteractor = new LoginInteractor(loginPresenter, rememberMeDAO);
 
-        sessionInteractor = new SessionInteractor();
+        LLMInteractor = new ChatGPTInteractor();
 
         System.out.println("init seccuss for usecase!!!!");
+    }
+
+    /**
+     * Returns the LLMInteractor
+     *
+     * @return the LLMInteractor
+     */
+    public static LLMInputBoundary getLLMInteractor() {
+        return LLMInteractor;
     }
 
     /**
@@ -184,5 +214,19 @@ public class UsecaseFactory {
         return chatWindowInteractor;
     }
 
-    public static ChatCoordinatorInputBoundary getChatCoordinatorInteractor(){return chatCoordinatorInteractor;}
+    /**
+     * Returns the chatCoordinator Interactor
+     * @return the chatCoordinator Interactor
+     */
+    public static ChatCoordinatorInputBoundary getChatCoordinatorInteractor(){
+        return chatCoordinatorInteractor;
+    }
+
+    /**
+     * Returns the post Interactor
+     * @return the post Interactor
+     */
+    public static PostInputBoundary getPostInteractor() {
+        return postInteractor;
+    }
 }

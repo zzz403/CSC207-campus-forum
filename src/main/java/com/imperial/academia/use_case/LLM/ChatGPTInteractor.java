@@ -1,4 +1,4 @@
-package com.imperial.academia.use_case.other;
+package com.imperial.academia.use_case.LLM;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 import com.imperial.academia.config.ApiKeyConfig;
 
-public class ChatGPTApiImp implements LLMApi {
+public class ChatGPTInteractor implements LLMInputBoundary {
 
     @Override
     public String enhanceContent(String content) {
@@ -39,7 +39,7 @@ public class ChatGPTApiImp implements LLMApi {
 
             JSONObject userMessage = new JSONObject()
                     .put("role", "user")
-                    .put("content", "Enhance the following content but don't say anyother things: " + content);
+                    .put("content", "Enhance the following content but don't say another things: " + content);
 
             JSONArray messages = new JSONArray()
                     .put(systemMessage)

@@ -12,9 +12,10 @@ import com.imperial.academia.entity.user.User;
 import com.imperial.academia.service.BoardService;
 import com.imperial.academia.service.PostService;
 import com.imperial.academia.session.SessionManager;
+import com.imperial.academia.use_case.LLM.LLMInputBoundary;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
-import com.imperial.academia.use_case.other.ChatGPTApiImp;
-import com.imperial.academia.use_case.other.LLMApi;
+import com.imperial.academia.use_case.post.PostInfoData;
+import com.imperial.academia.use_case.post.PostInputBoundary;
 
 /**
  * The interactor that handles the logic for creating a post.
@@ -25,8 +26,18 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
     /** The interactor that handles the logic for changing the view */
     private final ChangeViewInputBoundary changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
 
+    /** The interactor that handles the logic for update post view */
+    private final PostInputBoundary postInteractor = UsecaseFactory.getPostInteractor();
+
+    /** The interactor that handles the logic for useing LLM */
+    private final LLMInputBoundary llmInteractor = UsecaseFactory.getLLMInteractor();
+
     /** The presenter */
     private final CreatePostOutputBoundary createPostPresenter;
+
+    /** The database service */
+    private final BoardService boardService = ServiceFactory.getBoardService();
+    private final PostService postService = ServiceFactory.getPostService();
 
     /**
      * Constructs a new CreatePostInteractor with the specified presenter and board service.
@@ -53,8 +64,6 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
      */
     @Override
     public boolean submitPost(String title, String content, String boardName) {
-        BoardService boardService = ServiceFactory.getBoardService();
-        PostService postService = ServiceFactory.getPostService();
         User user = SessionManager.getCurrentUser();
         int authorId = user.getId();
         int boardId;
@@ -82,7 +91,17 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
         }
 
         createPostPresenter.submitSeccuss();
-        changeViewInteractor.changeView("post board");
+
+        PostInfoData postInfoData = PostInfoData.builder()
+                                                .setTitle(title)
+                                                .setContent(content)
+                                                .setUsername(user.getUsername())
+                                                .setAvatarUrl(user.getAvatarUrl())
+                                                .setDate(post.getLastModifiedDate())
+                                                .build();
+
+        postInteractor.initPostPage(postInfoData);
+        changeViewInteractor.changeView("post");
         return true;
     }
 
@@ -91,8 +110,7 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
      */
     @Override
     public void enhanceContent(String content) {
-        LLMApi llmApi = new ChatGPTApiImp();
-        String enhancedContent = llmApi.enhanceContent(content);
+        String enhancedContent = llmInteractor.enhanceContent(content);
         createPostPresenter.updateContent(enhancedContent);
     }    
 }

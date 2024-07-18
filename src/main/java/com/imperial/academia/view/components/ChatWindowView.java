@@ -36,6 +36,8 @@ public class ChatWindowView extends JPanel {
     private Image scaledOpenMicIconImage;
     private Image scaledCloseMicIconImage;
 
+    ChatWindowViewModel chatWindowViewModel;
+
     /**
      * Constructor for ChatWindowView.
      * 
@@ -43,6 +45,7 @@ public class ChatWindowView extends JPanel {
      * @param application the application window view model
      */
     public ChatWindowView(ChatWindowViewModel chatWindowViewModel, JFrame application) {
+        this.chatWindowViewModel = chatWindowViewModel;
         setLayout(new BorderLayout());
 
         // Message list panel

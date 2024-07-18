@@ -28,6 +28,7 @@ public class ChatSideBarView extends JPanel {
     private final JTextField searchField;
     private final ChatSideBarController chatSideBarController = new ChatSideBarController();
     private final Map<Integer,ImageIcon> avatarCache = new HashMap<>();
+    ChatSideBarViewModel chatSideBarViewModel;
 
     /**
      * Constructs a ChatSideBarView with the specified controller and view model.
@@ -36,6 +37,7 @@ public class ChatSideBarView extends JPanel {
      *                              sidebar.
      */
     public ChatSideBarView(ChatSideBarViewModel chatSideBarViewModel) {
+        this.chatSideBarViewModel = chatSideBarViewModel;
         try {
             BufferedImage avatarImage = ImageIO.read(new File("resources/avatar/default/group_chat.png"));
             Image scaledAvatarImage = avatarImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);

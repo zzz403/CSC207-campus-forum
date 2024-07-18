@@ -2,7 +2,6 @@ package com.imperial.academia.use_case.chat;
 
 import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.app.UsecaseFactory;
-import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.service.ChatGroupService;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;

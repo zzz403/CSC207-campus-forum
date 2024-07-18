@@ -17,8 +17,8 @@ public class ProfileInteractor implements ProfileInputBoundry {
 
     private final UserService userService = ServiceFactory.getUserService();
 
-    public ProfileInteractor(ProfileOutputBoundry profilepresenter) {
-        this.profilepresenter = profilepresenter;
+    public ProfileInteractor(ProfileOutputBoundry profilePresenter) {
+        this.profilepresenter = profilePresenter;
     }
 
     public void excute(ProfileInputData profileInputData) {
