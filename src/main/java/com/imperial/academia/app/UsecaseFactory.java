@@ -22,6 +22,8 @@ import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
 import com.imperial.academia.interface_adapter.signup.SignupPresenter;
 import com.imperial.academia.interface_adapter.signup.SignupViewModel;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
+import com.imperial.academia.use_case.LLM.ChatGPTInteractor;
+import com.imperial.academia.use_case.LLM.LLMInputBoundary;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.changeview.ChangeViewInteractor;
 import com.imperial.academia.use_case.changeview.ChangeViewOutputBoundary;
@@ -68,6 +70,7 @@ public class UsecaseFactory {
     private static ChatWindowInputBoundary chatWindowInteractor;
     private static ChatCoordinatorInputBoundary chatCoordinatorInteractor;
     private static PostInputBoundary postInteractor;
+    private static LLMInputBoundary LLMInteractor;
 
     /** Prevents instantiation of this utility class. */
     private UsecaseFactory() {
@@ -122,10 +125,19 @@ public class UsecaseFactory {
         LoginOutputBoundary loginPresenter = new LoginPresenter(loginViewModel, topNavigationBarViewModel);
         loginInteractor = new LoginInteractor(loginPresenter, rememberMeDAO);
 
+        LLMInteractor = new ChatGPTInteractor();
+
         System.out.println("init seccuss for usecase!!!!");
     }
 
-    
+    /**
+     * Returns the LLMInteractor
+     *
+     * @return the LLMInteractor
+     */
+    public static LLMInputBoundary getLLMInteractor() {
+        return LLMInteractor;
+    }
 
     /**
      * Returns the CreatePostInputBoundary interactor.

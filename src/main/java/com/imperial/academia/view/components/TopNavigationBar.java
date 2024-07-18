@@ -385,6 +385,7 @@ public class TopNavigationBar extends JPanel {
         if (frameWidth < 1000) {
             logoText.setVisible(false);
         } else {
+            logoText.setVisible(false);
             logoText.setVisible(true);
         }
     }

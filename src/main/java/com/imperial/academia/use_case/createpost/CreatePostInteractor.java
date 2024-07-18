@@ -12,7 +12,6 @@ import com.imperial.academia.entity.user.User;
 import com.imperial.academia.service.BoardService;
 import com.imperial.academia.service.PostService;
 import com.imperial.academia.session.SessionManager;
-import com.imperial.academia.use_case.LLM.ChatGPTInteractor;
 import com.imperial.academia.use_case.LLM.LLMInputBoundary;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.post.PostInfoData;
@@ -29,6 +28,9 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
 
     /** The interactor that handles the logic for update post view */
     private final PostInputBoundary postInteractor = UsecaseFactory.getPostInteractor();
+
+    /** The interactor that handles the logic for useing LLM */
+    private final LLMInputBoundary llmInteractor = UsecaseFactory.getLLMInteractor();
 
     /** The presenter */
     private final CreatePostOutputBoundary createPostPresenter;
@@ -108,8 +110,7 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
      */
     @Override
     public void enhanceContent(String content) {
-        LLMInputBoundary llmApi = new ChatGPTInteractor();
-        String enhancedContent = llmApi.enhanceContent(content);
+        String enhancedContent = llmInteractor.enhanceContent(content);
         createPostPresenter.updateContent(enhancedContent);
     }    
 }
