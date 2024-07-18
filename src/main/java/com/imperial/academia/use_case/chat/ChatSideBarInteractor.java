@@ -11,8 +11,8 @@ import com.imperial.academia.service.ChatGroupService;
  * Implements the ChatSideBarInputBoundary interface to process input data.
  */
 public class ChatSideBarInteractor implements ChatSideBarInputBoundary {
-    private ChatGroupService chatGroupService;
-    private ChatSideBarOutputBoundary chatSideBarPresenter;
+    private final ChatGroupService chatGroupService;
+    private final ChatSideBarOutputBoundary chatSideBarPresenter;
 
     /**
      * Constructor for ChatSideBarInteractor.

@@ -39,7 +39,7 @@ public class ChatGPTInteractor implements LLMInputBoundary {
 
             JSONObject userMessage = new JSONObject()
                     .put("role", "user")
-                    .put("content", "Enhance the following content but don't say anyother things: " + content);
+                    .put("content", "Enhance the following content but don't say another things: " + content);
 
             JSONArray messages = new JSONArray()
                     .put(systemMessage)
