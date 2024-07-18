@@ -31,7 +31,6 @@ public class LoginInteractor implements LoginInputBoundary {
      * @param loginPresenter        The login presenter to present the results.
      * @param rememberMeDAO         The remember me DAO for managing saved
      *                              credentials.
-     * @param chatSideBarInteractor The chat sidebar interactor for chat operations.
      */
     public LoginInteractor(LoginOutputBoundary loginPresenter, RememberMeDAI rememberMeDAO) {
         this.userService = ServiceFactory.getUserService();
