@@ -86,9 +86,10 @@ public class UsecaseFactory {
         // init change view usecase
         ChangeViewOutputBoundary changeViewPresenter = new ChangeViewPresenter(viewManagerModel);
         changeViewInteractor = new ChangeViewInteractor(changeViewPresenter);
-
+        
         sessionInteractor = new SessionInteractor();
         
+        LLMInteractor = new ChatGPTInteractor();
         
         LoginViewModel loginViewModel = viewModels.getLoginViewModel();
         SignupViewModel signupViewModel = viewModels.getSignupViewModel();
@@ -125,7 +126,6 @@ public class UsecaseFactory {
         LoginOutputBoundary loginPresenter = new LoginPresenter(loginViewModel, topNavigationBarViewModel);
         loginInteractor = new LoginInteractor(loginPresenter, rememberMeDAO);
 
-        LLMInteractor = new ChatGPTInteractor();
 
         System.out.println("init seccuss for usecase!!!!");
     }
