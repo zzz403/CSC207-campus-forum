@@ -1,0 +1,159 @@
+package com.imperial.academia.service;
+
+import com.imperial.academia.cache.ChatGroupCache;
+import com.imperial.academia.cache.GroupMemberCache;
+import com.imperial.academia.data_access.ChatGroupDAI;
+import com.imperial.academia.data_access.GroupMemberDAI;
+import com.imperial.academia.entity.chat_group.ChatGroup;
+import com.imperial.academia.entity.chat_group.ChatGroupDTO;
+import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.user.User;
+import com.imperial.academia.session.SessionManager;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+public class ChatGroupServiceImplTest {
+
+    @Mock
+    private ChatGroupCache chatGroupCache;
+
+    @Mock
+    private ChatGroupDAI chatGroupDAO;
+
+    @Mock
+    private GroupMemberCache groupMemberCache;
+
+    @Mock
+    private GroupMemberDAI groupMemberDAO;
+
+    @InjectMocks
+    private ChatGroupServiceImpl chatGroupService;
+
+    @BeforeEach
+    public void setUp() {
+        chatGroupService = new ChatGroupServiceImpl(chatGroupCache, chatGroupDAO, groupMemberCache, groupMemberDAO);
+    }
+
+    @Test
+    public void testInsert() throws SQLException {
+        ChatGroup chatGroup = new ChatGroup(1, "Test Group", true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+
+        chatGroupService.insert(chatGroup);
+
+        verify(chatGroupDAO, times(1)).insert(chatGroup);
+        verify(chatGroupCache, times(1)).setChatGroup("chatgroup:1", chatGroup);
+    }
+
+    @Test
+    public void testGet() throws SQLException {
+        int id = 1;
+        ChatGroup chatGroup = new ChatGroup(id, "Test Group", true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+
+        when(chatGroupCache.getChatGroup("chatgroup:" + id)).thenReturn(null);
+        when(chatGroupDAO.get(id)).thenReturn(chatGroup);
+
+        ChatGroup result = chatGroupService.get(id);
+
+        assertNotNull(result);
+        assertEquals(id, result.getId());
+        verify(chatGroupCache, times(1)).getChatGroup("chatgroup:" + id);
+        verify(chatGroupDAO, times(1)).get(id);
+        verify(chatGroupCache, times(1)).setChatGroup("chatgroup:" + id, chatGroup);
+    }
+
+    @Test
+    public void testGetChatGroupsByGroupName() throws SQLException {
+        String searchGroupName = "group";
+        ChatGroup chatGroup = new ChatGroup(1, "testgroup", true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+
+        List<ChatGroup> allChatGroups = Arrays.asList(chatGroup);
+
+        when(chatGroupCache.getChatGroups("chatgroups:all")).thenReturn(allChatGroups);
+
+        List<ChatGroupDTO> result = chatGroupService.getChatGroupsByGroupName(searchGroupName);
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        verify(chatGroupCache, times(1)).getChatGroups("chatgroups:all");
+    }
+
+    @Test
+    public void testUpdate() throws SQLException {
+        ChatGroup chatGroup = new ChatGroup(1, "Test Group", true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+
+        chatGroupService.update(chatGroup);
+
+        verify(chatGroupDAO, times(1)).update(chatGroup);
+        verify(chatGroupCache, times(1)).setChatGroup("chatgroup:1", chatGroup);
+    }
+
+    @Test
+    public void testDelete() throws SQLException {
+        int id = 1;
+
+        chatGroupService.delete(id);
+
+        verify(chatGroupDAO, times(1)).delete(id);
+        verify(chatGroupCache, times(1)).deleteChatGroup("chatgroup:" + id);
+    }
+
+    @Test
+    public void testGetLastMessage() throws SQLException {
+        int groupId = 1;
+        ChatMessage chatMessage = new ChatMessage(1, 2, groupId, "text", "Hello", new Timestamp(System.currentTimeMillis()));
+
+        when(chatGroupCache.getLastMessage("lastMessage:" + groupId)).thenReturn(null);
+        when(chatGroupDAO.getLastMessage(groupId)).thenReturn(chatMessage);
+
+        ChatMessage result = chatGroupService.getLastMessage(groupId);
+
+        assertNotNull(result);
+        assertEquals(1, result.getId());
+        verify(chatGroupCache, times(1)).getLastMessage("lastMessage:" + groupId);
+        verify(chatGroupDAO, times(1)).getLastMessage(groupId);
+        verify(chatGroupCache, times(1)).setLastMessage("lastMessage:" + groupId, chatMessage);
+    }
+
+    @Test
+    public void testSortChatGroupsByTime() {
+        ChatGroupDTO chatGroup1 = new ChatGroupDTO(1, "group1", true, new Timestamp(System.currentTimeMillis()), "message1", new Timestamp(System.currentTimeMillis()), "avatar1");
+        ChatGroupDTO chatGroup2 = new ChatGroupDTO(2, "group2", true, new Timestamp(System.currentTimeMillis()), "message2", new Timestamp(System.currentTimeMillis() - 10000), "avatar2");
+
+        List<ChatGroupDTO> chatGroups = Arrays.asList(chatGroup1, chatGroup2);
+
+        List<ChatGroupDTO> sortedChatGroups = chatGroupService.sortChatGroupsByTime(chatGroups);
+
+        assertNotNull(sortedChatGroups);
+        assertEquals(2, sortedChatGroups.size());
+        assertEquals(chatGroup1.getId(), sortedChatGroups.get(0).getId());
+    }
+
+    @Test
+    public void testGetPrivateChatId() throws SQLException {
+        int userId1 = 1;
+        int userId2 = 2;
+        int chatGroupId = 3;
+
+        when(groupMemberCache.getChatGroupId(userId1, userId2)).thenReturn(-1);
+        when(groupMemberDAO.getPrivateChatId(userId1, userId2)).thenReturn(chatGroupId);
+
+        int result = chatGroupService.getPrivateChatId(userId1, userId2);
+
+        assertEquals(chatGroupId, result);
+        verify(groupMemberCache, times(1)).getChatGroupId(userId1, userId2);
+        verify(groupMemberDAO, times(1)).getPrivateChatId(userId1, userId2);
+    }
+}
