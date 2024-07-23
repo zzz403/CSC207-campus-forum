@@ -19,7 +19,7 @@ public class SignupInteractor implements SignupInputBoundary {
     private final UserFactory userFactory;
     private final UserService userService;
 
-    private final ChangeViewInputBoundary changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
+    private final ChangeViewInputBoundary changeViewInteractor;
 
     /**
      * Constructs a SignupInteractor with the given dependencies.
@@ -32,6 +32,14 @@ public class SignupInteractor implements SignupInputBoundary {
         this.userService = ServiceFactory.getUserService();
         this.signupPresenter = signupPresenter;
         this.userFactory = userFactory;
+        changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
+    }
+
+    public SignupInteractor(SignupOutputBoundary signupPresenter, UserFactory userFactory, UserService userService, ChangeViewInputBoundary changeViewInteractor) {
+        this.userService = userService;
+        this.signupPresenter = signupPresenter;
+        this.userFactory = userFactory;
+        this.changeViewInteractor = changeViewInteractor;
     }
 
     /**

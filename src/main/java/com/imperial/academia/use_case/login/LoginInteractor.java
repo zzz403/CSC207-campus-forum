@@ -22,7 +22,7 @@ public class LoginInteractor implements LoginInputBoundary {
     private final RememberMeDAI rememberMeDAO;
     private final ChatSideBarInputBoundary chatSideBarInteractor;
 
-    private final ChangeViewInputBoundary changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
+    private final ChangeViewInputBoundary changeViewInteractor;
 
     /**
      * Constructs a LoginInteractor with the specified UserService,
@@ -37,6 +37,15 @@ public class LoginInteractor implements LoginInputBoundary {
         this.loginPresenter = loginPresenter;
         this.rememberMeDAO = rememberMeDAO;
         this.chatSideBarInteractor = UsecaseFactory.getChatSideBarInteractor();
+        this.changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
+    }
+
+    public LoginInteractor(LoginOutputBoundary loginPresenter, RememberMeDAI rememberMeDAO, UserService userService, ChatSideBarInputBoundary chatSideBarInteractor, ChangeViewInputBoundary changeViewInteractor) {
+        this.userService = userService;
+        this.loginPresenter = loginPresenter;
+        this.rememberMeDAO = rememberMeDAO;
+        this.chatSideBarInteractor = chatSideBarInteractor;
+        this.changeViewInteractor = changeViewInteractor;
     }
 
     /**
