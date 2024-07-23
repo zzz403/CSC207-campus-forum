@@ -57,7 +57,7 @@ class ChatGPTInteractorTest {
     void testEnhanceContentApiKeyMissing() {
         mockedApiKeyConfig.when(ApiKeyConfig::getGPTApi).thenReturn(""); // Setting an empty API key
         String originalContent = "This is a test content.";
-        
+
         String result = chatGPTInteractor.enhanceContent(originalContent);
 
         assertEquals(originalContent, result); // Expecting the original content to be returned
@@ -77,4 +77,5 @@ class ChatGPTInteractorTest {
 
         assertEquals("", result); // Expecting an empty string due to API failure
     }
+
 }

@@ -14,7 +14,7 @@ import com.imperial.academia.config.ApiKeyConfig;
 
 public class ChatGPTInteractor implements LLMInputBoundary {
     private final String apiUrl;
-    
+
     /**
      * Init the Interactor
      * and set the url for the LLM model to the correct one
@@ -23,7 +23,7 @@ public class ChatGPTInteractor implements LLMInputBoundary {
     public ChatGPTInteractor() {
         this("https://api.openai.com/v1/chat/completions");
     }
-    
+
     /**
      * For unit test
      * 
@@ -32,9 +32,10 @@ public class ChatGPTInteractor implements LLMInputBoundary {
     public ChatGPTInteractor(String apiUrl) {
         this.apiUrl = apiUrl;
     }
-    
+
     /**
-     * Takes the content that need to be enhace and send to gpt-3.5-turbo-0125 toArray
+     * Takes the content that need to be enhace and send to gpt-3.5-turbo-0125
+     * toArray
      * enhace content
      * 
      * @param content the content that need to be enhance
@@ -83,16 +84,30 @@ public class ChatGPTInteractor implements LLMInputBoundary {
                 os.write(input, 0, input.length);
             }
 
-            try (BufferedReader br = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream(), "utf-8"))) {
-                StringBuilder response = new StringBuilder();
-                String responseLine;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
+            int statusCode = connection.getResponseCode();
+            if (statusCode >= 200 && statusCode < 300) {
+                try (BufferedReader br = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+                    StringBuilder response = new StringBuilder();
+                    String responseLine;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    JSONObject responseJson = new JSONObject(response.toString());
+                    enhancedContent = responseJson.getJSONArray("choices").getJSONObject(0).getJSONObject("message")
+                            .getString("content");
                 }
-                JSONObject responseJson = new JSONObject(response.toString());
-                enhancedContent = responseJson.getJSONArray("choices").getJSONObject(0).getJSONObject("message")
-                        .getString("content");
+            } else {
+                // 处理错误响应
+                try (BufferedReader br = new BufferedReader(
+                        new InputStreamReader(connection.getErrorStream(), "utf-8"))) {
+                    StringBuilder errorResponse = new StringBuilder();
+                    String responseLine;
+                    while ((responseLine = br.readLine()) != null) {
+                        errorResponse.append(responseLine.trim());
+                    }
+                    System.out.println("Error response from API: " + errorResponse.toString());
+                }
             }
         } catch (IOException | org.json.JSONException e) {
             e.printStackTrace();
