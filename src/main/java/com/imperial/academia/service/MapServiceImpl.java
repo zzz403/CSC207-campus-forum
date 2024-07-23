@@ -40,8 +40,9 @@ public class MapServiceImpl implements MapService {
     @Override
     public void generateMapImage(int groupId, double latitude, double longitude){
         try {
-            // 获取用户位置
-//            double[] location = getUserLocation();
+            if (API_KEY == null) {
+                throw new IllegalArgumentException("API key not found.");
+            }
             int zoom = 16; // 增加缩放级别以放大图片
             int width = 800; // 图片宽度
             int height = 600; // 图片高度

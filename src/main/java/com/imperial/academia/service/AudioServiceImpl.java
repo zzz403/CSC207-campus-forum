@@ -91,6 +91,9 @@ public class AudioServiceImpl implements AudioService {
     @Override
     public WaveformData processAudio(String audioFilePath) {
         File audioFile = new File(audioFilePath);
+        if (!audioFile.exists()) {
+            return null;
+        }
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
             AudioFormat format = audioInputStream.getFormat();
