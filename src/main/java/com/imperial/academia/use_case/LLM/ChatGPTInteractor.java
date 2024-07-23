@@ -13,7 +13,33 @@ import org.json.JSONObject;
 import com.imperial.academia.config.ApiKeyConfig;
 
 public class ChatGPTInteractor implements LLMInputBoundary {
-
+    private final String apiUrl;
+    
+    /**
+     * Init the Interactor
+     * and set the url for the LLM model to the correct one
+     * 
+     */
+    public ChatGPTInteractor() {
+        this("https://api.openai.com/v1/chat/completions");
+    }
+    
+    /**
+     * For unit test
+     * 
+     * @param apiUrl - url for LLM model
+     */
+    public ChatGPTInteractor(String apiUrl) {
+        this.apiUrl = apiUrl;
+    }
+    
+    /**
+     * Takes the content that need to be enhace and send to gpt-3.5-turbo-0125 toArray
+     * enhace content
+     * 
+     * @param content the content that need to be enhance
+     * @return the enhaced content
+     */
     @Override
     public String enhanceContent(String content) {
         String apiKey = ApiKeyConfig.getGPTApi();
@@ -21,7 +47,6 @@ public class ChatGPTInteractor implements LLMInputBoundary {
             System.out.println("No gpt token key found");
             return content;
         }
-        String apiUrl = "https://api.openai.com/v1/chat/completions";
         String enhancedContent = "";
 
         try {
@@ -75,5 +100,4 @@ public class ChatGPTInteractor implements LLMInputBoundary {
 
         return enhancedContent;
     }
-
 }

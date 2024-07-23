@@ -1,22 +1,35 @@
 package com.imperial.academia.use_case.chat;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import com.imperial.academia.entity.chat_message.*;
-import com.imperial.academia.entity.user.User;
-import com.imperial.academia.service.*;
-import com.imperial.academia.session.SessionManager;
-import org.junit.*;
-import org.mockito.*;
-
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.File;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.sound.sampled.LineUnavailableException;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.MockitoAnnotations;
+
+import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.chat_message.ChatMessageDTO;
+import com.imperial.academia.entity.chat_message.ChatMessageFactory;
+import com.imperial.academia.entity.user.User;
+import com.imperial.academia.service.AudioService;
+import com.imperial.academia.service.ChatMessageService;
+import com.imperial.academia.service.FileService;
+import com.imperial.academia.service.MapService;
+import com.imperial.academia.session.SessionManager;
 
 public class ChatWindowInteractorTest {
 

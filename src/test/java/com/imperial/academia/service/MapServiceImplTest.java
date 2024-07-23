@@ -1,25 +1,31 @@
 package com.imperial.academia.service;
 
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockConstruction;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
 
-import com.imperial.academia.config.ApiKeyConfig;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import org.json.JSONObject;
-import org.json.JSONArray;
-import org.junit.*;
-import org.junit.rules.TemporaryFolder;
-import org.mockito.*;
-
-import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.file.Files;
 
-import javax.imageio.ImageIO;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockedConstruction;
+import org.mockito.MockedStatic;
+import org.mockito.MockitoAnnotations;
+
+import com.imperial.academia.config.ApiKeyConfig;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
 
 public class MapServiceImplTest {
     @Mock
