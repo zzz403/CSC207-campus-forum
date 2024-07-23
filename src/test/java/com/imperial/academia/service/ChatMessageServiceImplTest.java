@@ -65,7 +65,8 @@ public class ChatMessageServiceImplTest {
         ChatMessage chatMessage = new ChatMessage(1, 1, 1, "text", "Hello", timestamp);
         User user = new User(1, "user1", "password", "email@example.com", "user", "avatarUrl", timestamp, timestamp);
 
-        when(chatMessageCache.getChatMessage("chatMessage:1")).thenReturn(chatMessage);
+        when(chatMessageCache.getChatMessage("chatMessage:1")).thenReturn(null);
+        when(chatMessageDAO.get(1)).thenReturn(chatMessage);
         when(userCache.getUser("user:1")).thenReturn(null); // Ensure cache miss
         when(userDAO.get(1)).thenReturn(user); // Ensure DAO hit
 
@@ -78,6 +79,12 @@ public class ChatMessageServiceImplTest {
             assertEquals(1, chatMessageDTO.getId());
             assertEquals("user1", chatMessageDTO.getSenderName());
             assertEquals("Hello", chatMessageDTO.getContent());
+            verify(chatMessageCache, times(1)).getChatMessage("chatMessage:1");
+            verify(chatMessageDAO, times(1)).get(1);
+            verify(chatMessageCache, times(1)).setChatMessage("chatMessage:1", chatMessage);
+            verify(userCache, times(1)).getUser("user:1");
+            verify(userDAO, times(1)).get(1);
+            verify(userCache, times(1)).setUser("user:1", user);
         }
     }
 
@@ -114,6 +121,32 @@ public class ChatMessageServiceImplTest {
         verify(chatMessageDAO, times(1)).delete(1);
         verify(chatMessageCache, times(1)).deleteChatMessage("chatMessage:1");
     }
+
+    @Test
+    public void testGetChatMessageFromCache() throws SQLException {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        ChatMessage chatMessage = new ChatMessage(1, 1, 1, "text", "Hello", timestamp);
+        User user = new User(1, "user1", "password", "email@example.com", "user", "avatarUrl", timestamp, timestamp);
+
+        when(chatMessageCache.getChatMessage("chatMessage:1")).thenReturn(chatMessage);
+        when(userCache.getUser("user:1")).thenReturn(user);
+
+        try (MockedStatic<SessionManager> mockedSessionManager = mockStatic(SessionManager.class)) {
+            mockedSessionManager.when(SessionManager::getCurrentUser).thenReturn(user); // Mock current user
+
+            ChatMessageDTO chatMessageDTO = chatMessageService.get(1);
+
+            assertNotNull(chatMessageDTO);
+            assertEquals(1, chatMessageDTO.getId());
+            assertEquals("user1", chatMessageDTO.getSenderName());
+            assertEquals("Hello", chatMessageDTO.getContent());
+            verify(chatMessageCache, times(1)).getChatMessage("chatMessage:1");
+            verify(userCache, times(1)).getUser("user:1");
+            verify(chatMessageDAO, never()).get(1);
+            verify(userDAO, never()).get(1);
+        }
+    }
+
 }
 
 

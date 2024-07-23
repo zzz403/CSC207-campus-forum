@@ -7,6 +7,7 @@ import com.imperial.academia.data_access.GroupMemberDAI;
 import com.imperial.academia.entity.chat_group.ChatGroup;
 import com.imperial.academia.entity.chat_group.ChatGroupDTO;
 import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.group_member.GroupMember;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.session.SessionManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.SQLException;
@@ -155,5 +158,121 @@ public class ChatGroupServiceImplTest {
         assertEquals(chatGroupId, result);
         verify(groupMemberCache, times(1)).getChatGroupId(userId1, userId2);
         verify(groupMemberDAO, times(1)).getPrivateChatId(userId1, userId2);
+    }
+
+    @Test
+    public void testGetChatGroupsByGroupNameNoMatch() throws SQLException {
+        String searchGroupName = "nonexistentgroup";
+        List<ChatGroup> allChatGroups = Arrays.asList(
+                new ChatGroup(1, "testgroup1", true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())),
+                new ChatGroup(2, "testgroup2", true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()))
+        );
+
+        when(chatGroupCache.getChatGroups("chatgroups:all")).thenReturn(allChatGroups);
+
+        List<ChatGroupDTO> result = chatGroupService.getChatGroupsByGroupName(searchGroupName);
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(chatGroupCache, times(1)).getChatGroups("chatgroups:all");
+    }
+
+    @Test
+    public void testGetAll() throws SQLException {
+        List<ChatGroup> chatGroups = Arrays.asList(
+                new ChatGroup(1, "testgroup1", true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())),
+                new ChatGroup(2, "testgroup2", true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()))
+        );
+
+        when(chatGroupCache.getChatGroups("chatgroups:all")).thenReturn(null);
+        when(chatGroupDAO.getAll(anyInt())).thenReturn(chatGroups);
+        try (MockedStatic<SessionManager> mockedStatic = Mockito.mockStatic(SessionManager.class)) {
+            User mockUser = mock(User.class);
+            when(mockUser.getId()).thenReturn(1);
+            mockedStatic.when(SessionManager::getCurrentUser).thenReturn(mockUser);
+            List<ChatGroup> result = chatGroupService.getAll();
+            assertNotNull(result);
+            assertEquals(2, result.size());
+            verify(chatGroupCache, times(1)).getChatGroups("chatgroups:all");
+            verify(chatGroupDAO, times(1)).getAll(anyInt());
+            verify(chatGroupCache, times(1)).setChatGroups("chatgroups:all", chatGroups);
+        }
+    }
+
+    @Test
+    public void testGetPrivateChatIdCreateNew() throws SQLException {
+        int userId1 = 1;
+        int userId2 = 2;
+        int chatGroupId = 3;
+
+        when(groupMemberCache.getChatGroupId(userId1, userId2)).thenReturn(-1);
+        when(groupMemberDAO.getPrivateChatId(userId1, userId2)).thenReturn(-1);
+        doAnswer(invocation -> {
+            ChatGroup chatGroup = invocation.getArgument(0);
+            chatGroup.setId(chatGroupId);
+            return null;
+        }).when(chatGroupDAO).insert(any(ChatGroup.class));
+
+        int result = chatGroupService.getPrivateChatId(userId1, userId2);
+
+        assertEquals(chatGroupId, result);
+        verify(groupMemberCache, times(1)).getChatGroupId(userId1, userId2);
+        verify(groupMemberDAO, times(1)).getPrivateChatId(userId1, userId2);
+        verify(chatGroupDAO, times(1)).insert(any(ChatGroup.class));
+        verify(groupMemberDAO, times(2)).insert(any(GroupMember.class));
+    }
+
+    @Test
+    void testGetUser() throws Exception {
+        int groupId = 1;
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        User mockUser = new User(1, "user1", "password", "email@example.com", "user", "avatarUrl", timestamp, timestamp);
+        mockUser.setId(2);
+        mockUser.setUsername("testuser");
+        mockUser.setAvatarUrl("avatar.png");
+
+        try (MockedStatic<SessionManager> mockedStatic = Mockito.mockStatic(SessionManager.class)) {
+            when(chatGroupCache.getUser("user:" + groupId)).thenReturn(null);
+            // Configure the mock SessionManager to return the mock User
+            mockedStatic.when(SessionManager::getCurrentUser).thenReturn(mockUser);
+            when(chatGroupDAO.getMember(groupId, SessionManager.getCurrentUser().getId())).thenReturn(mockUser);
+
+
+            User result = chatGroupService.getUser(groupId);
+
+            assertNotNull(result);
+            assertEquals(mockUser.getId(), result.getId());
+            assertEquals(mockUser.getUsername(), result.getUsername());
+            assertEquals(mockUser.getAvatarUrl(), result.getAvatarUrl());
+            verify(chatGroupCache, times(1)).getUser("user:" + groupId);
+            verify(chatGroupDAO, times(1)).getMember(groupId, SessionManager.getCurrentUser().getId());
+            verify(chatGroupCache, times(1)).setUser("user:" + groupId, mockUser);
+        }
+    }
+
+    @Test
+    void testGetUserFromCache() throws Exception {
+        int groupId = 1;
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        User mockUser = new User(1, "user1", "password", "email@example.com", "user", "avatarUrl", timestamp, timestamp);
+        mockUser.setId(2);
+        mockUser.setUsername("testuser");
+        mockUser.setAvatarUrl("avatar.png");
+
+        try (MockedStatic<SessionManager> mockedStatic = Mockito.mockStatic(SessionManager.class)) {
+            when(chatGroupCache.getUser("user:" + groupId)).thenReturn(mockUser);
+
+            // Configure the mock SessionManager to return the mock User
+            mockedStatic.when(SessionManager::getCurrentUser).thenReturn(mockUser);
+
+            User result = chatGroupService.getUser(groupId);
+
+            assertNotNull(result);
+            assertEquals(mockUser.getId(), result.getId());
+            assertEquals(mockUser.getUsername(), result.getUsername());
+            assertEquals(mockUser.getAvatarUrl(), result.getAvatarUrl());
+            verify(chatGroupCache, times(1)).getUser("user:" + groupId);
+            verify(chatGroupDAO, never()).getMember(groupId, SessionManager.getCurrentUser().getId());
+        }
     }
 }

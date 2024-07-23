@@ -12,8 +12,8 @@ import com.imperial.academia.entity.group_member.GroupMember;
  * Uses caching to reduce database access.
  */
 public class GroupMemberServiceImpl implements GroupMemberService {
-    private GroupMemberCache groupMemberCache;
-    private GroupMemberDAI groupMemberDAO;
+    private final GroupMemberCache groupMemberCache;
+    private final GroupMemberDAI groupMemberDAO;
 
     /**
      * Constructs a new GroupMemberServiceImpl with the specified cache and DAO.

@@ -1,6 +1,7 @@
 package com.imperial.academia.service;
 
 import com.imperial.academia.entity.chat_message.WaveformData;
+import com.imperial.academia.entity.user.User;
 import com.imperial.academia.session.SessionManager;
 
 import javax.sound.sampled.*;
@@ -43,7 +44,11 @@ public class AudioServiceImpl implements AudioService {
             groupDir.mkdirs();
         }
 
-        int senderId = SessionManager.getCurrentUser().getId();
+        User user = SessionManager.getCurrentUser();
+        if (user == null) {
+            throw new IllegalStateException("No user is logged in");
+        }
+        int senderId = user.getId();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
         String timestampStr = dateFormat.format(timestamp);

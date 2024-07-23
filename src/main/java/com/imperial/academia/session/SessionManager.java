@@ -18,6 +18,9 @@ public class SessionManager {
      * @return the current user, or null if no user is logged in
      */
     public static User getCurrentUser() {
+        if (currentUser == null) {
+            return null;
+        }
         return currentUser;
     }
 

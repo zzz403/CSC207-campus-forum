@@ -3,14 +3,14 @@ package com.imperial.academia.use_case.chat;
 import static org.mockito.Mockito.*;
 
 import com.imperial.academia.entity.chat_message.*;
+import com.imperial.academia.entity.user.User;
 import com.imperial.academia.service.*;
 import com.imperial.academia.session.SessionManager;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.mockito.*;
 
 import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -33,7 +33,7 @@ public class ChatWindowInteractorTest {
 
     @Before
     public void setUp() throws LineUnavailableException {
-        MockitoAnnotations.openMocks(this);
+        closeable = MockitoAnnotations.openMocks(this);
         chatWindowInteractor = new ChatWindowInteractor(
                 chatWindowPresenter,
                 chatMessageFactory,
@@ -67,5 +67,44 @@ public class ChatWindowInteractorTest {
 
         verify(chatMessageService).getAllByGroupId(chatGroupId);
         verify(chatWindowPresenter).presentChatMessages(any(ChatWindowOutputData.class));
+    }
+
+    @Test
+    public void testStartRecording_StartsRecording() throws LineUnavailableException {
+        int chatGroupId = 1;
+        chatWindowInteractor.startRecording(chatGroupId);
+
+        verify(audioService).startRecording(chatGroupId);
+    }
+
+    @Test
+    public void testLoadAudio_LoadsAudio() {
+        String audioPath = "test.wav";
+        chatWindowInteractor.loadAudio(audioPath);
+
+        verify(audioService).loadAudio(audioPath);
+    }
+
+
+    @Test
+    public void testSendMessage_SendsTextMessage() throws Exception {
+        int senderId = 1;
+        int groupId = 1;
+        String contentType = "text";
+        String content = "Hello";
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        ChatMessage chatMessage = new ChatMessage(1, 1, 1, "text", "Hello", timestamp);
+
+        try (MockedStatic<SessionManager> mockedSessionManager = mockStatic(SessionManager.class)) {
+            User mockUser = new User(1, "username", "password", "email@example.com", "user", "avatarUrl", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+            mockedSessionManager.when(SessionManager::getCurrentUser).thenReturn(mockUser);
+
+            when(chatMessageFactory.createChatMessage(senderId, 1, groupId, contentType, content)).thenReturn(chatMessage);
+
+            ChatWindowInputData inputData = new ChatWindowInputData(groupId, content, contentType);
+            chatWindowInteractor.sendMessage(inputData);
+
+            verify(chatMessageService).insert(chatMessage);
+        }
     }
 }

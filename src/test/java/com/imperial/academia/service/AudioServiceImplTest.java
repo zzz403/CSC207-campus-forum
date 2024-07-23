@@ -5,11 +5,13 @@ import com.imperial.academia.entity.user.User;
 import com.imperial.academia.session.SessionManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,7 +32,7 @@ public class AudioServiceImplTest {
         audioService = new AudioServiceImpl();
         setPrivateField(audioService, "audioRecorder", mockAudioRecorder);
         setPrivateField(audioService, "audioPlayer", mockAudioPlayer);
-//        PowerMockito.mockStatic(SessionManager.class);
+
     }
 
     private void setPrivateField(Object target, String fieldName, Object value) throws Exception {
@@ -39,26 +41,76 @@ public class AudioServiceImplTest {
         field.set(target, value);
     }
 
-//    @Test
-//    void testStartRecording() throws Exception {
-//        int groupId = 1;
-//
-//        // Create a mock User
-//        User mockUser = mock(User.class);
-//
-//        // Configure the mock User to return an ID
-//        when(mockUser.getId()).thenReturn(1);
-//
-//        // Configure the mock SessionManager to return the mock User
-//        when(SessionManager.getCurrentUser()).thenReturn(mockUser);
-//
-//        // Call the method under test
-//        audioService.startRecording(groupId);
-//
-//        // Verify that the recording started
-//        verify(mockAudioRecorder).startRecording(anyString());
-//        assertTrue((Boolean) getPrivateField(audioService, "recording"));
-//    }
+    @Test
+    void testStartRecording() throws Exception {
+        int groupId = 1;
+
+        try (MockedStatic<SessionManager> mockedStatic = Mockito.mockStatic(SessionManager.class)) {
+            // Create a mock User
+            System.out.println("Creating mock user");
+            User mockUser = mock(User.class);
+
+            // Configure the mock User to return an ID
+            when(mockUser.getId()).thenReturn(1);
+
+            // Configure the mock SessionManager to return the mock User
+            mockedStatic.when(SessionManager::getCurrentUser).thenReturn(mockUser);
+
+            // Call the method under test
+            audioService.startRecording(groupId);
+
+            // Ensure the mocked method is called
+            mockedStatic.verify(SessionManager::getCurrentUser, times(1));
+
+            // Verify that the recording started
+            verify(mockAudioRecorder).startRecording(any());
+            assertTrue((Boolean) getPrivateField(audioService, "recording"));
+        }
+    }
+
+    @Test
+    void testStartRecordingNoUserLoggedIn() {
+        int groupId = 1;
+
+        try (MockedStatic<SessionManager> mockedStatic = Mockito.mockStatic(SessionManager.class)) {
+            // Configure the mock SessionManager to return null for getCurrentUser
+            mockedStatic.when(SessionManager::getCurrentUser).thenReturn(null);
+
+            // Expect an IllegalStateException when no user is logged in
+            Exception exception = assertThrows(IllegalStateException.class, () -> {
+                audioService.startRecording(groupId);
+            });
+
+            assertEquals("No user is logged in", exception.getMessage());
+        }
+    }
+
+    @Test
+    void testLoadAudioFileNotFound() {
+        String audioFilePath = "non_existent_file.wav";
+
+        doThrow(new RuntimeException("File not found")).when(mockAudioPlayer).load(audioFilePath);
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            audioService.loadAudio(audioFilePath);
+        });
+
+        assertEquals("File not found", exception.getMessage());
+    }
+
+    @Test
+    void testProcessUnsupportedAudioFile() {
+        String audioFilePath = "unsupported_audio_format.xyz";
+
+        WaveformData waveformData = audioService.processAudio(audioFilePath);
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            audioService.processAudio(audioFilePath);
+        });
+
+        assertNull(waveformData);
+    }
+
 
     @Test
     void testStopRecording() throws Exception {
