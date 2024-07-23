@@ -9,18 +9,43 @@ import com.imperial.academia.service.UserService;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.session.SessionManager;
 
+/**
+ * The ProfileInteractor class implements the ProfileInputBoundry interface
+ * and provides the logic for handling profile-related operations.
+ */
 public class ProfileInteractor implements ProfileInputBoundry {
 
+    /**
+     * The interactor responsible for changing the view.
+     */
     private final ChangeViewInputBoundary changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
 
+    /**
+     * The presenter for profile operations.
+     */
     private final ProfileOutputBoundry profilepresenter;
 
-    public ProfileInteractor(ProfileOutputBoundry profilepresenter) {
-        this.profilepresenter = profilepresenter;
+    /**
+     * The service for user operations.
+     */
+    private final UserService userService = ServiceFactory.getUserService();
+
+    /**
+     * Constructs a new ProfileInteractor with the specified profile presenter.
+     *
+     * @param profilePresenter the presenter for profile operations
+     */
+    public ProfileInteractor(ProfileOutputBoundry profilePresenter) {
+        this.profilepresenter = profilePresenter;
     }
 
+    /**
+     * Executes the profile operation with the given profile input data.
+     * This involves retrieving user data, presenting the data, and changing the view.
+     *
+     * @param profileInputData the data required to perform the profile operation
+     */
     public void excute(ProfileInputData profileInputData) {
-        UserService userService = ServiceFactory.getUserService();
         try {
             User user = userService.get(profileInputData.getUserId());
             if (user != null) {
@@ -39,7 +64,7 @@ public class ProfileInteractor implements ProfileInputBoundry {
             }
 
             changeViewInteractor.changeView("profile");
-            
+
         } catch (SQLException e) {
             profilepresenter.presentError(e.getMessage());
         }

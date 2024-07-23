@@ -13,20 +13,22 @@ import java.awt.event.MouseEvent;
  */
 public class AvatarComponent extends JLabel {
 
+    /**
+     * The controller for profile operations.
+     */
     private final ProfileController profileController = new ProfileController();
 
     /**
-     * Constructor to initialize the AvatarComponent.
+     * Constructs a new AvatarComponent with the specified user ID and avatar icon.
      *
-     * @param profileController The controller to handle profile view transitions.
-     * @param userId The ID of the user.
-     * @param avatarIcon The ImageIcon of the user's avatar image.
+     * @param userId the ID of the user
+     * @param avatarIcon the avatar icon to be displayed
      */
     public AvatarComponent(int userId, ImageIcon avatarIcon) {
         setIcon(avatarIcon);
         setPreferredSize(new Dimension(50, 50));
-
         setCursor(new Cursor(Cursor.HAND_CURSOR));
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
