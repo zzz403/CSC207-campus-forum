@@ -44,6 +44,18 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
     }
 
     /**
+     * for unit test only
+     */
+    public ChatWindowInteractor(ChatWindowOutputBoundary chatWindowPresenter, ChatMessageFactory chatMessageFactory, ChatMessageService chatMessageService, MapService mapService, FileService fileService, AudioService audioService) {
+        this.chatMessageService = chatMessageService;
+        this.mapService = mapService;
+        this.fileService = fileService;
+        this.audioService = audioService;
+        this.chatWindowPresenter = chatWindowPresenter;
+        this.chatMessageFactory = chatMessageFactory;
+    }
+
+    /**
      * Loads chat messages for a specific chat group.
      *
      * @param chatGroupId the ID of the chat group

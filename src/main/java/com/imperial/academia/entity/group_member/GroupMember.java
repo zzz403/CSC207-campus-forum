@@ -26,7 +26,6 @@ public class GroupMember {
         this.groupId = groupId;
         this.userId = userId;
         this.role = role;
-//        this.isPrevent = isPrevent;
         this.joinedDate = joinedDate;
         this.lastModified = lastModified;
     }

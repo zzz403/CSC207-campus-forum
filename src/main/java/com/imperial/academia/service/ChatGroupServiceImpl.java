@@ -178,7 +178,7 @@ public class ChatGroupServiceImpl implements ChatGroupService {
         return lastMessage;
     }
 
-    private User getUser(int groupId) throws SQLException {
+    User getUser(int groupId) throws SQLException {
         String key = "user:" + groupId;
         User user = chatGroupCache.getUser(key);
         if (user == null) {
@@ -190,7 +190,7 @@ public class ChatGroupServiceImpl implements ChatGroupService {
         return user;
     }
 
-    private List<ChatGroupDTO> sortChatGroupsByTime(List<ChatGroupDTO> chatGroups) {
+    List<ChatGroupDTO> sortChatGroupsByTime(List<ChatGroupDTO> chatGroups) {
         chatGroups.sort(new Comparator<ChatGroupDTO>() {
             @Override
             public int compare(ChatGroupDTO cg1, ChatGroupDTO cg2) {

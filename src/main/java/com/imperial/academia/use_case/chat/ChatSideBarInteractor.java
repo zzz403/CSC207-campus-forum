@@ -25,6 +25,14 @@ public class ChatSideBarInteractor implements ChatSideBarInputBoundary {
     }
 
     /**
+     * for unit test
+     */
+    public ChatSideBarInteractor(ChatSideBarOutputBoundary chatPresenter, ChatGroupService chatGroupService) {
+        this.chatGroupService = chatGroupService;
+        this.chatSideBarPresenter = chatPresenter;
+    }
+
+    /**
      * Executes the chat sidebar operation with the given input data.
      *
      * @param chatSideBarInputData the input data for the chat sidebar operation

@@ -13,8 +13,8 @@ import java.util.List;
  * Uses caching to reduce database access.
  */
 public class BoardServiceImpl implements BoardService {
-    private BoardCache boardCache;
-    private BoardDAI boardDAO;
+    private final BoardCache boardCache;
+    private final BoardDAI boardDAO;
 
     /**
      * Constructs a new BoardServiceImpl with the specified cache and DAO.
