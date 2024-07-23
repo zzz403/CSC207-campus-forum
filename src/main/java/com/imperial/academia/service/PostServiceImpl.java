@@ -13,8 +13,8 @@ import java.util.List;
  * Uses caching to reduce database access.
  */
 public class PostServiceImpl implements PostService {
-    private PostCache postCache;
-    private PostDAI postDAO;
+    private final PostCache postCache;
+    private final PostDAI postDAO;
 
     /**
      * Constructs a new PostServiceImpl with the specified cache and DAO.
