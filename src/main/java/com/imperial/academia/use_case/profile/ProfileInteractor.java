@@ -18,12 +18,12 @@ public class ProfileInteractor implements ProfileInputBoundry {
     /**
      * The interactor responsible for changing the view.
      */
-    private final ChangeViewInputBoundary changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
+    private final ChangeViewInputBoundary changeViewInteractor;
 
     /**
      * The presenter for profile operations.
      */
-    private final ProfileOutputBoundry profilepresenter;
+    private final ProfileOutputBoundry profilePresenter;
 
     /**
      * The service for user operations.
@@ -36,19 +36,14 @@ public class ProfileInteractor implements ProfileInputBoundry {
      * @param profilePresenter the presenter for profile operations
      */
     public ProfileInteractor(ProfileOutputBoundry profilePresenter) {
-        this.profilepresenter = profilePresenter;
+        this.profilePresenter = profilePresenter;
         this.userService = ServiceFactory.getUserService();
+        this.changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
     }
-
-    /**
-     *
-     *
-     * @param profilePresenter
-     * @param userService
-     */
-    public ProfileInteractor(ProfileOutputBoundry profilePresenter, UserService userService){
-        this.profilepresenter = profilePresenter;
+    public ProfileInteractor(ProfileOutputBoundry profilePresenter, UserService userService, ChangeViewInputBoundary changeViewInteractor) {
+        this.profilePresenter = profilePresenter;
         this.userService = userService;
+        this.changeViewInteractor = changeViewInteractor;
     }
 
     /**
@@ -57,7 +52,7 @@ public class ProfileInteractor implements ProfileInputBoundry {
      *
      * @param profileInputData the data required to perform the profile operation
      */
-    public void excute(ProfileInputData profileInputData) {
+    public void execute(ProfileInputData profileInputData) {
         try {
             User user = userService.get(profileInputData.getUserId());
             if (user != null) {
@@ -70,15 +65,15 @@ public class ProfileInteractor implements ProfileInputBoundry {
                         user.getRegistrationDate(),
                         SessionManager.getCurrentUser().getId() == user.getId()
                 );
-                profilepresenter.present(profileOutputData);
+                profilePresenter.present(profileOutputData);
             } else {
-                profilepresenter.presentError("User not found");
+                profilePresenter.presentError("User not found");
             }
 
             changeViewInteractor.changeView("profile");
 
         } catch (SQLException e) {
-            profilepresenter.presentError(e.getMessage());
+            profilePresenter.presentError(e.getMessage());
         }
     }
 }

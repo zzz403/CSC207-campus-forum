@@ -36,7 +36,7 @@ public class ProfileController {
      */
     public void showProfile(int userId) {
         ProfileInputData profileInputData = new ProfileInputData(userId);
-        profileInteractor.excute(profileInputData);
+        profileInteractor.execute(profileInputData);
     }
 
     /**
