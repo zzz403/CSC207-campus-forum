@@ -14,18 +14,20 @@ public class ProfileViewModel extends ViewModel {
     /**
      * The current state of the profile.
      */
-    private ProfileState profileState = new ProfileState();
+    private ProfileState profileState;
 
     /**
      * The support for property change listeners.
      */
-    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport support;
 
     /**
      * Constructs a new ProfileViewModel with the default view name "profile".
      */
     public ProfileViewModel() {
         super("profile");
+        profileState = new ProfileState();
+        support = new PropertyChangeSupport(this);
     }
 
     /**
