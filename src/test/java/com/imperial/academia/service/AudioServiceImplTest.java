@@ -1,21 +1,29 @@
 package com.imperial.academia.service;
 
-import com.imperial.academia.entity.chat_message.WaveformData;
-import com.imperial.academia.entity.user.User;
-import com.imperial.academia.session.SessionManager;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.lang.reflect.Field;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
 
-import javax.sound.sampled.LineUnavailableException;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import com.imperial.academia.entity.chat_message.WaveformData;
+import com.imperial.academia.entity.user.User;
+import com.imperial.academia.session.SessionManager;
 
 public class AudioServiceImplTest {
 
@@ -39,6 +47,11 @@ public class AudioServiceImplTest {
         Field field = target.getClass().getDeclaredField(fieldName);
         field.setAccessible(true);
         field.set(target, value);
+    }
+
+    @AfterEach
+    void tearDown(){
+        SessionManager.clearSession();
     }
 
     @Test
@@ -103,10 +116,6 @@ public class AudioServiceImplTest {
         String audioFilePath = "unsupported_audio_format.xyz";
 
         WaveformData waveformData = audioService.processAudio(audioFilePath);
-
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            audioService.processAudio(audioFilePath);
-        });
 
         assertNull(waveformData);
     }

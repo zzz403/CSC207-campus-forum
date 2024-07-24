@@ -43,6 +43,7 @@ public class ChatMessageServiceImplTest {
 
     @After
     public void tearDown() throws Exception {
+        SessionManager.clearSession();
         closeable.close();
     }
 

@@ -44,6 +44,13 @@
         <artifactId>mysql-connector-java</artifactId>
         <version>8.0.28</version>
     </dependency>
+
+    <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>mockwebserver</artifactId>
+      <version>4.9.1</version>
+      <scope>test</scope>
+    </dependency>
     
     <dependency>
         <groupId>com.h2database</groupId>
