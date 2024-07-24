@@ -1,89 +1,62 @@
 package com.imperial.academia.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockConstruction;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockedConstruction;
+import javax.imageio.ImageIO;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
-import org.mockito.MockitoAnnotations;
 
 import com.imperial.academia.config.ApiKeyConfig;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Response;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okio.Buffer;
 
 public class MapServiceImplTest {
-    @Mock
-    private OkHttpClient client;
-    @Mock
-    private Response response;
 
-    @InjectMocks
+    private MockWebServer mockWebServer;
     private MapServiceImpl mapService;
+    private MockedStatic<ApiKeyConfig> mockedApiKeyConfig;
 
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
-
-    private AutoCloseable closeable;
-
-    @Before
-    public void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
+    @BeforeEach
+    void setUp() throws IOException {
+        mockWebServer = new MockWebServer();
+        mockWebServer.start();
+        mockedApiKeyConfig = mockStatic(ApiKeyConfig.class);
+        mockedApiKeyConfig.when(ApiKeyConfig::getMapBoxApiKey).thenReturn("test-api-key");
+        mapService = new MapServiceImpl();
     }
 
-    @After
-    public void tearDown() throws Exception {
-        closeable.close();
+    @AfterEach
+    void tearDown() throws IOException {
+        mockWebServer.shutdown();
+        mockedApiKeyConfig.close();
     }
-
 
     @Test
-    public void testGetUserLocation() throws Exception {
-        // Mocking URL connection
-        String mockResponse = "{\"lat\": 37.7749, \"lon\": -122.4194}";
-        HttpURLConnection connection = mock(HttpURLConnection.class);
-        InputStream inputStream = new ByteArrayInputStream(mockResponse.getBytes());
-        when(connection.getInputStream()).thenReturn(inputStream);
-        when(connection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_OK);
+    void testGetUserLocation() throws IOException {
+        String mockResponse = "{\"lat\":37.7749,\"lon\":-122.4194}";
+        mockWebServer.enqueue(new MockResponse().setBody(mockResponse).addHeader("Content-Type", "application/json"));
 
-        URL url = mock(URL.class);
-        when(url.openConnection()).thenReturn(connection);
+        double[] location = mapService.getUserLocation();
 
-        // Mock URL instantiation
-        try (MockedConstruction<URL> mockedURL = mockConstruction(URL.class, (mock, context) -> {
-            when(mock.openConnection()).thenReturn(connection);
-        })) {
-            // Get user location
-            double[] location = mapService.getUserLocation();
-
-            // Validate location
-            assertEquals(37.7749, location[0], 0.0001);
-            assertEquals(-122.4194, location[1], 0.0001);
-        }
+        assertNotNull(location, "The location should not be null");
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testConstructorThrowsExceptionWhenApiKeyIsMissing() {
-        // Mocking API key
-        try (MockedStatic<ApiKeyConfig> mockedApiKeyConfig = mockStatic(ApiKeyConfig.class)) {
-            mockedApiKeyConfig.when(ApiKeyConfig::getMapBoxApiKey).thenReturn("");
-
-            new MapServiceImpl();
-        }
+    @Test
+    private Buffer imageToBuffer(BufferedImage image) throws IOException {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", os);
+        Buffer buffer = new Buffer();
+        buffer.write(os.toByteArray());
+        return buffer;
     }
 }

@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -46,6 +47,11 @@ public class AudioServiceImplTest {
         Field field = target.getClass().getDeclaredField(fieldName);
         field.setAccessible(true);
         field.set(target, value);
+    }
+
+    @AfterEach
+    void tearDown(){
+        SessionManager.clearSession();
     }
 
     @Test
@@ -110,10 +116,6 @@ public class AudioServiceImplTest {
         String audioFilePath = "unsupported_audio_format.xyz";
 
         WaveformData waveformData = audioService.processAudio(audioFilePath);
-
-        // Exception exception = assertThrows(RuntimeException.class, () -> {
-        //     audioService.processAudio(audioFilePath);
-        // });
 
         assertNull(waveformData);
     }

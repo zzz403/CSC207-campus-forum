@@ -10,6 +10,8 @@ import com.imperial.academia.entity.chat_message.ChatMessage;
 import com.imperial.academia.entity.group_member.GroupMember;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.session.SessionManager;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +27,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,6 +52,11 @@ public class ChatGroupServiceImplTest {
     @BeforeEach
     public void setUp() {
         chatGroupService = new ChatGroupServiceImpl(chatGroupCache, chatGroupDAO, groupMemberCache, groupMemberDAO);
+    }
+
+    @AfterEach
+    public void tearDown(){
+        SessionManager.clearSession();
     }
 
     @Test
