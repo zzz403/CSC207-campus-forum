@@ -26,7 +26,6 @@ class ProfilePresenterTest {
                 new Timestamp(0),
                 true
         );
-//TODO not finished
     }
 
     @Test
