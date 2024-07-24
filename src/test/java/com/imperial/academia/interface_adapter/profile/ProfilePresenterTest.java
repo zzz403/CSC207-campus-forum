@@ -11,7 +11,7 @@ class ProfilePresenterTest {
     @BeforeEach
     public void init(){
         mockProfileViewModel = new ProfileViewModel();
-
+//TODO not finished
     }
 
     @Test
