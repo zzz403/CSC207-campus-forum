@@ -1,7 +1,7 @@
 package com.imperial.academia.config;
 
 public class ApiKeyConfig {
-    private static final String MAP_BOX_API_KEY = "";
+    private static final String MAP_BOX_API_KEY = "none";
     private static final String GPT_3_5_turbo_0125_TOKEN = "";
 
     public static String getMapBoxApiKey() {

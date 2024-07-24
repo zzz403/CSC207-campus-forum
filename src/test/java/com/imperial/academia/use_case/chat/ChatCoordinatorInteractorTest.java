@@ -6,10 +6,13 @@ import com.imperial.academia.service.ChatGroupService;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.entity.user.User;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class ChatCoordinatorInteractorTest {
@@ -40,6 +43,14 @@ public class ChatCoordinatorInteractorTest {
         when(ServiceFactory.getChatGroupService()).thenReturn(mockChatGroupService);
 
         chatCoordinatorInteractor = new ChatCoordinatorInteractor();
+    }
+
+    @AfterEach
+    void tearDown() {
+        mockedSessionManager.clearInvocations();
+        mockedServiceFactory.close();
+        mockedUsecaseFactory.close();
+        mockedSessionManager.close();
     }
 
     @Test

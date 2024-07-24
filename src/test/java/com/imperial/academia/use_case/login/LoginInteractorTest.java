@@ -1,23 +1,27 @@
 package com.imperial.academia.use_case.login;
 
-import com.imperial.academia.session.SessionManager;
-import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
-import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
-import com.imperial.academia.service.UserService;
-import com.imperial.academia.entity.user.User;
-import com.imperial.academia.data_access.RememberMeDAI;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import com.imperial.academia.data_access.RememberMeDAI;
+import com.imperial.academia.entity.user.User;
+import com.imperial.academia.service.UserService;
+import com.imperial.academia.session.SessionManager;
+import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
+import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
 
 class LoginInteractorTest {
 
@@ -34,6 +38,11 @@ class LoginInteractorTest {
         MockitoAnnotations.openMocks(this);
         loginInteractor = new LoginInteractor(loginPresenter, rememberMeDAO, userService, chatSideBarInteractor, changeViewInteractor);
         loginInteractor = spy(loginInteractor);
+    }
+
+    @AfterEach
+    void tearDown(){
+        SessionManager.clearSession();
     }
 
     @Test

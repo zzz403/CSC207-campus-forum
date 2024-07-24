@@ -1,19 +1,20 @@
 package com.imperial.academia.use_case.chat;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import java.io.File;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -23,7 +24,12 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 
-import com.imperial.academia.entity.chat_message.*;
+import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.chat_message.ChatMessageDTO;
+import com.imperial.academia.entity.chat_message.ChatMessageFactory;
+import com.imperial.academia.entity.chat_message.FileData;
+import com.imperial.academia.entity.chat_message.MapData;
+import com.imperial.academia.entity.chat_message.WaveformData;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.service.AudioService;
 import com.imperial.academia.service.ChatMessageService;
@@ -66,6 +72,7 @@ public class ChatWindowInteractorTest {
         if (closeable != null) {
             closeable.close();
         }
+        SessionManager.clearSession();
     }
 
     @Test

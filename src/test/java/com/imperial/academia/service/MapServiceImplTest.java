@@ -1,14 +1,11 @@
 package com.imperial.academia.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mockStatic;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
@@ -54,7 +51,7 @@ public class MapServiceImplTest {
         assertNotNull(location, "The location should not be null");
     }
 
-
+    @Test
     private Buffer imageToBuffer(BufferedImage image) throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ImageIO.write(image, "png", os);
