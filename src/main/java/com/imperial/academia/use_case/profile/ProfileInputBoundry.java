@@ -11,5 +11,5 @@ public interface ProfileInputBoundry {
      *
      * @param profileInputData the data required to perform the profile operation
      */
-    void excute(ProfileInputData profileInputData);
+    void execute(ProfileInputData profileInputData);
 }
