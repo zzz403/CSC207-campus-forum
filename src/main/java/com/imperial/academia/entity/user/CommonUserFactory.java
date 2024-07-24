@@ -21,4 +21,8 @@ public class CommonUserFactory implements UserFactory {
     public User create(String username, String password, String email, LocalDateTime registrationDate) {
         return new User(0, username, password, email, "user", null, Timestamp.valueOf(registrationDate), Timestamp.valueOf(registrationDate));
     }
+    @Override
+    public User create(String username, String password, String email, LocalDateTime registrationDate, LocalDateTime lastModifiedDate) {
+        return new User(0, username, password, email, "user", null, Timestamp.valueOf(registrationDate), Timestamp.valueOf(lastModifiedDate));
+    }
 }

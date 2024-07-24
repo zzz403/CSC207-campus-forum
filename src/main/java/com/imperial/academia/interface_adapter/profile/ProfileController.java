@@ -53,6 +53,6 @@ public class ProfileController {
      * This method is currently not implemented.
      */
     public void edit() {
-        // TODO editInteractor.set
+        // TODO EditInteractor.set
     }
 }

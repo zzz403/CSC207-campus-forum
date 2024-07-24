@@ -16,4 +16,6 @@ public interface UserFactory {
      * @return A new User object with the specified details.
      */
     User create(String username, String password, String email, LocalDateTime registrationDate);
+
+    User create(String username, String password, String email, LocalDateTime registrationDate, LocalDateTime lastModifiedDate);
 }
