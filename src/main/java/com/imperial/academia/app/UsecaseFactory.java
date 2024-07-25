@@ -38,6 +38,9 @@ import com.imperial.academia.use_case.chat.ChatWindowOutputBoundary;
 import com.imperial.academia.use_case.createpost.CreatePostInputBoundary;
 import com.imperial.academia.use_case.createpost.CreatePostInteractor;
 import com.imperial.academia.use_case.createpost.CreatePostOutputBoundary;
+import com.imperial.academia.use_case.edit.EditInputBoundry;
+import com.imperial.academia.use_case.edit.EditInteractor;
+import com.imperial.academia.use_case.edit.EditOutputBoundry;
 import com.imperial.academia.use_case.login.LoginInputBoundary;
 import com.imperial.academia.use_case.login.LoginInteractor;
 import com.imperial.academia.use_case.login.LoginOutputBoundary;
@@ -71,6 +74,7 @@ public class UsecaseFactory {
     private static ChatCoordinatorInputBoundary chatCoordinatorInteractor;
     private static PostInputBoundary postInteractor;
     private static LLMInputBoundary LLMInteractor;
+    private static EditInputBoundry editInteractor;
 
     /** Prevents instantiation of this utility class. */
     private UsecaseFactory() {
@@ -90,7 +94,7 @@ public class UsecaseFactory {
         sessionInteractor = new SessionInteractor();
         
         LLMInteractor = new ChatGPTInteractor();
-        
+
         LoginViewModel loginViewModel = viewModels.getLoginViewModel();
         SignupViewModel signupViewModel = viewModels.getSignupViewModel();
         CreatePostViewModel createPostViewModel = viewModels.getCreatePostViewModel();
@@ -126,7 +130,8 @@ public class UsecaseFactory {
         LoginOutputBoundary loginPresenter = new LoginPresenter(loginViewModel, topNavigationBarViewModel);
         loginInteractor = new LoginInteractor(loginPresenter, rememberMeDAO);
 
-
+        EditOutputBoundry editPresenter = new EditPresenter(//TODO );
+        editInteractor = new EditInteractor(editPresenter,userFactory);
         System.out.println("init seccuss for usecase!!!!");
     }
 

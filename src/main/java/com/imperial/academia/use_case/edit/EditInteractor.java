@@ -7,6 +7,9 @@ import com.imperial.academia.entity.user.UserFactory;
 import com.imperial.academia.service.UserService;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
+import com.imperial.academia.use_case.profile.ProfileInputData;
+import com.imperial.academia.use_case.profile.ProfileInteractor;
+import com.imperial.academia.use_case.profile.ProfileOutputData;
 import com.imperial.academia.use_case.signup.SignupOutputData;
 
 import java.sql.SQLException;
@@ -15,7 +18,7 @@ import java.util.regex.Pattern;
 
 public class EditInteractor {
     private final ChangeViewInputBoundary changeViewInteractor;
-    private final EditOutputBopundry editPresenter;
+    private final EditOutputBoundry editPresenter;
     private final UserFactory userFactory;
     private final UserService userService;
 
@@ -28,16 +31,18 @@ public class EditInteractor {
 
     public void excute(){
         User user = SessionManager.getCurrentUser();
-        EditOutputData editOutputData = new EditOutputData(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRole(),
-                user.getAvatarUrl(),
-                user.getRegistrationDate()
-        );
-        editPresenter.present(editOutputData);
-        changeViewInteractor.changeView("edit");
+        if (user == null){
+            changeViewInteractor.changeView("login");
+        } else {
+            EditOutputData editOutputData = new EditOutputData(
+                    user.getUsername(),
+                    user.getPassword(),
+                    user.getEmail(),
+                    user.getAvatarUrl()
+            );
+            editPresenter.present(editOutputData);
+            changeViewInteractor.changeView("edit");
+        }
     }
 
     public void update(EditInoutData editInoutData){
@@ -63,14 +68,14 @@ public class EditInteractor {
                         editInoutData.getPassword(),
                         editInoutData.getEmail(),
                         SessionManager.getCurrentUser().getRole(),
-                        SessionManager.getCurrentUser().getAvatarUrl(),//TODO change avatar???
+                        SessionManager.getCurrentUser().getAvatarUrl(),//TODO change avatar???  chat window interactor
                         SessionManager.getCurrentUser().getRegistrationDate(),
                         now
                 );
                 SessionManager.setCurrentUser(updatedUser);
                 userService.update(updatedUser);
-                editPresenter.prepareSuccessView();
-                changeViewInteractor.changeView("profile");//TODO navigate to login ?
+                ProfileInputData profileInputData = new ProfileInputData(updatedUser.getId());
+                UsecaseFactory.getProfileInteractor().execute(profileInputData);
             }
         } catch (SQLException e) {
             editPresenter.prepareFailView("An error occurred during signup: " + e.getMessage());

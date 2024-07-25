@@ -1,5 +1,6 @@
 package com.imperial.academia.use_case.edit;
 
-public class EditOutputBoundry {
-    void pressent(EditOutputData editOutputData);
+public interface EditOutputBoundry {
+    void prepareFailView(String error);
+    void present(EditOutputData editOutputData);
 }
