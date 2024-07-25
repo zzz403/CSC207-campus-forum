@@ -45,7 +45,7 @@ public class EditInteractor {
         }
     }
 
-    public void update(EditInoutData editInoutData){
+    public void update(EditInputData editInputData){
         try {
             editPresenter.prepareFailView(null);
             if (editInputData.getUsername().length() <= 6) {
@@ -62,20 +62,24 @@ public class EditInteractor {
                 editPresenter.prepareFailView("Email already used.");
             } else {
                 LocalDateTime now = LocalDateTime.now();
-                User updatedUser = userFactory.create(
-                        SessionManager.getCurrentUser().getId(),
-                        editInoutData.getUsername(),
-                        editInoutData.getPassword(),
-                        editInoutData.getEmail(),
-                        SessionManager.getCurrentUser().getRole(),
-                        SessionManager.getCurrentUser().getAvatarUrl(),//TODO change avatar???  chat window interactor
-                        SessionManager.getCurrentUser().getRegistrationDate(),
-                        now
-                );
-                SessionManager.setCurrentUser(updatedUser);
-                userService.update(updatedUser);
-                ProfileInputData profileInputData = new ProfileInputData(updatedUser.getId());
-                UsecaseFactory.getProfileInteractor().execute(profileInputData);
+                User oldUser = SessionManager.getCurrentUser();
+                if (oldUser == null){
+                    changeViewInteractor.changeView("login");
+                } else {
+                    User updatedUser = userFactory.create(
+                            oldUser.getId(),
+                            editInputData.getUsername(),
+                            editInputData.getPassword(),
+                            editInputData.getEmail(),
+                            oldUser.getAvatarUrl(),//TODO change avatar???  chat window interactor
+                            oldUser.getRegistrationDate(),
+                            now
+                    );
+                    SessionManager.setCurrentUser(updatedUser);
+                    userService.update(updatedUser);
+                    ProfileInputData profileInputData = new ProfileInputData(updatedUser.getId());
+                    UsecaseFactory.getProfileInteractor().execute(profileInputData);
+                }
             }
         } catch (SQLException e) {
             editPresenter.prepareFailView("An error occurred during signup: " + e.getMessage());

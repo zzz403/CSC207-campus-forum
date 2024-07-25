@@ -234,4 +234,6 @@ public class UsecaseFactory {
     public static PostInputBoundary getPostInteractor() {
         return postInteractor;
     }
+
+    public static EditInputBoundry getEditInteractor(){ return editInteractor;}
 }

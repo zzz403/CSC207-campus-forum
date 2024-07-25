@@ -1,5 +1,6 @@
 package com.imperial.academia.entity.user;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
@@ -17,5 +18,5 @@ public interface UserFactory {
      */
     User create(String username, String password, String email, LocalDateTime registrationDate);
 
-    User create(String username, String password, String email, LocalDateTime registrationDate, LocalDateTime lastModifiedDate);
+    User create(int id, String username, String password, String email, String avatarURL, Timestamp registrationDate, LocalDateTime lastModifiedDate);
 }

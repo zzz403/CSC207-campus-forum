@@ -22,7 +22,7 @@ public class CommonUserFactory implements UserFactory {
         return new User(0, username, password, email, "user", null, Timestamp.valueOf(registrationDate), Timestamp.valueOf(registrationDate));
     }
     @Override
-    public User create(String username, String password, String email, LocalDateTime registrationDate, LocalDateTime lastModifiedDate) {
-        return new User(0, username, password, email, "user", null, Timestamp.valueOf(registrationDate), Timestamp.valueOf(lastModifiedDate));
+    public User create(int id, String username, String password, String email,String avatarURL, Timestamp registrationDate, LocalDateTime lastModifiedDate) {
+        return new User(id, username, password, email, "user", avatarURL, registrationDate, Timestamp.valueOf(lastModifiedDate));
     }
 }
