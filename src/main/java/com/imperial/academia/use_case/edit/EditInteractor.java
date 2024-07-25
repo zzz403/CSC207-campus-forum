@@ -47,7 +47,7 @@ public class EditInteractor {
 
     public void update(EditInputData editInputData){
         try {
-            editPresenter.prepareFailView(null);
+            editPresenter.prepareFailView(null);//TODO same as before information handling
             if (editInputData.getUsername().length() <= 6) {
                 editPresenter.prepareFailView("Username must be longer than 6 characters.");
             } else if (userService.existsByUsername(editInputData.getUsername())) {
