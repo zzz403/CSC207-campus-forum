@@ -5,6 +5,7 @@ import com.imperial.academia.entity.chat_message.WaveformData;
 import com.imperial.academia.interface_adapter.chat.ChatWindowController;
 import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
 import com.imperial.academia.entity.chat_message.ChatMessageDTO;
+import com.imperial.academia.view.style.CustomScrollBarUI;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -55,7 +56,7 @@ public class ChatWindowView extends JPanel {
         messageListPanel.setLayout(new BoxLayout(messageListPanel, BoxLayout.Y_AXIS));
         messageListPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JScrollPane scrollPane = new JScrollPane(messageListPanel);
+        JScrollPane scrollPane = new CustomScrollBarUI.CustomScrollPane(messageListPanel);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         add(scrollPane, BorderLayout.CENTER);
@@ -152,7 +153,7 @@ public class ChatWindowView extends JPanel {
         summaryTextArea.setWrapStyleWord(true);
         summaryTextArea.setEditable(false);
 
-        JScrollPane summaryScrollPane = new JScrollPane(summaryTextArea);
+        JScrollPane summaryScrollPane = new CustomScrollBarUI.CustomScrollPane(summaryTextArea);
         summaryScrollPane.setPreferredSize(new Dimension(300, 200)); // 设置最大宽度和高度
 
         summaryPopupMenu.add(summaryScrollPane, BorderLayout.CENTER);
@@ -506,7 +507,7 @@ public class ChatWindowView extends JPanel {
         messageListPanel.repaint();
 
         // Scroll to bottom
-        JScrollBar verticalScrollBar = ((JScrollPane) messageListPanel.getParent().getParent()).getVerticalScrollBar();
+        JScrollBar verticalScrollBar = ((CustomScrollBarUI.CustomScrollPane) messageListPanel.getParent().getParent()).getVerticalScrollBar();
         SwingUtilities.invokeLater(() -> verticalScrollBar.setValue(verticalScrollBar.getMaximum()));
     }
 
