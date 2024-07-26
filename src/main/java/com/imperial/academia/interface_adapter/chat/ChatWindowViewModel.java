@@ -68,6 +68,15 @@ public class ChatWindowViewModel extends ViewModel {
     }
 
     /**
+     * Fires a property change event to notify listeners of any change to the chat window state.
+     *
+     * @param propertyName The name of the property that has changed.
+     */
+    public void firePropertyChanged(String propertyName) {
+        support.firePropertyChange(propertyName, null, chatWindowState);
+    }
+
+    /**
      * Adds a PropertyChangeListener to listen for changes to the chat window state.
      *
      * @param listener The PropertyChangeListener to be added.

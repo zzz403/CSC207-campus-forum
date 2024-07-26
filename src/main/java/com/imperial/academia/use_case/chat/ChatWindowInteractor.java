@@ -1,5 +1,6 @@
 package com.imperial.academia.use_case.chat;
 
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.entity.chat_message.*;
 import com.imperial.academia.service.AudioService;
 import com.imperial.academia.service.ChatMessageService;
@@ -7,6 +8,7 @@ import com.imperial.academia.service.FileService;
 import com.imperial.academia.service.MapService;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.app.ServiceFactory;
+import com.imperial.academia.use_case.LLM.LLMInputBoundary;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
@@ -26,6 +28,7 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
     private final FileService fileService;
     private final ChatWindowOutputBoundary chatWindowPresenter;
     private final ChatMessageFactory chatMessageFactory;
+    private final LLMInputBoundary llmInputBoundary;
 
 
     /**
@@ -41,18 +44,20 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
         this.audioService = ServiceFactory.getAudioService();
         this.chatWindowPresenter = chatWindowPresenter;
         this.chatMessageFactory = chatMessageFactory;
+        this.llmInputBoundary = UsecaseFactory.getLLMInteractor();
     }
 
     /**
      * for unit test only
      */
-    public ChatWindowInteractor(ChatWindowOutputBoundary chatWindowPresenter, ChatMessageFactory chatMessageFactory, ChatMessageService chatMessageService, MapService mapService, FileService fileService, AudioService audioService) {
+    public ChatWindowInteractor(ChatWindowOutputBoundary chatWindowPresenter, ChatMessageFactory chatMessageFactory, ChatMessageService chatMessageService, MapService mapService, FileService fileService, AudioService audioService, LLMInputBoundary llmInputBoundary) {
         this.chatMessageService = chatMessageService;
         this.mapService = mapService;
         this.fileService = fileService;
         this.audioService = audioService;
         this.chatWindowPresenter = chatWindowPresenter;
         this.chatMessageFactory = chatMessageFactory;
+        this.llmInputBoundary = llmInputBoundary;
     }
 
     /**
@@ -197,5 +202,22 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
 
         // Refresh the chat messages after sending the message
         execute(groupId);
+    }
+
+    /**
+     * Summarizes the chat history for the specified group.
+     *
+     * @param chatGroupId the ID of the chat group
+     * @throws SQLException if a database access error occurs
+     */
+    @Override
+    public void summarizeChatHistory(int chatGroupId) throws SQLException {
+        List<ChatMessageDTO> chatMessages = chatMessageService.getAllByGroupId(chatGroupId);
+        StringBuilder chatHistory = new StringBuilder();
+        for (ChatMessageDTO chatMessage : chatMessages) {
+            chatHistory.append(chatMessage.getSenderName()).append(": ").append(chatMessage.getContent()).append("\n");
+        }
+        String summarizeChatHistory = llmInputBoundary.summarizeChatHistory(chatHistory.toString());
+        chatWindowPresenter.presentSummary(summarizeChatHistory);
     }
 }

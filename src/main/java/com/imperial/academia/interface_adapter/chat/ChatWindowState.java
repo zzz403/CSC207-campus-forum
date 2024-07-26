@@ -13,6 +13,7 @@ public class ChatWindowState {
     private List<ChatMessageDTO> chatMessages = new ArrayList<>();
     private int chatGroupId;
     private String error = "";
+    private String summary = "";
 
     /**
      * Copy constructor for ChatWindowState.
@@ -23,6 +24,7 @@ public class ChatWindowState {
         this.chatMessages = chatWindowState.getChatMessages();
         this.chatGroupId = chatWindowState.getChatGroupId();
         this.error = chatWindowState.getError();
+        this.summary = chatWindowState.getSummary();
     }
 
     /**
@@ -83,5 +85,23 @@ public class ChatWindowState {
      */
     public void setChatGroupId(int chatGroupId) {
         this.chatGroupId = chatGroupId;
+    }
+
+    /**
+     * Gets the summary of the chat history.
+     *
+     * @return the summary of the chat history
+     */
+    public String getSummary() {
+        return summary;
+    }
+
+    /**
+     * Sets the summary of the chat history.
+     *
+     * @param summary the summary of the chat history to set
+     */
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }

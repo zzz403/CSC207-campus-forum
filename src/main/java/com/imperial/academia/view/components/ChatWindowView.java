@@ -69,7 +69,6 @@ public class ChatWindowView extends JPanel {
         attachmentsPanel.setOpaque(false); // Make panel transparent
 
         // Adding attachment icon
-        // Adding attachment icon
         try {
             BufferedImage plusIconImage = ImageIO.read(new File("resources/icons/plus_icon.png"));
             Image scaledPlusIconImage = plusIconImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
