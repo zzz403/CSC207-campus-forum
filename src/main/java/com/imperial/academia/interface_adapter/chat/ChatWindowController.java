@@ -5,6 +5,7 @@ import com.imperial.academia.use_case.chat.ChatWindowInputBoundary;
 import com.imperial.academia.use_case.chat.ChatWindowInputData;
 
 import java.io.File;
+import java.sql.SQLException;
 
 /**
  * Controller for handling actions related to the chat window.
@@ -80,5 +81,9 @@ public class ChatWindowController {
     public void sendFile(int groupId, File selectedFile){
         chatWindowInteractor.sendFile(groupId, selectedFile);
         System.out.println("File size: " + (double) selectedFile.length() / (1024 * 1024) + " mb");
+    }
+
+    public void summarizeChatHistory(int groupId) throws SQLException {
+        chatWindowInteractor.summarizeChatHistory(groupId);
     }
 }

@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -103,7 +104,29 @@ public class ChatWindowView extends JPanel {
 
             // Add custom menu items
             popupMenu.add(locationButton);
-            popupMenu.add(new IconTextMenuItem(reviewIcon, "AI review"));
+
+            JPanel reviewButton = new IconTextMenuItem(reviewIcon, "review chat");
+
+            reviewButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (SwingUtilities.isLeftMouseButton(e)) {
+                        if (isButtonEnabled) {
+                            int groupId = chatWindowViewModel.getState().getChatGroupId();
+                            try {
+                                chatWindowController.summarizeChatHistory(groupId);
+                            } catch (SQLException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                            isButtonEnabled = false;
+                        }else {
+                            JOptionPane.showMessageDialog(application, "You are clicking too fast! Please wait.");
+                        }
+                    }
+                }
+            });
+
+            popupMenu.add(reviewButton);
 
             plusIcon.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
@@ -116,6 +139,17 @@ public class ChatWindowView extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Review popup page
+        JPopupMenu summaryPopupMenu = new RoundedPopupMenu();
+        summaryPopupMenu.setLayout(new BorderLayout());
+        summaryPopupMenu.setBorder(new LineBorder(Color.black, 4, true));
+
+        JLabel summaryLabel = new JLabel("Summary will be displayed here");
+        summaryLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        summaryLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        summaryPopupMenu.add(summaryLabel, BorderLayout.CENTER);
+
 
         JPanel spacerPanel = new JPanel();
         spacerPanel.setLayout(new BoxLayout(spacerPanel, BoxLayout.X_AXIS));
@@ -291,6 +325,13 @@ public class ChatWindowView extends JPanel {
         chatWindowViewModel.addPropertyChangeListener(evt -> {
             if (evt.getPropertyName().equals("chatWindowState")) {
                 displayChatMessages(chatWindowViewModel.getState().getChatMessages());
+            }
+            else if ("summary".equals(evt.getPropertyName())) {
+                String summary = chatWindowViewModel.getState().getSummary();
+                summaryLabel.setText("<html>" + summary.replace("\n", "<br>") + "</html>");
+                summaryPopupMenu.setVisible(false);
+                summaryPopupMenu.show(application, application.getWidth() / 2 - summaryPopupMenu.getPreferredSize().width / 2, application.getHeight() / 2 - summaryPopupMenu.getPreferredSize().height / 2);
+                isButtonEnabled = true;
             }
         });
     }
