@@ -141,14 +141,14 @@ public class ChatGPTInteractor implements LLMInputBoundary {
 
             JSONObject userMessage = new JSONObject()
                     .put("role", "user")
-                    .put("content", "Summarize the following chat history: " + chatHistory);
+                    .put("content", "Summarize the following chat history and try to list all main points: " + chatHistory);
 
             JSONArray messages = new JSONArray()
                     .put(systemMessage)
                     .put(userMessage);
 
             JSONObject requestBody = new JSONObject()
-                    .put("model", "gpt-3.5-turbo")
+                    .put("model", "gpt-3.5-turbo-0125")
                     .put("messages", messages)
                     .put("max_tokens", 1500)
                     .put("temperature", 0.7);

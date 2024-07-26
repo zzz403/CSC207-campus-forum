@@ -217,8 +217,7 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
         for (ChatMessageDTO chatMessage : chatMessages) {
             chatHistory.append(chatMessage.getSenderName()).append(": ").append(chatMessage.getContent()).append("\n");
         }
-//        String summarizeChatHistory = llmInputBoundary.summarizeChatHistory(chatHistory.toString());
-        //Todo implement summarizeChatHistory
-        chatWindowPresenter.presentSummary(chatHistory.toString());
+        String summarizeChatHistory = llmInputBoundary.summarizeChatHistory(chatHistory.toString());
+        chatWindowPresenter.presentSummary(summarizeChatHistory);
     }
 }

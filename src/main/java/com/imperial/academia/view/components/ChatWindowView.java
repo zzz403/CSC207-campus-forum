@@ -92,9 +92,9 @@ public class ChatWindowView extends JPanel {
                 public void mouseClicked(MouseEvent e) {
                     if (SwingUtilities.isLeftMouseButton(e)) {
                         if (isButtonEnabled) {
+                            isButtonEnabled = false;
                             int groupId = chatWindowViewModel.getState().getChatGroupId();
                             chatWindowController.sendLocation(groupId);
-                            isButtonEnabled = false;
                         } else {
                             JOptionPane.showMessageDialog(application, "You are clicking too fast! Please wait.");
                         }
@@ -112,13 +112,13 @@ public class ChatWindowView extends JPanel {
                 public void mouseClicked(MouseEvent e) {
                     if (SwingUtilities.isLeftMouseButton(e)) {
                         if (isButtonEnabled) {
+                            isButtonEnabled = false;
                             int groupId = chatWindowViewModel.getState().getChatGroupId();
                             try {
                                 chatWindowController.summarizeChatHistory(groupId);
                             } catch (SQLException ex) {
                                 throw new RuntimeException(ex);
                             }
-                            isButtonEnabled = false;
                         }else {
                             JOptionPane.showMessageDialog(application, "You are clicking too fast! Please wait.");
                         }
@@ -145,10 +145,17 @@ public class ChatWindowView extends JPanel {
         summaryPopupMenu.setLayout(new BorderLayout());
         summaryPopupMenu.setBorder(new LineBorder(Color.black, 4, true));
 
-        JLabel summaryLabel = new JLabel("Summary will be displayed here");
-        summaryLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        summaryLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        summaryPopupMenu.add(summaryLabel, BorderLayout.CENTER);
+        JTextArea summaryTextArea = new JTextArea("Summary will be displayed here");
+        summaryTextArea.setFont(new Font("Arial", Font.PLAIN, 14));
+        summaryTextArea.setBorder(new EmptyBorder(10, 10, 10, 10));
+        summaryTextArea.setLineWrap(true);
+        summaryTextArea.setWrapStyleWord(true);
+        summaryTextArea.setEditable(false);
+
+        JScrollPane summaryScrollPane = new JScrollPane(summaryTextArea);
+        summaryScrollPane.setPreferredSize(new Dimension(300, 200)); // 设置最大宽度和高度
+
+        summaryPopupMenu.add(summaryScrollPane, BorderLayout.CENTER);
 
 
         JPanel spacerPanel = new JPanel();
@@ -328,7 +335,8 @@ public class ChatWindowView extends JPanel {
             }
             else if ("summary".equals(evt.getPropertyName())) {
                 String summary = chatWindowViewModel.getState().getSummary();
-                summaryLabel.setText("<html>" + summary.replace("\n", "<br>") + "</html>");
+                summaryScrollPane.setPreferredSize(new Dimension(application.getWidth()/3, application.getHeight()/3));
+                summaryTextArea.setText(summary);
                 summaryPopupMenu.setVisible(false);
                 summaryPopupMenu.show(application, application.getWidth() / 2 - summaryPopupMenu.getPreferredSize().width / 2, application.getHeight() / 2 - summaryPopupMenu.getPreferredSize().height / 2);
                 isButtonEnabled = true;
