@@ -35,6 +35,7 @@ public class ChatWindowView extends JPanel {
     
     private Image scaledOpenMicIconImage;
     private Image scaledCloseMicIconImage;
+    private boolean isButtonEnabled = true;
 
     ChatWindowViewModel chatWindowViewModel;
 
@@ -85,11 +86,17 @@ public class ChatWindowView extends JPanel {
             ImageIcon reviewIcon = popupIconSize("resources/icons/ai_review_icon.png", 33);
 
             JPanel locationButton = new IconTextMenuItem(locationIcon, "send location");
+
             locationButton.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
                     if (SwingUtilities.isLeftMouseButton(e)) {
-                        int groupId = chatWindowViewModel.getState().getChatGroupId();
-                        chatWindowController.sendLocation(groupId);
+                        if (isButtonEnabled) {
+                            int groupId = chatWindowViewModel.getState().getChatGroupId();
+                            chatWindowController.sendLocation(groupId);
+                            isButtonEnabled = false;
+                        } else {
+                            JOptionPane.showMessageDialog(application, "You are clicking too fast! Please wait.");
+                        }
                     }
                 }
             });
@@ -418,6 +425,7 @@ public class ChatWindowView extends JPanel {
                     }
                 });
                 contentPanel.add(mapPanel);
+                isButtonEnabled = true;
             } else if (chatMessage.getContentType().equals("file")) {
                 FilePanel filePanel = new FilePanel(chatMessage.getFileData(), chatMessage.isMe());
                 filePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
