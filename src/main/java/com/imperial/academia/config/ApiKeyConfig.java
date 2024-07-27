@@ -4,7 +4,7 @@ public class ApiKeyConfig {
     private static final String MAP_BOX_API_KEY = "";
     private static final String GPT_3_5_turbo_0125_TOKEN = "";
     private static final String IBM_SpeechToText_API_KEY = "";
-    private static final String DeepL_API_KEY = "";
+    private static final String DeepL_API_KEY = "8e73395c-1789-4036-a269-cf71cf174356:fx";
 
     public static String getMapBoxApiKey() {
         return MAP_BOX_API_KEY;

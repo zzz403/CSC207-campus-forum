@@ -77,4 +77,12 @@ public interface ChatWindowInputBoundary {
      * @param audioPath The path to the audio file.
      */
     void speechToText(String audioPath) throws Exception;
+
+    /**
+     * Translates the specified text to the target language.
+     *
+     * @param text The text to translate.
+     * @param targetLanguage The target language to translate to.
+     */
+    void translate(String text, String targetLanguage);
 }
