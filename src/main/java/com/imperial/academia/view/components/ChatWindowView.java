@@ -435,17 +435,7 @@ public class ChatWindowView extends JPanel {
                 case "text" -> {
                     JLabel messageContentLabel = createMessageContent(chatMessage);
 
-                    JLabel translateArea = createAdditionContent(chatMessage.isMe());
-                    JPanel transcriptionPanel = new JPanel();
-                    transcriptionPanel.setLayout(new BoxLayout(transcriptionPanel, BoxLayout.X_AXIS));
-                    transcriptionPanel.setOpaque(false); // Make the panel transparent
-                    if (chatMessage.isMe()) {
-                        transcriptionPanel.add(Box.createHorizontalGlue());
-                        transcriptionPanel.add(translateArea);
-                    } else {
-                        transcriptionPanel.add(translateArea);
-                        transcriptionPanel.add(Box.createHorizontalGlue());
-                    }
+                    JLabel translateArea = createAdditionContent();
 
                     // Add mouse listener to show JPopupMenu
                     messageContentLabel.addMouseListener(new MouseAdapter() {
@@ -458,7 +448,17 @@ public class ChatWindowView extends JPanel {
                     });
                     contentPanel.add(messageContentLabel);
                     contentPanel.add(Box.createVerticalStrut(5));
-                    contentPanel.add(transcriptionPanel);
+
+                    if (chatMessage.isMe()){
+                        JPanel transcriptionPanel = new JPanel();
+                        transcriptionPanel.setLayout(new BoxLayout(transcriptionPanel, BoxLayout.X_AXIS));
+                        transcriptionPanel.setOpaque(false);
+                        transcriptionPanel.add(Box.createHorizontalGlue());
+                        transcriptionPanel.add(translateArea);
+                        contentPanel.add(transcriptionPanel);
+                    }else{
+                        contentPanel.add(translateArea);
+                    }
 
                 }
                 case "image" -> {
@@ -484,17 +484,7 @@ public class ChatWindowView extends JPanel {
                         waveformPanel.addPlayButtonActionListener(e -> chatWindowController.loadAudio(chatMessage.getContent()));
 
                         // 创建一个JTextArea来显示转录文本
-                        JLabel transcriptionArea = createAdditionContent(chatMessage.isMe());
-                        JPanel transcriptionPanel = new JPanel();
-                        transcriptionPanel.setLayout(new BoxLayout(transcriptionPanel, BoxLayout.X_AXIS));
-                        transcriptionPanel.setOpaque(false); // Make the panel transparent
-                        if (chatMessage.isMe()) {
-                            transcriptionPanel.add(Box.createHorizontalGlue());
-                            transcriptionPanel.add(transcriptionArea);
-                        } else {
-                            transcriptionPanel.add(transcriptionArea);
-                            transcriptionPanel.add(Box.createHorizontalGlue());
-                        }
+                        JLabel transcriptionArea = createAdditionContent();
 
                         // 添加鼠标监听器以显示JPopupMenu
                         waveformPanel.addMouseListener(new MouseAdapter() {
@@ -511,7 +501,16 @@ public class ChatWindowView extends JPanel {
                         outerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
                         outerPanel.add(waveformPanel);
                         outerPanel.add(Box.createVerticalStrut(-10));
-                        outerPanel.add(transcriptionPanel); // Add transcription area below the waveform panel
+                        if (chatMessage.isMe()) {
+                            JPanel transcriptionPanel = new JPanel();
+                            transcriptionPanel.setLayout(new BoxLayout(transcriptionPanel, BoxLayout.X_AXIS));
+                            transcriptionPanel.setOpaque(false); // Make the panel transparent
+                            transcriptionPanel.add(Box.createHorizontalGlue());
+                            transcriptionPanel.add(transcriptionArea);
+                            outerPanel.add(transcriptionPanel); // Add transcription area below the waveform panel
+                        }else{
+                            outerPanel.add(transcriptionArea);
+                        }
 
                         contentPanel.add(outerPanel);
                     }
@@ -618,7 +617,6 @@ public class ChatWindowView extends JPanel {
         };
 
         messageContentLabel.setFont(new Font("Noto Color Emoji", Font.BOLD, 16));
-
         messageContentLabel.setOpaque(false); // We will paint the background ourselves
         messageContentLabel.setBackground(chatMessage.isMe() ? new Color(52, 152, 219) : Color.WHITE);
         messageContentLabel.setForeground(chatMessage.isMe() ? Color.WHITE : Color.BLACK);
@@ -627,7 +625,7 @@ public class ChatWindowView extends JPanel {
         return messageContentLabel;
     }
 
-    public JLabel createAdditionContent(boolean isMe) {
+    public JLabel createAdditionContent() {
         JLabel transcriptionArea = new JLabel("...") {
             @Override
             protected void paintComponent(Graphics g) {
@@ -644,11 +642,13 @@ public class ChatWindowView extends JPanel {
             }
         };
 
+        transcriptionArea.setOpaque(false);
         transcriptionArea.setFont(new Font("Arial", Font.BOLD, 14));
-        transcriptionArea.setForeground(isMe ? Color.WHITE : Color.BLACK);
-        transcriptionArea.setBackground(isMe ? new Color(52, 152, 219) : Color.WHITE);
+        transcriptionArea.setForeground(Color.BLACK);
+        transcriptionArea.setBackground(new Color(211, 211, 211));
         transcriptionArea.setVisible(false); // Initially hidden
         transcriptionArea.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15)); // Add padding for text
+
         return transcriptionArea;
     }
 
