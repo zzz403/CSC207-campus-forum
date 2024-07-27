@@ -26,6 +26,7 @@ import com.imperial.academia.use_case.ASR.ASRInputBoundary;
 import com.imperial.academia.use_case.ASR.IBMInteractor;
 import com.imperial.academia.use_case.LLM.ChatGPTInteractor;
 import com.imperial.academia.use_case.LLM.LLMInputBoundary;
+import com.imperial.academia.use_case.Translator.DeepLInteractor;
 import com.imperial.academia.use_case.Translator.TranslatorInputBoundary;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.changeview.ChangeViewInteractor;
@@ -96,7 +97,7 @@ public class UsecaseFactory {
         
         LLMInteractor = new ChatGPTInteractor();
         ASRInputBoundary = new IBMInteractor();
-        translatorInteractor = new IBMInteractor();
+        translatorInteractor = new DeepLInteractor();
         
         LoginViewModel loginViewModel = viewModels.getLoginViewModel();
         SignupViewModel signupViewModel = viewModels.getSignupViewModel();

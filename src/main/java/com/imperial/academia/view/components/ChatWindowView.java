@@ -434,7 +434,32 @@ public class ChatWindowView extends JPanel {
             switch (chatMessage.getContentType()) {
                 case "text" -> {
                     JLabel messageContentLabel = createMessageContent(chatMessage);
+
+                    JLabel translateArea = createAdditionContent(chatMessage.isMe());
+                    JPanel transcriptionPanel = new JPanel();
+                    transcriptionPanel.setLayout(new BoxLayout(transcriptionPanel, BoxLayout.X_AXIS));
+                    transcriptionPanel.setOpaque(false); // Make the panel transparent
+                    if (chatMessage.isMe()) {
+                        transcriptionPanel.add(Box.createHorizontalGlue());
+                        transcriptionPanel.add(translateArea);
+                    } else {
+                        transcriptionPanel.add(translateArea);
+                        transcriptionPanel.add(Box.createHorizontalGlue());
+                    }
+
+                    // Add mouse listener to show JPopupMenu
+                    messageContentLabel.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            if (SwingUtilities.isRightMouseButton(e)) {
+                                showTextPopup(messageContentLabel, chatMessage.getContent(), translateArea);
+                            }
+                        }
+                    });
                     contentPanel.add(messageContentLabel);
+                    contentPanel.add(Box.createVerticalStrut(5));
+                    contentPanel.add(transcriptionPanel);
+
                 }
                 case "image" -> {
                     JLabel messageImageLabel = new JLabel();
@@ -840,6 +865,62 @@ public class ChatWindowView extends JPanel {
 
         popupMenu.show(waveformPanel, popupX - location.x, popupY - location.y);
     }
+
+    private void showTextPopup(JLabel textLabel, String text, JLabel transcriptionArea) {
+        String defaultLanguage = "FR"; // 默认语言为法语
+        JPopupMenu popupMenu = new JPopupMenu();
+
+        JMenuItem translateToFrenchItem = new JMenuItem("Translate to French");
+        JMenuItem translateToEnglish = new JMenuItem("Translate to English");
+        JMenuItem translateToChineseItem = new JMenuItem("Translate to Chinese");
+
+        translateToFrenchItem.addActionListener(event -> {
+            try {
+                audioPopupQueue.add(transcriptionArea);
+                transcriptionArea.setText("Translating to French...");
+                transcriptionArea.setVisible(true);
+                chatWindowController.translate(text, "FR");
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        translateToEnglish.addActionListener(event -> {
+            try {
+                audioPopupQueue.add(transcriptionArea);
+                transcriptionArea.setText("Translating to English...");
+                transcriptionArea.setVisible(true);
+                chatWindowController.translate(text, "EN");
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        translateToChineseItem.addActionListener(event -> {
+            try {
+                audioPopupQueue.add(transcriptionArea);
+                transcriptionArea.setText("Translating to Chinese...");
+                transcriptionArea.setVisible(true);
+                chatWindowController.translate(text, "ZH");
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        popupMenu.add(translateToEnglish);
+        popupMenu.add(translateToFrenchItem);
+        popupMenu.add(translateToChineseItem);
+
+        // 获取 textLabel 的位置和大小
+        Point location = textLabel.getLocationOnScreen();
+        int panelWidth = textLabel.getWidth();
+
+        int popupX = location.x + (panelWidth - popupMenu.getPreferredSize().width) / 2;
+        int popupY = location.y - popupMenu.getPreferredSize().height + 10;
+
+        popupMenu.show(textLabel, popupX - location.x, popupY - location.y);
+    }
+
 
 
 }
