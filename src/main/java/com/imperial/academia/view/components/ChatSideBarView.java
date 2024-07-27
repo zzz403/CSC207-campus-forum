@@ -257,7 +257,7 @@ public class ChatSideBarView extends JPanel {
 
         // Last Message
         JLabel lastMessageLabel = new JLabel(chatGroup.getLastMessage());
-        lastMessageLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        lastMessageLabel.setFont(new Font("Noto Color Emoji", Font.PLAIN, 12));
         lastMessageLabel.setForeground(new Color(127, 140, 141));
         chatInfoPanel.add(lastMessageLabel, BorderLayout.SOUTH);
 

@@ -188,7 +188,7 @@ public class ChatWindowView extends JPanel {
 
         // Message input field
         messageInputField = new JTextField();
-        messageInputField.setFont(new Font("Arial", Font.PLAIN, 14));
+        messageInputField.setFont(new Font("Noto Color Emoji", Font.PLAIN, 14));
         messageInputField.setBackground(new Color(245, 245, 245));
         messageInputField.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         messageInputField.setPreferredSize(new Dimension(400, 30));
@@ -218,8 +218,21 @@ public class ChatWindowView extends JPanel {
         try {
             BufferedImage smileyIconImage = ImageIO.read(new File("resources/icons/smiley_icon.png"));
             Image scaledSmileyIconImage = smileyIconImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-            JLabel smileyIcon = new JLabel(new ImageIcon(scaledSmileyIconImage));
-            optionsPanel.add(smileyIcon);
+            JLabel emojiIcon = new JLabel(new ImageIcon(scaledSmileyIconImage));
+            optionsPanel.add(emojiIcon);
+
+            // 创建包含表情符号的PopupMenu
+            JPopupMenu emojiPopup = createEmojiPopupMenu();
+
+            // 显示PopupMenu
+            emojiIcon.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (SwingUtilities.isLeftMouseButton(e)) {
+                        emojiPopup.show(emojiIcon, e.getX(), e.getY());
+                    }
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Failed to load smiley icon");
@@ -541,7 +554,7 @@ public class ChatWindowView extends JPanel {
             }
         };
 
-        messageContentLabel.setFont(new Font("Arial", Font.BOLD, 15));
+        messageContentLabel.setFont(new Font("Noto Color Emoji", Font.BOLD, 16));
 
         messageContentLabel.setOpaque(false); // We will paint the background ourselves
         messageContentLabel.setBackground(chatMessage.isMe() ? new Color(52, 152, 219) : Color.WHITE);
@@ -717,4 +730,25 @@ public class ChatWindowView extends JPanel {
             g2.dispose();
         }
     }
+
+    private JPopupMenu createEmojiPopupMenu() {
+        JPopupMenu emojiPopup = new JPopupMenu();
+        emojiPopup.setLayout(new GridLayout(5, 5)); // 设置布局为5x5的网格布局
+        String[] emojis = {"😊", "😂", "😍", "😒", "😎", "😁", "😢", "😜", "😡", "👍", "👎", "🙏", "👏", "💪", "💖", "🎉", "🌹", "🍀", "🔥", "🌟"};
+
+        for (String emoji : emojis) {
+            JMenuItem emojiItem = new JMenuItem(emoji);
+            emojiItem.setFont(new Font("Noto Color Emoji", Font.PLAIN, 24)); // 设置字体为Emoji
+            emojiItem.addActionListener(e -> insertEmoji(emoji));
+            emojiPopup.add(emojiItem);
+        }
+        return emojiPopup;
+    }
+
+    // 在消息输入字段中插入表情符号
+    private void insertEmoji(String emoji) {
+        messageInputField.setText(messageInputField.getText() + emoji);
+    }
+
+
 }
