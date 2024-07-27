@@ -49,7 +49,32 @@ public interface ChatWindowInputBoundary {
      */
     void sendMessage(ChatWindowInputData chatWindowInputData) throws UnsupportedAudioFileException, IOException, SQLException;
 
+    /**
+     * Send a location message to the specified chat group.
+     *
+     * @param groupId The ID of the chat group.
+     */
     void sendLocation(int groupId);
 
+    /**
+     * Send a file to the specified chat group.
+     *
+     * @param groupId The ID of the chat group.
+     * @param file The file to be sent.
+     */
     void sendFile(int groupId, File file);
+
+    /**
+     * Summarizes the chat history for the specified group.
+     *
+     * @param groupId The ID of the chat group.
+     */
+    void summarizeChatHistory(int groupId) throws SQLException;
+
+    /**
+     * Converts speech to text for the specified audio file and chat group.
+     *
+     * @param audioPath The path to the audio file.
+     */
+    void speechToText(String audioPath) throws Exception;
 }

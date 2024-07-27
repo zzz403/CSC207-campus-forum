@@ -3,6 +3,7 @@ package com.imperial.academia.app;
 import com.imperial.academia.cache.*;
 import com.imperial.academia.data_access.*;
 import com.imperial.academia.service.*;
+import com.imperial.academia.use_case.LLM.LLMInputBoundary;
 
 import java.sql.SQLException;
 

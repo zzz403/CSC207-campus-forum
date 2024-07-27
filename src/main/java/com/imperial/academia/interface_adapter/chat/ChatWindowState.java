@@ -13,6 +13,8 @@ public class ChatWindowState {
     private List<ChatMessageDTO> chatMessages = new ArrayList<>();
     private int chatGroupId;
     private String error = "";
+    private String summary = "";
+    private String transcription = "";
 
     /**
      * Copy constructor for ChatWindowState.
@@ -23,6 +25,8 @@ public class ChatWindowState {
         this.chatMessages = chatWindowState.getChatMessages();
         this.chatGroupId = chatWindowState.getChatGroupId();
         this.error = chatWindowState.getError();
+        this.summary = chatWindowState.getSummary();
+        this.transcription = chatWindowState.getTranscription();
     }
 
     /**
@@ -83,5 +87,41 @@ public class ChatWindowState {
      */
     public void setChatGroupId(int chatGroupId) {
         this.chatGroupId = chatGroupId;
+    }
+
+    /**
+     * Gets the summary of the chat history.
+     *
+     * @return the summary of the chat history
+     */
+    public String getSummary() {
+        return summary;
+    }
+
+    /**
+     * Sets the summary of the chat history.
+     *
+     * @param summary the summary of the chat history to set
+     */
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    /**
+     * Gets the transcription of the audio message.
+     *
+     * @return the transcription of the audio message
+     */
+    public String getTranscription() {
+        return transcription;
+    }
+
+    /**
+     * Sets the transcription of the audio message.
+     *
+     * @param transcription the transcription of the audio message to set
+     */
+    public void setTranscription(String transcription) {
+        this.transcription = transcription;
     }
 }

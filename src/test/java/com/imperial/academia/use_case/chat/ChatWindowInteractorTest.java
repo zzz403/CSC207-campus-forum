@@ -16,6 +16,8 @@ import java.util.List;
 
 import javax.sound.sampled.LineUnavailableException;
 
+import com.imperial.academia.use_case.ASR.ASRInputBoundary;
+import com.imperial.academia.use_case.LLM.LLMInputBoundary;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,6 +47,8 @@ public class ChatWindowInteractorTest {
     @Mock private FileService fileService;
     @Mock private ChatWindowOutputBoundary chatWindowPresenter;
     @Mock private ChatMessageFactory chatMessageFactory;
+    @Mock private LLMInputBoundary llmInputBoundary;
+    @Mock private ASRInputBoundary asrInputBoundary;
 
     private ChatWindowInteractor chatWindowInteractor;
 
@@ -59,7 +63,9 @@ public class ChatWindowInteractorTest {
                 chatMessageService,
                 mapService,
                 fileService,
-                audioService
+                audioService,
+                llmInputBoundary,
+                asrInputBoundary
         );
 
         doNothing().when(audioService).startRecording(anyInt());

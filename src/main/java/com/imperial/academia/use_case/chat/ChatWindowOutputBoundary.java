@@ -19,4 +19,13 @@ public interface ChatWindowOutputBoundary {
      * @param error The error message to be displayed.
      */
     void presentError(String error);
+
+    /**
+     * Presents the summary of the chat history in the chat window.
+     *
+     * @param chatWindowOutputData The data containing the summary of the chat history.
+     */
+    void presentSummary(String chatWindowOutputData);
+
+    void presentSpeechToText(String chatWindowOutputData);
 }

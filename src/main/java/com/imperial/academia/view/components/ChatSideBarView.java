@@ -3,6 +3,7 @@ package com.imperial.academia.view.components;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarController;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarViewModel;
 import com.imperial.academia.entity.chat_group.ChatGroupDTO;
+import com.imperial.academia.view.style.CustomScrollBarUI;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -158,7 +159,7 @@ public class ChatSideBarView extends JPanel {
         // Create chat list panel
         chatListPanel = new JPanel();
         chatListPanel.setLayout(new BoxLayout(chatListPanel, BoxLayout.Y_AXIS));
-        JScrollPane scrollPane = new JScrollPane(chatListPanel);
+        JScrollPane scrollPane = new CustomScrollBarUI.CustomScrollPane(chatListPanel);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         add(scrollPane, BorderLayout.CENTER);
 
@@ -256,7 +257,7 @@ public class ChatSideBarView extends JPanel {
 
         // Last Message
         JLabel lastMessageLabel = new JLabel(chatGroup.getLastMessage());
-        lastMessageLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        lastMessageLabel.setFont(new Font("Noto Color Emoji", Font.PLAIN, 12));
         lastMessageLabel.setForeground(new Color(127, 140, 141));
         chatInfoPanel.add(lastMessageLabel, BorderLayout.SOUTH);
 

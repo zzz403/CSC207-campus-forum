@@ -1,5 +1,7 @@
 package com.imperial.academia.use_case.LLM;
 
+import java.util.List;
+
 public interface LLMInputBoundary {
 
 
@@ -11,4 +13,5 @@ public interface LLMInputBoundary {
      * @return the enhaced content
      */
     String enhanceContent(String content);
+    String summarizeChatHistory(String chatHistory);
 }
