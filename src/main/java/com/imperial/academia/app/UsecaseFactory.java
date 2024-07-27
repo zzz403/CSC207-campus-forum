@@ -22,6 +22,8 @@ import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
 import com.imperial.academia.interface_adapter.signup.SignupPresenter;
 import com.imperial.academia.interface_adapter.signup.SignupViewModel;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
+import com.imperial.academia.use_case.ASR.ASRInputBoundary;
+import com.imperial.academia.use_case.ASR.IBMInteractor;
 import com.imperial.academia.use_case.LLM.ChatGPTInteractor;
 import com.imperial.academia.use_case.LLM.LLMInputBoundary;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
@@ -71,6 +73,7 @@ public class UsecaseFactory {
     private static ChatCoordinatorInputBoundary chatCoordinatorInteractor;
     private static PostInputBoundary postInteractor;
     private static LLMInputBoundary LLMInteractor;
+    private static ASRInputBoundary ASRInputBoundary;
 
     /** Prevents instantiation of this utility class. */
     private UsecaseFactory() {
@@ -90,6 +93,7 @@ public class UsecaseFactory {
         sessionInteractor = new SessionInteractor();
         
         LLMInteractor = new ChatGPTInteractor();
+        ASRInputBoundary = new IBMInteractor();
         
         LoginViewModel loginViewModel = viewModels.getLoginViewModel();
         SignupViewModel signupViewModel = viewModels.getSignupViewModel();
@@ -228,5 +232,13 @@ public class UsecaseFactory {
      */
     public static PostInputBoundary getPostInteractor() {
         return postInteractor;
+    }
+
+    /**
+     * Returns the ASR Interactor
+     * @return the ASR Interactor
+     */
+    public static ASRInputBoundary getASRInteractor() {
+        return ASRInputBoundary;
     }
 }

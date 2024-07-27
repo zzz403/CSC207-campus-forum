@@ -26,4 +26,6 @@ public interface ChatWindowOutputBoundary {
      * @param chatWindowOutputData The data containing the summary of the chat history.
      */
     void presentSummary(String chatWindowOutputData);
+
+    void presentSpeechToText(String chatWindowOutputData);
 }

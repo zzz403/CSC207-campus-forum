@@ -130,6 +130,17 @@
           <scope>test</scope>
       </dependency>
 
+      <dependency>
+          <groupId>com.ibm.watson</groupId>
+          <artifactId>ibm-watson</artifactId>
+          <version>13.0.0</version>
+      </dependency>
+      <dependency>
+          <groupId>com.ibm.cloud</groupId>
+          <artifactId>sdk-core</artifactId>
+          <version>9.21.0</version>
+      </dependency>
+
   </dependencies>
 
   <build>

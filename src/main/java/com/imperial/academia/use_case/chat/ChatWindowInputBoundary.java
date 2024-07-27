@@ -70,4 +70,11 @@ public interface ChatWindowInputBoundary {
      * @param groupId The ID of the chat group.
      */
     void summarizeChatHistory(int groupId) throws SQLException;
+
+    /**
+     * Converts speech to text for the specified audio file and chat group.
+     *
+     * @param audioPath The path to the audio file.
+     */
+    void speechToText(String audioPath) throws Exception;
 }

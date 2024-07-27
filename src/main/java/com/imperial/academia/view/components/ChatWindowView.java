@@ -38,6 +38,7 @@ public class ChatWindowView extends JPanel {
     private Image scaledOpenMicIconImage;
     private Image scaledCloseMicIconImage;
     private boolean isButtonEnabled = true;
+    private Queue<JLabel> audioPopupQueue = new LinkedList<>();
 
     ChatWindowViewModel chatWindowViewModel;
 
@@ -346,14 +347,20 @@ public class ChatWindowView extends JPanel {
         chatWindowViewModel.addPropertyChangeListener(evt -> {
             if (evt.getPropertyName().equals("chatWindowState")) {
                 displayChatMessages(chatWindowViewModel.getState().getChatMessages());
-            }
-            else if ("summary".equals(evt.getPropertyName())) {
+            } else if ("summary".equals(evt.getPropertyName())) {
                 String summary = chatWindowViewModel.getState().getSummary();
                 summaryScrollPane.setPreferredSize(new Dimension(application.getWidth()/3, application.getHeight()/3));
                 summaryTextArea.setText(summary);
                 summaryPopupMenu.setVisible(false);
                 summaryPopupMenu.show(application, application.getWidth() / 2 - summaryPopupMenu.getPreferredSize().width / 2, application.getHeight() / 2 - summaryPopupMenu.getPreferredSize().height / 2);
                 isButtonEnabled = true;
+            } else if ("transcription".equals(evt.getPropertyName())) {
+                String transcription = chatWindowViewModel.getState().getTranscription();
+                JLabel audioPopup = audioPopupQueue.poll();
+                if (audioPopup != null) {
+                    System.out.println("Transcription: " + transcription);
+                    audioPopup.setText(transcription);
+                }
             }
         });
     }
@@ -419,91 +426,122 @@ public class ChatWindowView extends JPanel {
                 JLabel senderLabel = new JLabel(chatMessage.getSenderName());
                 senderLabel.setFont(new Font("Arial", Font.BOLD, 12));
                 senderLabel.setForeground(new Color(44, 62, 80));
-                contentPanel.add(senderLabel);
+                contentPanel.add(senderLabel, BorderLayout.WEST);
 
                 contentPanel.add(Box.createVerticalStrut(5));
             }
 
-            if (chatMessage.getContentType().equals("text")) {
-                JLabel messageContentLabel = createMessageContent(chatMessage);
-                contentPanel.add(messageContentLabel);
-            } else if (chatMessage.getContentType().equals("image")) {
-                JLabel messageImageLabel = new JLabel();
-                BufferedImage messageImage;
-                try {
-                    messageImage = ImageIO.read(new File(chatMessage.getContent()));
-                } catch (IOException e) {
-                    messageImage = (BufferedImage) new ImageIcon("resources/default/image_not_found.png").getImage();
+            switch (chatMessage.getContentType()) {
+                case "text" -> {
+                    JLabel messageContentLabel = createMessageContent(chatMessage);
+                    contentPanel.add(messageContentLabel);
                 }
-                Image scaledMessageImage = messageImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-                messageImageLabel.setIcon(new ImageIcon(scaledMessageImage));
-                contentPanel.add(messageImageLabel);
-            } else if (chatMessage.getContentType().equals("audio")) {
-                WaveformData waveformData = chatMessage.getWaveformData();
-                if (waveformData != null) {
-                    Component verticalStrut = Box.createVerticalStrut(-15); // Adjust this value as needed
+                case "image" -> {
+                    JLabel messageImageLabel = new JLabel();
+                    BufferedImage messageImage;
+                    try {
+                        messageImage = ImageIO.read(new File(chatMessage.getContent()));
+                    } catch (IOException e) {
+                        messageImage = (BufferedImage) new ImageIcon("resources/default/image_not_found.png").getImage();
+                    }
+                    Image scaledMessageImage = messageImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                    messageImageLabel.setIcon(new ImageIcon(scaledMessageImage));
+                    contentPanel.add(messageImageLabel);
+                }
+                case "audio" -> {
+                    WaveformData waveformData = chatMessage.getWaveformData();
+                    if (waveformData != null) {
+                        Component verticalStrut = Box.createVerticalStrut(-15); // Adjust this value as needed
 
-                    contentPanel.add(verticalStrut);
+                        contentPanel.add(verticalStrut);
 
-                    WaveformPanel waveformPanel = new WaveformPanel(waveformData.getMaxValues(), waveformData.getDuration(), chatMessage.isMe(), 50); // Set height to 50
-                    waveformPanel.addPlayButtonActionListener(e -> chatWindowController.loadAudio(chatMessage.getContent()));
+                        WaveformPanel waveformPanel = new WaveformPanel(waveformData.getMaxValues(), waveformData.getDuration(), chatMessage.isMe(), 50); // Set height to 50
+                        waveformPanel.addPlayButtonActionListener(e -> chatWindowController.loadAudio(chatMessage.getContent()));
 
+                        // 创建一个JTextArea来显示转录文本
+                        JLabel transcriptionArea = createAdditionContent(chatMessage.isMe());
+                        JPanel transcriptionPanel = new JPanel();
+                        transcriptionPanel.setLayout(new BoxLayout(transcriptionPanel, BoxLayout.X_AXIS));
+                        transcriptionPanel.setOpaque(false); // Make the panel transparent
+                        if (chatMessage.isMe()) {
+                            transcriptionPanel.add(Box.createHorizontalGlue());
+                            transcriptionPanel.add(transcriptionArea);
+                        } else {
+                            transcriptionPanel.add(transcriptionArea);
+                            transcriptionPanel.add(Box.createHorizontalGlue());
+                        }
+
+                        // 添加鼠标监听器以显示JPopupMenu
+                        waveformPanel.addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mouseClicked(MouseEvent e) {
+                                if (SwingUtilities.isRightMouseButton(e)) {
+                                    showAudioPopup(waveformPanel, chatMessage.getContent(), transcriptionArea);
+                                }
+                            }
+                        });
+
+                        JPanel outerPanel = new JPanel();
+                        outerPanel.setLayout(new BoxLayout(outerPanel, BoxLayout.Y_AXIS));
+                        outerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+                        outerPanel.add(waveformPanel);
+                        outerPanel.add(Box.createVerticalStrut(-10));
+                        outerPanel.add(transcriptionPanel); // Add transcription area below the waveform panel
+
+                        contentPanel.add(outerPanel);
+                    }
+                }
+                case "map" -> {
+                    BufferedImage mapImage;
+                    if (mapCache.containsKey(chatMessage.getContent())) {
+                        mapImage = mapCache.get(chatMessage.getContent());
+                    } else {
+                        try {
+                            mapImage = ImageIO.read(new File(chatMessage.getContent()));
+                            mapImage = mapResizeImage(mapImage, 300, 200); // Resize to desired dimensions
+                            mapImage = mapMakeRoundedCorner(mapImage);
+                            mapCache.put(chatMessage.getContent(), mapImage);
+                        } catch (IOException e) {
+                            mapImage = null;
+                        }
+                    }
+
+                    MapPanel mapPanel = new MapPanel(chatMessage.getMapData(), mapImage, chatMessage.isMe());
+                    mapPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    mapPanel.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            if (SwingUtilities.isLeftMouseButton(e)) {
+                                double latitude = chatMessage.getMapData().getLatitude();
+                                double longitude = chatMessage.getMapData().getLongitude();
+                                String url = String.format("https://www.google.com/maps/search/?api=1&query=%s,%s", latitude, longitude);
+                                try {
+                                    Desktop.getDesktop().browse(new URI(url));
+                                } catch (IOException | URISyntaxException evt) {
+                                    evt.printStackTrace();
+                                }
+                            }
+                        }
+                    });
+                    contentPanel.add(mapPanel);
+                    isButtonEnabled = true;
+                }
+                case "file" -> {
+                    FilePanel filePanel = new FilePanel(chatMessage.getFileData(), chatMessage.isMe());
+                    filePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    filePanel.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            openFileLocation(chatMessage.getContent());
+                        }
+                    });
                     JPanel outerPanel = new JPanel();
                     outerPanel.setLayout(new BoxLayout(outerPanel, BoxLayout.Y_AXIS));
                     outerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
-                    outerPanel.add(waveformPanel);
+                    outerPanel.add(filePanel);
 
                     contentPanel.add(outerPanel);
                 }
-            } else if (chatMessage.getContentType().equals("map")) {
-                BufferedImage mapImage;
-                if (mapCache.containsKey(chatMessage.getContent())) {
-                    mapImage = mapCache.get(chatMessage.getContent());
-                } else {
-                    try {
-                        mapImage = ImageIO.read(new File(chatMessage.getContent()));
-                        mapImage = mapResizeImage(mapImage, 300, 200); // Resize to desired dimensions
-                        mapImage = mapMakeRoundedCorner(mapImage);
-                        mapCache.put(chatMessage.getContent(), mapImage);
-                    } catch (IOException e) {
-                        mapImage = null;
-                    }
-                }
-
-                MapPanel mapPanel = new MapPanel(chatMessage.getMapData(), mapImage, chatMessage.isMe());
-                mapPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-                mapPanel.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        if (SwingUtilities.isLeftMouseButton(e)) {
-                            double latitude = chatMessage.getMapData().getLatitude();
-                            double longitude = chatMessage.getMapData().getLongitude();
-                            String url = String.format("https://www.google.com/maps/search/?api=1&query=%s,%s", latitude, longitude);
-                            try {
-                                Desktop.getDesktop().browse(new URI(url));
-                            } catch (IOException | URISyntaxException evt) {
-                                evt.printStackTrace();
-                            }
-                        }
-                    }
-                });
-                contentPanel.add(mapPanel);
-                isButtonEnabled = true;
-            } else if (chatMessage.getContentType().equals("file")) {
-                FilePanel filePanel = new FilePanel(chatMessage.getFileData(), chatMessage.isMe());
-                filePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-                filePanel.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        openFileLocation(chatMessage.getContent());
-                    }
-                });
-                JPanel outerPanel = new JPanel();
-                outerPanel.setLayout(new BoxLayout(outerPanel, BoxLayout.Y_AXIS));
-                outerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
-                outerPanel.add(filePanel);
-
-                contentPanel.add(outerPanel);
             }
 
             mainContentPanel.add(contentPanel);
@@ -562,6 +600,31 @@ public class ChatWindowView extends JPanel {
         messageContentLabel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15)); // Add padding for text
 
         return messageContentLabel;
+    }
+
+    public JLabel createAdditionContent(boolean isMe) {
+        JLabel transcriptionArea = new JLabel("...") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // Draw the rounded background
+                g2.setColor(getBackground());
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
+
+                // Draw the label text
+                super.paintComponent(g2);
+                g2.dispose();
+            }
+        };
+
+        transcriptionArea.setFont(new Font("Arial", Font.BOLD, 14));
+        transcriptionArea.setForeground(isMe ? Color.WHITE : Color.BLACK);
+        transcriptionArea.setBackground(isMe ? new Color(52, 152, 219) : Color.WHITE);
+        transcriptionArea.setVisible(false); // Initially hidden
+        transcriptionArea.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15)); // Add padding for text
+        return transcriptionArea;
     }
 
     /**
@@ -748,6 +811,34 @@ public class ChatWindowView extends JPanel {
     // 在消息输入字段中插入表情符号
     private void insertEmoji(String emoji) {
         messageInputField.setText(messageInputField.getText() + emoji);
+    }
+
+    private void showAudioPopup(WaveformPanel waveformPanel, String audioContent, JLabel transcriptionArea) {
+        JPopupMenu popupMenu = new JPopupMenu();
+        JMenuItem speechToTextItem = new JMenuItem("Speech to Text");
+
+        speechToTextItem.addActionListener(event -> {
+            try {
+                audioPopupQueue.add(transcriptionArea);
+                transcriptionArea.setText("Transcribing...");
+                transcriptionArea.setVisible(true);
+                chatWindowController.speechToText(audioContent);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        popupMenu.add(speechToTextItem);
+
+        // 获取 waveformPanel 的位置和大小
+        Point location = waveformPanel.getLocationOnScreen();
+        int panelWidth = waveformPanel.getWidth();
+
+        // 计算 popupMenu 应该出现的位置，使其在 waveformPanel 的正上方居中
+        int popupX = location.x + (panelWidth - popupMenu.getPreferredSize().width) / 2;
+        int popupY = location.y - popupMenu.getPreferredSize().height;
+
+        popupMenu.show(waveformPanel, popupX - location.x, popupY - location.y);
     }
 
 

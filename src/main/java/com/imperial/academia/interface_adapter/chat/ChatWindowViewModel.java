@@ -37,7 +37,6 @@ public class ChatWindowViewModel extends ViewModel {
      */
     public void setState(ChatWindowState chatWindowState) {
         this.chatWindowState = chatWindowState;
-        support.firePropertyChange("chatWindowState", null, chatWindowState);
     }
 
     /**

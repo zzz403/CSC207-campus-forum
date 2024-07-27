@@ -86,4 +86,8 @@ public class ChatWindowController {
     public void summarizeChatHistory(int groupId) throws SQLException {
         chatWindowInteractor.summarizeChatHistory(groupId);
     }
+
+    public void speechToText(String audioPath) throws Exception {
+        chatWindowInteractor.speechToText(audioPath);
+    }
 }

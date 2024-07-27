@@ -8,6 +8,7 @@ import com.imperial.academia.service.FileService;
 import com.imperial.academia.service.MapService;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.app.ServiceFactory;
+import com.imperial.academia.use_case.ASR.ASRInputBoundary;
 import com.imperial.academia.use_case.LLM.LLMInputBoundary;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -29,6 +30,7 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
     private final ChatWindowOutputBoundary chatWindowPresenter;
     private final ChatMessageFactory chatMessageFactory;
     private final LLMInputBoundary llmInputBoundary;
+    private final ASRInputBoundary asrInputBoundary;
 
 
     /**
@@ -45,12 +47,15 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
         this.chatWindowPresenter = chatWindowPresenter;
         this.chatMessageFactory = chatMessageFactory;
         this.llmInputBoundary = UsecaseFactory.getLLMInteractor();
+        this.asrInputBoundary = UsecaseFactory.getASRInteractor();
     }
 
     /**
      * for unit test only
      */
-    public ChatWindowInteractor(ChatWindowOutputBoundary chatWindowPresenter, ChatMessageFactory chatMessageFactory, ChatMessageService chatMessageService, MapService mapService, FileService fileService, AudioService audioService, LLMInputBoundary llmInputBoundary) {
+    public ChatWindowInteractor(ChatWindowOutputBoundary chatWindowPresenter, ChatMessageFactory chatMessageFactory,
+                                ChatMessageService chatMessageService, MapService mapService, FileService fileService,
+                                AudioService audioService, LLMInputBoundary llmInputBoundary, ASRInputBoundary asrInputBoundary) {
         this.chatMessageService = chatMessageService;
         this.mapService = mapService;
         this.fileService = fileService;
@@ -58,6 +63,7 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
         this.chatWindowPresenter = chatWindowPresenter;
         this.chatMessageFactory = chatMessageFactory;
         this.llmInputBoundary = llmInputBoundary;
+        this.asrInputBoundary = asrInputBoundary;
     }
 
     /**
@@ -219,5 +225,10 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
         }
         String summarizeChatHistory = llmInputBoundary.summarizeChatHistory(chatHistory.toString());
         chatWindowPresenter.presentSummary(summarizeChatHistory);
+    }
+
+    public void speechToText(String audioPath) throws Exception {
+        String text = asrInputBoundary.speechToText(audioPath);
+        chatWindowPresenter.presentSpeechToText(text);
     }
 }
