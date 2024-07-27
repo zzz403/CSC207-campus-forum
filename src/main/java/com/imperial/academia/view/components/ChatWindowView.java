@@ -836,7 +836,7 @@ public class ChatWindowView extends JPanel {
 
         // 计算 popupMenu 应该出现的位置，使其在 waveformPanel 的正上方居中
         int popupX = location.x + (panelWidth - popupMenu.getPreferredSize().width) / 2;
-        int popupY = location.y - popupMenu.getPreferredSize().height;
+        int popupY = location.y - popupMenu.getPreferredSize().height + 10;
 
         popupMenu.show(waveformPanel, popupX - location.x, popupY - location.y);
     }

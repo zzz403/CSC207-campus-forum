@@ -1,7 +1,7 @@
 -- Insert users
 INSERT INTO users (username, password, email, role, registration_date, avatar_url, last_modified) VALUES
 ('admin','admin123','admin@example.com', 'admin', CURRENT_TIMESTAMP, 'resources/avatar/admin_avatar.png', CURRENT_TIMESTAMP),
-('john_doe', 'hashed_password1', 'john@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example2.png', CURRENT_TIMESTAMP),
+('long', 'long123', 'john@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example2.png', CURRENT_TIMESTAMP),
 ('jane_smith', 'hashed_password2', 'jane@example.com', 'admin', CURRENT_TIMESTAMP, 'resources/avatar/avater_example3.png', CURRENT_TIMESTAMP),
 ('alice_jones', 'hashed_password3', 'alice@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example4.png', CURRENT_TIMESTAMP),
 ('bob_brown', 'hashed_password4', 'bob@example.com', 'moderator', CURRENT_TIMESTAMP, 'resources/avatar/avater_example5.png', CURRENT_TIMESTAMP),
