@@ -229,7 +229,7 @@ public class ChatWindowView extends JPanel {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     if (SwingUtilities.isLeftMouseButton(e)) {
-                        emojiPopup.show(emojiIcon, e.getX(), e.getY());
+                        emojiPopup.show(emojiIcon, -60, -emojiPopup.getPreferredSize().height - 15);
                     }
                 }
             });
