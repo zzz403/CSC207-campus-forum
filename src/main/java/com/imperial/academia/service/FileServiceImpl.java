@@ -20,7 +20,7 @@ public class FileServiceImpl implements FileService{
     public void saveFile(int groupId, File file, String type) {
         // Define the directory structure
         String directoryPath = String.format("resources/%s/%d/", type, groupId);
-
+        directoryPath = directoryPath.replace("\\", "/");
         // Create the directory if it doesn't exist
         Path directory = Paths.get(directoryPath);
         try {

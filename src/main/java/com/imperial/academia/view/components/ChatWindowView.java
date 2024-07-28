@@ -466,8 +466,15 @@ public class ChatWindowView extends JPanel {
                     BufferedImage messageImage;
                     try {
                         messageImage = ImageIO.read(new File(chatMessage.getContent()));
+                        System.out.println("Image loaded: " + chatMessage.getContent());
                     } catch (IOException e) {
-                        messageImage = (BufferedImage) new ImageIcon("resources/default/image_not_found.png").getImage();
+                        try {
+                            messageImage = ImageIO.read(new File("resources/default/image_not_found.png"));
+                            System.out.println("Image loaded: " + chatMessage.getContent());
+                        } catch (IOException em) {
+                            messageImage = null;
+                        }
+
                     }
                     Image scaledMessageImage = messageImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
                     messageImageLabel.setIcon(new ImageIcon(scaledMessageImage));
@@ -870,44 +877,17 @@ public class ChatWindowView extends JPanel {
         String defaultLanguage = "FR"; // 默认语言为法语
         JPopupMenu popupMenu = new JPopupMenu();
 
-        JMenuItem translateToFrenchItem = new JMenuItem("Translate to French");
-        JMenuItem translateToEnglish = new JMenuItem("Translate to English");
-        JMenuItem translateToChineseItem = new JMenuItem("Translate to Chinese");
+        // 设置弹出菜单背景颜色和边框
+        popupMenu.setBackground(Color.GRAY);
+        popupMenu.setBorder(new LineBorder(Color.DARK_GRAY));
 
-        translateToFrenchItem.addActionListener(event -> {
-            try {
-                audioPopupQueue.add(transcriptionArea);
-                transcriptionArea.setText("Translating to French...");
-                transcriptionArea.setVisible(true);
-                chatWindowController.translate(text, "FR");
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        });
+        // 创建并设置翻译菜单项
+        JMenuItem translateToFrenchItem = createMenuItem("Translate to French", transcriptionArea, text, "FR", "Translating to French...");
+        JMenuItem translateToEnglishItem = createMenuItem("Translate to English", transcriptionArea, text, "EN", "Translating to English...");
+        JMenuItem translateToChineseItem = createMenuItem("Translate to Chinese", transcriptionArea, text, "ZH", "Translating to Chinese...");
 
-        translateToEnglish.addActionListener(event -> {
-            try {
-                audioPopupQueue.add(transcriptionArea);
-                transcriptionArea.setText("Translating to English...");
-                transcriptionArea.setVisible(true);
-                chatWindowController.translate(text, "EN");
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-        translateToChineseItem.addActionListener(event -> {
-            try {
-                audioPopupQueue.add(transcriptionArea);
-                transcriptionArea.setText("Translating to Chinese...");
-                transcriptionArea.setVisible(true);
-                chatWindowController.translate(text, "ZH");
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-        popupMenu.add(translateToEnglish);
+        // 将菜单项添加到弹出菜单
+        popupMenu.add(translateToEnglishItem);
         popupMenu.add(translateToFrenchItem);
         popupMenu.add(translateToChineseItem);
 
@@ -915,10 +895,33 @@ public class ChatWindowView extends JPanel {
         Point location = textLabel.getLocationOnScreen();
         int panelWidth = textLabel.getWidth();
 
+        // 计算弹出菜单的位置
         int popupX = location.x + (panelWidth - popupMenu.getPreferredSize().width) / 2;
-        int popupY = location.y - popupMenu.getPreferredSize().height + 10;
+        int popupY = location.y - popupMenu.getPreferredSize().height - 10;
 
+        // 显示弹出菜单
         popupMenu.show(textLabel, popupX - location.x, popupY - location.y);
+    }
+
+    private JMenuItem createMenuItem(String text, JLabel transcriptionArea, String translateText, String language, String statusMessage) {
+        JMenuItem menuItem = new JMenuItem(text);
+
+        // 设置菜单项的字体和颜色
+        menuItem.setFont(new Font("Arial", Font.PLAIN, 12));
+        menuItem.setForeground(Color.BLACK);
+        menuItem.setBackground(Color.LIGHT_GRAY);
+
+        menuItem.addActionListener(event -> {
+            try {
+                audioPopupQueue.add(transcriptionArea);
+                transcriptionArea.setText(statusMessage);
+                transcriptionArea.setVisible(true);
+                chatWindowController.translate(translateText, language);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        return menuItem;
     }
 
 
