@@ -28,4 +28,6 @@ public interface ChatWindowOutputBoundary {
     void presentSummary(String chatWindowOutputData);
 
     void presentSpeechToText(String chatWindowOutputData);
+
+    void presentTranslatedText(String chatWindowOutputData);
 }

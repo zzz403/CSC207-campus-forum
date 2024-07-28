@@ -63,4 +63,15 @@ public class ChatWindowPresenter implements ChatWindowOutputBoundary {
         chatWindowViewModel.setState(state);
         chatWindowViewModel.firePropertyChanged("transcription");
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void presentTranslatedText(String chatWindowOutputData) {
+        ChatWindowState state = chatWindowViewModel.getState();
+        state.setTranscription(chatWindowOutputData);
+        chatWindowViewModel.setState(state);
+        chatWindowViewModel.firePropertyChanged("transcription");
+    }
 }

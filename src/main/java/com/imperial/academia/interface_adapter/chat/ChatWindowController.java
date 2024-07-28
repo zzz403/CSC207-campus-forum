@@ -90,4 +90,8 @@ public class ChatWindowController {
     public void speechToText(String audioPath) throws Exception {
         chatWindowInteractor.speechToText(audioPath);
     }
+
+    public void translate(String text, String targetLanguage) {
+        chatWindowInteractor.translate(text, targetLanguage);
+    }
 }

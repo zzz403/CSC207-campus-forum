@@ -26,6 +26,8 @@ import com.imperial.academia.use_case.ASR.ASRInputBoundary;
 import com.imperial.academia.use_case.ASR.IBMInteractor;
 import com.imperial.academia.use_case.LLM.ChatGPTInteractor;
 import com.imperial.academia.use_case.LLM.LLMInputBoundary;
+import com.imperial.academia.use_case.Translator.DeepLInteractor;
+import com.imperial.academia.use_case.Translator.TranslatorInputBoundary;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.changeview.ChangeViewInteractor;
 import com.imperial.academia.use_case.changeview.ChangeViewOutputBoundary;
@@ -74,6 +76,7 @@ public class UsecaseFactory {
     private static PostInputBoundary postInteractor;
     private static LLMInputBoundary LLMInteractor;
     private static ASRInputBoundary ASRInputBoundary;
+    private static TranslatorInputBoundary translatorInteractor;
 
     /** Prevents instantiation of this utility class. */
     private UsecaseFactory() {
@@ -94,6 +97,7 @@ public class UsecaseFactory {
         
         LLMInteractor = new ChatGPTInteractor();
         ASRInputBoundary = new IBMInteractor();
+        translatorInteractor = new DeepLInteractor();
         
         LoginViewModel loginViewModel = viewModels.getLoginViewModel();
         SignupViewModel signupViewModel = viewModels.getSignupViewModel();
@@ -240,5 +244,13 @@ public class UsecaseFactory {
      */
     public static ASRInputBoundary getASRInteractor() {
         return ASRInputBoundary;
+    }
+
+    /**
+     * Returns the Translator Interactor
+     * @return the Translator Interactor
+     */
+    public static TranslatorInputBoundary getTranslatorInteractor() {
+        return translatorInteractor;
     }
 }

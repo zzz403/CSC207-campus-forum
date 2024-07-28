@@ -29,19 +29,17 @@ public class MapServiceImpl implements MapService {
     private String filePath;
 
     public MapServiceImpl() {
-        if (Objects.equals(ApiKeyConfig.getMapBoxApiKey(), "")) {
-            throw new IllegalArgumentException("API key not found.");
-        }else{
-            API_KEY = ApiKeyConfig.getMapBoxApiKey();
-        }
+        API_KEY = ApiKeyConfig.getMapBoxApiKey();
         filePath = "";
     }
 
     @Override
     public void generateMapImage(int groupId, double latitude, double longitude){
         try {
-            if (API_KEY == null) {
-                throw new IllegalArgumentException("API key not found.");
+            if (API_KEY.isEmpty()) {
+                System.out.println("API key not found.");
+                filePath = "resources/default/image_not_found.png";
+                return;
             }
             int zoom = 16; // 增加缩放级别以放大图片
             int width = 800; // 图片宽度

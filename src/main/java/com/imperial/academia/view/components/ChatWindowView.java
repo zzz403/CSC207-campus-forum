@@ -434,15 +434,47 @@ public class ChatWindowView extends JPanel {
             switch (chatMessage.getContentType()) {
                 case "text" -> {
                     JLabel messageContentLabel = createMessageContent(chatMessage);
+
+                    JLabel translateArea = createAdditionContent();
+
+                    // Add mouse listener to show JPopupMenu
+                    messageContentLabel.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            if (SwingUtilities.isRightMouseButton(e)) {
+                                showTextPopup(messageContentLabel, chatMessage.getContent(), translateArea);
+                            }
+                        }
+                    });
                     contentPanel.add(messageContentLabel);
+                    contentPanel.add(Box.createVerticalStrut(5));
+
+                    if (chatMessage.isMe()){
+                        JPanel transcriptionPanel = new JPanel();
+                        transcriptionPanel.setLayout(new BoxLayout(transcriptionPanel, BoxLayout.X_AXIS));
+                        transcriptionPanel.setOpaque(false);
+                        transcriptionPanel.add(Box.createHorizontalGlue());
+                        transcriptionPanel.add(translateArea);
+                        contentPanel.add(transcriptionPanel);
+                    }else{
+                        contentPanel.add(translateArea);
+                    }
+
                 }
                 case "image" -> {
                     JLabel messageImageLabel = new JLabel();
                     BufferedImage messageImage;
                     try {
                         messageImage = ImageIO.read(new File(chatMessage.getContent()));
+                        System.out.println("Image loaded: " + chatMessage.getContent());
                     } catch (IOException e) {
-                        messageImage = (BufferedImage) new ImageIcon("resources/default/image_not_found.png").getImage();
+                        try {
+                            messageImage = ImageIO.read(new File("resources/default/image_not_found.png"));
+                            System.out.println("Image loaded: " + chatMessage.getContent());
+                        } catch (IOException em) {
+                            messageImage = null;
+                        }
+
                     }
                     Image scaledMessageImage = messageImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
                     messageImageLabel.setIcon(new ImageIcon(scaledMessageImage));
@@ -459,17 +491,7 @@ public class ChatWindowView extends JPanel {
                         waveformPanel.addPlayButtonActionListener(e -> chatWindowController.loadAudio(chatMessage.getContent()));
 
                         // 创建一个JTextArea来显示转录文本
-                        JLabel transcriptionArea = createAdditionContent(chatMessage.isMe());
-                        JPanel transcriptionPanel = new JPanel();
-                        transcriptionPanel.setLayout(new BoxLayout(transcriptionPanel, BoxLayout.X_AXIS));
-                        transcriptionPanel.setOpaque(false); // Make the panel transparent
-                        if (chatMessage.isMe()) {
-                            transcriptionPanel.add(Box.createHorizontalGlue());
-                            transcriptionPanel.add(transcriptionArea);
-                        } else {
-                            transcriptionPanel.add(transcriptionArea);
-                            transcriptionPanel.add(Box.createHorizontalGlue());
-                        }
+                        JLabel transcriptionArea = createAdditionContent();
 
                         // 添加鼠标监听器以显示JPopupMenu
                         waveformPanel.addMouseListener(new MouseAdapter() {
@@ -486,7 +508,16 @@ public class ChatWindowView extends JPanel {
                         outerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
                         outerPanel.add(waveformPanel);
                         outerPanel.add(Box.createVerticalStrut(-10));
-                        outerPanel.add(transcriptionPanel); // Add transcription area below the waveform panel
+                        if (chatMessage.isMe()) {
+                            JPanel transcriptionPanel = new JPanel();
+                            transcriptionPanel.setLayout(new BoxLayout(transcriptionPanel, BoxLayout.X_AXIS));
+                            transcriptionPanel.setOpaque(false); // Make the panel transparent
+                            transcriptionPanel.add(Box.createHorizontalGlue());
+                            transcriptionPanel.add(transcriptionArea);
+                            outerPanel.add(transcriptionPanel); // Add transcription area below the waveform panel
+                        }else{
+                            outerPanel.add(transcriptionArea);
+                        }
 
                         contentPanel.add(outerPanel);
                     }
@@ -593,7 +624,6 @@ public class ChatWindowView extends JPanel {
         };
 
         messageContentLabel.setFont(new Font("Noto Color Emoji", Font.BOLD, 16));
-
         messageContentLabel.setOpaque(false); // We will paint the background ourselves
         messageContentLabel.setBackground(chatMessage.isMe() ? new Color(52, 152, 219) : Color.WHITE);
         messageContentLabel.setForeground(chatMessage.isMe() ? Color.WHITE : Color.BLACK);
@@ -602,7 +632,7 @@ public class ChatWindowView extends JPanel {
         return messageContentLabel;
     }
 
-    public JLabel createAdditionContent(boolean isMe) {
+    public JLabel createAdditionContent() {
         JLabel transcriptionArea = new JLabel("...") {
             @Override
             protected void paintComponent(Graphics g) {
@@ -619,11 +649,13 @@ public class ChatWindowView extends JPanel {
             }
         };
 
+        transcriptionArea.setOpaque(false);
         transcriptionArea.setFont(new Font("Arial", Font.BOLD, 14));
-        transcriptionArea.setForeground(isMe ? Color.WHITE : Color.BLACK);
-        transcriptionArea.setBackground(isMe ? new Color(52, 152, 219) : Color.WHITE);
+        transcriptionArea.setForeground(Color.BLACK);
+        transcriptionArea.setBackground(new Color(211, 211, 211));
         transcriptionArea.setVisible(false); // Initially hidden
         transcriptionArea.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15)); // Add padding for text
+
         return transcriptionArea;
     }
 
@@ -840,6 +872,58 @@ public class ChatWindowView extends JPanel {
 
         popupMenu.show(waveformPanel, popupX - location.x, popupY - location.y);
     }
+
+    private void showTextPopup(JLabel textLabel, String text, JLabel transcriptionArea) {
+        String defaultLanguage = "FR"; // 默认语言为法语
+        JPopupMenu popupMenu = new JPopupMenu();
+
+        // 设置弹出菜单背景颜色和边框
+        popupMenu.setBackground(Color.GRAY);
+        popupMenu.setBorder(new LineBorder(Color.DARK_GRAY));
+
+        // 创建并设置翻译菜单项
+        JMenuItem translateToFrenchItem = createMenuItem("Translate to French", transcriptionArea, text, "FR", "Translating to French...");
+        JMenuItem translateToEnglishItem = createMenuItem("Translate to English", transcriptionArea, text, "EN", "Translating to English...");
+        JMenuItem translateToChineseItem = createMenuItem("Translate to Chinese", transcriptionArea, text, "ZH", "Translating to Chinese...");
+
+        // 将菜单项添加到弹出菜单
+        popupMenu.add(translateToEnglishItem);
+        popupMenu.add(translateToFrenchItem);
+        popupMenu.add(translateToChineseItem);
+
+        // 获取 textLabel 的位置和大小
+        Point location = textLabel.getLocationOnScreen();
+        int panelWidth = textLabel.getWidth();
+
+        // 计算弹出菜单的位置
+        int popupX = location.x + (panelWidth - popupMenu.getPreferredSize().width) / 2;
+        int popupY = location.y - popupMenu.getPreferredSize().height - 10;
+
+        // 显示弹出菜单
+        popupMenu.show(textLabel, popupX - location.x, popupY - location.y);
+    }
+
+    private JMenuItem createMenuItem(String text, JLabel transcriptionArea, String translateText, String language, String statusMessage) {
+        JMenuItem menuItem = new JMenuItem(text);
+
+        // 设置菜单项的字体和颜色
+        menuItem.setFont(new Font("Arial", Font.PLAIN, 12));
+        menuItem.setForeground(Color.BLACK);
+        menuItem.setBackground(Color.LIGHT_GRAY);
+
+        menuItem.addActionListener(event -> {
+            try {
+                audioPopupQueue.add(transcriptionArea);
+                transcriptionArea.setText(statusMessage);
+                transcriptionArea.setVisible(true);
+                chatWindowController.translate(translateText, language);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        return menuItem;
+    }
+
 
 
 }
