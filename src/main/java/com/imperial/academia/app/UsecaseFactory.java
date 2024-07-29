@@ -21,13 +21,19 @@ import com.imperial.academia.interface_adapter.login.LoginPresenter;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.post.PostPresenter;
 import com.imperial.academia.interface_adapter.post.PostViewModel;
+import com.imperial.academia.interface_adapter.postboard.PostBoardPresenter;
+import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
 import com.imperial.academia.interface_adapter.profile.ProfilePresenter;
 import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
 import com.imperial.academia.interface_adapter.signup.SignupPresenter;
 import com.imperial.academia.interface_adapter.signup.SignupViewModel;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
+import com.imperial.academia.use_case.ASR.ASRInputBoundary;
+import com.imperial.academia.use_case.ASR.IBMInteractor;
 import com.imperial.academia.use_case.LLM.ChatGPTInteractor;
 import com.imperial.academia.use_case.LLM.LLMInputBoundary;
+import com.imperial.academia.use_case.Translator.DeepLInteractor;
+import com.imperial.academia.use_case.Translator.TranslatorInputBoundary;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.changeview.ChangeViewInteractor;
 import com.imperial.academia.use_case.changeview.ChangeViewOutputBoundary;
@@ -51,6 +57,9 @@ import com.imperial.academia.use_case.login.LoginOutputBoundary;
 import com.imperial.academia.use_case.post.PostInputBoundary;
 import com.imperial.academia.use_case.post.PostInteractor;
 import com.imperial.academia.use_case.post.PostOutputBoundary;
+import com.imperial.academia.use_case.postBoard.PostBoardInputBoundary;
+import com.imperial.academia.use_case.postBoard.PostBoardInteractor;
+import com.imperial.academia.use_case.postBoard.PostBoardOutputBoundary;
 import com.imperial.academia.use_case.profile.ProfileInputBoundry;
 import com.imperial.academia.use_case.profile.ProfileInteractor;
 import com.imperial.academia.use_case.profile.ProfileOutputBoundry;
@@ -78,6 +87,9 @@ public class UsecaseFactory {
     private static ChatCoordinatorInputBoundary chatCoordinatorInteractor;
     private static PostInputBoundary postInteractor;
     private static LLMInputBoundary LLMInteractor;
+    private static ASRInputBoundary ASRInteractor;
+    private static TranslatorInputBoundary translatorInteractor;
+    private static PostBoardInputBoundary postBoardInteractor;
     private static EditInputBoundry editInteractor;
 
     /** Prevents instantiation of this utility class. */
@@ -98,6 +110,9 @@ public class UsecaseFactory {
         sessionInteractor = new SessionInteractor();
         
         LLMInteractor = new ChatGPTInteractor();
+        ASRInteractor = new IBMInteractor();
+        translatorInteractor = new DeepLInteractor();
+
 
         LoginViewModel loginViewModel = viewModels.getLoginViewModel();
         SignupViewModel signupViewModel = viewModels.getSignupViewModel();
@@ -108,7 +123,8 @@ public class UsecaseFactory {
         ProfileViewModel profileViewModel = viewModels.getProfileViewModel();
         PostViewModel postViewModel = viewModels.getPostViewModel();
         EditViewModel editViewModel = viewModels.getEditViewModel();
-        
+        PostBoardViewModel postBoardViewModel = viewModels.getPostBoardViewModel();
+
         PostOutputBoundary postPresenter = new PostPresenter(postViewModel);
         postInteractor = new PostInteractor(postPresenter);
 
@@ -138,7 +154,22 @@ public class UsecaseFactory {
         UpdateUserFactory updateUserFactory = new updatedUserFactoryImp();
         EditOutputBoundary editPresenter = new EditPresenter(editViewModel);
         editInteractor =  new EditInteractor(editPresenter,updateUserFactory);
+
+        PostBoardOutputBoundary postBoardPresenter = new PostBoardPresenter(postBoardViewModel);
+        postBoardInteractor = new PostBoardInteractor(postBoardPresenter);
+
         System.out.println("init success for useCase!!!!");
+
+    }
+
+
+    /**
+     * Returns the PostBoardInteractor
+     *
+     * @return the postBoardInteractor
+     */
+    public static PostBoardInputBoundary getPostBoardInteractor() {
+        return postBoardInteractor;
     }
 
     /**
@@ -242,4 +273,20 @@ public class UsecaseFactory {
     }
 
     public static EditInputBoundry getEditInteractor(){ return editInteractor;}
+
+    /**
+     * Returns the ASR Interactor
+     * @return the ASR Interactor
+     */
+    public static ASRInputBoundary getASRInteractor() {
+        return ASRInteractor;
+    }
+
+    /**
+     * Returns the Translator Interactor
+     * @return the Translator Interactor
+     */
+    public static TranslatorInputBoundary getTranslatorInteractor() {
+        return translatorInteractor;
+    }
 }

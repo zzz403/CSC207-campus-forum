@@ -12,6 +12,9 @@ import org.json.JSONObject;
 
 import com.imperial.academia.config.ApiKeyConfig;
 
+/**
+ * The ChatGPTInteractor class is the interactor for the ChatGPT use case.
+ */
 public class ChatGPTInteractor implements LLMInputBoundary {
     private final String apiUrl;
 
@@ -115,4 +118,87 @@ public class ChatGPTInteractor implements LLMInputBoundary {
 
         return enhancedContent;
     }
+
+    /**
+     * Takes the chat history and summarize it
+     * 
+     * @param chatHistory the chat history that need to be summarize
+     * @return the summarized chat history
+     */
+    @Override
+    public String summarizeChatHistory(String chatHistory) {
+        String apiKey = ApiKeyConfig.getGPTApi();
+        if (apiKey.equals("")) {
+            System.out.println("No GPT token key found");
+            return chatHistory;
+        }
+        String summary = "";
+
+        try {
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Authorization", "Bearer " + apiKey);
+            connection.setDoOutput(true);
+
+            // 构建 JSON 请求体
+            JSONObject systemMessage = new JSONObject()
+                    .put("role", "system")
+                    .put("content", "You are a helpful assistant.");
+
+            JSONObject userMessage = new JSONObject()
+                    .put("role", "user")
+                    .put("content",
+                            "Summarize the following chat history and try to list all main points: " + chatHistory);
+
+            JSONArray messages = new JSONArray()
+                    .put(systemMessage)
+                    .put(userMessage);
+
+            JSONObject requestBody = new JSONObject()
+                    .put("model", "gpt-3.5-turbo-0125")
+                    .put("messages", messages)
+                    .put("max_tokens", 1500)
+                    .put("temperature", 0.7);
+
+            String inputJson = requestBody.toString();
+
+            try (OutputStream os = connection.getOutputStream()) {
+                byte[] input = inputJson.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            int statusCode = connection.getResponseCode();
+            if (statusCode >= 200 && statusCode < 300) {
+                try (BufferedReader br = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+                    StringBuilder response = new StringBuilder();
+                    String responseLine;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    JSONObject responseJson = new JSONObject(response.toString());
+                    summary = responseJson.getJSONArray("choices").getJSONObject(0).getJSONObject("message")
+                            .getString("content");
+                }
+            } else {
+                // 处理错误响应
+                try (BufferedReader br = new BufferedReader(
+                        new InputStreamReader(connection.getErrorStream(), "utf-8"))) {
+                    StringBuilder errorResponse = new StringBuilder();
+                    String responseLine;
+                    while ((responseLine = br.readLine()) != null) {
+                        errorResponse.append(responseLine.trim());
+                    }
+                    System.out.println("Error response from API: " + errorResponse.toString());
+                }
+            }
+        } catch (IOException | org.json.JSONException e) {
+            e.printStackTrace();
+        }
+
+        return summary;
+    }
+
 }

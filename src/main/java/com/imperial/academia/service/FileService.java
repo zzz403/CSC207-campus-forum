@@ -8,6 +8,7 @@ public interface FileService {
     String getOutputFilePath();
     void saveFile(int groupId, File file, String type);
     void saveFile(File file);
+    void saveAvatar(int userId, File file);
 
     FileData getFileData(String filePath);
 }

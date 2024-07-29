@@ -20,7 +20,7 @@ public class FileServiceImpl implements FileService{
     public void saveFile(int groupId, File file, String type) {
         // Define the directory structure
         String directoryPath = String.format("resources/%s/%d/", type, groupId);
-
+        directoryPath = directoryPath.replace("\\", "/");
         // Create the directory if it doesn't exist
         Path directory = Paths.get(directoryPath);
         try {
@@ -44,6 +44,31 @@ public class FileServiceImpl implements FileService{
     @Override
     public void saveFile(File file) {
 
+    }
+
+    @Override
+    public void saveAvatar(int userId, File file) {
+        // Define the directory structure
+        String directoryPath = String.format("resources/avatars/%d/", userId);
+        directoryPath = directoryPath.replace("\\", "/");
+        // Create the directory if it doesn't exist
+        Path directory = Paths.get(directoryPath);
+        try {
+            if (!Files.exists(directory)) {
+                Files.createDirectories(directory);
+            }
+
+            // Define the destination file path
+            Path destination = directory.resolve(file.getName());
+
+            // Copy the file to the destination
+            Files.copy(file.toPath(), destination);
+            outputFilePath = destination.toString();
+            System.out.println("File saved to: " + destination.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to save file");
+        }
     }
 
     @Override

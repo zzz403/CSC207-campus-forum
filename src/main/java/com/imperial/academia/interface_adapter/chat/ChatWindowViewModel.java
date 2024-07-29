@@ -37,7 +37,6 @@ public class ChatWindowViewModel extends ViewModel {
      */
     public void setState(ChatWindowState chatWindowState) {
         this.chatWindowState = chatWindowState;
-        support.firePropertyChange("chatWindowState", null, chatWindowState);
     }
 
     /**
@@ -65,6 +64,15 @@ public class ChatWindowViewModel extends ViewModel {
      */
     public void firePropertyChanged() {
         support.firePropertyChange("chatWindowState", null, chatWindowState);
+    }
+
+    /**
+     * Fires a property change event to notify listeners of any change to the chat window state.
+     *
+     * @param propertyName The name of the property that has changed.
+     */
+    public void firePropertyChanged(String propertyName) {
+        support.firePropertyChange(propertyName, null, chatWindowState);
     }
 
     /**

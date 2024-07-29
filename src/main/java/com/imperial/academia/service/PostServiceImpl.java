@@ -20,7 +20,7 @@ public class PostServiceImpl implements PostService {
      * Constructs a new PostServiceImpl with the specified cache and DAO.
      *
      * @param postCache the cache to use
-     * @param postDAO the DAO to use
+     * @param postDAO   the DAO to use
      */
     public PostServiceImpl(PostCache postCache, PostDAI postDAO) {
         this.postCache = postCache;
@@ -88,7 +88,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void likePost(int postId, int userId) throws SQLException {
         postDAO.likePost(postId, userId);
-        postCache.deletePost("post:" + postId);  // Invalidate cache for the post
+        postCache.deletePost("post:" + postId); // Invalidate cache for the post
     }
 
     /**
@@ -97,7 +97,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void unlikePost(int postId, int userId) throws SQLException {
         postDAO.unlikePost(postId, userId);
-        postCache.deletePost("post:" + postId);  // Invalidate cache for the post
+        postCache.deletePost("post:" + postId); // Invalidate cache for the post
     }
 
     /**
@@ -106,5 +106,14 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostLike> getPostLikes(int postId) throws SQLException {
         return postDAO.getPostLikes(postId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getTotalLikesNumberByPostId(int postId) throws SQLException {
+        List<PostLike> postLikes = getPostLikes(postId);
+        return postLikes.size();
     }
 }

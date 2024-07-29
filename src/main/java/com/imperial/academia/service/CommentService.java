@@ -36,6 +36,15 @@ public interface CommentService {
     List<Comment> getAll() throws SQLException;
 
     /**
+     * Retrieves all comments for a specific post.
+     *
+     * @param postId the ID of the post to get comments for
+     * @return a list of comments for the specified post
+     * @throws SQLException if a database access error occurs
+     */
+    List<Comment> getAllByPostId(int postId) throws SQLException;
+
+    /**
      * Updates an existing comment in the database.
      *
      * @param comment the comment to update

@@ -1,5 +1,6 @@
 package com.imperial.academia.use_case.chat;
 
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.entity.chat_message.*;
 import com.imperial.academia.service.AudioService;
 import com.imperial.academia.service.ChatMessageService;
@@ -7,6 +8,9 @@ import com.imperial.academia.service.FileService;
 import com.imperial.academia.service.MapService;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.app.ServiceFactory;
+import com.imperial.academia.use_case.ASR.ASRInputBoundary;
+import com.imperial.academia.use_case.LLM.LLMInputBoundary;
+import com.imperial.academia.use_case.Translator.TranslatorInputBoundary;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
@@ -26,6 +30,9 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
     private final FileService fileService;
     private final ChatWindowOutputBoundary chatWindowPresenter;
     private final ChatMessageFactory chatMessageFactory;
+    private final LLMInputBoundary llmInputBoundary;
+    private final ASRInputBoundary asrInputBoundary;
+    private final TranslatorInputBoundary translatorInputBoundary;
 
 
     /**
@@ -41,18 +48,27 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
         this.audioService = ServiceFactory.getAudioService();
         this.chatWindowPresenter = chatWindowPresenter;
         this.chatMessageFactory = chatMessageFactory;
+        this.llmInputBoundary = UsecaseFactory.getLLMInteractor();
+        this.asrInputBoundary = UsecaseFactory.getASRInteractor();
+        this.translatorInputBoundary = UsecaseFactory.getTranslatorInteractor();
     }
 
     /**
      * for unit test only
      */
-    public ChatWindowInteractor(ChatWindowOutputBoundary chatWindowPresenter, ChatMessageFactory chatMessageFactory, ChatMessageService chatMessageService, MapService mapService, FileService fileService, AudioService audioService) {
+    public ChatWindowInteractor(ChatWindowOutputBoundary chatWindowPresenter, ChatMessageFactory chatMessageFactory,
+                                ChatMessageService chatMessageService, MapService mapService, FileService fileService,
+                                AudioService audioService, LLMInputBoundary llmInputBoundary, ASRInputBoundary asrInputBoundary,
+                                TranslatorInputBoundary translatorInputBoundary) {
         this.chatMessageService = chatMessageService;
         this.mapService = mapService;
         this.fileService = fileService;
         this.audioService = audioService;
         this.chatWindowPresenter = chatWindowPresenter;
         this.chatMessageFactory = chatMessageFactory;
+        this.llmInputBoundary = llmInputBoundary;
+        this.asrInputBoundary = asrInputBoundary;
+        this.translatorInputBoundary = translatorInputBoundary;
     }
 
     /**
@@ -197,5 +213,44 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
 
         // Refresh the chat messages after sending the message
         execute(groupId);
+    }
+
+    /**
+     * Summarizes the chat history for the specified group.
+     *
+     * @param chatGroupId the ID of the chat group
+     * @throws SQLException if a database access error occurs
+     */
+    @Override
+    public void summarizeChatHistory(int chatGroupId) throws SQLException {
+        List<ChatMessageDTO> chatMessages = chatMessageService.getAllByGroupId(chatGroupId);
+        StringBuilder chatHistory = new StringBuilder();
+        for (ChatMessageDTO chatMessage : chatMessages) {
+            chatHistory.append(chatMessage.getSenderName()).append(": ").append(chatMessage.getContent()).append("\n");
+        }
+        String summarizeChatHistory = llmInputBoundary.summarizeChatHistory(chatHistory.toString());
+        chatWindowPresenter.presentSummary(summarizeChatHistory);
+    }
+
+    /**
+     * Converts speech to text.
+     *
+     * @param audioPath the path to the audio file
+     * @throws Exception if an error occurs while converting speech to text
+     */
+    public void speechToText(String audioPath) throws Exception {
+        String text = asrInputBoundary.speechToText(audioPath);
+        chatWindowPresenter.presentSpeechToText(text);
+    }
+
+    /**
+     * Translates text to the specified language.
+     *
+     * @param text the text to be translated
+     * @param targetLanguage the target language
+     */
+    public void translate(String text, String targetLanguage) {
+        String translatedText = translatorInputBoundary.translate(text, targetLanguage);
+        chatWindowPresenter.presentTranslatedText(translatedText);
     }
 }
