@@ -232,11 +232,23 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
         chatWindowPresenter.presentSummary(summarizeChatHistory);
     }
 
+    /**
+     * Converts speech to text.
+     *
+     * @param audioPath the path to the audio file
+     * @throws Exception if an error occurs while converting speech to text
+     */
     public void speechToText(String audioPath) throws Exception {
         String text = asrInputBoundary.speechToText(audioPath);
         chatWindowPresenter.presentSpeechToText(text);
     }
 
+    /**
+     * Translates text to the specified language.
+     *
+     * @param text the text to be translated
+     * @param targetLanguage the target language
+     */
     public void translate(String text, String targetLanguage) {
         String translatedText = translatorInputBoundary.translate(text, targetLanguage);
         chatWindowPresenter.presentTranslatedText(translatedText);

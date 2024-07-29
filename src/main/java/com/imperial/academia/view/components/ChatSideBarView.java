@@ -28,14 +28,13 @@ public class ChatSideBarView extends JPanel {
     private final JPanel chatListPanel;
     private final JTextField searchField;
     private final ChatSideBarController chatSideBarController = new ChatSideBarController();
-    private final Map<Integer,ImageIcon> avatarCache = new HashMap<>();
+    private final Map<Integer, ImageIcon> avatarCache = new HashMap<>();
     ChatSideBarViewModel chatSideBarViewModel;
 
     /**
      * Constructs a ChatSideBarView with the specified controller and view model.
      *
-     * @param chatSideBarViewModel  The view model to manage the state of the
-     *                              sidebar.
+     * @param chatSideBarViewModel The view model to manage the state of the sidebar.
      */
     public ChatSideBarView(ChatSideBarViewModel chatSideBarViewModel) {
         this.chatSideBarViewModel = chatSideBarViewModel;
@@ -76,7 +75,7 @@ public class ChatSideBarView extends JPanel {
         };
         searchField.setFont(new Font("Arial", Font.PLAIN, 14));
         searchField.setForeground(Color.GRAY);
-        searchField.setPreferredSize(new Dimension(300, 30)); // Increase the width
+        searchField.setPreferredSize(new Dimension(300, 30));
         searchField.setBorder(new EmptyBorder(0, 20, 0, 0));
         searchField.setBackground(Color.WHITE);
         searchField.setOpaque(false);
@@ -213,12 +212,12 @@ public class ChatSideBarView extends JPanel {
         chatItem.add(avatar, BorderLayout.WEST);
 
         // Load and resize avatar image
-        if (chatGroup.isGroup()){
+        if (chatGroup.isGroup()) {
             avatar.setIcon(avatarCache.get(0));
-        }else{
-            if (avatarCache.containsKey(chatGroup.getId())){
+        } else {
+            if (avatarCache.containsKey(chatGroup.getId())) {
                 avatar.setIcon(avatarCache.get(chatGroup.getId()));
-            }else{
+            } else {
                 try {
                     BufferedImage avatarImage = ImageIO.read(new File(chatGroup.getAvatarUrl()));
                     BufferedImage roundedAvatarImage = makeRoundedCorner(avatarImage);
@@ -288,7 +287,8 @@ public class ChatSideBarView extends JPanel {
     }
 
     /**
-     * Format the timestamp for display.
+     * Formats the timestamp for display.
+     *
      * @param timestamp the timestamp to format
      * @return a formatted timestamp string
      */
