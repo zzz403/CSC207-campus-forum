@@ -10,39 +10,28 @@ public class EditOutputData {
     /**
      * The username of the user.
      */
-    private final String username;
+    private final int userId;
+    private final String userName;
     private final String password;
-
-    /**
-     * The email of the user.
-     */
     private final String email;
+    private final String avatarURL;
 
 
-    /**
-     * The role of the user.
-     */
-
-    private final String avatarUrl;
-
-    /**
-     * The registration date of the user.
-     */
-
-
-
-
-    public EditOutputData( String username,String password, String email, String avatarUrl){
-        this.username = username;
+    public EditOutputData(int userId, String userName, String password, String email, String avatarURL){
+        this.userId = userId;
+        this.userName = userName;
         this.password = password;
         this.email = email;
-        this.avatarUrl = avatarUrl;
+        this.avatarURL = avatarURL;
     }
 
 
+    public int getUserId() {
+        return userId;
+    }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
     public String getPassword() {
@@ -53,10 +42,7 @@ public class EditOutputData {
         return email;
     }
 
-
-    public String getAvatarUrl() {
-        return avatarUrl;
+    public String getAvatarURL() {
+        return avatarURL;
     }
-
-
 }

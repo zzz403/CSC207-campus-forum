@@ -4,6 +4,7 @@ import com.imperial.academia.interface_adapter.chat.ChatSideBarViewModel;
 import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.interface_adapter.createpost.CreatePostViewModel;
+import com.imperial.academia.interface_adapter.edit.EditViewModel;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.post.PostViewModel;
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
@@ -23,7 +24,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class Main {
-    public static void main(String[] args) throws SQLException, IOException {
+        public static void main(String[] args) throws SQLException, IOException {
         // The main application window.
         JFrame application = new JFrame("Academia Imperial");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -72,6 +73,7 @@ public class Main {
         TopNavigationBarViewModel topNavigationBarViewModel = viewModels.getTopNavigationBarViewModel();
         ProfileViewModel profileViewModel = viewModels.getProfileViewModel();
         PostViewModel postViewModel = viewModels.getPostViewModel();
+        EditViewModel editViewModel = viewModels.getEditViewModel();
 
         try {
             ServiceFactory.initialize();
@@ -99,6 +101,9 @@ public class Main {
 
             PostView postView = new PostView(postViewModel);
             views.add(postView, postView.viewName);
+
+            EditView editView = new EditView(editViewModel);
+            views.add(editView, editView.viewName);
 
             createPostView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
             postBoardView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);

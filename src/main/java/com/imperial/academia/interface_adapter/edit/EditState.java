@@ -1,8 +1,8 @@
 package com.imperial.academia.interface_adapter.edit;
 
 public class EditState {
-
-    private String username = "";
+    private int userId = 0;
+    private String userName = "";
     private String usernameError = null;
     private String password = "";
     private String passwordError = null;
@@ -10,19 +10,37 @@ public class EditState {
     private String repeatPasswordError = null;
     private String email = "";
     private String emailError = null;
+    private String avatarURL = "";
 
 
     public EditState(EditState copy) {
-        this.username = copy.username;
-        this.usernameError = copy.usernameError;
-        this.password = copy.password;
-        this.passwordError = copy.passwordError;
-        this.repeatPassword = copy.repeatPassword;
-        this.repeatPasswordError = copy.repeatPasswordError;
-        this.email = copy.email;
-        this.emailError = copy.emailError;
+        this.userId = copy.getUserId();
+        this.userName = copy.getUserName();
+        this.usernameError = copy.getUsernameError();
+        this.password = copy.getPassword();
+        this.passwordError = copy.getPasswordError();
+        this.repeatPassword = copy.getRepeatPassword();
+        this.repeatPasswordError = copy.getRepeatPasswordError();
+        this.email = copy.getEmail();
+        this.emailError = copy.getEmailError();
+        this.avatarURL = copy.getAvatarURL();
     }
 
+    public String getAvatarURL() {
+        return avatarURL;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
+    }
 
     public EditState() {}
 
@@ -33,8 +51,8 @@ public class EditState {
      *
      * @return The username.
      */
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
     /**
@@ -103,10 +121,10 @@ public class EditState {
     /**
      * Sets the username.
      *
-     * @param username The username to set.
+     * @param userName The username to set.
      */
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     /**
@@ -176,7 +194,7 @@ public class EditState {
      * Clears all state fields.
      */
     public void clear() {
-        this.username = "";
+        this.userName = "";
         this.usernameError = null;
         this.password = "";
         this.passwordError = null;

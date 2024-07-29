@@ -11,7 +11,7 @@ public class EditViewModel extends ViewModel {
     public final String PASSWORD_LABEL = "Choose password";
     public final String REPEAT_PASSWORD_LABEL = "Enter password again";
     public final String EMAIL_LABEL = "Enter email";
-    public final String SIGNUP_BUTTON_LABEL = "Change";
+    public final String UPDATE_BUTTON_LABEL = "Update";
     public final String CANCEL_BUTTON_LABEL = "Cancel";
 
     private  EditState state = new EditState();
@@ -25,7 +25,7 @@ public class EditViewModel extends ViewModel {
 
     public void setState(EditState state){
         this.state = state;
-        support.firePropertyChange("state", null, state);// TODO why old value is null?
+        support.firePropertyChange("state", null, state);
     }
     public String getErrorMessage() {
         return errorMessage;

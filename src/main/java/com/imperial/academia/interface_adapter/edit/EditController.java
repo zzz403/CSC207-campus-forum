@@ -1,16 +1,18 @@
 package com.imperial.academia.interface_adapter.edit;
 
 import com.imperial.academia.app.UsecaseFactory;
+import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.edit.EditInputBoundry;
 import com.imperial.academia.use_case.edit.EditInputData;
 
 public class EditController {
     private final EditInputBoundry editInteractor;
-
+    private final ChangeViewInputBoundary changeViewInteractor;
 
 
     public EditController(){
         this.editInteractor = UsecaseFactory.getEditInteractor();
+        this.changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
     }
 
     public void execute(){
@@ -21,4 +23,6 @@ public class EditController {
         EditInputData editInputData = new EditInputData(username, password, repeatPassword, avatarURL, email);
         editInteractor.update(editInputData);
     }
+
+    public void cancel(){changeViewInteractor.changeView("profile");}
 }

@@ -18,5 +18,4 @@ public interface UserFactory {
      */
     User create(String username, String password, String email, LocalDateTime registrationDate);
 
-    User create(int id, String username, String password, String email, String avatarURL, Timestamp registrationDate, LocalDateTime lastModifiedDate);
 }
