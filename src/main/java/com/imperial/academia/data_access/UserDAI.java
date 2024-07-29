@@ -44,6 +44,7 @@ public interface UserDAI {
      * @throws SQLException if a database access error occurs
      */
     User getByUsername(String username) throws SQLException;
+    User getByEmail(String email) throws SQLException;
 
     /**
      * Retrieves a user by their ID.

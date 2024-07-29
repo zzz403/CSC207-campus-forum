@@ -3,6 +3,7 @@ package com.imperial.academia.app;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarViewModel;
 import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
 import com.imperial.academia.interface_adapter.createpost.CreatePostViewModel;
+import com.imperial.academia.interface_adapter.edit.EditViewModel;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.post.PostViewModel;
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
@@ -24,6 +25,7 @@ public class ViewModels {
     private ProfileViewModel profileViewModel;
     private PostBoardViewModel postBoardViewModel;
     private PostViewModel postViewModel;
+    private EditViewModel editViewModel;
 
     /**
      * Constructs a new ViewModels container and initializes all ViewModel instances.
@@ -38,6 +40,11 @@ public class ViewModels {
         profileViewModel = new ProfileViewModel();
         postBoardViewModel = new PostBoardViewModel();
         postViewModel = new PostViewModel();
+        editViewModel = new EditViewModel();
+    }
+
+    public EditViewModel getEditViewModel() {
+        return editViewModel;
     }
 
     /**

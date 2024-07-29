@@ -34,7 +34,10 @@ public class UserCacheImpl implements UserCache {
      */
     @Override
     public void setUser(String key, User user) {
+
+
         userCache.put(key, user);
+
     }
 
     /**

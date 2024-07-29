@@ -1,2 +1,2 @@
-jane_smith
-hashed_password2
+admin
+admin123
