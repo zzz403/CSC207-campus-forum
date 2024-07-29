@@ -1,16 +1,42 @@
 package com.imperial.academia.view.components;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+
 public class PostSmallComponent extends JPanel {
 
-    public PostSmallComponent(BufferedImage image, BufferedImage avatar, String title, String content, String author, int likes) {
+    public PostSmallComponent(BufferedImage image, BufferedImage avatar, String title, String content, String author, int likes, JFrame applicationFrame) {
         setOpaque(false);
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 5, 5, 5)); // 设置空白边框
@@ -88,6 +114,15 @@ public class PostSmallComponent extends JPanel {
         setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         setPreferredSize(new Dimension(300, 370));
+
+        // fix display issue when size changing
+        applicationFrame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                likesLabel.setVisible(false);
+                likesLabel.setVisible(true);
+            }
+        });
     }
 
     @Override
@@ -189,14 +224,14 @@ public class PostSmallComponent extends JPanel {
             }
 
             // 创建四个 PostSmallComponent 实例并添加到主面板
-            mainPanel.add(new PostSmallComponent(postImage, avatar, "Title 1", "Content 1", "Author 1", 10), gbc);
+            mainPanel.add(new PostSmallComponent(postImage, avatar, "Title 1", "Content 1", "Author 1", 10, frame), gbc);
             gbc.gridx++;
-            mainPanel.add(new PostSmallComponent(postImage2, avatar, "Title 2", "Content 2", "Author 2", 20), gbc);
+            mainPanel.add(new PostSmallComponent(postImage2, avatar, "Title 2", "Content 2", "Author 2", 20, frame), gbc);
             gbc.gridx = 0;
             gbc.gridy++;
-            mainPanel.add(new PostSmallComponent(postImage, avatar, "Title 3", "Content 3", "Author 3", 30), gbc);
+            mainPanel.add(new PostSmallComponent(postImage, avatar, "Title 3", "Content 3", "Author 3", 30, frame), gbc);
             gbc.gridx++;
-            mainPanel.add(new PostSmallComponent(postImage, avatar, "Title 4", "Content 4", "Author 4", 40), gbc);
+            mainPanel.add(new PostSmallComponent(postImage, avatar, "Title 4", "Content 4", "Author 4", 40, frame), gbc);
 
             // 创建一个 JScrollPane 并将 mainPanel 添加到其中
             JScrollPane scrollPane = new JScrollPane(mainPanel);
