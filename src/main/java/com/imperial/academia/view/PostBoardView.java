@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -80,10 +81,6 @@ public class PostBoardView extends JPanel {
 
         List<PostOverviewInfo> postInfoList = postBoardViewModel.getPostInfoList();
 
-        // 使用工厂类创建多个 PostSmallComponent 实例并添加到主面板
-        String imageUrl1 = "resources/test_image/test_image_1.jpg";
-        String imageUrl2 = "resources/test_image/test_image_2.jpg";
-
         for (int i = 0; i < postInfoList.size(); i++) { // 例如创建8个组件
             PostOverviewInfo pInfo = postInfoList.get(i);
             int postID = pInfo.getPostID();
@@ -92,8 +89,12 @@ public class PostBoardView extends JPanel {
             String username = pInfo.getUserName();
             String avatarURL = pInfo.getAvatarURL();
             int postLikes = pInfo.getLikes();
+
+            Random rand = new Random();
+            int randomNum = rand.nextInt((9 - 1) + 1) + 1;
+
             PostSmallComponent postComponent = PostSmallComponentFactory.createPostSmallComponent(
-                    (i % 2 == 0) ? imageUrl1 : imageUrl2,
+                    "resources/test_image/test_image_"+randomNum+".jpg",
                     avatarURL, // user avatar url
                     title, // post title
                     summary, // summary content

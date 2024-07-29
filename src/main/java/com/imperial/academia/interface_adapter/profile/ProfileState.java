@@ -45,6 +45,8 @@ public class ProfileState {
      */
     private boolean isMe = true;
 
+    private List<Integer> postIDs = new ArrayList<>();
+
     private List<String> postTitles = new ArrayList<>();
     private List<String> postContents = new ArrayList<>();
     private List<Timestamp> postCreationDates = new ArrayList<>();
@@ -66,10 +68,11 @@ public class ProfileState {
         this.avatarUrl = copy.getAvatarUrl();
         this.registrationDate = copy.getRegistrationDate();
         this.isMe = copy.isMe();
-        this.postTitles = postTitles;
-        this.postContents = postContents;
-        this.postCreationDates = postCreationDates;
-        this.postImageUrls = postImageUrls;
+        this.postTitles = copy.postTitles;
+        this.postContents = copy.postContents;
+        this.postCreationDates = copy.postCreationDates;
+        this.postImageUrls = copy.postImageUrls;
+        this.postIDs = copy.postIDs;
     }
 
     /**
@@ -237,5 +240,13 @@ public class ProfileState {
 
     public void setPostImageUrls(List<String> postImageUrls) {
         this.postImageUrls = postImageUrls;
+    }
+
+    public void setPostIds(List<Integer> postIDs) {
+        this.postIDs = postIDs;
+    }
+
+    public List<Integer> getPostIds() {
+        return postIDs;
     }
 }

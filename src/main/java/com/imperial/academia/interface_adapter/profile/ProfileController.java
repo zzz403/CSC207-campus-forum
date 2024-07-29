@@ -5,6 +5,7 @@ import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.chat.ChatCoordinatorInputBoundary;
 import com.imperial.academia.use_case.edit.EditInputBoundry;
 import com.imperial.academia.use_case.edit.EditOutputData;
+import com.imperial.academia.use_case.post.PostInputBoundary;
 import com.imperial.academia.use_case.profile.ProfileInputBoundry;
 import com.imperial.academia.use_case.profile.ProfileInputData;
 
@@ -25,6 +26,7 @@ public class ProfileController {
     private final ChatCoordinatorInputBoundary chatCoordinatorInteractor;
     private final ChangeViewInputBoundary changeViewInteractor;
     private final EditInputBoundry editInteractor;
+    private final PostInputBoundary postInteractor;
 
     /**
      * Constructs a new ProfileController and initializes the interactors for profile and chat operations.
@@ -34,6 +36,7 @@ public class ProfileController {
         this.chatCoordinatorInteractor = UsecaseFactory.getChatCoordinatorInteractor();
         this.changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
         this.editInteractor = UsecaseFactory.getEditInteractor();
+        this.postInteractor = UsecaseFactory.getPostInteractor();
     }
 
     /**
@@ -61,5 +64,14 @@ public class ProfileController {
      */
     public void edit() {
         editInteractor.execute();
+    }
+
+    public boolean initPostById(int postID) {
+        if (!postInteractor.initPostById(postID)) {
+            //TODO: does not find post
+            return false;
+        }
+        changeViewInteractor.changeView("post");
+        return true;
     }
 }
