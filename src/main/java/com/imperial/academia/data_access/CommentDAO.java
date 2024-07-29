@@ -101,6 +101,32 @@ public class CommentDAO implements CommentDAI {
      * {@inheritDoc}
      */
     @Override
+    public List<Comment> getAllByPostId(int postId) throws SQLException {
+        String sql = "SELECT * FROM comments WHERE post_id = ?";
+        List<Comment> comments = new ArrayList<>();
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, postId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    comments.add(new Comment(
+                        rs.getInt("comment_id"),
+                        rs.getString("content"),
+                        rs.getInt("author_id"),
+                        rs.getInt("post_id"),
+                        rs.getInt("parent_comment_id"),
+                        rs.getTimestamp("creation_date"),
+                        rs.getTimestamp("last_modified")
+                    ));
+                }
+            }
+        }
+        return comments;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<Comment> getAllSince(Timestamp timestamp) throws SQLException {
         String sql = "SELECT * FROM comments WHERE last_modified > ?";
         List<Comment> comments = new ArrayList<>();
