@@ -1,5 +1,9 @@
 package com.imperial.academia.use_case.postBoard;
 
-public class PostBoardInputBoundary {
+/**
+ * PostBoardInputBoundary
+ */
+public interface PostBoardInputBoundary {
+
     
 }

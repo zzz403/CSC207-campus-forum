@@ -2,6 +2,7 @@ package com.imperial.academia.interface_adapter.postboard;
 
 import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
+import com.imperial.academia.use_case.postBoard.PostBoardInputBoundary;
 
 public class PostBoardController {
 
@@ -11,10 +12,16 @@ public class PostBoardController {
     private final ChangeViewInputBoundary changeViewInteractor;
 
     /**
+     * The interactor for postBoard
+     */
+    private final PostBoardInputBoundary postBoardInteractor;
+
+    /**
      * Constructs the PostBoardController
      */
     public PostBoardController(){
-        changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
+        this.changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
+        this.postBoardInteractor = UsecaseFactory.getPostBoardInteractor();
     }
 
     /**
@@ -24,5 +31,10 @@ public class PostBoardController {
      */
     public void changeView(String viewName){
         changeViewInteractor.changeView(viewName);
+    }
+
+
+    public Boolean fetchAllPost(){
+        return postBoardInteractor.fetchAllPost();
     }
 }

@@ -1,7 +1,5 @@
 package com.imperial.academia.use_case.LLM;
 
-import java.util.List;
-
 public interface LLMInputBoundary {
 
 
