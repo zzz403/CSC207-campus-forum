@@ -50,6 +50,7 @@ public class ProfileOutputData {
     private final List<String> postContents;
     private final List<Timestamp> postCreationDates;
     private final List<String> postImageUrls;
+    private final List<Integer> postIds;
 
 
 
@@ -65,7 +66,9 @@ public class ProfileOutputData {
      * @param isMe             a flag indicating if the profile belongs to the current user
      */
 
-    public ProfileOutputData(int id, String username, String email, String role, String avatarUrl, Timestamp registrationDate, boolean isMe, List<String> postTitles, List<String> postContents, List<Timestamp> postCreationDates, List<String> postImageUrls) {
+    public ProfileOutputData(int id, String username, String email, String role, String avatarUrl, Timestamp registrationDate,
+                             boolean isMe, List<String> postTitles, List<String> postContents, List<Timestamp> postCreationDates,
+                             List<String> postImageUrls, List<Integer> postIds) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -77,6 +80,7 @@ public class ProfileOutputData {
         this.postContents = postContents;
         this.postCreationDates = postCreationDates;
         this.postImageUrls = postImageUrls;
+        this.postIds = postIds;
     }
     /**
      * Returns the ID of the user.
@@ -156,5 +160,14 @@ public class ProfileOutputData {
      */
     public boolean isMe() {
         return isMe;
+    }
+
+    /**
+     * Returns the list of post IDs.
+     *
+     * @return the list of post IDs
+     */
+    public List<Integer> getPostIds() {
+        return postIds;
     }
 }

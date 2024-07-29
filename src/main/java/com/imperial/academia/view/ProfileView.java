@@ -8,6 +8,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +41,8 @@ public class ProfileView extends JPanel {
      * The controller for profile operations.
      */
     private final ProfileController profileController = new ProfileController();
+
+    private JPanel bottomPanel;
 
     /**
      * Constructs a new ProfileView with the specified profile view model.
@@ -100,7 +104,7 @@ public class ProfileView extends JPanel {
         topPanel.add(infoPanel, BorderLayout.CENTER);
 
         // TODO change bottom to user's post
-        JPanel bottomPanel = new JPanel();
+        bottomPanel = new JPanel();
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
 //      bottomPanel.setBackground(new Color(58, 185, 232));
 
@@ -110,40 +114,14 @@ public class ProfileView extends JPanel {
 
 
         ProfileState currentState =  profileViewModel.getProfileState();
-        for (int i = 0; i < currentState.getPostTitles().size(); i++) {
-            PostProfileViewComponent post = PostProfileFactory.create(
-                    currentState.getPostTitles().get(i),
-                    currentState.getPostContents().get(i),
-                    currentState.getUsername(),//TODO ID????   press no effect?
-                    currentState.getPostCreationDates().get(i).toString().substring(0, 10),
-                    currentState.getPostImageUrls().get(i),
-                    100 // Image size
-            );
-            bottomPanel.add(post);
-            bottomPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        }
+
+        createAllPost(currentState);
 
         JScrollPane scrollPane = new JScrollPane(bottomPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         mainPanel.add(scrollPane);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         // Set constraints for the top panel
         constraints.gridx = 0;
@@ -181,21 +159,37 @@ public class ProfileView extends JPanel {
                 roleLabel.setText("Role : " + state.getRole());
                 registrationDateLabel.setText("Member since " + state.getRegistrationDate().toString().substring(0, 10));
                 chatOrModify.setText(state.isMe() ? "Edit" : "Chat");
-                bottomPanel.removeAll();
-                for (int i = 0; i < state.getPostTitles().size(); i++) {
-                    PostProfileViewComponent post = PostProfileFactory.create(
-                            state.getPostTitles().get(i),
-                            state.getPostContents().get(i),
-                            state.getUsername(),//TODO author ID????   press no effect?
-                            state.getPostCreationDates().get(i).toString().substring(0, 10),
-                            state.getPostImageUrls().get(i), //TODO Image URL?
-                            100 // Image size
-                    );
-                    bottomPanel.add(post);
-                    bottomPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-                }
 
+                createAllPost(state);
             }
         });
     }
+
+    private void createAllPost(ProfileState state){
+        bottomPanel.removeAll();
+        for (int i = 0; i < state.getPostTitles().size(); i++) {
+            PostProfileViewComponent post = PostProfileFactory.create(
+                    state.getPostTitles().get(i),
+                    state.getPostContents().get(i),
+                    state.getUsername(),
+                    state.getPostCreationDates().get(i).toString().substring(0, 10),
+                    state.getPostImageUrls().get(i),
+                    100 // Image size
+            );
+            int postID = state.getPostIds().get(i);
+            post.addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent evt) {
+                    if (profileController.initPostById(postID)) {
+                        System.out.println("init post success | postID: " + postID);
+                        return;
+                    }
+                    System.out.println("init post unsuccess | postID: " + postID);
+                }
+            });
+            bottomPanel.add(post);
+            bottomPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        }
+    }
 }
+
+

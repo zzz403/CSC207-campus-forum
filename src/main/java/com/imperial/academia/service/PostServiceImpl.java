@@ -34,6 +34,7 @@ public class PostServiceImpl implements PostService {
     public void insert(Post post) throws SQLException {
         postDAO.insert(post);
         postCache.setPost("post:" + post.getId(), post);
+        postCache.setPost("posts:user:" + post.getAuthorId(), post);
     }
 
     /**

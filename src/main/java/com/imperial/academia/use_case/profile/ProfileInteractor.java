@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.app.UsecaseFactory;
@@ -69,13 +70,17 @@ public class ProfileInteractor implements ProfileInputBoundry {
             List<Integer> postAuthorId = new ArrayList<>();
             List<Timestamp> postCreationDate = new ArrayList<>();
             List<String> postImageUrl = new ArrayList<>();
+            List<Integer> postID = new ArrayList<>();
 
             for (Post post : postList){
                 postTitle.add(post.getTitle());
                 postContent.add(post.getContent());
                 postAuthorId.add(post.getAuthorId());
                 postCreationDate.add(post.getCreationDate());
-                postImageUrl.add("resources/test_image/test_image_1.jpg"); //TODO real URL???
+                Random rand = new Random();
+                int randomNum = rand.nextInt((9 - 1) + 1) + 1;
+                postImageUrl.add("resources/test_image/test_image_"+randomNum+".jpg"); //TODO real URL???
+                postID.add(post.getId());
             }
 
 
@@ -91,7 +96,8 @@ public class ProfileInteractor implements ProfileInputBoundry {
                         postTitle,
                         postContent,
                         postCreationDate,
-                        postImageUrl
+                        postImageUrl,
+                        postID
                 );
 
                 profilePresenter.present(profileOutputData);

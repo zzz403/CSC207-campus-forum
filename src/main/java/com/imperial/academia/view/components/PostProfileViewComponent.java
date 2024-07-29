@@ -26,11 +26,11 @@ public class PostProfileViewComponent extends JPanel {
      *
      * @param title        The title of the post.
      * @param content      The content of the post.
-     * @param authorId     The author ID of the post.
+     * @param authorName     The author ID of the post.
      * @param creationDate The creation date of the post.
      * @param imageIcon    The image icon of the post.
      */
-    public PostProfileViewComponent(String title, String content, String authorId, String creationDate,
+    public PostProfileViewComponent(String title, String content, String authorName, String creationDate,
             ImageIcon imageIcon) {
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createCompoundBorder(
@@ -76,7 +76,7 @@ public class PostProfileViewComponent extends JPanel {
         JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         infoPanel.setOpaque(false);
 
-        JLabel authorLabel = new JLabel("Author ID: " + authorId + " | ");
+        JLabel authorLabel = new JLabel("Author ID: " + authorName + " | ");
         authorLabel.setFont(new Font("Arial", Font.PLAIN, 12));
 
         JLabel dateLabel = new JLabel("Creation Date: " + creationDate);
