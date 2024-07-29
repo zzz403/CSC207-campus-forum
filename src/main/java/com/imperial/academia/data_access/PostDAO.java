@@ -73,6 +73,32 @@ public class PostDAO implements PostDAI {
      * {@inheritDoc}
      */
     @Override
+    public List<Post> getAllByUserId(int userId) throws SQLException {
+        String sql = "SELECT * FROM posts WHERE author_id = ?";
+        List<Post> posts = new ArrayList<>();
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    posts.add(new Post(
+                        rs.getInt("post_id"),
+                        rs.getString("title"),
+                        rs.getString("content"),
+                        rs.getInt("author_id"),
+                        rs.getInt("board_id"),
+                        rs.getTimestamp("creation_date"),
+                        rs.getTimestamp("last_modified_date")
+                    ));
+                }
+            }
+        }
+        return posts;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<Post> getAll() throws SQLException {
         String sql = "SELECT * FROM posts";
         List<Post> posts = new ArrayList<>();
