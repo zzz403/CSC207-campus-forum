@@ -1,11 +1,9 @@
 package com.imperial.academia.interface_adapter.profile;
 
 import com.imperial.academia.app.UsecaseFactory;
-import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.use_case.chat.ChatCoordinatorInputBoundary;
-import com.imperial.academia.use_case.profile.ProfileInputBoundry;
+import com.imperial.academia.use_case.profile.ProfileInputBoundary;
 import com.imperial.academia.use_case.profile.ProfileInputData;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -14,14 +12,14 @@ import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProfileControllerTest {
-    private ProfileInputBoundry mockProfileInteractor;
+    private ProfileInputBoundary mockProfileInteractor;
     private ChatCoordinatorInputBoundary mockChatCoordinatorInteractor;
     private ProfileInputData profileInputDataOut;
     private int userIdOut;
     private ProfileController profileController;
     @BeforeEach
     public void init(){
-        mockProfileInteractor = new ProfileInputBoundry() {
+        mockProfileInteractor = new ProfileInputBoundary() {
             @Override
             public void execute(ProfileInputData profileInputData) {
                 profileInputDataOut = profileInputData;

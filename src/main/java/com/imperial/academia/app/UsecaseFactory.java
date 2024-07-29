@@ -6,7 +6,7 @@ import com.imperial.academia.entity.chat_message.CommonChatMessageFactory;
 import com.imperial.academia.entity.user.CommonUserFactory;
 import com.imperial.academia.entity.user.UpdateUserFactory;
 import com.imperial.academia.entity.user.UserFactory;
-import com.imperial.academia.entity.user.updatedUserFactoryImp;
+import com.imperial.academia.entity.user.UpdatedUserFactoryImpl;
 import com.imperial.academia.interface_adapter.changeview.ChangeViewPresenter;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarPresenter;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarViewModel;
@@ -48,7 +48,7 @@ import com.imperial.academia.use_case.chat.ChatWindowOutputBoundary;
 import com.imperial.academia.use_case.createpost.CreatePostInputBoundary;
 import com.imperial.academia.use_case.createpost.CreatePostInteractor;
 import com.imperial.academia.use_case.createpost.CreatePostOutputBoundary;
-import com.imperial.academia.use_case.edit.EditInputBoundry;
+import com.imperial.academia.use_case.edit.EditInputBoundary;
 import com.imperial.academia.use_case.edit.EditInteractor;
 import com.imperial.academia.use_case.edit.EditOutputBoundary;
 import com.imperial.academia.use_case.login.LoginInputBoundary;
@@ -60,9 +60,9 @@ import com.imperial.academia.use_case.post.PostOutputBoundary;
 import com.imperial.academia.use_case.postBoard.PostBoardInputBoundary;
 import com.imperial.academia.use_case.postBoard.PostBoardInteractor;
 import com.imperial.academia.use_case.postBoard.PostBoardOutputBoundary;
-import com.imperial.academia.use_case.profile.ProfileInputBoundry;
+import com.imperial.academia.use_case.profile.ProfileInputBoundary;
 import com.imperial.academia.use_case.profile.ProfileInteractor;
-import com.imperial.academia.use_case.profile.ProfileOutputBoundry;
+import com.imperial.academia.use_case.profile.ProfileOutputBoundary;
 import com.imperial.academia.use_case.session.SessionInputBoundary;
 import com.imperial.academia.use_case.session.SessionInteractor;
 import com.imperial.academia.use_case.signup.SignupInputBoundary;
@@ -85,7 +85,7 @@ public class UsecaseFactory {
     private static ChangeViewInputBoundary changeViewInteractor;
     private static SignupInputBoundary signupInteractor;
     private static SessionInputBoundary sessionInteractor;
-    private static ProfileInputBoundry profileInteractor;
+    private static ProfileInputBoundary profileInteractor;
     private static ChatWindowInputBoundary chatWindowInteractor;
     private static ChatCoordinatorInputBoundary chatCoordinatorInteractor;
     private static PostInputBoundary postInteractor;
@@ -93,7 +93,7 @@ public class UsecaseFactory {
     private static ASRInputBoundary ASRInteractor;
     private static TranslatorInputBoundary translatorInteractor;
     private static PostBoardInputBoundary postBoardInteractor;
-    private static EditInputBoundry editInteractor;
+    private static EditInputBoundary editInteractor;
 
     /** Prevents instantiation of this utility class. */
     private UsecaseFactory() {
@@ -135,7 +135,7 @@ public class UsecaseFactory {
         SignupOutputBoundary signupPresenter = new SignupPresenter(signupViewModel, loginViewModel);
         signupInteractor = new SignupInteractor(signupPresenter, userFactory);
 
-        ProfileOutputBoundry profilePresenter = new ProfilePresenter(profileViewModel);
+        ProfileOutputBoundary profilePresenter = new ProfilePresenter(profileViewModel);
         profileInteractor = new ProfileInteractor(profilePresenter);
 
         ChatSideBarOutputBoundary chatSideBarPresenter = new ChatSideBarPresenter(chatSideBarViewModel);
@@ -151,7 +151,7 @@ public class UsecaseFactory {
         LoginOutputBoundary loginPresenter = new LoginPresenter(loginViewModel, topNavigationBarViewModel);
         loginInteractor = new LoginInteractor(loginPresenter, rememberMeDAO);
 
-        UpdateUserFactory updateUserFactory = new updatedUserFactoryImp();
+        UpdateUserFactory updateUserFactory = new UpdatedUserFactoryImpl();
         EditOutputBoundary editPresenter = new EditPresenter(editViewModel);
         editInteractor = new EditInteractor(editPresenter, updateUserFactory);
 
@@ -245,7 +245,7 @@ public class UsecaseFactory {
      *
      * @return The ProfileInputBoundary interactor.
      */
-    public static ProfileInputBoundry getProfileInteractor() {
+    public static ProfileInputBoundary getProfileInteractor() {
         return profileInteractor;
     }
 
@@ -276,7 +276,7 @@ public class UsecaseFactory {
         return postInteractor;
     }
 
-    public static EditInputBoundry getEditInteractor() {
+    public static EditInputBoundary getEditInteractor() {
         return editInteractor;
     }
 

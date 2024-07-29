@@ -6,7 +6,6 @@ import com.imperial.academia.entity.user.User;
 import com.imperial.academia.service.UserService;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
-import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +20,7 @@ import java.util.List;
 import static junit.framework.Assert.assertFalse;
 
 public class ProfileInteractorTest {
-    private ProfileOutputBoundry mockPresenter;
+    private ProfileOutputBoundary mockPresenter;
     private UserService mockUserService;
     private ChangeViewInputBoundary mockChangeViewInteractor;
     private ProfileInteractor profileInteractor;
@@ -53,7 +52,7 @@ public class ProfileInteractorTest {
                 new Timestamp(0),
                 new Timestamp(0)
         );
-        mockPresenter = new ProfileOutputBoundry() {
+        mockPresenter = new ProfileOutputBoundary() {
             @Override
             public void present(ProfileOutputData user) {
                 outputUser = user;

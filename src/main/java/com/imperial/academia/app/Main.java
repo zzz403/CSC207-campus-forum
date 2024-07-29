@@ -1,21 +1,17 @@
 package com.imperial.academia.app;
 
-import com.imperial.academia.interface_adapter.chat.ChatSideBarViewModel;
-import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
+import com.imperial.academia.interface_adapter.chat.*;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.interface_adapter.createpost.CreatePostViewModel;
 import com.imperial.academia.interface_adapter.edit.EditViewModel;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
-import com.imperial.academia.interface_adapter.post.PostViewModel;
+import com.imperial.academia.interface_adapter.post.*;
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
 import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
 import com.imperial.academia.interface_adapter.signup.SignupViewModel;
 import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
 import com.imperial.academia.view.*;
-import com.imperial.academia.view.components.ChatSideBarView;
-import com.imperial.academia.view.components.ChatWindowView;
-import com.imperial.academia.view.components.TopNavigationBar;
-
+import com.imperial.academia.view.components.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -24,17 +20,17 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * The main entry point of the Academia Imperial application.
- * This class sets up the main application window and initializes the various views and view models.
+ * Main class acts as the entry point for the Academia Imperial application.
+ * It configures the main application window, initializes view models, and manages views.
  */
 public class Main {
     public static void main(String[] args) throws SQLException, IOException {
 
-        // The main application window.
+        // Main application frame setup
         JFrame application = new JFrame("Academia Imperial");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        // Add a window listener to handle the close operation
+        // Window listener for application close event
         application.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -42,12 +38,11 @@ public class Main {
             }
         });
 
-        // Set the application icon logo
+        // Loading and setting application icon
         try {
             Image logo = ImageIO.read(new File("resources/logo.png"));
             application.setIconImage(logo);
-
-            // Set macOS Dock icon if running on macOS
+            // Special handling for macOS Dock icon
             if (System.getProperty("os.name").toLowerCase().contains("mac")) {
                 Taskbar.getTaskbar().setIconImage(logo);
             }
@@ -56,22 +51,23 @@ public class Main {
             System.out.println("Failed to load logo image");
         }
 
-        // Set the size of the main application window and center it on the screen
+        // Configure application window size and centering
         application.setSize(1000, 700);
         application.setLocationRelativeTo(null);
 
-        // Use CardLayout to manage different views in the application
+        // CardLayout to manage different views
         CardLayout cardLayout = new CardLayout();
         JPanel views = new JPanel(cardLayout);
         application.add(views);
 
-        // Initialize ViewManagerModel
+        // View manager initialization
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
 
-        // Initialize ViewModels
+        // ViewModel initialization
         ViewModels viewModels = new ViewModels();
 
+        // Setting up ViewModels for different application components
         LoginViewModel loginViewModel = viewModels.getLoginViewModel();
         SignupViewModel signupViewModel = viewModels.getSignupViewModel();
         PostBoardViewModel postBoardViewModel = viewModels.getPostBoardViewModel();
@@ -84,11 +80,11 @@ public class Main {
         EditViewModel editViewModel = viewModels.getEditViewModel();
 
         try {
-            // Initialize services and use cases
+            // Initialize backend services and use cases
             ServiceFactory.initialize();
             UsecaseFactory.initialize(viewManagerModel, viewModels);
 
-            // Create views and add them to the card layout
+            // Creating views and integrating them into the application
             SignupView signupView = new SignupView(signupViewModel);
             views.add(signupView, signupView.viewName);
 
@@ -115,7 +111,7 @@ public class Main {
             EditView editView = new EditView(editViewModel, application);
             views.add(editView, editView.viewName);
 
-            // Add the top navigation bar to the views
+            // Integrating top navigation bar with views
             createPostView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
             postBoardView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
             chatView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
@@ -126,12 +122,11 @@ public class Main {
             e.printStackTrace();
         }
 
-        // Set the initial view to "log in"
+        // Set initial view and trigger view update
         viewManagerModel.setActiveView("log in");
-        // viewManagerModel.setActiveView("post");
         viewManagerModel.firePropertyChanged();
 
-        // Make the main application window visible
+        // Display the main application window
         application.setVisible(true);
     }
 }
