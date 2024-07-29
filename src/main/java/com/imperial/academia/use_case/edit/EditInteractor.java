@@ -5,28 +5,40 @@ import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.entity.user.UpdateUserFactory;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.entity.user.UserFactory;
+import com.imperial.academia.service.FileService;
 import com.imperial.academia.service.UserService;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
+import com.imperial.academia.use_case.chat.ChatWindowInputData;
 import com.imperial.academia.use_case.profile.ProfileInputData;
 import org.jetbrains.annotations.NotNull;
 
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.regex.Pattern;
+
+import com.imperial.academia.service.FileService;
+
 
 public class EditInteractor implements EditInputBoundry {
     private final ChangeViewInputBoundary changeViewInteractor;
     private final EditOutputBoundary editPresenter;
     private final UpdateUserFactory updateUserFactory;
     private final UserService userService;
+    private final FileService fileService;
+
 
     public EditInteractor(EditOutputBoundary editPresenter, UpdateUserFactory updateUserFactory){
         this.editPresenter = editPresenter;
         this.userService = ServiceFactory.getUserService();
         this.updateUserFactory = updateUserFactory;
         this.changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
+        this.fileService = ServiceFactory.getFileService();
+
     }
 
     public void execute(){
@@ -107,5 +119,79 @@ public class EditInteractor implements EditInputBoundry {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pat = Pattern.compile(emailRegex);
         return pat.matcher(email).matches();
+    }
+
+    private boolean isImageFile(File file) {
+        String fileName = file.getName();
+        String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+        return extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png") || extension.equals("gif")|| extension.equals("bmp");
+    }
+
+    public void changeAvatar(int userId, File selectedFile){
+
+        User oldUser = SessionManager.getCurrentUser();
+        LocalDateTime now = LocalDateTime.now();
+        if (oldUser == null){
+            changeViewInteractor.changeView("login");
+        }else{
+            if (isImageFile(selectedFile)) {
+                fileService.saveAvatar(userId, selectedFile);
+                String filePath = fileService.getOutputFilePath();
+                User updatedUser = updateUserFactory.create(
+                        oldUser.getId(),
+                        oldUser.getUsername(),
+                        oldUser.getPassword(),
+                        oldUser.getEmail(),
+                        oldUser.getRole(),
+                        filePath,
+                        oldUser.getRegistrationDate(),
+                        now
+                );
+                EditOutputData editOutputData = new EditOutputData(
+                        updatedUser.getId(),
+                        updatedUser.getUsername(),
+                        updatedUser.getPassword(),
+                        updatedUser.getEmail(),
+                        updatedUser.getAvatarUrl()
+                );
+                editPresenter.present(editOutputData);
+                SessionManager.setCurrentUser(updatedUser);
+            }else{
+                User updatedUser = updateUserFactory.create(
+                        oldUser.getId(),
+                        oldUser.getUsername(),
+                        oldUser.getPassword(),
+                        oldUser.getEmail(),
+                        oldUser.getRole(),
+                        oldUser.getAvatarUrl(),
+                        oldUser.getRegistrationDate(),
+                        now
+                );
+                EditOutputData editOutputData = new EditOutputData(
+                        updatedUser.getId(),
+                        updatedUser.getUsername(),
+                        updatedUser.getPassword(),
+                        updatedUser.getEmail(),
+                        updatedUser.getAvatarUrl()
+                );
+                editPresenter.prepareFailView("Uploaded file is not in correct format", editOutputData);
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
     }
 }

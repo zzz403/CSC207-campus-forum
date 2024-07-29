@@ -5,6 +5,8 @@ import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.edit.EditInputBoundry;
 import com.imperial.academia.use_case.edit.EditInputData;
 
+import java.io.File;
+
 public class EditController {
     private final EditInputBoundry editInteractor;
     private final ChangeViewInputBoundary changeViewInteractor;
@@ -25,4 +27,8 @@ public class EditController {
     }
 
     public void cancel(){changeViewInteractor.changeView("profile");}
+
+    public void changeAvatar(int userId, File selectedFile){
+        editInteractor.changeAvatar(userId, selectedFile);
+    }
 }

@@ -11,7 +11,16 @@ public class EditState {
     private String email = "";
     private String emailError = null;
     private String avatarURL = "";
+    private String avatarError = null;
 
+
+    public String getAvatarError() {
+        return avatarError;
+    }
+
+    public void setAvatarError(String avatarError) {
+        this.avatarError = avatarError;
+    }
 
     public EditState(EditState copy) {
         this.userId = copy.getUserId();
@@ -202,6 +211,7 @@ public class EditState {
         this.repeatPasswordError = null;
         this.email = "";
         this.emailError = null;
+        this.avatarError = null;
     }
 
     /**
@@ -212,5 +222,6 @@ public class EditState {
         this.passwordError = null;
         this.repeatPasswordError = null;
         this.emailError = null;
+        this.avatarError = null;
     }
 }

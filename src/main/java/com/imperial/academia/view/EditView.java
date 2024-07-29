@@ -5,9 +5,13 @@ import com.imperial.academia.interface_adapter.edit.EditState;
 import com.imperial.academia.interface_adapter.edit.EditViewModel;
 import com.imperial.academia.interface_adapter.profile.ProfileState;
 import com.imperial.academia.interface_adapter.signup.SignupState;
+import com.imperial.academia.view.components.ChatWindowView;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,8 +24,10 @@ public class EditView extends JPanel {
     private JLabel passwordErrorLabel;
     private JLabel repeatPasswordErrorLabel;
     private JLabel emailErrorLabel;
+    private JLabel avatarErrorLabel;
 
-    public EditView(EditViewModel editViewModel){
+
+    public EditView(EditViewModel editViewModel, JFrame application){
 
         super(new BorderLayout());
         JPanel mainPanel = new JPanel();
@@ -44,7 +50,36 @@ public class EditView extends JPanel {
         avatarPanel.add(imageLabel);
         mainPanel.add(avatarPanel);
 
-        //TODO avatar update button
+        JButton updateAvatarButton = new JButton(editViewModel.CHANGE_AVATAR_BUTTON);
+
+
+        updateAvatarButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
+                    // Open system file chooser dialog
+                    EditView.this.setEnabled(false);
+                    FileDialog fileDialog = new FileDialog(application, "Select a file");
+                    fileDialog.setVisible(true);
+                    String directory = fileDialog.getDirectory();
+                    String file = fileDialog.getFile();
+                    if (directory != null && file != null) {
+                        File selectedFile = new File(directory, file);
+                        // Send file to chatWindowController
+                        int userId = editViewModel.getState().getUserId();
+                        editController.changeAvatar(userId, selectedFile);
+                    }
+                }
+            }
+        });
+        mainPanel.add(updateAvatarButton);
+
+
+        avatarErrorLabel = new JLabel();
+        avatarErrorLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        avatarErrorLabel.setForeground(Color.RED);
+        mainPanel.add(avatarErrorLabel);
+
 
         JLabel userId = new JLabel("User ID: UserId");
         userId.setFont(new Font("Arial", Font.BOLD, 14));
@@ -166,6 +201,8 @@ public class EditView extends JPanel {
                 passwordErrorLabel.setText(state.getPasswordError());
                 repeatPasswordErrorLabel.setText(state.getRepeatPasswordError());
                 emailErrorLabel.setText(state.getEmailError());
+                avatarErrorLabel.setText(state.getAvatarError());
+
             }
         });
         add(mainPanel);

@@ -27,6 +27,9 @@ public class EditPresenter implements EditOutputBoundary {
             editState.setRepeatPasswordError(error);
         } else if (error.contains("Email")){
             editState.setEmailError(error);
+        } else if (error.contains("file")){
+            editState.setAvatarError(error);
+
         }
         editState.setUserName(editOutputData.getUserName());
         editState.setUserId(editOutputData.getUserId());

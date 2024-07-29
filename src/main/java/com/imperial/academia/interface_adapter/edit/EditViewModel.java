@@ -13,6 +13,7 @@ public class EditViewModel extends ViewModel {
     public final String EMAIL_LABEL = "Enter email";
     public final String UPDATE_BUTTON_LABEL = "Update";
     public final String CANCEL_BUTTON_LABEL = "Cancel";
+    public final String CHANGE_AVATAR_BUTTON = "Change Avatar";
 
     private  EditState state = new EditState();
     private String errorMessage;
