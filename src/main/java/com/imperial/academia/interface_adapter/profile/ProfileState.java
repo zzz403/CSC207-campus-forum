@@ -49,13 +49,13 @@ public class ProfileState {
      * @param copy the ProfileState instance to copy
      */
     public ProfileState(ProfileState copy) {
-        this.id = copy.id;
-        this.username = copy.username;
-        this.email = copy.email;
-        this.role = copy.role;
-        this.avatarUrl = copy.avatarUrl;
-        this.registrationDate = copy.registrationDate;
-        this.isMe = copy.isMe;
+        this.id = copy.getId();
+        this.username = copy.getUsername();
+        this.email = copy.getEmail();
+        this.role = copy.getRole();
+        this.avatarUrl = copy.getAvatarUrl();
+        this.registrationDate = copy.getRegistrationDate();
+        this.isMe = copy.isMe();
     }
 
     /**

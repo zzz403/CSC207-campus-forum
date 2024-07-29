@@ -107,6 +107,30 @@ public class UserDAO implements UserDAI {
         return user;
     }
 
+    @Override
+    public User getByEmail(String email) throws SQLException {
+        String sql = "SELECT * FROM users WHERE email = ?";
+        User user = null;
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, email);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    user = new User(
+                            rs.getInt("user_id"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getString("email"),
+                            rs.getString("role"),
+                            rs.getString("avatar_url"),
+                            rs.getTimestamp("registration_date"),
+                            rs.getTimestamp("last_modified")
+                    );
+                }
+            }
+        }
+        return user;
+    }
+
     /**
      * {@inheritDoc}
      */

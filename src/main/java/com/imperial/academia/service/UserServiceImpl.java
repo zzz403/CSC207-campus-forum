@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
         }
         boolean exists = userDAO.existsByEmail(email);
         if (exists) {
-            User user = userDAO.getByUsername(email);
+            User user = userDAO.getByEmail(email);
             userCache.setUser("email:" + email, user);
         }
         return exists;
@@ -76,6 +76,17 @@ public class UserServiceImpl implements UserService {
             user = userDAO.getByUsername(username);
             if (user != null) {
                 userCache.setUser("username:" + username, user);
+            }
+        }
+        return user;
+    }
+
+    public User getByEmail(String email) throws SQLException {
+        User user = userCache.getUser("email:" + email);
+        if (user == null) {
+            user = userDAO.getByEmail(email);
+            if (user != null) {
+                userCache.setUser("email:" + email, user);
             }
         }
         return user;
