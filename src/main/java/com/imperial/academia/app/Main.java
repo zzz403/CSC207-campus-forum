@@ -22,6 +22,10 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * The main entry point of the Academia Imperial application.
+ * This class sets up the main application window and initializes the various views and view models.
+ */
 public class Main {
     public static void main(String[] args) throws SQLException, IOException {
 
@@ -37,7 +41,7 @@ public class Main {
             }
         });
 
-        // icon logo
+        // Set the application icon logo
         try {
             Image logo = ImageIO.read(new File("resources/logo.png"));
             application.setIconImage(logo);
@@ -51,17 +55,20 @@ public class Main {
             System.out.println("Failed to load logo image");
         }
 
-        application.setSize(1000, 700); // 设置窗口大小
-        application.setLocationRelativeTo(null); // 居中显示
+        // Set the size of the main application window and center it on the screen
+        application.setSize(1000, 700);
+        application.setLocationRelativeTo(null);
 
+        // Use CardLayout to manage different views in the application
         CardLayout cardLayout = new CardLayout();
-
         JPanel views = new JPanel(cardLayout);
         application.add(views);
 
+        // Initialize ViewManagerModel
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
 
+        // Initialize ViewModels
         ViewModels viewModels = new ViewModels();
 
         LoginViewModel loginViewModel = viewModels.getLoginViewModel();
@@ -75,9 +82,11 @@ public class Main {
         PostViewModel postViewModel = viewModels.getPostViewModel();
 
         try {
+            // Initialize services and use cases
             ServiceFactory.initialize();
             UsecaseFactory.initialize(viewManagerModel, viewModels);
 
+            // Create views and add them to the card layout
             SignupView signupView = new SignupView(signupViewModel);
             views.add(signupView, signupView.viewName);
 
@@ -101,6 +110,7 @@ public class Main {
             PostView postView = new PostView(postViewModel);
             views.add(postView, postView.viewName);
 
+            // Add the top navigation bar to the views
             createPostView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
             postBoardView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
             chatView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);
@@ -116,8 +126,7 @@ public class Main {
         // viewManagerModel.setActiveView("post");
         viewManagerModel.firePropertyChanged();
 
-        // Set size and center the window
-
+        // Make the main application window visible
         application.setVisible(true);
     }
 }

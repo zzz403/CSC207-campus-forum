@@ -27,7 +27,17 @@ public interface ChatWindowOutputBoundary {
      */
     void presentSummary(String chatWindowOutputData);
 
+    /**
+     * Presents the speech-to-text output in the chat window.
+     *
+     * @param chatWindowOutputData The data containing the speech-to-text output.
+     */
     void presentSpeechToText(String chatWindowOutputData);
 
+    /**
+     * Presents the translated text in the chat window.
+     *
+     * @param chatWindowOutputData The data containing the translated text.
+     */
     void presentTranslatedText(String chatWindowOutputData);
 }
