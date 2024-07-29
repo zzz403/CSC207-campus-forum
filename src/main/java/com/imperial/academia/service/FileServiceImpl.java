@@ -61,10 +61,15 @@ public class FileServiceImpl implements FileService{
             // Define the destination file path
             Path destination = directory.resolve(file.getName());
 
+            // If the file already exists, delete it
+            if (Files.exists(destination)) {
+                Files.delete(destination);
+            }
+
             // Copy the file to the destination
             Files.copy(file.toPath(), destination);
-            outputFilePath = destination.toString();
-            System.out.println("File saved to: " + destination.toString());
+            String outputFilePath = destination.toString();
+            System.out.println("File saved to: " + outputFilePath);
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Failed to save file");

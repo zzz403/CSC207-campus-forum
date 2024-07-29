@@ -36,6 +36,15 @@ public interface PostService {
     List<Post> getAll() throws SQLException;
 
     /**
+     * Retrieves all posts from the database by user ID.
+     *
+     * @param userId the ID of the user to retrieve posts for
+     * @return a list of all posts by the specified user
+     * @throws SQLException if a database access error occurs
+     */
+    List<Post> getAllByUserId(int userId) throws SQLException;
+
+    /**
      * Updates an existing post in the database.
      *
      * @param post the post to update
