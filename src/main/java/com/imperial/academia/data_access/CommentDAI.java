@@ -37,6 +37,15 @@ public interface CommentDAI {
     List<Comment> getAll() throws SQLException;
 
     /**
+     * Retrieves all comments for a specific post.
+     *
+     * @param postId the ID of the post to get comments for
+     * @return a list of comments for the specified post
+     * @throws SQLException if a database access error occurs
+     */
+    List<Comment> getAllByPostId(int postId) throws SQLException;
+
+    /**
      * Retrieves all comments that have been modified since a given timestamp.
      *
      * @param timestamp the timestamp to compare against
