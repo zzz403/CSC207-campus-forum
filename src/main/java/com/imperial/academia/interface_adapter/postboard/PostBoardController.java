@@ -2,6 +2,7 @@ package com.imperial.academia.interface_adapter.postboard;
 
 import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
+import com.imperial.academia.use_case.post.PostInputBoundary;
 import com.imperial.academia.use_case.postBoard.PostBoardInputBoundary;
 
 public class PostBoardController {
@@ -16,12 +17,15 @@ public class PostBoardController {
      */
     private final PostBoardInputBoundary postBoardInteractor;
 
+    private final PostInputBoundary postInteractor;
+
     /**
      * Constructs the PostBoardController
      */
-    public PostBoardController(){
+    public PostBoardController() {
         this.changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
         this.postBoardInteractor = UsecaseFactory.getPostBoardInteractor();
+        this.postInteractor = UsecaseFactory.getPostInteractor();
     }
 
     /**
@@ -29,12 +33,32 @@ public class PostBoardController {
      * 
      * @param viewName the name of the view to change to
      */
-    public void changeView(String viewName){
+    public void changeView(String viewName) {
         changeViewInteractor.changeView(viewName);
     }
 
-
-    public Boolean fetchAllPost(){
+    /**
+     * Fetches all posts from the database and updates the post board view with the
+     * post information.
+     * 
+     * @return true if the posts were fetched successfully, false otherwise.
+     */
+    public Boolean fetchAllPost() {
         return postBoardInteractor.fetchAllPost();
+    }
+
+    /**
+     * Initializes the post page with the post information for the post with the
+     * given post ID.
+     * 
+     * @param postID the ID of the post to initialize the post page with.
+     * @return true if the post was fetched successfully, false otherwise.
+     */
+    public Boolean initPostById(int postID) {
+        if (!postInteractor.initPostById(postID)) {
+            return false;
+        }
+        changeViewInteractor.changeView("post");
+        return true;
     }
 }

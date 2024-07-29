@@ -1,24 +1,41 @@
 package com.imperial.academia.view.components;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+/**
+ * This class represents a view component for displaying a post profile.
+ * It extends JPanel and sets up the layout and appearance of the post profile
+ * view component.
+ */
 public class PostProfileViewComponent extends JPanel {
 
-    public PostProfileViewComponent(String title, String content, String authorId, String creationDate, ImageIcon imageIcon) {
+    /**
+     * Constructs a new PostProfileViewComponent with the specified parameters.
+     *
+     * @param title        The title of the post.
+     * @param content      The content of the post.
+     * @param authorId     The author ID of the post.
+     * @param creationDate The creation date of the post.
+     * @param imageIcon    The image icon of the post.
+     */
+    public PostProfileViewComponent(String title, String content, String authorId, String creationDate,
+            ImageIcon imageIcon) {
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY, 1),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
-
-        addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent evt) {
-                showPostDetailDialog(title, content, authorId, creationDate);
-            }
-        });
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -74,21 +91,16 @@ public class PostProfileViewComponent extends JPanel {
         add(infoPanel, gbc);
     }
 
+    /**
+     * Truncates the content to a maximum of 50 characters.
+     *
+     * @param content The content to truncate.
+     * @return The truncated content.
+     */
     private static String truncateContent(String content) {
         if (content.length() > 50) {
             return content.substring(0, 50) + "...";
         }
         return content;
     }
-
-    private static void showPostDetailDialog(String title, String content, String authorId, String creationDate) {
-        JOptionPane.showMessageDialog(null,
-                "Title: " + title + "\n" +
-                        "Content: " + content + "\n" +
-                        "Author ID: " + authorId + "\n" +
-                        "Creation Date: " + creationDate,
-                "Post Detail",
-                JOptionPane.INFORMATION_MESSAGE);
-    }
 }
-

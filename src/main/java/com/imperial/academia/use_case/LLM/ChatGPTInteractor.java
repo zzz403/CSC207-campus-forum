@@ -12,6 +12,9 @@ import org.json.JSONObject;
 
 import com.imperial.academia.config.ApiKeyConfig;
 
+/**
+ * The ChatGPTInteractor class is the interactor for the ChatGPT use case.
+ */
 public class ChatGPTInteractor implements LLMInputBoundary {
     private final String apiUrl;
 
@@ -116,12 +119,18 @@ public class ChatGPTInteractor implements LLMInputBoundary {
         return enhancedContent;
     }
 
+    /**
+     * Takes the chat history and summarize it
+     * 
+     * @param chatHistory the chat history that need to be summarize
+     * @return the summarized chat history
+     */
     @Override
     public String summarizeChatHistory(String chatHistory) {
         String apiKey = ApiKeyConfig.getGPTApi();
         if (apiKey.equals("")) {
             System.out.println("No GPT token key found");
-            return "No GPT token key found";
+            return chatHistory;
         }
         String summary = "";
 
@@ -140,7 +149,8 @@ public class ChatGPTInteractor implements LLMInputBoundary {
 
             JSONObject userMessage = new JSONObject()
                     .put("role", "user")
-                    .put("content", "Summarize the following chat history and try to list all main points: " + chatHistory);
+                    .put("content",
+                            "Summarize the following chat history and try to list all main points: " + chatHistory);
 
             JSONArray messages = new JSONArray()
                     .put(systemMessage)
