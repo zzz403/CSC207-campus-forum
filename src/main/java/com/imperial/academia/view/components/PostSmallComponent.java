@@ -1,0 +1,210 @@
+package com.imperial.academia.view.components;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+public class PostSmallComponent extends JPanel {
+
+    public PostSmallComponent(BufferedImage image, BufferedImage avatar, String title, String content, String author, int likes) {
+        setOpaque(false);
+        setLayout(new BorderLayout());
+        setBorder(BorderFactory.createEmptyBorder(20, 5, 5, 5)); // 设置空白边框
+
+        JLabel mapPlaceholder = new JLabel(new ImageIcon(image));
+        mapPlaceholder.setHorizontalAlignment(SwingConstants.CENTER);
+        mapPlaceholder.setOpaque(false);
+        mapPlaceholder.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+
+        // Info panel
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.setBackground(Color.WHITE);
+        infoPanel.setOpaque(false);
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        infoPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel titleLabel = new JLabel(title);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        titleLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        infoPanel.add(titleLabel);
+        infoPanel.add(Box.createRigidArea(new Dimension(0, 5))); // 调整间距
+
+        JLabel detailLabel = new JLabel(content);
+        detailLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        detailLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        detailLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        detailLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
+        infoPanel.add(detailLabel);
+
+        // Avatar and author panel
+        JPanel authorLikesPanel = new JPanel();
+        authorLikesPanel.setLayout(new BoxLayout(authorLikesPanel, BoxLayout.X_AXIS));
+        authorLikesPanel.setOpaque(false);
+        authorLikesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        Image scaledAvatar = avatar.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        JLabel avatarLabel = new JLabel(new ImageIcon(scaledAvatar));
+        avatarLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+        authorLikesPanel.add(avatarLabel);
+
+        JLabel authorLabel = new JLabel(author);
+        authorLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        authorLikesPanel.add(authorLabel);
+
+        authorLikesPanel.add(Box.createHorizontalGlue());
+
+        // Load and scale like icon
+        BufferedImage likeIcon = null;
+        try {
+            likeIcon = ImageIO.read(new File("resources/icons/like_icon.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (likeIcon != null) {
+            Image scaledLikeIcon = likeIcon.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+            JLabel likeIconLabel = new JLabel(new ImageIcon(scaledLikeIcon));
+            likeIconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5)); // Add some padding
+            authorLikesPanel.add(likeIconLabel);
+        }
+
+        JLabel likesLabel = new JLabel(String.valueOf(likes));
+        likesLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        authorLikesPanel.add(likesLabel);
+
+        infoPanel.add(Box.createRigidArea(new Dimension(0, 5))); // 调整间距
+        infoPanel.add(authorLikesPanel);
+
+        // Add components to MapPanel
+        add(mapPlaceholder, BorderLayout.NORTH); // 调整图片位置
+        add(infoPanel, BorderLayout.SOUTH); // 调整infoPanel位置
+
+        setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        setPreferredSize(new Dimension(300, 370));
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g.create();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        int arc = 30; // Arc width and height for rounded corners
+        Shape roundedRect = new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), arc, arc);
+
+        g2.setColor(Color.WHITE); // Background color
+        g2.fill(roundedRect);
+
+        g2.dispose();
+    }
+
+    private static BufferedImage scaleImage(BufferedImage image, int maxWidth, int maxHeight) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        if (width > maxWidth || height > maxHeight) {
+            double widthRatio = (double) maxWidth / width;
+            double heightRatio = (double) maxHeight / height;
+            double scale = Math.min(widthRatio, heightRatio);
+
+            int newWidth = (int) Math.floor(width * scale);
+            int newHeight = (int) Math.floor(height * scale);
+
+            Image tmp = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+            BufferedImage scaledImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = scaledImage.createGraphics();
+            g2d.drawImage(tmp, 0, 0, null);
+            g2d.dispose();
+
+            // Crop the image
+            int cropSize = 10;
+            BufferedImage croppedImage = scaledImage.getSubimage(cropSize, cropSize, newWidth - 2 * cropSize, newHeight - 2 * cropSize);
+            return croppedImage;
+        } else {
+            return image;
+        }
+    }
+
+    private static BufferedImage imageMakeRoundedCorner(BufferedImage image, int cornerRadius) {
+        int w = image.getWidth();
+        int h = image.getHeight();
+        BufferedImage output = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2 = output.createGraphics();
+
+        // Enable anti-aliasing for smooth corners
+        g2.setComposite(AlphaComposite.Src);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setColor(Color.WHITE);
+
+        // Create a shape with rounded corners
+        g2.fill(new RoundRectangle2D.Float(0, 0, w, h, cornerRadius, cornerRadius));
+
+        // Composite the image on top using the rounded shape as the alpha source
+        g2.setComposite(AlphaComposite.SrcAtop);
+        g2.drawImage(image, 0, 0, null);
+
+        g2.dispose();
+
+        return output;
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Map Panel");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(800, 600); // 调整窗口大小以适应2x2布局
+
+            // 创建一个主面板并设置为 GridBagLayout
+            JPanel mainPanel = new JPanel(new GridBagLayout());
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.insets = new Insets(10, 10, 10, 10);
+            gbc.anchor = GridBagConstraints.NORTHWEST;
+
+            BufferedImage postImage = null;
+            BufferedImage postImage2 = null;
+            BufferedImage avatar = null;
+            try {
+                postImage = ImageIO.read(new File("resources/test_image/test_image_1.jpg"));
+                postImage = scaleImage(postImage, 300, 200);
+                postImage = imageMakeRoundedCorner(postImage, 30);
+
+                postImage2 = ImageIO.read(new File("resources/test_image/test_image_2.jpg"));
+                postImage2 = scaleImage(postImage2, 300, 200);
+                postImage2 = imageMakeRoundedCorner(postImage2, 30);
+
+                avatar = ImageIO.read(new File("resources/avatar/avatarExample.png"));
+                avatar = imageMakeRoundedCorner(avatar, 250);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            // 创建四个 PostSmallComponent 实例并添加到主面板
+            mainPanel.add(new PostSmallComponent(postImage, avatar, "Title 1", "Content 1", "Author 1", 10), gbc);
+            gbc.gridx++;
+            mainPanel.add(new PostSmallComponent(postImage2, avatar, "Title 2", "Content 2", "Author 2", 20), gbc);
+            gbc.gridx = 0;
+            gbc.gridy++;
+            mainPanel.add(new PostSmallComponent(postImage, avatar, "Title 3", "Content 3", "Author 3", 30), gbc);
+            gbc.gridx++;
+            mainPanel.add(new PostSmallComponent(postImage, avatar, "Title 4", "Content 4", "Author 4", 40), gbc);
+
+            // 创建一个 JScrollPane 并将 mainPanel 添加到其中
+            JScrollPane scrollPane = new JScrollPane(mainPanel);
+            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+            frame.getContentPane().add(scrollPane);
+            frame.setVisible(true);
+        });
+    }
+}
