@@ -55,6 +55,19 @@ public class PostServiceImpl implements PostService {
      * {@inheritDoc}
      */
     @Override
+    public List<Post> getAllByUserId(int userId) throws SQLException {
+        List<Post> posts = postCache.getPosts("posts:user:" + userId);
+        if (posts == null) {
+            posts = postDAO.getAllByUserId(userId);
+            postCache.setPosts("posts:user:" + userId, posts);
+        }
+        return posts;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<Post> getAll() throws SQLException {
         List<Post> posts = postCache.getPosts("posts:all");
         if (posts == null) {
