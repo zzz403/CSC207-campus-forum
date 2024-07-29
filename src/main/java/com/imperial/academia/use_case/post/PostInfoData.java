@@ -12,9 +12,10 @@ public class PostInfoData {
     private String username;
     private String avatarUrl;
     private Timestamp date;
+    private int likes;
 
     /**
-     * Private constructor for PostInfoData. 
+     * Private constructor for PostInfoData.
      * Instances should be created using the PostInfoDataBuilder.
      * 
      * @param builder the builder instance used to create the PostInfoData object.
@@ -25,6 +26,95 @@ public class PostInfoData {
         this.username = builder.username;
         this.avatarUrl = builder.avatarUrl;
         this.date = builder.date;
+        this.likes = builder.likes;
+    }
+
+    /**
+     * Constructs a new PostInfoData with the specified parameters.
+     * 
+     * @param title     the title of the post.
+     * @param content   the content of the post.
+     * @param username  the username of the post author.
+     * @param avatarUrl the avatar URL of the post author.
+     * @param date      the date of the post.
+     * @param likes     the number of likes the post has.
+     */
+    public PostInfoData(String title, String content, String username, String avatarUrl, Timestamp date, int likes) {
+        this.title = title;
+        this.content = content;
+        this.username = username;
+        this.avatarUrl = avatarUrl;
+        this.date = date;
+        this.likes = likes;
+    }
+
+    /**
+     * Default constructor for PostInfoData.
+     */
+    public PostInfoData() {
+    }
+
+    /**
+     * Sets the title of the post.
+     * 
+     * @param title the title to set.
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * Sets the content of the post.
+     * 
+     * @param content the content to set.
+     */
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    /**
+     * Sets the username of the post author.
+     * 
+     * @param username the username to set.
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     * Sets the avatar URL of the post author.
+     * 
+     * @param avatarUrl the avatar URL to set.
+     */
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    /**
+     * Sets the date of the post.
+     * 
+     * @param date the date to set.
+     */
+    public void setDate(Timestamp date) {
+        this.date = date;
+    }
+
+    /**
+     * Gets the number of likes the post has.
+     * 
+     * @return the number of likes the post has.
+     */
+    public int getLikes() {
+        return likes;
+    }
+
+    /**
+     * Sets the number of likes the post has.
+     * 
+     * @param likes the number of likes to set.
+     */
+    public void setLikes(int likes) {
+        this.likes = likes;
     }
 
     /**
@@ -90,6 +180,12 @@ public class PostInfoData {
         private String username;
         private String avatarUrl;
         private Timestamp date;
+        private int likes;
+
+        public PostInfoDataBuilder setLikes(int likes) {
+            this.likes = likes;
+            return this;
+        }
 
         /**
          * Sets the title of the post.

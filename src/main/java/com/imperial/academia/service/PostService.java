@@ -77,4 +77,13 @@ public interface PostService {
      * @throws SQLException if a database access error occurs
      */
     List<PostLike> getPostLikes(int postId) throws SQLException;
+
+    /**
+     * Return total like for a post
+     *
+     * @param postId the ID of the post to get likes for
+     * @return the total likes for the specified post
+     * @throws SQLException if a database access error occurs
+     */
+    int getTotalLikesNumberByPostId(int postId) throws SQLException;
 }

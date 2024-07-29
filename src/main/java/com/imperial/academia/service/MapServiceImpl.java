@@ -1,9 +1,5 @@
 package com.imperial.academia.service;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -16,7 +12,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
-import java.util.Objects;
+
 import javax.imageio.ImageIO;
 
 import org.json.JSONArray;
@@ -24,17 +20,36 @@ import org.json.JSONObject;
 
 import com.imperial.academia.config.ApiKeyConfig;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+/**
+ * The MapServiceImpl class is the service for the Map use case.
+ */
 public class MapServiceImpl implements MapService {
     private final String API_KEY;
     private String filePath;
 
+    /**
+     * Init the service
+     * and set the API key for the MapBox API
+     * 
+     */
     public MapServiceImpl() {
         API_KEY = ApiKeyConfig.getMapBoxApiKey();
         filePath = "";
     }
 
+    /**
+     * Generate a map image with a marker at the specified location.
+     * 
+     * @param groupId   the group ID to save the image to.
+     * @param latitude  the latitude of the marker.
+     * @param longitude the longitude of the marker.
+     */
     @Override
-    public void generateMapImage(int groupId, double latitude, double longitude){
+    public void generateMapImage(int groupId, double latitude, double longitude) {
         try {
             if (API_KEY.isEmpty()) {
                 System.out.println("API key not found.");
@@ -51,8 +66,7 @@ public class MapServiceImpl implements MapService {
             // 获取地图瓦片
             String url = String.format(
                     "https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/pin-l-embassy+f74e4e(%f,%f)/%f,%f,%d/%dx%d?access_token=%s",
-                    longitude, latitude, centerLongitude, centerLatitude, zoom, width, height, API_KEY
-            );
+                    longitude, latitude, centerLongitude, centerLatitude, zoom, width, height, API_KEY);
             InputStream input = new URL(url).openStream();
             BufferedImage mapImage = ImageIO.read(input);
 
@@ -65,6 +79,12 @@ public class MapServiceImpl implements MapService {
         }
     }
 
+    /**
+     * Process the image by cropping and scaling it.
+     * 
+     * @param image the image to process.
+     * @return the processed image.
+     */
     private BufferedImage processImage(BufferedImage image) {
         int cropHeight = image.getHeight() - 50;
         BufferedImage croppedImage = image.getSubimage(0, 0, image.getWidth(), cropHeight);
@@ -81,6 +101,14 @@ public class MapServiceImpl implements MapService {
         return scaledImage;
     }
 
+    /**
+     * Save the image to the specified group ID.
+     * 
+     * @param image     the image to save.
+     * @param groupId   the group ID to save the image to.
+     * @param longitude the longitude of the marker.
+     * @param latitude  the latitude of the marker.
+     */
     private void saveImage(BufferedImage image, String groupId, double longitude, double latitude) {
         try {
             // 创建保存路径
@@ -89,7 +117,8 @@ public class MapServiceImpl implements MapService {
 
             // 生成文件名
             int userId = 1; // 替换为实际的用户ID
-            filePath = String.format("%s/%s_%f_%f_%d.png", dirPath, userId, longitude, latitude, Instant.now().getEpochSecond());
+            filePath = String.format("%s/%s_%f_%f_%d.png", dirPath, userId, longitude, latitude,
+                    Instant.now().getEpochSecond());
             System.out.println("File path: " + filePath);
             File outputfile = new File(filePath);
 
@@ -101,6 +130,11 @@ public class MapServiceImpl implements MapService {
         }
     }
 
+    /**
+     * Get the user's location based on their IP address.
+     * 
+     * @return the user's location as an array of latitude and longitude.
+     */
     @Override
     public double[] getUserLocation() {
         double[] location = new double[2];
@@ -129,16 +163,21 @@ public class MapServiceImpl implements MapService {
         return location;
     }
 
+    /**
+     * Get the location information based on the latitude and longitude.
+     * 
+     * @param latitude  the latitude of the location.
+     * @param longitude the longitude of the location.
+     * @return the location information.
+     */
     @Override
     public String getLocationInfo(double latitude, double longitude) throws IOException {
-//        double[] location = getUserLocation();
+        // double[] location = getUserLocation();
         OkHttpClient client = new OkHttpClient();
-
 
         String url = String.format(
                 "https://api.mapbox.com/geocoding/v5/mapbox.places/%f,%f.json?access_token=%s",
-                longitude, latitude, API_KEY
-        );
+                longitude, latitude, API_KEY);
 
         Request request = new Request.Builder()
                 .url(url)
@@ -163,6 +202,11 @@ public class MapServiceImpl implements MapService {
         }
     }
 
+    /**
+     * Get the file path of the generated map image.
+     * 
+     * @return the file path of the generated map image.
+     */
     @Override
     public String getFilePath() {
         return filePath;
