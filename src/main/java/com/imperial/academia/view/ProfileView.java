@@ -11,17 +11,13 @@ import java.awt.Image;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
+import com.imperial.academia.app.components_factory.PostProfileFactory;
 import com.imperial.academia.interface_adapter.profile.ProfileController;
 import com.imperial.academia.interface_adapter.profile.ProfileState;
 import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
+import com.imperial.academia.view.components.PostProfileViewComponent;
 
 /**
  * The ProfileView class represents the UI for displaying a user's profile.
@@ -60,7 +56,7 @@ public class ProfileView extends JPanel {
 
         // default image
         JPanel avatarPanel = new JPanel(new BorderLayout());
-        avatarPanel.setBackground(new Color(255, 225, 120));
+//        avatarPanel.setBackground(new Color(255, 225, 120));
         ImageIcon originalIcon = new ImageIcon("resources/avatar/default_avatar.png");
         Image resizedImage = originalIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         ImageIcon resizedIcon = new ImageIcon(resizedImage);
@@ -83,7 +79,7 @@ public class ProfileView extends JPanel {
         topPanel.add(chatOrModify, BorderLayout.EAST);
 
         JPanel infoPanel = new JPanel(new GridLayout(0, 1));
-        infoPanel.setBackground(new Color(255, 225, 120));
+//        infoPanel.setBackground(new Color(255, 225, 120));
         JLabel nameLabel = new JLabel("UserName: UserName");
         nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
         JLabel emailLabel = new JLabel("Email: xxx@mail.com");
@@ -106,10 +102,47 @@ public class ProfileView extends JPanel {
         // TODO change bottom to user's post
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
-        bottomPanel.setBackground(new Color(58, 185, 232));
-        for (int i = 0; i < 3000; i++) {
-            bottomPanel.add(new JLabel("Label " + i));
+//      bottomPanel.setBackground(new Color(58, 185, 232));
+
+
+
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Example usage of PostProfileViewComponent
+        for (int i = 0; i < 5; i++) {
+            String imageUrl = "resources/test_image/test_image_" + (i % 3 + 1) + ".jpg";
+            PostProfileViewComponent post = PostProfileFactory.create(
+                    "Sample Post Title " + (i + 1),
+                    "This is some content of the post " + (i + 1) + ".",
+                    "Author" + (i + 1),
+                    "2024-07-24",
+                    imageUrl,
+                    100 // Image size
+            );
+            mainPanel.add(post);
+            mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         }
+
+        JScrollPane scrollPane = new JScrollPane(mainPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        frame.getContentPane().add(scrollPane);
+        frame.setVisible(true);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         JScrollPane scrollPane = new JScrollPane(bottomPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
