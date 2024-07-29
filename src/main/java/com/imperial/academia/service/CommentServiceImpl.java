@@ -68,6 +68,19 @@ public class CommentServiceImpl implements CommentService {
      * {@inheritDoc}
      */
     @Override
+    public List<Comment> getAllByPostId(int postId) throws SQLException {
+        List<Comment> comments = commentCache.getComments("comments:post:" + postId);
+        if (comments == null) {
+            comments = commentDAO.getAllByPostId(postId);
+            commentCache.setComments("comments:post:" + postId, comments);
+        }
+        return comments;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void update(Comment comment) throws SQLException {
         commentDAO.update(comment);
         commentCache.setComment("comment:" + comment.getId(), comment);
