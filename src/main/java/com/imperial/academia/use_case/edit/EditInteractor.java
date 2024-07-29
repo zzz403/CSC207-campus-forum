@@ -73,7 +73,7 @@ public class EditInteractor implements EditInputBoundry {
                     editInputData.getPassword(),
                     editInputData.getEmail(),
                     oldUser.getRole(),
-                    oldUser.getAvatarUrl(),//TODO change avatar???  chat window interactor
+                    oldUser.getAvatarUrl(),
                     oldUser.getRegistrationDate(),
                     now
             );
