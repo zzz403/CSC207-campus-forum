@@ -95,7 +95,7 @@ public class Main {
             LoginView loginView = new LoginView(loginViewModel);
             views.add(loginView, loginView.viewName);
 
-            PostBoardView postBoardView = new PostBoardView(postBoardViewModel);
+            PostBoardView postBoardView = new PostBoardView(postBoardViewModel, application);
             views.add(postBoardView, postBoardView.viewName);
 
             CreatePostView createPostView = new CreatePostView(createPostViewModel);

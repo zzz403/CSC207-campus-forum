@@ -16,6 +16,8 @@ import com.imperial.academia.use_case.LLM.LLMInputBoundary;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.post.PostInfoData;
 import com.imperial.academia.use_case.post.PostInputBoundary;
+import com.imperial.academia.use_case.post.PostOverviewInfo;
+import com.imperial.academia.use_case.postBoard.PostBoardOutputBoundary;
 
 /**
  * The interactor that handles the logic for creating a post.
@@ -32,23 +34,25 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
     /** The interactor that handles the logic for useing LLM */
     private final LLMInputBoundary llmInteractor;
 
-    /** The presenter */
+    /** The presenter that updates the view model with the board names */
     private final CreatePostOutputBoundary createPostPresenter;
+
+    /** The presenter that updates the view model with the board names */
+    private final PostBoardOutputBoundary postBoardPresenter;
 
     /** The database service */
     private final BoardService boardService;
     private final PostService postService;
 
     /**
-     * Constructs a new CreatePostInteractor with the specified presenter and board
-     * service.
+     * Constructs a new CreatePostInteractor with the specified presenter.
      * 
-     * @param createPostPresenter the presenter that updates the view model with the
-     *                            board names
-     * @param boardService        the service that provides access to board data
+     * @param createPostPresenter the presenter that updates the view model with the board names
+     * @param postBoardPresenter the presenter that updates the view model with the board names
      */
-    public CreatePostInteractor(CreatePostOutputBoundary createPostPresenter) {
+    public CreatePostInteractor(CreatePostOutputBoundary createPostPresenter, PostBoardOutputBoundary postBoardPresenter) {
         this.createPostPresenter = createPostPresenter;
+        this.postBoardPresenter = postBoardPresenter;
         changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
         postInteractor = UsecaseFactory.getPostInteractor();
         llmInteractor = UsecaseFactory.getLLMInteractor();
@@ -73,6 +77,7 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
         this.postInteractor = postInteractor;
         this.llmInteractor = llmInteractor;
         this.createPostPresenter = createPostPresenter;
+        this.postBoardPresenter = null;
 
         this.boardService = boardService;
         this.postService = postService;
@@ -138,7 +143,17 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
                 .setDate(post.getLastModifiedDate())
                 .build();
 
+        String summary = llmInteractor.summarizeChatHistory(content);
+        PostOverviewInfo postOverviewInfo = PostOverviewInfo.builder()
+                .setPostID(post.getId())
+                .setPostTitle(title)
+                .setSummary(summary)
+                .setUserName(user.getUsername())
+                .setAvatarURL(user.getAvatarUrl())
+                .setLikes(0)
+                .build();
         postInteractor.initPostPage(postInfoData);
+        postBoardPresenter.addPost(postOverviewInfo);
         changeViewInteractor.changeView("post");
         return true;
     }

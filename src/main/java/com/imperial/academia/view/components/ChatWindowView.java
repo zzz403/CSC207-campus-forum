@@ -476,6 +476,7 @@ public class ChatWindowView extends JPanel {
                         }
 
                     }
+                    @SuppressWarnings("null")
                     Image scaledMessageImage = messageImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
                     messageImageLabel.setIcon(new ImageIcon(scaledMessageImage));
                     contentPanel.add(messageImageLabel);
@@ -896,7 +897,7 @@ public class ChatWindowView extends JPanel {
      * @param transcriptionArea
      */
     private void showTextPopup(JLabel textLabel, String text, JLabel transcriptionArea) {
-        String defaultLanguage = "FR"; // 默认语言为法语
+        // String defaultLanguage = "FR"; // 默认语言为法语
         JPopupMenu popupMenu = new JPopupMenu();
 
         // 设置弹出菜单背景颜色和边框

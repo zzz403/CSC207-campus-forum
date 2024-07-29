@@ -1,9 +1,15 @@
 package com.imperial.academia.app.components_factory;
 
-import com.imperial.academia.view.components.PostSmallComponent;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
+
+import com.imperial.academia.view.components.PostSmallComponent;
 
 public class TestMainPage {
     public static void main(String[] args) {
@@ -30,7 +36,8 @@ public class TestMainPage {
                         "Title " + (i + 1),
                         "Content " + (i + 1),
                         "Author " + (i + 1),
-                        10 * (i + 1)
+                        10 * (i + 1),
+                        frame
                 );
 
                 gbc.gridx = i % 2;

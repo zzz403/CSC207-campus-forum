@@ -71,4 +71,9 @@ public class PostBoardViewModel extends ViewModel {
         state.setPostList(postList);
         support.firePropertyChange("post list", oldList, postList);
     }
+
+    public void addOnePostInfoToState(PostOverviewInfo postOverviewInfo) {
+        state.addPost(postOverviewInfo);
+        support.firePropertyChange("addPost", null, state);
+    }
 }
