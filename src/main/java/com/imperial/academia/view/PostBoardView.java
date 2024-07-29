@@ -18,6 +18,7 @@ import com.imperial.academia.interface_adapter.postboard.PostBoardController;
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
 import com.imperial.academia.use_case.post.PostOverviewInfo;
 import com.imperial.academia.view.components.PostSmallComponent;
+import com.imperial.academia.view.style.CustomScrollBarUI;
 
 /**
  * This class represents the view for the Post Board in the application.
@@ -47,7 +48,7 @@ public class PostBoardView extends JPanel {
         // Initialize the main panel before adding to JScrollPane
         mainPanel = new JPanel(new GridBagLayout());
 
-        JScrollPane scrollPane = new JScrollPane(mainPanel);
+        JScrollPane scrollPane = new CustomScrollBarUI.CustomScrollPane(mainPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
