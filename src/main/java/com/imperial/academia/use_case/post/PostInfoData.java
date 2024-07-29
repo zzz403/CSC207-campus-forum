@@ -12,7 +12,7 @@ public class PostInfoData {
     private String username;
     private String avatarUrl;
     private Timestamp date;
-    private int likes;
+    private int likes = 0;
 
     /**
      * Private constructor for PostInfoData.

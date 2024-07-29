@@ -70,9 +70,12 @@ import com.imperial.academia.use_case.signup.SignupInteractor;
 import com.imperial.academia.use_case.signup.SignupOutputBoundary;
 
 /**
- * The UsecaseFactory class is responsible for initializing and providing instances of various use case interactors.
- * It follows the Singleton pattern to ensure that only one instance of each interactor is created.
- * The factory also provides getter methods to access the instances of the interactors.
+ * The UsecaseFactory class is responsible for initializing and providing
+ * instances of various use case interactors.
+ * It follows the Singleton pattern to ensure that only one instance of each
+ * interactor is created.
+ * The factory also provides getter methods to access the instances of the
+ * interactors.
  */
 public class UsecaseFactory {
 
@@ -97,22 +100,22 @@ public class UsecaseFactory {
     }
 
     /**
-     * Initializes the UsecaseFactory by creating and initializing the necessary view models, presenters, and interactors.
+     * Initializes the UsecaseFactory by creating and initializing the necessary
+     * view models, presenters, and interactors.
      * 
      * @param viewManagerModel The view manager model used for changing views.
      */
     public static void initialize(ViewManagerModel viewManagerModel, ViewModels viewModels) {
-        
+
         // init change view useCase
         ChangeViewOutputBoundary changeViewPresenter = new ChangeViewPresenter(viewManagerModel);
         changeViewInteractor = new ChangeViewInteractor(changeViewPresenter);
-        
+
         sessionInteractor = new SessionInteractor();
-        
+
         LLMInteractor = new ChatGPTInteractor();
         ASRInteractor = new IBMInteractor();
         translatorInteractor = new DeepLInteractor();
-
 
         LoginViewModel loginViewModel = viewModels.getLoginViewModel();
         SignupViewModel signupViewModel = viewModels.getSignupViewModel();
@@ -127,9 +130,6 @@ public class UsecaseFactory {
 
         PostOutputBoundary postPresenter = new PostPresenter(postViewModel);
         postInteractor = new PostInteractor(postPresenter);
-
-        CreatePostOutputBoundary createPostPresenter = new CreatePostPresenter(createPostViewModel);
-        createPostInteractor = new CreatePostInteractor(createPostPresenter);
 
         UserFactory userFactory = new CommonUserFactory();
         SignupOutputBoundary signupPresenter = new SignupPresenter(signupViewModel, loginViewModel);
@@ -153,15 +153,17 @@ public class UsecaseFactory {
 
         UpdateUserFactory updateUserFactory = new updatedUserFactoryImp();
         EditOutputBoundary editPresenter = new EditPresenter(editViewModel);
-        editInteractor =  new EditInteractor(editPresenter,updateUserFactory);
+        editInteractor = new EditInteractor(editPresenter, updateUserFactory);
 
         PostBoardOutputBoundary postBoardPresenter = new PostBoardPresenter(postBoardViewModel);
         postBoardInteractor = new PostBoardInteractor(postBoardPresenter);
 
-        System.out.println("init success for useCase!!!!");
+        CreatePostOutputBoundary createPostPresenter = new CreatePostPresenter(createPostViewModel);
+        createPostInteractor = new CreatePostInteractor(createPostPresenter, postBoardPresenter);
+
+        System.out.println("init seccuss for usecase!!!!");
 
     }
-
 
     /**
      * Returns the PostBoardInteractor
@@ -214,7 +216,7 @@ public class UsecaseFactory {
      * @return The ChangeViewInputBoundary interactor.
      */
     public static ChangeViewInputBoundary getChangeViewInteractor() {
-        if(changeViewInteractor == null){
+        if (changeViewInteractor == null) {
             System.out.println("get changeView interactor");
         }
         return changeViewInteractor;
@@ -258,24 +260,29 @@ public class UsecaseFactory {
 
     /**
      * Returns the chatCoordinator Interactor
+     * 
      * @return the chatCoordinator Interactor
      */
-    public static ChatCoordinatorInputBoundary getChatCoordinatorInteractor(){
+    public static ChatCoordinatorInputBoundary getChatCoordinatorInteractor() {
         return chatCoordinatorInteractor;
     }
 
     /**
      * Returns the post Interactor
+     * 
      * @return the post Interactor
      */
     public static PostInputBoundary getPostInteractor() {
         return postInteractor;
     }
 
-    public static EditInputBoundry getEditInteractor(){ return editInteractor;}
+    public static EditInputBoundry getEditInteractor() {
+        return editInteractor;
+    }
 
     /**
      * Returns the ASR Interactor
+     * 
      * @return the ASR Interactor
      */
     public static ASRInputBoundary getASRInteractor() {
@@ -284,6 +291,7 @@ public class UsecaseFactory {
 
     /**
      * Returns the Translator Interactor
+     * 
      * @return the Translator Interactor
      */
     public static TranslatorInputBoundary getTranslatorInteractor() {
