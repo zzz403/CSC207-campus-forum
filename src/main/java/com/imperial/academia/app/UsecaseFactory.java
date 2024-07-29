@@ -4,7 +4,9 @@ import com.imperial.academia.data_access.RememberMeDAO;
 import com.imperial.academia.entity.chat_message.ChatMessageFactory;
 import com.imperial.academia.entity.chat_message.CommonChatMessageFactory;
 import com.imperial.academia.entity.user.CommonUserFactory;
+import com.imperial.academia.entity.user.UpdateUserFactory;
 import com.imperial.academia.entity.user.UserFactory;
+import com.imperial.academia.entity.user.updatedUserFactoryImp;
 import com.imperial.academia.interface_adapter.changeview.ChangeViewPresenter;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarPresenter;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarViewModel;
@@ -13,6 +15,8 @@ import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.interface_adapter.createpost.CreatePostPresenter;
 import com.imperial.academia.interface_adapter.createpost.CreatePostViewModel;
+import com.imperial.academia.interface_adapter.edit.EditPresenter;
+import com.imperial.academia.interface_adapter.edit.EditViewModel;
 import com.imperial.academia.interface_adapter.login.LoginPresenter;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.post.PostPresenter;
@@ -44,6 +48,9 @@ import com.imperial.academia.use_case.chat.ChatWindowOutputBoundary;
 import com.imperial.academia.use_case.createpost.CreatePostInputBoundary;
 import com.imperial.academia.use_case.createpost.CreatePostInteractor;
 import com.imperial.academia.use_case.createpost.CreatePostOutputBoundary;
+import com.imperial.academia.use_case.edit.EditInputBoundry;
+import com.imperial.academia.use_case.edit.EditInteractor;
+import com.imperial.academia.use_case.edit.EditOutputBoundary;
 import com.imperial.academia.use_case.login.LoginInputBoundary;
 import com.imperial.academia.use_case.login.LoginInteractor;
 import com.imperial.academia.use_case.login.LoginOutputBoundary;
@@ -63,9 +70,12 @@ import com.imperial.academia.use_case.signup.SignupInteractor;
 import com.imperial.academia.use_case.signup.SignupOutputBoundary;
 
 /**
- * The UsecaseFactory class is responsible for initializing and providing instances of various use case interactors.
- * It follows the Singleton pattern to ensure that only one instance of each interactor is created.
- * The factory also provides getter methods to access the instances of the interactors.
+ * The UsecaseFactory class is responsible for initializing and providing
+ * instances of various use case interactors.
+ * It follows the Singleton pattern to ensure that only one instance of each
+ * interactor is created.
+ * The factory also provides getter methods to access the instances of the
+ * interactors.
  */
 public class UsecaseFactory {
 
@@ -83,28 +93,30 @@ public class UsecaseFactory {
     private static ASRInputBoundary ASRInteractor;
     private static TranslatorInputBoundary translatorInteractor;
     private static PostBoardInputBoundary postBoardInteractor;
+    private static EditInputBoundry editInteractor;
 
     /** Prevents instantiation of this utility class. */
     private UsecaseFactory() {
     }
 
     /**
-     * Initializes the UsecaseFactory by creating and initializing the necessary view models, presenters, and interactors.
+     * Initializes the UsecaseFactory by creating and initializing the necessary
+     * view models, presenters, and interactors.
      * 
      * @param viewManagerModel The view manager model used for changing views.
      */
     public static void initialize(ViewManagerModel viewManagerModel, ViewModels viewModels) {
-        
-        // init change view usecase
+
+        // init change view useCase
         ChangeViewOutputBoundary changeViewPresenter = new ChangeViewPresenter(viewManagerModel);
         changeViewInteractor = new ChangeViewInteractor(changeViewPresenter);
-        
+
         sessionInteractor = new SessionInteractor();
-        
+
         LLMInteractor = new ChatGPTInteractor();
         ASRInteractor = new IBMInteractor();
         translatorInteractor = new DeepLInteractor();
-        
+
         LoginViewModel loginViewModel = viewModels.getLoginViewModel();
         SignupViewModel signupViewModel = viewModels.getSignupViewModel();
         CreatePostViewModel createPostViewModel = viewModels.getCreatePostViewModel();
@@ -113,18 +125,19 @@ public class UsecaseFactory {
         TopNavigationBarViewModel topNavigationBarViewModel = viewModels.getTopNavigationBarViewModel();
         ProfileViewModel profileViewModel = viewModels.getProfileViewModel();
         PostViewModel postViewModel = viewModels.getPostViewModel();
+        EditViewModel editViewModel = viewModels.getEditViewModel();
         PostBoardViewModel postBoardViewModel = viewModels.getPostBoardViewModel();
-        
+
         PostOutputBoundary postPresenter = new PostPresenter(postViewModel);
         postInteractor = new PostInteractor(postPresenter);
-        
+
         UserFactory userFactory = new CommonUserFactory();
         SignupOutputBoundary signupPresenter = new SignupPresenter(signupViewModel, loginViewModel);
         signupInteractor = new SignupInteractor(signupPresenter, userFactory);
-        
+
         ProfileOutputBoundry profilePresenter = new ProfilePresenter(profileViewModel);
         profileInteractor = new ProfileInteractor(profilePresenter);
-        
+
         ChatSideBarOutputBoundary chatSideBarPresenter = new ChatSideBarPresenter(chatSideBarViewModel);
         chatSideBarInteractor = new ChatSideBarInteractor(chatSideBarPresenter);
 
@@ -133,20 +146,24 @@ public class UsecaseFactory {
         chatWindowInteractor = new ChatWindowInteractor(chatWindowPresenter, chatMessageFactory);
 
         chatCoordinatorInteractor = new ChatCoordinatorInteractor();
-        
+
         RememberMeDAO rememberMeDAO = new RememberMeDAO();
         LoginOutputBoundary loginPresenter = new LoginPresenter(loginViewModel, topNavigationBarViewModel);
         loginInteractor = new LoginInteractor(loginPresenter, rememberMeDAO);
-        
+
+        UpdateUserFactory updateUserFactory = new updatedUserFactoryImp();
+        EditOutputBoundary editPresenter = new EditPresenter(editViewModel);
+        editInteractor = new EditInteractor(editPresenter, updateUserFactory);
+
         PostBoardOutputBoundary postBoardPresenter = new PostBoardPresenter(postBoardViewModel);
         postBoardInteractor = new PostBoardInteractor(postBoardPresenter);
-        
+
         CreatePostOutputBoundary createPostPresenter = new CreatePostPresenter(createPostViewModel);
         createPostInteractor = new CreatePostInteractor(createPostPresenter, postBoardPresenter);
-        
-        System.out.println("init seccuss for usecase!!!!");
-    }
 
+        System.out.println("init seccuss for usecase!!!!");
+
+    }
 
     /**
      * Returns the PostBoardInteractor
@@ -199,8 +216,8 @@ public class UsecaseFactory {
      * @return The ChangeViewInputBoundary interactor.
      */
     public static ChangeViewInputBoundary getChangeViewInteractor() {
-        if(changeViewInteractor == null){
-            System.out.println("get changeview interactor");
+        if (changeViewInteractor == null) {
+            System.out.println("get changeView interactor");
         }
         return changeViewInteractor;
     }
@@ -224,9 +241,9 @@ public class UsecaseFactory {
     }
 
     /**
-     * Returns the ProfileInputBoundry interactor.
+     * Returns the ProfileInputBoundary interactor.
      *
-     * @return The ProfileInputBoundry interactor.
+     * @return The ProfileInputBoundary interactor.
      */
     public static ProfileInputBoundry getProfileInteractor() {
         return profileInteractor;
@@ -243,22 +260,29 @@ public class UsecaseFactory {
 
     /**
      * Returns the chatCoordinator Interactor
+     * 
      * @return the chatCoordinator Interactor
      */
-    public static ChatCoordinatorInputBoundary getChatCoordinatorInteractor(){
+    public static ChatCoordinatorInputBoundary getChatCoordinatorInteractor() {
         return chatCoordinatorInteractor;
     }
 
     /**
      * Returns the post Interactor
+     * 
      * @return the post Interactor
      */
     public static PostInputBoundary getPostInteractor() {
         return postInteractor;
     }
 
+    public static EditInputBoundry getEditInteractor() {
+        return editInteractor;
+    }
+
     /**
      * Returns the ASR Interactor
+     * 
      * @return the ASR Interactor
      */
     public static ASRInputBoundary getASRInteractor() {
@@ -267,6 +291,7 @@ public class UsecaseFactory {
 
     /**
      * Returns the Translator Interactor
+     * 
      * @return the Translator Interactor
      */
     public static TranslatorInputBoundary getTranslatorInteractor() {

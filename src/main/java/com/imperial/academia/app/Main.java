@@ -4,6 +4,7 @@ import com.imperial.academia.interface_adapter.chat.ChatSideBarViewModel;
 import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
 import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.interface_adapter.createpost.CreatePostViewModel;
+import com.imperial.academia.interface_adapter.edit.EditViewModel;
 import com.imperial.academia.interface_adapter.login.LoginViewModel;
 import com.imperial.academia.interface_adapter.post.PostViewModel;
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
@@ -80,6 +81,7 @@ public class Main {
         TopNavigationBarViewModel topNavigationBarViewModel = viewModels.getTopNavigationBarViewModel();
         ProfileViewModel profileViewModel = viewModels.getProfileViewModel();
         PostViewModel postViewModel = viewModels.getPostViewModel();
+        EditViewModel editViewModel = viewModels.getEditViewModel();
 
         try {
             // Initialize services and use cases
@@ -109,6 +111,9 @@ public class Main {
 
             PostView postView = new PostView(postViewModel);
             views.add(postView, postView.viewName);
+
+            EditView editView = new EditView(editViewModel, application);
+            views.add(editView, editView.viewName);
 
             // Add the top navigation bar to the views
             createPostView.add(new TopNavigationBar(topNavigationBarViewModel, application), BorderLayout.NORTH);

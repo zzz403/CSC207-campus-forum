@@ -150,7 +150,7 @@ public class ProfileView extends JPanel {
                 roleLabel.setText("Role : " + state.getRole());
                 registrationDateLabel.setText("Member since " + state.getRegistrationDate().toString().substring(0, 10));
                 chatOrModify.setText(state.isMe() ? "Edit" : "Chat");
-                // TODO profile edit view
+
             }
         });
     }

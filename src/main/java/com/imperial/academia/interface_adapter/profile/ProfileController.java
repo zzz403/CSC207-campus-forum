@@ -1,7 +1,10 @@
 package com.imperial.academia.interface_adapter.profile;
 
 import com.imperial.academia.app.UsecaseFactory;
+import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.chat.ChatCoordinatorInputBoundary;
+import com.imperial.academia.use_case.edit.EditInputBoundry;
+import com.imperial.academia.use_case.edit.EditOutputData;
 import com.imperial.academia.use_case.profile.ProfileInputBoundry;
 import com.imperial.academia.use_case.profile.ProfileInputData;
 
@@ -20,6 +23,8 @@ public class ProfileController {
      * The interactor for chat coordination operations.
      */
     private final ChatCoordinatorInputBoundary chatCoordinatorInteractor;
+    private final ChangeViewInputBoundary changeViewInteractor;
+    private final EditInputBoundry editInteractor;
 
     /**
      * Constructs a new ProfileController and initializes the interactors for profile and chat operations.
@@ -27,6 +32,8 @@ public class ProfileController {
     public ProfileController() {
         this.profileInteractor = UsecaseFactory.getProfileInteractor();
         this.chatCoordinatorInteractor = UsecaseFactory.getChatCoordinatorInteractor();
+        this.changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
+        this.editInteractor = UsecaseFactory.getEditInteractor();
     }
 
     /**
@@ -53,6 +60,6 @@ public class ProfileController {
      * This method is currently not implemented.
      */
     public void edit() {
-        // TODO editInteractor.set
+        editInteractor.execute();
     }
 }
