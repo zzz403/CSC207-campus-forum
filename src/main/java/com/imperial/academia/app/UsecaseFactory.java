@@ -117,17 +117,14 @@ public class UsecaseFactory {
         
         PostOutputBoundary postPresenter = new PostPresenter(postViewModel);
         postInteractor = new PostInteractor(postPresenter);
-
-        CreatePostOutputBoundary createPostPresenter = new CreatePostPresenter(createPostViewModel);
-        createPostInteractor = new CreatePostInteractor(createPostPresenter);
-
+        
         UserFactory userFactory = new CommonUserFactory();
         SignupOutputBoundary signupPresenter = new SignupPresenter(signupViewModel, loginViewModel);
         signupInteractor = new SignupInteractor(signupPresenter, userFactory);
-
+        
         ProfileOutputBoundry profilePresenter = new ProfilePresenter(profileViewModel);
         profileInteractor = new ProfileInteractor(profilePresenter);
-
+        
         ChatSideBarOutputBoundary chatSideBarPresenter = new ChatSideBarPresenter(chatSideBarViewModel);
         chatSideBarInteractor = new ChatSideBarInteractor(chatSideBarPresenter);
 
@@ -136,14 +133,17 @@ public class UsecaseFactory {
         chatWindowInteractor = new ChatWindowInteractor(chatWindowPresenter, chatMessageFactory);
 
         chatCoordinatorInteractor = new ChatCoordinatorInteractor();
-
+        
         RememberMeDAO rememberMeDAO = new RememberMeDAO();
         LoginOutputBoundary loginPresenter = new LoginPresenter(loginViewModel, topNavigationBarViewModel);
         loginInteractor = new LoginInteractor(loginPresenter, rememberMeDAO);
-
+        
         PostBoardOutputBoundary postBoardPresenter = new PostBoardPresenter(postBoardViewModel);
         postBoardInteractor = new PostBoardInteractor(postBoardPresenter);
-
+        
+        CreatePostOutputBoundary createPostPresenter = new CreatePostPresenter(createPostViewModel);
+        createPostInteractor = new CreatePostInteractor(createPostPresenter, postBoardPresenter);
+        
         System.out.println("init seccuss for usecase!!!!");
     }
 

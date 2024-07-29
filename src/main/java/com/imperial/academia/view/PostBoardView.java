@@ -8,6 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -32,29 +33,56 @@ public class PostBoardView extends JPanel {
     /** The controller for the post board view. */
     private final PostBoardController postBoardController = new PostBoardController();
 
+    private JFrame applicationFrame;
     /**
-     * Constructs a new PostBoardView with the specified view model and controller.
+     * Constructs a new PostBoardView with the specified view model.
+     * 
+     * @param postBoardViewModel the view model associated with the post board
+     */
+    public PostBoardView(PostBoardViewModel postBoardViewModel, JFrame applicationFrame) {
+        this.applicationFrame = applicationFrame;
+        setLayout(new BorderLayout());
+
+        // Initialize the main panel before adding to JScrollPane
+        mainPanel = new JPanel(new GridBagLayout());
+
+        JScrollPane scrollPane = new JScrollPane(mainPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        postBoardViewModel.addPropertyChangeListener(evt -> {
+            if (evt.getPropertyName().equals("addPost")) {
+                System.out.println("PostBoardView: property changed");
+                mainPanel.removeAll();
+                generatePostComponents(postBoardViewModel);
+                mainPanel.revalidate();
+                mainPanel.repaint();
+            }
+        });
+
+        // Fetch posts after setting up the view
+        postBoardController.fetchAllPost();
+        generatePostComponents(postBoardViewModel);
+
+        // Add scroll panel to the center of the layout
+        add(scrollPane, BorderLayout.CENTER);
+    }
+
+    /**
+     * Generates the post components for the post board view.
      * 
      * @param posterViewModel the view model associated with the post board
      */
-    public PostBoardView(PostBoardViewModel posterViewModel) {
-        // this.posterViewModel = posterViewModel;
-
-        setLayout(new BorderLayout());
-
-        mainPanel = new JPanel(new GridBagLayout());
+    private void generatePostComponents(PostBoardViewModel postBoardViewModel) {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.NORTHWEST;
 
+        List<PostOverviewInfo> postInfoList = postBoardViewModel.getPostInfoList();
+
         // 使用工厂类创建多个 PostSmallComponent 实例并添加到主面板
         String imageUrl1 = "resources/test_image/test_image_1.jpg";
         String imageUrl2 = "resources/test_image/test_image_2.jpg";
-        // String avatarUrl = "resources/avatar/avatarExample.png";
-
-        postBoardController.fetchAllPost();
-
-        List<PostOverviewInfo> postInfoList = posterViewModel.getPostInfoList();
 
         for (int i = 0; i < postInfoList.size(); i++) { // 例如创建8个组件
             PostOverviewInfo pInfo = postInfoList.get(i);
@@ -70,7 +98,8 @@ public class PostBoardView extends JPanel {
                     title, // post title
                     summary, // summary content
                     username, // author
-                    postLikes // likes
+                    postLikes, // likes
+                    applicationFrame
             );
 
             postComponent.addMouseListener(new MouseAdapter() {
@@ -87,14 +116,5 @@ public class PostBoardView extends JPanel {
             gbc.gridy = i / 3;
             mainPanel.add(postComponent, gbc);
         }
-        // mainPanel.removeAll();
-
-        // 创建一个 JScrollPane 并将 mainPanel 添加到其中
-        JScrollPane scrollPane = new JScrollPane(mainPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-        // Add scroll panel to the center of the layout
-        add(scrollPane, BorderLayout.CENTER);
     }
 }

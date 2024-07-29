@@ -29,6 +29,15 @@ public class PostBoardState {
     }
 
     /**
+     * Add a post overview information to the list of post overview information.
+     * 
+     * @param postOverviewInfo the post overview information to add.
+     */
+    public void addPost(PostOverviewInfo postOverviewInfo) {
+        postList.add(postOverviewInfo);
+    }
+
+    /**
      * Set the list of post overview information.
      * 
      * @param posts the list of post overview information to set.

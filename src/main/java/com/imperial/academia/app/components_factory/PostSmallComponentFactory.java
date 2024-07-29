@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 
 import com.imperial.academia.view.components.PostSmallComponent;
 
@@ -30,7 +31,7 @@ public class PostSmallComponentFactory {
      * @param likes The number of likes the post has.
      * @return A new PostSmallComponent instance or null if an error occurred.
      */
-    public static PostSmallComponent createPostSmallComponent(String imageUrl, String avatarUrl, String title, String content, String author, int likes) {
+    public static PostSmallComponent createPostSmallComponent(String imageUrl, String avatarUrl, String title, String content, String author, int likes, JFrame applicationFrame) {
         BufferedImage image = null;
         BufferedImage avatar = null;
         try {
@@ -48,7 +49,7 @@ public class PostSmallComponentFactory {
         avatar = imageMakeRoundedCorner(avatar, 250);
 
         // Return a new PostSmallComponent with the processed images and provided data
-        return new PostSmallComponent(image, avatar, title, content, author, likes);
+        return new PostSmallComponent(image, avatar, title, content, author, likes, applicationFrame);
     }
 
     /**

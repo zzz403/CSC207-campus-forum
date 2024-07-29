@@ -16,4 +16,11 @@ public interface PostBoardOutputBoundary {
      *                  list with.
      */
     void updatePostList(List<PostOverviewInfo> postsInfo);
+
+    /**
+     * Adds a post to the post list.
+     * 
+     * @param postOverviewInfo the post overview information to add to the post list.
+     */
+    void addPost(PostOverviewInfo postOverviewInfo);
 }

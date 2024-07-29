@@ -35,4 +35,14 @@ public class PostBoardPresenter implements PostBoardOutputBoundary {
     public void updatePostList(List<PostOverviewInfo> postsInfo) {
         postBoardViewModel.setStatePostList(postsInfo);
     }
+
+    /**
+     * Adds a post to the post list.
+     * 
+     * @param postOverviewInfo the post overview information to add to the post list.
+     */
+    @Override
+    public void addPost(PostOverviewInfo postOverviewInfo) {
+        postBoardViewModel.addOnePostInfoToState(postOverviewInfo);
+    }
 }
