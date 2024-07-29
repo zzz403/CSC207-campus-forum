@@ -1,6 +1,8 @@
 package com.imperial.academia.interface_adapter.profile;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The ProfileState class represents the state of a user's profile.
@@ -43,6 +45,14 @@ public class ProfileState {
      */
     private boolean isMe = true;
 
+    private List<String> postTitles = new ArrayList<>();
+    private List<String> postContents = new ArrayList<>();
+    private List<Timestamp> postCreationDates = new ArrayList<>();
+    private List<String> postImageUrls = new ArrayList<>();
+
+
+
+
     /**
      * Constructs a new ProfileState by copying another ProfileState instance.
      *
@@ -56,6 +66,10 @@ public class ProfileState {
         this.avatarUrl = copy.getAvatarUrl();
         this.registrationDate = copy.getRegistrationDate();
         this.isMe = copy.isMe();
+        this.postTitles = postTitles;
+        this.postContents = postContents;
+        this.postCreationDates = postCreationDates;
+        this.postImageUrls = postImageUrls;
     }
 
     /**
@@ -187,5 +201,41 @@ public class ProfileState {
      */
     public void setIsMe(boolean isMe) {
         this.isMe = isMe;
+    }
+
+    public List<String> getPostTitles() {
+        return postTitles;
+    }
+
+    public List<String> getPostContents() {
+        return postContents;
+    }
+
+
+
+    public List<Timestamp> getPostCreationDates() {
+        return postCreationDates;
+    }
+
+    public List<String> getPostImageUrls() {
+        return postImageUrls;
+    }
+
+    public void setPostTitles(List<String> postTitles) {
+        this.postTitles = postTitles;
+    }
+
+    public void setPostContents(List<String> postContents) {
+        this.postContents = postContents;
+    }
+
+
+
+    public void setPostCreationDates(List<Timestamp> postCreationDates) {
+        this.postCreationDates = postCreationDates;
+    }
+
+    public void setPostImageUrls(List<String> postImageUrls) {
+        this.postImageUrls = postImageUrls;
     }
 }

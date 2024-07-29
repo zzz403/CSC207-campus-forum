@@ -108,44 +108,42 @@ public class ProfileView extends JPanel {
 
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Example usage of PostProfileViewComponent
-        for (int i = 0; i < 5; i++) {
-            String imageUrl = "resources/test_image/test_image_" + (i % 3 + 1) + ".jpg";
+
+        ProfileState currentState =  profileViewModel.getProfileState();
+        for (int i = 0; i < currentState.getPostTitles().size(); i++) {
             PostProfileViewComponent post = PostProfileFactory.create(
-                    "Sample Post Title " + (i + 1),
-                    "This is some content of the post " + (i + 1) + ".",
-                    "Author" + (i + 1),
-                    "2024-07-24",
-                    imageUrl,
+                    currentState.getPostTitles().get(i),
+                    currentState.getPostContents().get(i),
+                    currentState.getUsername(),//TODO ID????   press no effect?
+                    currentState.getPostCreationDates().get(i).toString().substring(0, 10),
+                    currentState.getPostImageUrls().get(i),
                     100 // Image size
             );
-            mainPanel.add(post);
-            mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+            bottomPanel.add(post);
+            bottomPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         }
-
-        JScrollPane scrollPane = new JScrollPane(mainPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        frame.getContentPane().add(scrollPane);
-        frame.setVisible(true);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         JScrollPane scrollPane = new JScrollPane(bottomPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        mainPanel.add(scrollPane);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // Set constraints for the top panel
         constraints.gridx = 0;
@@ -183,6 +181,19 @@ public class ProfileView extends JPanel {
                 roleLabel.setText("Role : " + state.getRole());
                 registrationDateLabel.setText("Member since " + state.getRegistrationDate().toString().substring(0, 10));
                 chatOrModify.setText(state.isMe() ? "Edit" : "Chat");
+                bottomPanel.removeAll();
+                for (int i = 0; i < state.getPostTitles().size(); i++) {
+                    PostProfileViewComponent post = PostProfileFactory.create(
+                            state.getPostTitles().get(i),
+                            state.getPostContents().get(i),
+                            state.getUsername(),//TODO author ID????   press no effect?
+                            state.getPostCreationDates().get(i).toString().substring(0, 10),
+                            state.getPostImageUrls().get(i), //TODO Image URL?
+                            100 // Image size
+                    );
+                    bottomPanel.add(post);
+                    bottomPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                }
 
             }
         });

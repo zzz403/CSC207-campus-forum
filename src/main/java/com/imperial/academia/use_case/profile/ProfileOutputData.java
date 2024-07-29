@@ -1,6 +1,9 @@
 package com.imperial.academia.use_case.profile;
 
+import com.imperial.academia.entity.post.Post;
+
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * The ProfileOutputData class encapsulates the data required to present a user's profile.
@@ -43,6 +46,13 @@ public class ProfileOutputData {
      */
     private final boolean isMe;
 
+    private final List<String> postTitles;
+    private final List<String> postContents;
+    private final List<Timestamp> postCreationDates;
+    private final List<String> postImageUrls;
+
+
+
     /**
      * Constructs a new ProfileOutputData instance with the specified profile details.
      *
@@ -54,7 +64,8 @@ public class ProfileOutputData {
      * @param registrationDate the registration date of the user
      * @param isMe             a flag indicating if the profile belongs to the current user
      */
-    public ProfileOutputData(int id, String username, String email, String role, String avatarUrl, Timestamp registrationDate, boolean isMe) {
+
+    public ProfileOutputData(int id, String username, String email, String role, String avatarUrl, Timestamp registrationDate, boolean isMe, List<String> postTitles, List<String> postContents, List<Timestamp> postCreationDates, List<String> postImageUrls) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -62,8 +73,11 @@ public class ProfileOutputData {
         this.avatarUrl = avatarUrl;
         this.registrationDate = registrationDate;
         this.isMe = isMe;
+        this.postTitles = postTitles;
+        this.postContents = postContents;
+        this.postCreationDates = postCreationDates;
+        this.postImageUrls = postImageUrls;
     }
-
     /**
      * Returns the ID of the user.
      *
@@ -89,6 +103,23 @@ public class ProfileOutputData {
      */
     public String getAvatarUrl() {
         return avatarUrl;
+    }
+
+    public List<String> getPostTitles() {
+        return postTitles;
+    }
+
+    public List<String> getPostContents() {
+        return postContents;
+    }
+
+
+    public List<Timestamp> getPostCreationDates() {
+        return postCreationDates;
+    }
+
+    public List<String> getPostImageUrls() {
+        return postImageUrls;
     }
 
     /**
