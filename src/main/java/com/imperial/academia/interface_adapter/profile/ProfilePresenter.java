@@ -1,13 +1,13 @@
 package com.imperial.academia.interface_adapter.profile;
 
-import com.imperial.academia.use_case.profile.ProfileOutputBoundry;
+import com.imperial.academia.use_case.profile.ProfileOutputBoundary;
 import com.imperial.academia.use_case.profile.ProfileOutputData;
 
 /**
- * The ProfilePresenter class implements the ProfileOutputBoundry interface
+ * The ProfilePresenter class implements the ProfileOutputBoundary interface
  * and is responsible for presenting profile data to the ProfileViewModel.
  */
-public class ProfilePresenter implements ProfileOutputBoundry {
+public class ProfilePresenter implements ProfileOutputBoundary {
 
     /**
      * The view model for the profile data.

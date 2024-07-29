@@ -3,10 +3,9 @@ package com.imperial.academia.interface_adapter.profile;
 import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.chat.ChatCoordinatorInputBoundary;
-import com.imperial.academia.use_case.edit.EditInputBoundry;
-import com.imperial.academia.use_case.edit.EditOutputData;
+import com.imperial.academia.use_case.edit.EditInputBoundary;
 import com.imperial.academia.use_case.post.PostInputBoundary;
-import com.imperial.academia.use_case.profile.ProfileInputBoundry;
+import com.imperial.academia.use_case.profile.ProfileInputBoundary;
 import com.imperial.academia.use_case.profile.ProfileInputData;
 
 /**
@@ -18,14 +17,14 @@ public class ProfileController {
     /**
      * The interactor for profile operations.
      */
-    private final ProfileInputBoundry profileInteractor;
+    private final ProfileInputBoundary profileInteractor;
 
     /**
      * The interactor for chat coordination operations.
      */
     private final ChatCoordinatorInputBoundary chatCoordinatorInteractor;
     private final ChangeViewInputBoundary changeViewInteractor;
-    private final EditInputBoundry editInteractor;
+    private final EditInputBoundary editInteractor;
     private final PostInputBoundary postInteractor;
 
     /**

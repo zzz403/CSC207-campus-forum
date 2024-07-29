@@ -16,99 +16,98 @@ import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.session.SessionManager;
 
 /**
- * The ProfileInteractor class implements the ProfileInputBoundry interface
- * and provides the logic for handling profile-related operations.
+ * Implements profile-related operations defined by the ProfileInputBoundary.
+ * This class is responsible for fetching user and post data from services,
+ * preparing output data, and managing view transitions.
  */
-public class ProfileInteractor implements ProfileInputBoundry {
+public class ProfileInteractor implements ProfileInputBoundary {
 
-    /**
-     * The interactor responsible for changing the view.
-     */
     private final ChangeViewInputBoundary changeViewInteractor;
-
-    /**
-     * The presenter for profile operations.
-     */
-    private final ProfileOutputBoundry profilePresenter;
-
-    /**
-     * The service for user operations.
-     */
+    private final ProfileOutputBoundary profilePresenter;
     private final UserService userService;
     private final PostService postService;
 
     /**
-     * Constructs a new ProfileInteractor with the specified profile presenter.
+     * Constructor for dependency injection.
+     * Utilizes default services to manage user and post data.
      *
-     * @param profilePresenter the presenter for profile operations
+     * @param profilePresenter the presenter for displaying profile data and errors.
      */
-    public ProfileInteractor(ProfileOutputBoundry profilePresenter) {
-        this.profilePresenter = profilePresenter;
-        this.userService = ServiceFactory.getUserService();
-        this.postService = ServiceFactory.getPostService();
-        this.changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
-    }
-    public ProfileInteractor(ProfileOutputBoundry profilePresenter, UserService userService, ChangeViewInputBoundary changeViewInteractor, PostService postService) {
-        this.profilePresenter = profilePresenter;
-        this.userService = userService;
-        this.changeViewInteractor = changeViewInteractor;
-        this.postService = postService; //TODO change test
+    public ProfileInteractor(ProfileOutputBoundary profilePresenter) {
+        this(profilePresenter, ServiceFactory.getUserService(), UsecaseFactory.getChangeViewInteractor(),
+                ServiceFactory.getPostService());
     }
 
     /**
-     * Executes the profile operation with the given profile input data.
-     * This involves retrieving user data, presenting the data, and changing the view.
+     * Constructor for explicit dependency injection. Useful for testing.
      *
-     * @param profileInputData the data required to perform the profile operation
+     * @param profilePresenter       the presenter for profile operations.
+     * @param userService            the service handling user-related data operations.
+     * @param changeViewInteractor   the interactor responsible for changing views.
+     * @param postService            the service handling post-related data operations.
      */
+    public ProfileInteractor(ProfileOutputBoundary profilePresenter, UserService userService,
+                             ChangeViewInputBoundary changeViewInteractor, PostService postService) {
+        this.profilePresenter = profilePresenter;
+        this.userService = userService;
+        this.changeViewInteractor = changeViewInteractor;
+        this.postService = postService;
+    }
+
+    /**
+     * Executes the operation to fetch and present profile data based on the provided input data.
+     * Retrieves user and their posts, assembles profile output data, and directs the user interface to display it.
+     *
+     * @param profileInputData the data containing the user ID to fetch profile information.
+     */
+    @Override
     public void execute(ProfileInputData profileInputData) {
         try {
             User user = userService.get(profileInputData.getUserId());
-            List<Post> postList = postService.getAllByUserId(profileInputData.getUserId());
-            List<String> postTitle = new ArrayList<>();
-            List<String> postContent = new ArrayList<>();
-            List<Integer> postAuthorId = new ArrayList<>();
-            List<Timestamp> postCreationDate = new ArrayList<>();
-            List<String> postImageUrl = new ArrayList<>();
-            List<Integer> postID = new ArrayList<>();
-
-            for (Post post : postList){
-                postTitle.add(post.getTitle());
-                postContent.add(post.getContent());
-                postAuthorId.add(post.getAuthorId());
-                postCreationDate.add(post.getCreationDate());
-                Random rand = new Random();
-                int randomNum = rand.nextInt((9 - 1) + 1) + 1;
-                postImageUrl.add("resources/test_image/test_image_"+randomNum+".jpg"); //TODO real URL???
-                postID.add(post.getId());
-            }
-
-
-            if (user != null) {
-                ProfileOutputData profileOutputData = new ProfileOutputData(
-                        user.getId(),
-                        user.getUsername(),
-                        user.getEmail(),
-                        user.getRole(),
-                        user.getAvatarUrl(),
-                        user.getRegistrationDate(),
-                        SessionManager.getCurrentUser().getId() == user.getId(),
-                        postTitle,
-                        postContent,
-                        postCreationDate,
-                        postImageUrl,
-                        postID
-                );
-
-                profilePresenter.present(profileOutputData);
-            } else {
+            if (user == null) {
                 profilePresenter.presentError("User not found");
+                return;
             }
+            List<Post> posts = postService.getAllByUserId(user.getId());
+            ProfileOutputData profileOutputData = createProfileOutputData(user, posts);
 
+            profilePresenter.present(profileOutputData);
             changeViewInteractor.changeView("profile");
 
         } catch (SQLException e) {
-            profilePresenter.presentError(e.getMessage());
+            profilePresenter.presentError("Database error: " + e.getMessage());
         }
+    }
+
+    /**
+     * Creates ProfileOutputData from user and posts information.
+     * Randomly assigns image URLs from a set resource path for demonstration purposes.
+     *
+     * @param user  the user for whom profile data is being created.
+     * @param posts the posts associated with the user.
+     * @return ProfileOutputData containing all necessary user and post details.
+     */
+    private ProfileOutputData createProfileOutputData(User user, List<Post> posts) {
+        List<String> postTitles = new ArrayList<>();
+        List<String> postContents = new ArrayList<>();
+        List<Timestamp> postDates = new ArrayList<>();
+        List<String> postImageUrls = new ArrayList<>();
+        List<Integer> postIds = new ArrayList<>();
+
+        Random rand = new Random();
+        for (Post post : posts) {
+            postTitles.add(post.getTitle());
+            postContents.add(post.getContent());
+            postDates.add(post.getCreationDate());
+            int randomNum = rand.nextInt(9) + 1;  // Generates a number between 1 and 9
+            postImageUrls.add("resources/test_image/test_image_" + randomNum + ".jpg");
+            postIds.add(post.getId());
+        }
+
+        return new ProfileOutputData(
+                user.getId(), user.getUsername(), user.getEmail(), user.getRole(), user.getAvatarUrl(),
+                user.getRegistrationDate(), SessionManager.getCurrentUser().getId() == user.getId(),
+                postTitles, postContents, postDates, postImageUrls, postIds
+        );
     }
 }

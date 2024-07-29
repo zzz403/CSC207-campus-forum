@@ -1,74 +1,48 @@
 package com.imperial.academia.use_case.profile;
 
-import com.imperial.academia.entity.post.Post;
-
 import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * The ProfileOutputData class encapsulates the data required to present a user's profile.
- * This class is immutable and provides methods to retrieve profile details such as user ID, username, email, role, avatar URL, registration date, and a flag indicating if the profile belongs to the current user.
+ * Encapsulates all relevant data for presenting a user's profile.
+ * This class is immutable and provides accessors for user details such as user ID, username, email,
+ * role, avatar URL, and registration date. It also includes post-related information, ensuring that all
+ * necessary profile information is available in one consolidated object.
  */
 public class ProfileOutputData {
 
-    /**
-     * The ID of the user.
-     */
     private final int id;
-
-    /**
-     * The username of the user.
-     */
     private final String username;
-
-    /**
-     * The email of the user.
-     */
     private final String email;
-
-    /**
-     * The role of the user.
-     */
     private final String role;
-
-    /**
-     * The avatar URL of the user.
-     */
     private final String avatarUrl;
-
-    /**
-     * The registration date of the user.
-     */
     private final Timestamp registrationDate;
-
-    /**
-     * A flag indicating if the profile belongs to the current user.
-     */
     private final boolean isMe;
-
     private final List<String> postTitles;
     private final List<String> postContents;
     private final List<Timestamp> postCreationDates;
     private final List<String> postImageUrls;
     private final List<Integer> postIds;
 
-
-
     /**
-     * Constructs a new ProfileOutputData instance with the specified profile details.
+     * Constructs a ProfileOutputData object with detailed information about the user and their posts.
      *
-     * @param id               the ID of the user
-     * @param username         the username of the user
-     * @param email            the email of the user
-     * @param role             the role of the user
-     * @param avatarUrl        the avatar URL of the user
-     * @param registrationDate the registration date of the user
-     * @param isMe             a flag indicating if the profile belongs to the current user
+     * @param id                The unique identifier for the user.
+     * @param username          The user's username.
+     * @param email             The user's email address.
+     * @param role              The user's role within the system.
+     * @param avatarUrl         The URL to the user's avatar image.
+     * @param registrationDate  The date the user registered.
+     * @param isMe              Flag indicating if this profile belongs to the current logged-in user.
+     * @param postTitles        Titles of the user's posts.
+     * @param postContents      Contents of the user's posts.
+     * @param postCreationDates Creation dates of the user's posts.
+     * @param postImageUrls     Image URLs for the user's posts.
+     * @param postIds           Unique identifiers for the user's posts.
      */
-
-    public ProfileOutputData(int id, String username, String email, String role, String avatarUrl, Timestamp registrationDate,
-                             boolean isMe, List<String> postTitles, List<String> postContents, List<Timestamp> postCreationDates,
-                             List<String> postImageUrls, List<Integer> postIds) {
+    public ProfileOutputData(int id, String username, String email, String role, String avatarUrl,
+                             Timestamp registrationDate, boolean isMe, List<String> postTitles, List<String> postContents,
+                             List<Timestamp> postCreationDates, List<String> postImageUrls, List<Integer> postIds) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -83,91 +57,112 @@ public class ProfileOutputData {
         this.postIds = postIds;
     }
     /**
-     * Returns the ID of the user.
+     * Gets the unique identifier for the user.
      *
-     * @return the user ID
+     * @return The user's unique identifier.
      */
     public int getId() {
         return id;
     }
 
     /**
-     * Returns the registration date of the user.
+     * Gets the username of the user.
      *
-     * @return the registration date
-     */
-    public Timestamp getRegistrationDate() {
-        return registrationDate;
-    }
-
-    /**
-     * Returns the avatar URL of the user.
-     *
-     * @return the avatar URL
-     */
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
-
-    public List<String> getPostTitles() {
-        return postTitles;
-    }
-
-    public List<String> getPostContents() {
-        return postContents;
-    }
-
-
-    public List<Timestamp> getPostCreationDates() {
-        return postCreationDates;
-    }
-
-    public List<String> getPostImageUrls() {
-        return postImageUrls;
-    }
-
-    /**
-     * Returns the role of the user.
-     *
-     * @return the role
-     */
-    public String getRole() {
-        return role;
-    }
-
-    /**
-     * Returns the email of the user.
-     *
-     * @return the email
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Returns the username of the user.
-     *
-     * @return the username
+     * @return The user's username.
      */
     public String getUsername() {
         return username;
     }
 
     /**
-     * Returns a flag indicating if the profile belongs to the current user.
+     * Gets the email address of the user.
      *
-     * @return true if the profile belongs to the current user, false otherwise
+     * @return The user's email address.
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Gets the role of the user within the system.
+     *
+     * @return The user's role.
+     */
+    public String getRole() {
+        return role;
+    }
+
+    /**
+     * Gets the URL of the user's avatar image.
+     *
+     * @return The URL of the avatar image.
+     */
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    /**
+     * Gets the registration date of the user.
+     *
+     * @return The timestamp of when the user registered.
+     */
+    public Timestamp getRegistrationDate() {
+        return registrationDate;
+    }
+
+    /**
+     * Checks if the profile belongs to the currently logged-in user.
+     *
+     * @return True if the profile is of the current user, false otherwise.
      */
     public boolean isMe() {
         return isMe;
     }
 
     /**
-     * Returns the list of post IDs.
+     * Gets the titles of all posts made by the user.
      *
-     * @return the list of post IDs
+     * @return A list of post titles.
+     */
+    public List<String> getPostTitles() {
+        return postTitles;
+    }
+
+    /**
+     * Gets the contents of all posts made by the user.
+     *
+     * @return A list of post contents.
+     */
+    public List<String> getPostContents() {
+        return postContents;
+    }
+
+    /**
+     * Gets the creation dates of all posts made by the user.
+     *
+     * @return A list of timestamps representing the creation dates of the posts.
+     */
+    public List<Timestamp> getPostCreationDates() {
+        return postCreationDates;
+    }
+
+    /**
+     * Gets the image URLs for all posts made by the user.
+     *
+     * @return A list of URLs of images associated with the posts.
+     */
+    public List<String> getPostImageUrls() {
+        return postImageUrls;
+    }
+
+    /**
+     * Gets the unique identifiers for all posts made by the user.
+     *
+     * @return A list of post IDs.
      */
     public List<Integer> getPostIds() {
         return postIds;
     }
+
+
 }
