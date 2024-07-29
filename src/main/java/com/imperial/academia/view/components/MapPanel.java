@@ -58,4 +58,19 @@ public class MapPanel extends JPanel {
         g2.dispose();
     }
 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Map Panel");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(400, 300);
+
+            MapData mapData = new MapData(51.4988, -0.1747,"Imperial College London");
+            BufferedImage mapImage = new BufferedImage(300, 200, BufferedImage.TYPE_INT_ARGB);
+            MapPanel mapPanel = new MapPanel(mapData, mapImage, false);
+
+            frame.getContentPane().add(mapPanel);
+            frame.setVisible(true);
+        });
+    }
+
 }

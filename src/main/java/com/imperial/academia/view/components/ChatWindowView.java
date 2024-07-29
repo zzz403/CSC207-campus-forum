@@ -34,7 +34,7 @@ public class ChatWindowView extends JPanel {
     private final JTextField messageInputField;
     private final ChatWindowController chatWindowController = new ChatWindowController();
     private final Map<String, BufferedImage> mapCache = new HashMap<>();
-    
+
     private Image scaledOpenMicIconImage;
     private Image scaledCloseMicIconImage;
     private boolean isButtonEnabled = true;
@@ -44,7 +44,7 @@ public class ChatWindowView extends JPanel {
 
     /**
      * Constructor for ChatWindowView.
-     * 
+     *
      * @param chatWindowViewModel the chat window view model
      * @param application the application window view model
      */
@@ -778,6 +778,10 @@ public class ChatWindowView extends JPanel {
         }
     }
 
+    /**
+     *
+     * @param filePath
+     */
     private void openFileLocation(String filePath) {
         try {
             File file = new File(filePath);
@@ -802,6 +806,9 @@ public class ChatWindowView extends JPanel {
         }
     }
 
+    /**
+     * A custom JPopupMenu with rounded corners.
+     */
     static class RoundedPopupMenu extends JPopupMenu {
 
         public RoundedPopupMenu() {
@@ -826,6 +833,10 @@ public class ChatWindowView extends JPanel {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     private JPopupMenu createEmojiPopupMenu() {
         JPopupMenu emojiPopup = new JPopupMenu();
         emojiPopup.setLayout(new GridLayout(5, 5)); // 设置布局为5x5的网格布局
@@ -845,6 +856,12 @@ public class ChatWindowView extends JPanel {
         messageInputField.setText(messageInputField.getText() + emoji);
     }
 
+    /**
+     *
+     * @param waveformPanel
+     * @param audioContent
+     * @param transcriptionArea
+     */
     private void showAudioPopup(WaveformPanel waveformPanel, String audioContent, JLabel transcriptionArea) {
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem speechToTextItem = new JMenuItem("Speech to Text");
@@ -873,6 +890,11 @@ public class ChatWindowView extends JPanel {
         popupMenu.show(waveformPanel, popupX - location.x, popupY - location.y);
     }
 
+    /**
+     * @param textLabel
+     * @param text
+     * @param transcriptionArea
+     */
     private void showTextPopup(JLabel textLabel, String text, JLabel transcriptionArea) {
         String defaultLanguage = "FR"; // 默认语言为法语
         JPopupMenu popupMenu = new JPopupMenu();
@@ -903,6 +925,14 @@ public class ChatWindowView extends JPanel {
         popupMenu.show(textLabel, popupX - location.x, popupY - location.y);
     }
 
+    /**
+     * @param text
+     * @param transcriptionArea
+     * @param translateText
+     * @param language
+     * @param statusMessage
+     * @return JMenuItem
+     */
     private JMenuItem createMenuItem(String text, JLabel transcriptionArea, String translateText, String language, String statusMessage) {
         JMenuItem menuItem = new JMenuItem(text);
 
@@ -923,7 +953,4 @@ public class ChatWindowView extends JPanel {
         });
         return menuItem;
     }
-
-
-
 }
