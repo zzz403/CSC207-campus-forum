@@ -103,7 +103,6 @@ public class ProfileView extends JPanel {
         infoPanel.setBorder(BorderFactory.createEmptyBorder(0, 100, 0, 0));
         topPanel.add(infoPanel, BorderLayout.CENTER);
 
-        // TODO change bottom to user's post
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
 //      bottomPanel.setBackground(new Color(58, 185, 232));
