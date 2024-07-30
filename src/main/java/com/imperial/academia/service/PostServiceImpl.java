@@ -34,7 +34,9 @@ public class PostServiceImpl implements PostService {
     public void insert(Post post) throws SQLException {
         postDAO.insert(post);
         postCache.setPost("post:" + post.getId(), post);
-        postCache.setPost("posts:user:" + post.getAuthorId(), post);
+        List<Post> posts = postCache.getPosts("posts:user:" + post.getAuthorId());
+        posts.add(post);
+        postCache.setPosts("posts:user:" + post.getAuthorId(), posts);
     }
 
     /**
@@ -58,9 +60,12 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getAllByUserId(int userId) throws SQLException {
         List<Post> posts = postCache.getPosts("posts:user:" + userId);
+        System.out.println("posts:user:" + userId);
         if (posts == null) {
             posts = postDAO.getAllByUserId(userId);
             postCache.setPosts("posts:user:" + userId, posts);
+        }else{
+            System.out.println(posts.size());
         }
         return posts;
     }

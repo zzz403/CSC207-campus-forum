@@ -33,6 +33,7 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
     private final LLMInputBoundary llmInputBoundary;
     private final ASRInputBoundary asrInputBoundary;
     private final TranslatorInputBoundary translatorInputBoundary;
+    private final ChatSideBarInputBoundary chatSideBarInteractor;
 
 
     /**
@@ -51,6 +52,7 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
         this.llmInputBoundary = UsecaseFactory.getLLMInteractor();
         this.asrInputBoundary = UsecaseFactory.getASRInteractor();
         this.translatorInputBoundary = UsecaseFactory.getTranslatorInteractor();
+        this.chatSideBarInteractor = UsecaseFactory.getChatSideBarInteractor();
     }
 
     /**
@@ -59,7 +61,7 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
     public ChatWindowInteractor(ChatWindowOutputBoundary chatWindowPresenter, ChatMessageFactory chatMessageFactory,
                                 ChatMessageService chatMessageService, MapService mapService, FileService fileService,
                                 AudioService audioService, LLMInputBoundary llmInputBoundary, ASRInputBoundary asrInputBoundary,
-                                TranslatorInputBoundary translatorInputBoundary) {
+                                TranslatorInputBoundary translatorInputBoundary, ChatSideBarInputBoundary chatSideBarInteractor) {
         this.chatMessageService = chatMessageService;
         this.mapService = mapService;
         this.fileService = fileService;
@@ -69,6 +71,7 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
         this.llmInputBoundary = llmInputBoundary;
         this.asrInputBoundary = asrInputBoundary;
         this.translatorInputBoundary = translatorInputBoundary;
+        this.chatSideBarInteractor = chatSideBarInteractor;
     }
 
     /**
@@ -213,6 +216,7 @@ public class ChatWindowInteractor implements ChatWindowInputBoundary {
 
         // Refresh the chat messages after sending the message
         execute(groupId);
+        chatSideBarInteractor.execute();
     }
 
     /**

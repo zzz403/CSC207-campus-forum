@@ -20,6 +20,7 @@ import com.imperial.academia.interface_adapter.profile.ProfileController;
 import com.imperial.academia.interface_adapter.profile.ProfileState;
 import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
 import com.imperial.academia.view.components.PostProfileViewComponent;
+import com.imperial.academia.view.style.CustomScrollBarUI;
 
 /**
  * The ProfileView class represents the UI for displaying a user's profile.
@@ -116,7 +117,7 @@ public class ProfileView extends JPanel {
 
         createAllPost(currentState);
 
-        JScrollPane scrollPane = new JScrollPane(bottomPanel);
+        JScrollPane scrollPane = new CustomScrollBarUI.CustomScrollPane(bottomPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 

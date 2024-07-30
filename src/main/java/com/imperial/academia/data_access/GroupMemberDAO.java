@@ -137,7 +137,12 @@ public class GroupMemberDAO implements GroupMemberDAI {
      */
     @Override
     public int getPrivateChatId(int userId1, int userId2) throws SQLException {
-        String sql = "SELECT group_id FROM group_members WHERE (user_id = ? OR user_id = ?) AND is_group = false GROUP BY group_id HAVING COUNT(*) = 2";
+        String sql = "SELECT gm.group_id \n" +
+                "FROM group_members AS gm\n" +
+                "JOIN chat_groups AS cg ON gm.group_id = cg.group_id\n" +
+                "WHERE (gm.user_id = ? OR gm.user_id = ?) AND cg.is_group = false\n" +
+                "GROUP BY gm.group_id \n" +
+                "HAVING COUNT(*) = 2";
         int chatGroupId = -1;
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, userId1);
