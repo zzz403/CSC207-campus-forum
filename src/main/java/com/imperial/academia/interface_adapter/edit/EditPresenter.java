@@ -19,17 +19,17 @@ public class EditPresenter implements EditOutputBoundary {
             editState.setPasswordError(null);
             editState.setRepeatPasswordError(null);
             editState.setUsernameError(null);
+            editState.setAvatarError(null);
         } else if (error.contains("Username")) { //TODO type
             editState.setUsernameError(error);
         } else if (error.contains("Password")) {
-            editState.setRepeatPasswordError(error);
+            editState.setPasswordError(error);
         } else if (error.contains("Repeat password")){
             editState.setRepeatPasswordError(error);
         } else if (error.contains("Email")){
             editState.setEmailError(error);
         } else if (error.contains("file")){
             editState.setAvatarError(error);
-
         }
         editState.setUserName(editOutputData.getUserName());
         editState.setUserId(editOutputData.getUserId());
