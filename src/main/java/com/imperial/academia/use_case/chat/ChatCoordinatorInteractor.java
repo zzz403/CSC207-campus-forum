@@ -5,6 +5,7 @@ import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.service.ChatGroupService;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
+import com.imperial.academia.entity.user.User;
 
 /**
  * ChatCoordinatorInteractor is responsible for coordinating chat interactions,
@@ -34,6 +35,11 @@ public class ChatCoordinatorInteractor implements ChatCoordinatorInputBoundary {
     public void toPrivateChat(int userId) {
         try {
             // Get the private chat ID between the current user and the specified user
+            User user = SessionManager.getCurrentUser();
+            if (user == null) {
+                System.out.println("User is not logged in.");
+                return;
+            }
             int chatGroupId = chatGroupService.getPrivateChatId(SessionManager.getCurrentUser().getId(), userId);
 
             // Execute sidebar interactor

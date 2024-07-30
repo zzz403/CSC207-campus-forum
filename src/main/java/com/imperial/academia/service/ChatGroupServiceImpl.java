@@ -219,6 +219,7 @@ public class ChatGroupServiceImpl implements ChatGroupService {
                 ChatGroup chatGroup = new ChatGroupFactory().createPrivateChatGroup();
                 insert(chatGroup);
                 chatGroupId = chatGroup.getId();
+                System.out.println("chatGroupId: " + chatGroupId);
 
                 GroupMember groupMember1 = groupMemberFactory.createGroupMember(chatGroupId, userId1, "member");
                 GroupMember groupMember2 = groupMemberFactory.createGroupMember(chatGroupId, userId2, "member");
