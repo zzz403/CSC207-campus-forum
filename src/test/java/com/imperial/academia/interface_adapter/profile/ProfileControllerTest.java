@@ -1,7 +1,10 @@
 package com.imperial.academia.interface_adapter.profile;
 
 import com.imperial.academia.app.UsecaseFactory;
+import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.chat.ChatCoordinatorInputBoundary;
+import com.imperial.academia.use_case.edit.EditInputBoundary;
+import com.imperial.academia.use_case.post.PostInputBoundary;
 import com.imperial.academia.use_case.profile.ProfileInputBoundary;
 import com.imperial.academia.use_case.profile.ProfileInputData;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,56 +12,74 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
+import java.io.File;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class ProfileControllerTest {
     private ProfileInputBoundary mockProfileInteractor;
     private ChatCoordinatorInputBoundary mockChatCoordinatorInteractor;
+    private EditInputBoundary mockEditInteractor;
+    private ChangeViewInputBoundary mockChangeViewInteractor;
+    private  PostInputBoundary mockPostInteractor;
     private ProfileInputData profileInputDataOut;
     private int userIdOut;
     private ProfileController profileController;
+
     @BeforeEach
-    public void init(){
-        mockProfileInteractor = new ProfileInputBoundary() {
-            @Override
-            public void execute(ProfileInputData profileInputData) {
-                profileInputDataOut = profileInputData;
-            }
-        };
+    public void init() {
+        mockProfileInteractor = mock(ProfileInputBoundary.class);
+        mockChatCoordinatorInteractor = mock(ChatCoordinatorInputBoundary.class);
+        mockEditInteractor = mock(EditInputBoundary.class);
+        mockChangeViewInteractor = mock(ChangeViewInputBoundary.class);
+        mockPostInteractor = mock(PostInputBoundary.class);
 
-        mockChatCoordinatorInteractor = new ChatCoordinatorInputBoundary() {
-            @Override
-            public void toPrivateChat(int userId) {
-                userIdOut = userId;
-            }
-
-            @Override
-            public void updateChatList() {
-
-            }
-        };
-        try(MockedStatic<UsecaseFactory> mockedStatic = Mockito.mockStatic(UsecaseFactory.class)){
+        try (MockedStatic<UsecaseFactory> mockedStatic = Mockito.mockStatic(UsecaseFactory.class)) {
             mockedStatic.when(UsecaseFactory::getProfileInteractor).thenReturn(mockProfileInteractor);
             mockedStatic.when(UsecaseFactory::getChatCoordinatorInteractor).thenReturn(mockChatCoordinatorInteractor);
-            profileController = new ProfileController();
+            mockedStatic.when(UsecaseFactory::getEditInteractor).thenReturn(mockEditInteractor);
+            mockedStatic.when(UsecaseFactory::getChangeViewInteractor).thenReturn(mockChangeViewInteractor);
+            mockedStatic.when(UsecaseFactory::getPostInteractor).thenReturn(mockPostInteractor);
 
+            profileController = new ProfileController();
         }
     }
+
     @Test
     void showProfile() {
         profileController.showProfile(1);
-        assertEquals(1, profileInputDataOut.getUserId());
+        verify(mockProfileInteractor).execute(any(ProfileInputData.class));
     }
 
     @Test
     void chat() {
         profileController.chat(2);
-        assertEquals(2, userIdOut);
+        verify(mockChatCoordinatorInteractor).toPrivateChat(2);
     }
 
     @Test
     void edit() {
-        //TODO
         profileController.edit();
+        verify(mockEditInteractor).execute();
     }
+    @Test
+    void initPostIdTrue(){
+        when(mockPostInteractor.initPostById(2)).thenReturn(true);
+
+        boolean result = profileController.initPostById(2);
+        assertTrue(result);
+        verify(mockChangeViewInteractor).changeView("post");
+    }
+
+    @Test
+    void initPostIdFalse(){
+        when(mockPostInteractor.initPostById(1)).thenReturn(false);
+
+        boolean result = profileController.initPostById(1);
+        assertFalse(result);
+        verify(mockChangeViewInteractor, never()).changeView("post");
+    }
+
+
 }
