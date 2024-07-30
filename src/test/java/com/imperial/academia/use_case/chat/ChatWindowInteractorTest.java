@@ -51,6 +51,7 @@ public class ChatWindowInteractorTest {
     @Mock private LLMInputBoundary llmInputBoundary;
     @Mock private ASRInputBoundary asrInputBoundary;
     @Mock private TranslatorInputBoundary translatorInputBoundary;
+    @Mock private ChatSideBarInputBoundary chatSideBarInteractor;
 
     private ChatWindowInteractor chatWindowInteractor;
 
@@ -68,7 +69,8 @@ public class ChatWindowInteractorTest {
                 audioService,
                 llmInputBoundary,
                 asrInputBoundary,
-                translatorInputBoundary
+                translatorInputBoundary,
+                chatSideBarInteractor
         );
 
         doNothing().when(audioService).startRecording(anyInt());

@@ -31,6 +31,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         chatMessageDAO.insert(chatMessage);
         // 更新单条消息缓存
         chatMessageCache.setChatMessage("chatMessage:" + chatMessage.getId(), chatMessage);
+        chatMessageCache.deleteChatMessages("chatMessages:all");
 
         // 更新群组消息列表缓存
         String groupCacheKey = "chatMessages:group:" + chatMessage.getGroupId();

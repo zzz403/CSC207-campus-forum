@@ -50,6 +50,9 @@ public class ChatGroupServiceImpl implements ChatGroupService {
     public void insert(ChatGroup chatGroup) throws SQLException {
         chatGroupDAO.insert(chatGroup);
         chatGroupCache.setChatGroup("chatgroup:" + chatGroup.getId(), chatGroup);
+        List<ChatGroup> allChatGroups = chatGroupCache.getChatGroups("chatgroups:all");
+        allChatGroups.add(chatGroup);
+        chatGroupCache.setChatGroups("chatgroups:all", allChatGroups);
     }
 
     /**
@@ -167,15 +170,7 @@ public class ChatGroupServiceImpl implements ChatGroupService {
 
     @Override
     public ChatMessage getLastMessage(int groupId) throws SQLException {
-        String key = "lastMessage:" + groupId;
-        ChatMessage lastMessage = chatGroupCache.getLastMessage(key);
-        if (lastMessage == null) {
-            lastMessage = chatGroupDAO.getLastMessage(groupId);
-            if (lastMessage != null) {
-                chatGroupCache.setLastMessage(key, lastMessage);
-            }
-        }
-        return lastMessage;
+        return chatGroupDAO.getLastMessage(groupId);
     }
 
     User getUser(int groupId) throws SQLException {

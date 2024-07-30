@@ -31,6 +31,11 @@ class ProfileControllerTest {
             public void toPrivateChat(int userId) {
                 userIdOut = userId;
             }
+
+            @Override
+            public void updateChatList() {
+
+            }
         };
         try(MockedStatic<UsecaseFactory> mockedStatic = Mockito.mockStatic(UsecaseFactory.class)){
             mockedStatic.when(UsecaseFactory::getProfileInteractor).thenReturn(mockProfileInteractor);
