@@ -72,12 +72,12 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
      */
     public CreatePostInteractor(ChangeViewInputBoundary changeViewInteractor, PostInputBoundary postInteractor,
             LLMInputBoundary llmInteractor, CreatePostOutputBoundary createPostPresenter, BoardService boardService,
-            PostService postService) {
+            PostService postService,PostBoardOutputBoundary postBoardPresenter) {
         this.changeViewInteractor = changeViewInteractor;
         this.postInteractor = postInteractor;
         this.llmInteractor = llmInteractor;
         this.createPostPresenter = createPostPresenter;
-        this.postBoardPresenter = null;
+        this.postBoardPresenter = postBoardPresenter;
 
         this.boardService = boardService;
         this.postService = postService;

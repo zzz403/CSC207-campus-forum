@@ -18,6 +18,7 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
+import com.imperial.academia.use_case.postBoard.PostBoardOutputBoundary;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,6 +57,9 @@ class CreatePostInteractorTest {
     @Mock
     private PostService postService;
 
+    @Mock
+    PostBoardOutputBoundary postBoardPresenter;
+
     @InjectMocks
     private CreatePostInteractor createPostInteractor;
 
@@ -63,7 +67,7 @@ class CreatePostInteractorTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         createPostInteractor = new CreatePostInteractor(changeViewInteractor, postInteractor, llmInteractor,
-                createPostPresenter, boardService, postService);
+                createPostPresenter, boardService, postService,postBoardPresenter);
     }
 
     @AfterEach
