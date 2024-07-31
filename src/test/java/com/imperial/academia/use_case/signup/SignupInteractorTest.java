@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import com.imperial.academia.app.ServiceFactory;
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.entity.user.UserFactory;
 import com.imperial.academia.service.UserService;
@@ -110,5 +112,29 @@ public class SignupInteractorTest {
         signupInteractor.navigateToLogin();
 
         verify(changeViewInteractor).changeView("log in");
+    }
+    @Test
+    void executeSQLException(){
+        SignupInputData inputData = new SignupInputData("validUsername", "validPassword", "validPassword", "existing@example.com");
+        try {
+            when(userService.existsByEmail("existing@example.com")).thenThrow(new SQLException());
+
+            signupInteractor.execute(inputData);
+        } catch (SQLException e){
+            verify(signupPresenter).prepareFailView("An error occurred during signup: "+ e.getMessage());
+
+        }
+
+    }
+    @Test
+    void constructorTest(){
+        try (MockedStatic<ServiceFactory> mockedStatic = Mockito.mockStatic(ServiceFactory.class)){
+            mockedStatic.when(ServiceFactory::getUserService).thenReturn(userService);
+            try(MockedStatic<UsecaseFactory> mockedStatic1 = Mockito.mockStatic(UsecaseFactory.class)){
+                mockedStatic1.when(UsecaseFactory::getChangeViewInteractor).thenReturn(changeViewInteractor);
+                signupInteractor = new SignupInteractor(signupPresenter, userFactory);
+                verify(UsecaseFactory.getChangeViewInteractor());
+            }
+        }
     }
 }

@@ -129,4 +129,5 @@ public class Main {
         // Display the main application window
         application.setVisible(true);
     }
+
 }
