@@ -83,20 +83,23 @@ public class EditInteractor implements EditInputBoundary {
      * @throws SQLException If updating the user fails.
      */
     private boolean validateAndUpdateUser(EditInputData editInputData, User oldUser) throws SQLException {
-        if (!validateInputData(editInputData, oldUser)) return false;
+        if (!validateInputData(editInputData, oldUser)) {
+            return false;
+        }else {
 
-        LocalDateTime now = LocalDateTime.now();
-        User updatedUser = updateUserFactory.create(oldUser.getId(), editInputData.getUsername(), editInputData.getPassword(),
-                editInputData.getEmail(), oldUser.getRole(), oldUser.getAvatarUrl(),
-                oldUser.getRegistrationDate(), now);
+            LocalDateTime now = LocalDateTime.now();
+            User updatedUser = updateUserFactory.create(oldUser.getId(), editInputData.getUsername(), editInputData.getPassword(),
+                    editInputData.getEmail(), oldUser.getRole(), oldUser.getAvatarUrl(),
+                    oldUser.getRegistrationDate(), now);
 
-        userService.update(updatedUser);
-        SessionManager.setCurrentUser(updatedUser);
+            userService.update(updatedUser);
+            SessionManager.setCurrentUser(updatedUser);
 
-        // Trigger the profile interactor to reflect changes
-        ProfileInputData profileInputData = new ProfileInputData(updatedUser.getId());
-        UsecaseFactory.getProfileInteractor().execute(profileInputData);
-        return true;
+            // Trigger the profile interactor to reflect changes
+            ProfileInputData profileInputData = new ProfileInputData(updatedUser.getId());
+            UsecaseFactory.getProfileInteractor().execute(profileInputData);
+            return true;
+        }
     }
 
     /**
@@ -115,7 +118,7 @@ public class EditInteractor implements EditInputBoundary {
             editPresenter.prepareFailView("Username must be longer than 6 characters.", editOutputData);
             return false;
         }
-        if (userService.existsByUsername(editInputData.getUsername()) && !Objects.equals(editInputData.getUsername(), oldUser.getUsername())) {
+        if ( !Objects.equals(editInputData.getUsername(), oldUser.getUsername()) && userService.existsByUsername(editInputData.getUsername())) {
             editPresenter.prepareFailView("Username already exists.", editOutputData);
             return false;
         }
@@ -131,7 +134,7 @@ public class EditInteractor implements EditInputBoundary {
             editPresenter.prepareFailView("Invalid email format.", editOutputData);
             return false;
         }
-        if (userService.existsByEmail(editInputData.getEmail()) && !Objects.equals(editInputData.getEmail(), oldUser.getEmail())) {
+        if (!Objects.equals(editInputData.getEmail(), oldUser.getEmail()) && userService.existsByEmail(editInputData.getEmail())) {
             editPresenter.prepareFailView("Email already in use.", editOutputData);
             return false;
         }
