@@ -51,6 +51,23 @@ public class ChatMessageCacheImpl implements ChatMessageCache {
     }
 
     /**
+     * Constructs a new ChatMessageCacheImpl with the specified caches.
+     *
+     * @param chatMessageCache The cache for ChatMessage objects.
+     * @param chatMessagesCache The cache for lists of ChatMessage objects.
+     * @param waveformDataCache The cache for WaveformData objects.
+     * @param mapDataCache The cache for MapData objects.
+     * @param fileDataCache The cache for FileData objects.
+     */
+    public ChatMessageCacheImpl(Cache<String, ChatMessage> chatMessageCache, Cache<String, List<ChatMessage>> chatMessagesCache, Cache<String, WaveformData> waveformDataCache, Cache<String, MapData> mapDataCache, Cache<String, FileData> fileDataCache) {
+        this.chatMessageCache = chatMessageCache;
+        this.chatMessagesCache = chatMessagesCache;
+        this.waveformDataCache = waveformDataCache;
+        this.mapDataCache = mapDataCache;
+        this.fileDataCache = fileDataCache;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

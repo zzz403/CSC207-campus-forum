@@ -30,6 +30,17 @@ public class UserCacheImpl implements UserCache {
     }
 
     /**
+     * Constructs a new UserCacheImpl with the specified caches.
+     *
+     * @param userCache The cache for User objects.
+     * @param usersCache The cache for lists of User objects.
+     */
+    public UserCacheImpl(Cache<String, User> userCache, Cache<String, List<User>> usersCache) {
+        this.userCache = userCache;
+        this.usersCache = usersCache;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

@@ -30,6 +30,17 @@ public class CommentCacheImpl implements CommentCache {
     }
 
     /**
+     * Constructs a new CommentCacheImpl with the specified caches.
+     *
+     * @param commentCache The cache for Comment objects.
+     * @param commentsCache The cache for lists of Comment objects.
+     */
+    public CommentCacheImpl(Cache<String, Comment> commentCache, Cache<String, List<Comment>> commentsCache) {
+        this.commentCache = commentCache;
+        this.commentsCache = commentsCache;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
