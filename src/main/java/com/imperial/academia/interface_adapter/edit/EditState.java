@@ -15,7 +15,9 @@ public class EditState {
 
 
     public String getAvatarError() {
-        return avatarError;
+
+        return this.avatarError;
+
     }
 
     public void setAvatarError(String avatarError) {
@@ -33,6 +35,7 @@ public class EditState {
         this.email = copy.getEmail();
         this.emailError = copy.getEmailError();
         this.avatarURL = copy.getAvatarURL();
+        this.avatarError = copy.getAvatarError();
     }
 
     public String getAvatarURL() {

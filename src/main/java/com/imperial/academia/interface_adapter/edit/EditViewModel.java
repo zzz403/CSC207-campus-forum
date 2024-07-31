@@ -22,7 +22,9 @@ public class EditViewModel extends ViewModel {
 
     public EditViewModel(){super("edit");};
 
-    public EditState getState(){return new EditState(state);}
+    public EditState getState(){
+        return new EditState(state);
+    }
 
     public void setState(EditState state){
         this.state = state;
