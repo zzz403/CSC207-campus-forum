@@ -2,7 +2,10 @@ package com.imperial.academia.use_case.profile;
 
 import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.app.UsecaseFactory;
+import com.imperial.academia.entity.post.Post;
+import com.imperial.academia.entity.post.PostLike;
 import com.imperial.academia.entity.user.User;
+import com.imperial.academia.service.PostService;
 import com.imperial.academia.service.UserService;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
@@ -15,6 +18,7 @@ import org.mockito.Mockito;
 import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.Assert.assertFalse;
@@ -23,6 +27,7 @@ public class ProfileInteractorTest {
     private ProfileOutputBoundary mockPresenter;
     private UserService mockUserService;
     private ChangeViewInputBoundary mockChangeViewInteractor;
+    private PostService mockPostService;
     private ProfileInteractor profileInteractor;
     private User testUser;
     private User testUser1;
@@ -64,6 +69,70 @@ public class ProfileInteractorTest {
             }
 
         };
+
+        mockPostService = new PostService() {
+            @Override
+            public void insert(Post post) throws SQLException {
+
+            }
+
+            @Override
+            public Post get(int id) throws SQLException {
+                return null;
+            }
+
+            @Override
+            public List<Post> getAll() throws SQLException {
+                return List.of();
+            }
+
+            @Override
+            public List<Post> getAllByUserId(int userId) throws SQLException {
+                ArrayList<Post> posts = new ArrayList<Post>();
+                Post post = new Post(
+                        1,
+                        "",
+                        "",
+                        0,
+                        0,
+                        new Timestamp(1),
+                        new Timestamp(2)
+                );
+                posts.add(post);
+                return posts;
+            }
+
+            @Override
+            public void update(Post post) throws SQLException {
+
+            }
+
+            @Override
+            public void delete(int id) throws SQLException {
+
+            }
+
+            @Override
+            public void likePost(int postId, int userId) throws SQLException {
+
+            }
+
+            @Override
+            public void unlikePost(int postId, int userId) throws SQLException {
+
+            }
+
+            @Override
+            public List<PostLike> getPostLikes(int postId) throws SQLException {
+                return List.of();
+            }
+
+            @Override
+            public int getTotalLikesNumberByPostId(int postId) throws SQLException {
+                return 0;
+            }
+        };
+
         mockUserService = new UserService() {
             @Override
             public void insert(User user) throws SQLException {
@@ -119,7 +188,7 @@ public class ProfileInteractorTest {
             }
         };
 
-//        profileInteractor = new ProfileInteractor(mockPresenter, mockUserService,mockChangeViewInteractor);// TODO chang test
+        profileInteractor = new ProfileInteractor(mockPresenter, mockUserService,mockChangeViewInteractor,mockPostService);// TODO chang test
     }
 
     @Test
@@ -163,7 +232,7 @@ public class ProfileInteractorTest {
     @Test
     public void testExecuteSQLError(){
         profileInteractor.execute(new ProfileInputData(500));
-        Assert.assertEquals((new SQLException()).getMessage(), outputError);
+        Assert.assertEquals("Database error: " + (new SQLException()).getMessage(), outputError);
     }
 
     @Test
