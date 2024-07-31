@@ -79,12 +79,12 @@ public class UserServiceImplTest {
         when(userCache.exists("email:email@example.com")).thenReturn(false);
         when(userDAO.existsByEmail("email@example.com")).thenReturn(true);
         User user = new User(1, "user1", "password", "email@example.com", "user", "avatarUrl", null, null);
-        when(userDAO.getByUsername("email@example.com")).thenReturn(user);
+        when(userDAO.getByEmail("email@example.com")).thenReturn(user);
 
         assertTrue(userService.existsByEmail("email@example.com"));
         verify(userCache, times(1)).exists("email:email@example.com");
         verify(userDAO, times(1)).existsByEmail("email@example.com");
-        verify(userDAO, times(1)).getByUsername("email@example.com");
+        verify(userDAO, times(1)).getByEmail("email@example.com");
         verify(userCache, times(1)).setUser("email:email@example.com", user);
     }
 

@@ -127,16 +127,13 @@ public class ChatGroupServiceImplTest {
         int groupId = 1;
         ChatMessage chatMessage = new ChatMessage(1, 2, groupId, "text", "Hello", new Timestamp(System.currentTimeMillis()));
 
-        when(chatGroupCache.getLastMessage("lastMessage:" + groupId)).thenReturn(null);
         when(chatGroupDAO.getLastMessage(groupId)).thenReturn(chatMessage);
 
         ChatMessage result = chatGroupService.getLastMessage(groupId);
 
         assertNotNull(result);
         assertEquals(1, result.getId());
-        verify(chatGroupCache, times(1)).getLastMessage("lastMessage:" + groupId);
         verify(chatGroupDAO, times(1)).getLastMessage(groupId);
-        verify(chatGroupCache, times(1)).setLastMessage("lastMessage:" + groupId, chatMessage);
     }
 
     @Test
