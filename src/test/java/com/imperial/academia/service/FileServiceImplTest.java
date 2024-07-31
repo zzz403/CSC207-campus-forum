@@ -43,7 +43,7 @@ public class FileServiceImplTest {
 
         fileService.saveFile(groupId, tempFile, type);
 
-        String expectedPath = String.format("resources\\%s\\%d\\%s", type, groupId, tempFile.getName());
+        String expectedPath = String.format("resources/%s/%d/%s", type, groupId, tempFile.getName());
         Path savedFilePath = Paths.get(fileService.getOutputFilePath());
 
         assertTrue(Files.exists(savedFilePath));
