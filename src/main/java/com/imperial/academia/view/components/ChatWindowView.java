@@ -559,7 +559,7 @@ public class ChatWindowView extends JPanel {
                     isButtonEnabled = true;
                 }
                 case "file" -> {
-                    FilePanel filePanel = new FilePanel(chatMessage.getFileData(), chatMessage.isMe());
+                    FilePanel filePanel = new FilePanel(chatMessage.getFileData());
                     filePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
                     filePanel.addMouseListener(new MouseAdapter() {
                         @Override

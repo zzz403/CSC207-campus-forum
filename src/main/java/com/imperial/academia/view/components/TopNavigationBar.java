@@ -318,7 +318,7 @@ public class TopNavigationBar extends JPanel {
     /**
      * Custom search bar with a search icon and placeholder text.
      */
-    private class CustomSearchBar extends JTextField {
+    class CustomSearchBar extends JTextField {
         private final Icon searchIcon;
 
         public CustomSearchBar(int columns) {
