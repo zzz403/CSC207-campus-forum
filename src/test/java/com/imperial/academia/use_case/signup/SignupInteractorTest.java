@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import com.imperial.academia.app.ServiceFactory;
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.entity.user.UserFactory;
 import com.imperial.academia.service.UserService;
@@ -111,4 +113,35 @@ public class SignupInteractorTest {
 
         verify(changeViewInteractor).changeView("log in");
     }
+    @Test
+    void executeSQLException(){
+        SignupInputData inputData = new SignupInputData("validUsername", "validPassword", "validPassword", "existing@example.com");
+        try {
+            when(userService.existsByEmail("existing@example.com")).thenThrow(new SQLException());
+
+            signupInteractor.execute(inputData);
+        } catch (SQLException e){
+            verify(signupPresenter).prepareFailView("An error occurred during signup: "+ e.getMessage());
+
+        }
+
+    }
+    @Test
+    void constructorTest() {
+        // Setup static mocks for ServiceFactory and UsecaseFactory
+        try (MockedStatic<ServiceFactory> mockedServiceFactory = Mockito.mockStatic(ServiceFactory.class);
+             MockedStatic<UsecaseFactory> mockedUsecaseFactory = Mockito.mockStatic(UsecaseFactory.class)) {
+
+            // Prepare static mocks to return specific objects when methods are called
+            mockedServiceFactory.when(ServiceFactory::getUserService).thenReturn(userService);
+            mockedUsecaseFactory.when(UsecaseFactory::getChangeViewInteractor).thenReturn(changeViewInteractor);
+
+            // Execute: instantiate the SignupInteractor
+            SignupInteractor interactor = new SignupInteractor(signupPresenter, userFactory);
+
+            // Verify: Check if the static method was called as expected
+            mockedUsecaseFactory.verify(() -> UsecaseFactory.getChangeViewInteractor(), Mockito.times(1));
+        }
+    }
+
 }
