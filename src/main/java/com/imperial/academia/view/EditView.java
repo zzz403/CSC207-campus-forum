@@ -1,19 +1,29 @@
 package com.imperial.academia.view;
 
-import com.imperial.academia.interface_adapter.edit.EditController;
-import com.imperial.academia.interface_adapter.edit.EditState;
-import com.imperial.academia.interface_adapter.edit.EditViewModel;
-import com.imperial.academia.interface_adapter.profile.ProfileState;
-import com.imperial.academia.interface_adapter.signup.SignupState;
-import com.imperial.academia.view.components.ChatWindowView;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FileDialog;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
+import com.imperial.academia.interface_adapter.edit.EditController;
+import com.imperial.academia.interface_adapter.edit.EditState;
+import com.imperial.academia.interface_adapter.edit.EditViewModel;
 
 public class EditView extends JPanel {
     public final String viewName = "edit";
@@ -34,7 +44,7 @@ public class EditView extends JPanel {
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
 
-        GridBagConstraints constraints = new GridBagConstraints();
+        // GridBagConstraints constraints = new GridBagConstraints();
 
         JLabel title = new JLabel(editViewModel.TITLE_LABEL);
         title.setFont(new Font("Arial", Font.BOLD, 20));

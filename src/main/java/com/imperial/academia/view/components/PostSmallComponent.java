@@ -1,6 +1,5 @@
 package com.imperial.academia.view.components;
 
-import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -9,10 +8,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Image;
-import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.ComponentAdapter;
@@ -30,9 +26,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 
 public class PostSmallComponent extends JPanel {
     
@@ -151,54 +145,54 @@ public class PostSmallComponent extends JPanel {
         g2.dispose();
     }
 
-    private static BufferedImage scaleImage(BufferedImage image, int maxWidth, int maxHeight) {
-        int width = image.getWidth();
-        int height = image.getHeight();
+    // private static BufferedImage scaleImage(BufferedImage image, int maxWidth, int maxHeight) {
+    //     int width = image.getWidth();
+    //     int height = image.getHeight();
 
-        if (width > maxWidth || height > maxHeight) {
-            double widthRatio = (double) maxWidth / width;
-            double heightRatio = (double) maxHeight / height;
-            double scale = Math.min(widthRatio, heightRatio);
+    //     if (width > maxWidth || height > maxHeight) {
+    //         double widthRatio = (double) maxWidth / width;
+    //         double heightRatio = (double) maxHeight / height;
+    //         double scale = Math.min(widthRatio, heightRatio);
 
-            int newWidth = (int) Math.floor(width * scale);
-            int newHeight = (int) Math.floor(height * scale);
+    //         int newWidth = (int) Math.floor(width * scale);
+    //         int newHeight = (int) Math.floor(height * scale);
 
-            Image tmp = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-            BufferedImage scaledImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2d = scaledImage.createGraphics();
-            g2d.drawImage(tmp, 0, 0, null);
-            g2d.dispose();
+    //         Image tmp = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+    //         BufferedImage scaledImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+    //         Graphics2D g2d = scaledImage.createGraphics();
+    //         g2d.drawImage(tmp, 0, 0, null);
+    //         g2d.dispose();
 
-            // Crop the image
-            int cropSize = 10;
-            BufferedImage croppedImage = scaledImage.getSubimage(cropSize, cropSize, newWidth - 2 * cropSize, newHeight - 2 * cropSize);
-            return croppedImage;
-        } else {
-            return image;
-        }
-    }
+    //         // Crop the image
+    //         int cropSize = 10;
+    //         BufferedImage croppedImage = scaledImage.getSubimage(cropSize, cropSize, newWidth - 2 * cropSize, newHeight - 2 * cropSize);
+    //         return croppedImage;
+    //     } else {
+    //         return image;
+    //     }
+    // }
 
-    private static BufferedImage imageMakeRoundedCorner(BufferedImage image, int cornerRadius) {
-        int w = image.getWidth();
-        int h = image.getHeight();
-        BufferedImage output = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+    // private static BufferedImage imageMakeRoundedCorner(BufferedImage image, int cornerRadius) {
+    //     int w = image.getWidth();
+    //     int h = image.getHeight();
+    //     BufferedImage output = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 
-        Graphics2D g2 = output.createGraphics();
+    //     Graphics2D g2 = output.createGraphics();
 
-        // Enable anti-aliasing for smooth corners
-        g2.setComposite(AlphaComposite.Src);
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(Color.WHITE);
+    //     // Enable anti-aliasing for smooth corners
+    //     g2.setComposite(AlphaComposite.Src);
+    //     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    //     g2.setColor(Color.WHITE);
 
-        // Create a shape with rounded corners
-        g2.fill(new RoundRectangle2D.Float(0, 0, w, h, cornerRadius, cornerRadius));
+    //     // Create a shape with rounded corners
+    //     g2.fill(new RoundRectangle2D.Float(0, 0, w, h, cornerRadius, cornerRadius));
 
-        // Composite the image on top using the rounded shape as the alpha source
-        g2.setComposite(AlphaComposite.SrcAtop);
-        g2.drawImage(image, 0, 0, null);
+    //     // Composite the image on top using the rounded shape as the alpha source
+    //     g2.setComposite(AlphaComposite.SrcAtop);
+    //     g2.drawImage(image, 0, 0, null);
 
-        g2.dispose();
+    //     g2.dispose();
 
-        return output;
-    }
+    //     return output;
+    // }
 }

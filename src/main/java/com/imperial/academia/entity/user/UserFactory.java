@@ -1,6 +1,5 @@
 package com.imperial.academia.entity.user;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
