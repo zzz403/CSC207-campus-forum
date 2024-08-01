@@ -20,7 +20,7 @@ public class PostSmallComponentTest {
         BufferedImage image = ImageIO.read(new File("resources/test_image/test_image_1.jpg"));
         BufferedImage avatar = ImageIO.read(new File("resources/avatar/avatarExample.png"));
         String title = "Sample Title";
-        String content = "This is a sample content for testing.";
+        String content = "This is a sample content for testing!";
         String author = "Author Name";
         int likes = 42;
 
