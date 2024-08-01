@@ -30,6 +30,17 @@ public class GroupMemberCacheImpl implements GroupMemberCache {
     }
 
     /**
+     * Constructs a new GroupMemberCacheImpl with the specified caches.
+     *
+     * @param groupMemberCache The cache for GroupMember objects.
+     * @param groupMembersCache The cache for lists of GroupMember objects.
+     */
+    public GroupMemberCacheImpl(Cache<String, GroupMember> groupMemberCache, Cache<String, List<GroupMember>> groupMembersCache) {
+        this.groupMemberCache = groupMemberCache;
+        this.groupMembersCache = groupMembersCache;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

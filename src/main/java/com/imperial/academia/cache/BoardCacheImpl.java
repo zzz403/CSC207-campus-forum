@@ -30,6 +30,16 @@ public class BoardCacheImpl implements BoardCache {
     }
 
     /**
+     * Constructs a new BoardCacheImpl with the specified caches.
+     * @param boardCache
+     * @param boardsCache
+     */
+    public BoardCacheImpl(Cache<String, Board> boardCache, Cache<String, List<Board>> boardsCache) {
+        this.boardCache = boardCache;
+        this.boardsCache = boardsCache;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

@@ -34,6 +34,13 @@ public class TopNavigationBarController implements PropertyChangeListener {
         sessionInputBoundary.addSessionChangeListener(this);
     }
 
+    public TopNavigationBarController(ChangeViewInputBoundary changeViewInteractor, SessionInputBoundary sessionInputBoundary) {
+        this.changeViewInteractor = changeViewInteractor;
+        this.sessionInputBoundary = sessionInputBoundary;
+        this.currentSession = sessionInputBoundary.getSessionInfo();
+        sessionInputBoundary.addSessionChangeListener(this);
+    }
+
     /**
      * Changes the view to the specified view name.
      * 

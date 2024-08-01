@@ -30,6 +30,17 @@ public class PostCacheImpl implements PostCache {
     }
 
     /**
+     * Constructs a new PostCacheImpl with the specified caches.
+     *
+     * @param postCache The cache for Post objects.
+     * @param postsCache The cache for lists of Post objects.
+     */
+    public PostCacheImpl(Cache<String, Post> postCache, Cache<String, List<Post>> postsCache) {
+        this.postCache = postCache;
+        this.postsCache = postsCache;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

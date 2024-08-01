@@ -26,6 +26,13 @@ public class UserDAO implements UserDAI {
      */
     @Override
     public void insert(User user) throws SQLException {
+        if (user.getUsername() == null || user.getUsername().isEmpty() ||
+                user.getPassword() == null || user.getPassword().isEmpty() ||
+                user.getEmail() == null || user.getEmail().isEmpty() ||
+                user.getRole() == null || user.getRole().isEmpty()) {
+            throw new SQLException("User fields cannot be empty");
+        }
+
         if (existsByUsername(user.getUsername())) {
             throw new SQLException("Username already exists");
         }
@@ -92,14 +99,14 @@ public class UserDAO implements UserDAI {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     user = new User(
-                        rs.getInt("user_id"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("email"),
-                        rs.getString("role"),
-                        rs.getString("avatar_url"),
-                        rs.getTimestamp("registration_date"),
-                        rs.getTimestamp("last_modified")
+                            rs.getInt("user_id"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getString("email"),
+                            rs.getString("role"),
+                            rs.getString("avatar_url"),
+                            rs.getTimestamp("registration_date"),
+                            rs.getTimestamp("last_modified")
                     );
                 }
             }
@@ -143,14 +150,14 @@ public class UserDAO implements UserDAI {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     user = new User(
-                        rs.getInt("user_id"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("email"),
-                        rs.getString("role"),
-                        rs.getString("avatar_url"),
-                        rs.getTimestamp("registration_date"),
-                        rs.getTimestamp("last_modified")
+                            rs.getInt("user_id"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getString("email"),
+                            rs.getString("role"),
+                            rs.getString("avatar_url"),
+                            rs.getTimestamp("registration_date"),
+                            rs.getTimestamp("last_modified")
                     );
                 }
             }
@@ -169,14 +176,14 @@ public class UserDAO implements UserDAI {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 users.add(new User(
-                    rs.getInt("user_id"),
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("email"),
-                    rs.getString("role"),
-                    rs.getString("avatar_url"),
-                    rs.getTimestamp("registration_date"),
-                    rs.getTimestamp("last_modified")
+                        rs.getInt("user_id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getString("role"),
+                        rs.getString("avatar_url"),
+                        rs.getTimestamp("registration_date"),
+                        rs.getTimestamp("last_modified")
                 ));
             }
         }
@@ -195,14 +202,14 @@ public class UserDAO implements UserDAI {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     users.add(new User(
-                        rs.getInt("user_id"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("email"),
-                        rs.getString("role"),
-                        rs.getString("avatar_url"),
-                        rs.getTimestamp("registration_date"),
-                        rs.getTimestamp("last_modified")
+                            rs.getInt("user_id"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getString("email"),
+                            rs.getString("role"),
+                            rs.getString("avatar_url"),
+                            rs.getTimestamp("registration_date"),
+                            rs.getTimestamp("last_modified")
                     ));
                 }
             }

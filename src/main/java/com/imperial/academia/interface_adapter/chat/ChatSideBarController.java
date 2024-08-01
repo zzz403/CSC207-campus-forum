@@ -22,6 +22,17 @@ public class ChatSideBarController {
     }
 
     /**
+     * Constructor for ChatSideBarController.
+     *
+     * @param chatSideBarInteractor the chat side bar interactor
+     * @param chatWindowInteractor the chat window interactor
+     */
+    public ChatSideBarController(ChatSideBarInputBoundary chatSideBarInteractor, ChatWindowInputBoundary chatWindowInteractor) {
+        this.chatSideBarInteractor = chatSideBarInteractor;
+        this.chatWindowInteractor = chatWindowInteractor;
+    }
+
+    /**
      * Executes an action to handle a chat group by its name.
      *
      * @param chatGroupName the name of the chat group
