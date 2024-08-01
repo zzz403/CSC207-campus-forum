@@ -127,14 +127,21 @@ public class SignupInteractorTest {
 
     }
     @Test
-    void constructorTest(){
-        try (MockedStatic<ServiceFactory> mockedStatic = Mockito.mockStatic(ServiceFactory.class)){
-            mockedStatic.when(ServiceFactory::getUserService).thenReturn(userService);
-            try(MockedStatic<UsecaseFactory> mockedStatic1 = Mockito.mockStatic(UsecaseFactory.class)){
-                mockedStatic1.when(UsecaseFactory::getChangeViewInteractor).thenReturn(changeViewInteractor);
-                signupInteractor = new SignupInteractor(signupPresenter, userFactory);
-                verify(UsecaseFactory.getChangeViewInteractor());
-            }
+    void constructorTest() {
+        // Setup static mocks for ServiceFactory and UsecaseFactory
+        try (MockedStatic<ServiceFactory> mockedServiceFactory = Mockito.mockStatic(ServiceFactory.class);
+             MockedStatic<UsecaseFactory> mockedUsecaseFactory = Mockito.mockStatic(UsecaseFactory.class)) {
+
+            // Prepare static mocks to return specific objects when methods are called
+            mockedServiceFactory.when(ServiceFactory::getUserService).thenReturn(userService);
+            mockedUsecaseFactory.when(UsecaseFactory::getChangeViewInteractor).thenReturn(changeViewInteractor);
+
+            // Execute: instantiate the SignupInteractor
+            SignupInteractor interactor = new SignupInteractor(signupPresenter, userFactory);
+
+            // Verify: Check if the static method was called as expected
+            mockedUsecaseFactory.verify(() -> UsecaseFactory.getChangeViewInteractor(), Mockito.times(1));
         }
     }
+
 }
