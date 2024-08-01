@@ -36,9 +36,12 @@ public class PostSmallComponentFactory {
         BufferedImage avatar = null;
         try {
             // Load images from file paths
-            System.out.println("Image loaded: "+ imageUrl);
 
+            System.out.println(imageUrl);
             image = ImageIO.read(new File(imageUrl));
+            if (image == null) {
+                System.out.println("Image is null");
+            }
             avatar = ImageIO.read(new File(avatarUrl));
         } catch (IOException e) {
             e.printStackTrace();
@@ -46,6 +49,7 @@ public class PostSmallComponentFactory {
         }
 
         // Scale and round corners of the images
+        System.out.println(imageUrl);
         image = scaleImage(image, 300, 200);
         image = imageMakeRoundedCorner(image, 30);
         avatar = imageMakeRoundedCorner(avatar, 250);
