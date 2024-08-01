@@ -27,10 +27,13 @@ import java.util.List;
 public class ChatSideBarView extends JPanel {
     private final JPanel chatListPanel;
     private final JTextField searchField;
-    private final ChatSideBarController chatSideBarController = new ChatSideBarController();
+    private ChatSideBarController chatSideBarController = new ChatSideBarController();
     private final Map<Integer, ImageIcon> avatarCache = new HashMap<>();
     ChatSideBarViewModel chatSideBarViewModel;
 
+    public void setChatSideBarController(ChatSideBarController chatSideBarController) {
+        this.chatSideBarController = chatSideBarController;
+    }
     /**
      * Constructs a ChatSideBarView with the specified controller and view model.
      *
@@ -341,5 +344,13 @@ public class ChatSideBarView extends JPanel {
         g2.dispose();
 
         return output;
+    }
+
+    JTextField getSearchField() {
+        return searchField;
+    }
+
+    JPanel getChatListPanel() {
+        return chatListPanel;
     }
 }
