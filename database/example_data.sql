@@ -32,8 +32,84 @@ INSERT INTO boards (name, description, creator_id, created_at) VALUES
 
 -- Insert posts
 INSERT INTO posts (title, content, author_id, board_id, creation_date, last_modified_date) VALUES
-('Welcome to the forum', 'This is the first post in the general discussion board.', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('Tech News', 'Let''s talk about the latest tech news.', 2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Welcome to the forum',  'This is the first post in the general discussion board. We are excited to have you here! Feel free to introduce yourself and share what you hope to gain from this community. Let’s build a friendly and supportive environment for everyone.', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Tech News', 'Technology has become an integral part of our daily lives, shaping how we communicate, work, and entertain ourselves. The rapid advancements in technology have brought about significant changes across various sectors, from healthcare and education to transportation and entertainment. This article explores the profound impact of technology on society, highlighting both the positive and negative aspects of this digital revolution.
+
+**1. The Evolution of Communication**
+
+One of the most noticeable impacts of technology is the transformation of communication. Gone are the days when sending a letter or making a long-distance phone call was the primary means of staying in touch. Today, technology has made communication instant and accessible through various platforms such as social media, messaging apps, and video conferencing tools.
+
+- **Social Media**: Platforms like Facebook, Twitter, and Instagram have changed how we connect with others. They allow us to share our thoughts, photos, and videos with a global audience in real-time, fostering a sense of community and connectivity.
+
+- **Messaging Apps**: Applications like WhatsApp, Telegram, and Signal have revolutionized the way we send messages. With features like group chats, voice notes, and multimedia sharing, these apps offer a versatile and convenient communication experience.
+
+- **Video Conferencing**: Tools like Zoom, Microsoft Teams, and Google Meet have become essential for both personal and professional communication, especially during the COVID-19 pandemic. They enable face-to-face interactions across vast distances, making remote work and virtual events possible.
+
+**2. Transforming the Workplace**
+
+Technology has significantly impacted the workplace, altering how businesses operate and how employees perform their tasks.
+
+- **Remote Work**: The advent of technology has made remote work feasible, allowing employees to work from anywhere with an internet connection. This flexibility has led to improved work-life balance and increased productivity for many.
+
+- **Automation and AI**: Automation and artificial intelligence have streamlined processes across various industries, reducing the need for manual labor and increasing efficiency. While this has led to job displacement in some sectors, it has also created new opportunities in tech-driven fields.
+
+- **Collaboration Tools**: Software like Slack, Asana, and Trello have enhanced collaboration among team members, enabling real-time communication and project management. These tools facilitate seamless teamwork, even in distributed teams.
+
+**3. Advancements in Healthcare**
+
+Technology has transformed the healthcare industry, improving patient care and outcomes through innovations such as telemedicine, electronic health records, and medical devices.
+
+- **Telemedicine**: Telemedicine platforms have made healthcare more accessible by allowing patients to consult with doctors remotely. This is particularly beneficial for those living in rural or underserved areas.
+
+- **Electronic Health Records (EHRs)**: EHRs have digitized patient information, making it easier for healthcare providers to access and share data. This has led to more accurate diagnoses and coordinated care.
+
+- **Medical Devices**: Advanced medical devices, such as wearable health trackers and robotic surgical systems, have improved the accuracy and efficiency of medical procedures, enhancing patient outcomes.
+
+**4. Education and Learning**
+
+Technology has revolutionized education by providing new ways to learn and access information.
+
+- **Online Learning**: Online platforms like Coursera, Khan Academy, and Udemy offer courses on a wide range of subjects, making education more accessible to people worldwide. This democratization of knowledge has empowered individuals to learn at their own pace and convenience.
+
+- **Interactive Learning Tools**: Technology has introduced interactive learning tools, such as virtual labs and educational apps, that enhance the learning experience. These tools engage students and make complex concepts easier to understand.
+
+- **Virtual Classrooms**: The COVID-19 pandemic accelerated the adoption of virtual classrooms, allowing students to continue their education remotely. Platforms like Google Classroom and Blackboard facilitate online learning and collaboration between teachers and students.
+
+**5. The Entertainment Industry**
+
+The entertainment industry has undergone a digital transformation, with technology playing a crucial role in content creation, distribution, and consumption.
+
+- **Streaming Services**: Platforms like Netflix, Spotify, and YouTube have changed how we consume media, offering on-demand access to movies, music, and videos. This shift has disrupted traditional media channels, such as cable TV and radio.
+
+- **Gaming**: The gaming industry has seen significant advancements with the introduction of virtual reality (VR) and augmented reality (AR). These technologies offer immersive experiences, blurring the line between the digital and physical worlds.
+
+- **Content Creation**: Technology has democratized content creation, allowing individuals to produce and share their work with a global audience. Social media platforms and streaming services provide a stage for creators to showcase their talents and reach millions.
+
+**6. Transportation and Smart Cities**
+
+Technology has also impacted transportation, leading to the development of smart cities and innovative mobility solutions.
+
+- **Electric Vehicles (EVs)**: The rise of electric vehicles, such as Tesla and Nissan Leaf, has revolutionized the automotive industry, promoting sustainability and reducing carbon emissions.
+
+- **Autonomous Vehicles**: Self-driving cars are on the horizon, promising to transform the way we travel and reduce traffic accidents caused by human error.
+
+- **Smart City Initiatives**: Technology is at the heart of smart city initiatives, where data-driven solutions optimize urban living. From smart traffic lights to waste management systems, these technologies aim to enhance the quality of life for residents.
+
+**7. The Dark Side of Technology**
+
+While technology has brought numerous benefits, it also poses challenges and risks that must be addressed.
+
+- **Privacy Concerns**: The collection and use of personal data by tech companies have raised privacy concerns among users. Ensuring data protection and transparency is crucial to maintaining trust in technology.
+
+- **Cybersecurity Threats**: As technology becomes more integrated into our lives, cybersecurity threats, such as hacking and identity theft, have increased. Protecting sensitive information and developing robust security measures are essential.
+
+- **Digital Divide**: Despite the widespread adoption of technology, a digital divide still exists between those who have access to technology and those who do not. Bridging this gap is vital to ensuring equal opportunities for all.
+
+- **Addiction and Mental Health**: The overuse of technology, particularly social media, can lead to addiction and negative impacts on mental health. Promoting healthy technology use and digital well-being is important for a balanced lifestyle.
+
+**Conclusion**
+
+Technology has undoubtedly transformed society, offering unprecedented opportunities and challenges. As we continue to embrace digital advancements, it is crucial to navigate the complexities of this tech-driven world thoughtfully and ethically. By leveraging technology responsibly, we can create a future that enhances our lives and fosters a more connected, sustainable, and equitable society.', 2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('Fitness Tips', 'Share your best fitness tips here.', 3, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('Favorite Destinations', 'What are your favorite travel destinations?', 4, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('Book Recommendations', 'Recommend some good books to read.', 5, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -60,7 +136,26 @@ INSERT INTO comments (content, author_id, post_id, parent_comment_id, creation_d
 ('Thanks for the tips!', 4, 3, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('I love visiting Japan.', 3, 4, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('I recommend "1984" by George Orwell.', 2, 5, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('Thanks for the recommendation!', 1, 5, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+('Thanks for the recommendation!', 1, 5, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+-- Comments for Post 1
+('This article really highlights the importance of technology in modern society.', 3, 1, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('I learned a lot about how technology impacts different sectors. Thanks for sharing!', 4, 1, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('I think technology also plays a huge role in environmental conservation efforts.', 5, 1, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Great insights! How do you think technology will shape the future of education?', 6, 1, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('The part about AI and automation was particularly fascinating. More jobs are getting automated!', 7, 1, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('I believe there should be more emphasis on ethical tech development.', 8, 1, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Nice write-up! I think privacy concerns are a major issue with tech advancement.', 9, 1, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Agreed! We need to be cautious about data security.', 10, 1, 14, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('I think technology also helps to connect people in ways we never imagined.', 11, 1, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Do you think tech companies are doing enough to address cybersecurity threats?', 12, 1, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+-- Comments for Post 2
+('Tech news is always exciting to keep up with. What do you guys think about the new iPhone release?', 3, 2, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('I think the latest AI developments are game-changing for industries.', 4, 2, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('I’m excited about the upcoming tech conferences. Anyone planning to attend CES this year?', 5, 2, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Has anyone tried the new VR headsets? Heard they have some impressive features!', 6, 2, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('What do you think is the most important tech trend this year?', 7, 2, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('I’m curious about how 5G will change our connectivity and data speeds.', 8, 2, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('I heard there’s a new breakthrough in quantum computing. Any thoughts?', 9, 2, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Insert chat groups
 INSERT INTO chat_groups (group_name, creation_date, is_group,last_modified) VALUES

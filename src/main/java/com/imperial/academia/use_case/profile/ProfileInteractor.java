@@ -99,7 +99,7 @@ public class ProfileInteractor implements ProfileInputBoundary {
             postTitles.add(post.getTitle());
             postContents.add(post.getContent());
             postDates.add(post.getCreationDate());
-            int randomNum = rand.nextInt(9) + 1;  // Generates a number between 1 and 9
+            int randomNum = rand.nextInt(20) + 1;  // Generates a number between 1 and 9
             postImageUrls.add("resources/test_image/test_image_" + randomNum + ".jpg");
             postIds.add(post.getId());
         }
