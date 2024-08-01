@@ -105,7 +105,7 @@ public class Main {
             ProfileView profileView = new ProfileView(profileViewModel);
             views.add(profileView, profileView.viewName);
 
-            PostView postView = new PostView(postViewModel);
+            PostView postView = new PostView(postViewModel, application);
             views.add(postView, postView.viewName);
 
             EditView editView = new EditView(editViewModel, application);

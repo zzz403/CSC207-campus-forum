@@ -46,4 +46,48 @@ public class PostBoardState {
         this.postList = new ArrayList<>(posts);
     }
 
+    /**
+     * Increment the likes of the post with the given post ID.
+     * 
+     * @param postId the ID of the post to increment the likes of.
+     */
+    public void incrementLikesByPostId(int postId) {
+        for (PostOverviewInfo post : postList) {
+            if (post.getPostID() == postId) {
+                int likes = post.getLikes();
+                post.setLikes(likes + 1);
+                return;
+            }
+        }
+    }
+
+    /**
+     * Decrement the likes of the post with the given post ID.
+     * 
+     * @param postId the ID of the post to decrement the likes of.
+     */
+    public void decrementLikesByPostId(int postId) {
+        for (PostOverviewInfo post : postList) {
+            if (post.getPostID() == postId) {
+                int likes = post.getLikes();
+                post.setLikes(likes - 1);
+                return;
+            }
+        }
+    }
+
+    /**
+     * Get the likes of the post with the given post ID.
+     * 
+     * @param postId the ID of the post to get the likes of.
+     * @return the likes of the post with the given post ID.
+     */
+    public int getLikesByPostId(int postId) {
+        for (PostOverviewInfo post : postList) {
+            if (post.getPostID() == postId) {
+                return post.getLikes();
+            }
+        }
+        return 0;
+    }
 }

@@ -7,6 +7,7 @@ import com.imperial.academia.entity.post.Post;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.service.PostService;
 import com.imperial.academia.service.UserService;
+import com.imperial.academia.session.SessionManager;
 
 import java.sql.Timestamp;
 
@@ -62,6 +63,9 @@ public class PostInteractor implements PostInputBoundary {
             String avatarUrl = user.getAvatarUrl();
             Timestamp date = post.getLastModifiedDate();
             int postLikes = postService.getTotalLikesNumberByPostId(postID);
+
+            User currentUser = SessionManager.getCurrentUser();
+            boolean isLiked = postService.checkLiked(postID, currentUser.getId());
             
             PostInfoData postInfoData = PostInfoData.builder()
                                                     .setTitle(title)
@@ -70,6 +74,8 @@ public class PostInteractor implements PostInputBoundary {
                                                     .setAvatarUrl(avatarUrl)
                                                     .setDate(date)
                                                     .setLikes(postLikes)
+                                                    .setPostId(postID)
+                                                    .setIsLiked(isLiked)
                                                     .build();
 
             postPresenter.initPostPage(postInfoData);
@@ -78,5 +84,60 @@ public class PostInteractor implements PostInputBoundary {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Adds a like to the post with the given post ID.
+     * 
+     * @param postId the ID of the post to add a like to.
+     * @return true if the like was added successfully, false otherwise.
+     */
+    @Override
+    public boolean addLike(int postId, int userId) {
+        try{
+            postService.likePost(postId, userId);
+        }catch(SQLException e){
+            System.out.println("Can't like the post");
+            return false;
+        }
+        postPresenter.addLike(postId);
+        return true;
+    }
+
+    /**
+     * Removes a like from the post with the given post ID.
+     * 
+     * @param postId the ID of the post to remove a like from.
+     * @return true if the like was removed successfully, false otherwise.
+     */
+    @Override
+    public boolean removeLike(int postId, int userId) {
+        try{
+            postService.unlikePost(postId, userId);
+        }catch(SQLException e){
+            System.out.println("Can't unlike the post");
+            return false;
+        }
+        postPresenter.removeLike(postId);
+        return true;
+    }
+
+    /**
+     * Checks if the post with the given post ID is liked by the user with the given
+     * user ID.
+     * 
+     * @param postId the ID of the post to check if liked.
+     * @param userId the ID of the user to check if liked.
+     * @return true if the post is liked by the user, false otherwise.
+     */
+    @Override
+    public boolean checkLiked(int postId, int userId) {
+        try{
+            return postService.checkLiked(postId, userId);
+        }catch(SQLException e){
+            System.out.println("Can't check if liked");
+            return false;
+        }
+
     }
 }

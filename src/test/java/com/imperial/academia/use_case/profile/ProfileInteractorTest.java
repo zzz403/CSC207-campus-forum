@@ -131,6 +131,11 @@ public class ProfileInteractorTest {
             public int getTotalLikesNumberByPostId(int postId) throws SQLException {
                 return 0;
             }
+
+            @Override
+            public boolean checkLiked(int postId, int userId) throws SQLException {
+                return false;
+            }
         };
 
         mockUserService = new UserService() {

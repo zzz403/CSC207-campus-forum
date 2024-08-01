@@ -95,4 +95,14 @@ public interface PostService {
      * @throws SQLException if a database access error occurs
      */
     int getTotalLikesNumberByPostId(int postId) throws SQLException;
+
+    /**
+     * Check if the post is liked by the user.
+     *
+     * @param postId the ID of the post to check if liked
+     * @param userId the ID of the user to check if liked
+     * @return true if the post is liked by the user, false otherwise
+     * @throws SQLException if a database access error occurs
+     */
+    boolean checkLiked(int postId, int userId) throws SQLException;
 }

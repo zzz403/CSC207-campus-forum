@@ -2,6 +2,7 @@ package com.imperial.academia.interface_adapter.post;
 
 import java.sql.Timestamp;
 
+import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
 import com.imperial.academia.use_case.post.PostInfoData;
 import com.imperial.academia.use_case.post.PostOutputBoundary;
 
@@ -12,13 +13,16 @@ import com.imperial.academia.use_case.post.PostOutputBoundary;
 public class PostPresenter implements PostOutputBoundary {
     private final PostViewModel postViewModel;
 
+    private final PostBoardViewModel postBoardViewModel;
+
     /**
      * Constructs a new PostPresenter with the specified PostViewModel.
      * 
      * @param postViewModel the ViewModel to be updated with post data.
      */
-    public PostPresenter(PostViewModel postViewModel) {
+    public PostPresenter(PostViewModel postViewModel, PostBoardViewModel postBoardViewModel) {
         this.postViewModel = postViewModel;
+        this.postBoardViewModel = postBoardViewModel;
     }
 
     /**
@@ -33,11 +37,41 @@ public class PostPresenter implements PostOutputBoundary {
         String username = postInfoData.getUsername();
         String avatarUrl = postInfoData.getAvatarUrl();
         Timestamp date = postInfoData.getDate();
-        
+        int likes = postInfoData.getLikes();
+        int postId = postInfoData.getPostID();
+        boolean isLiked = postInfoData.isLiked();
+
         postViewModel.setStateTitle(title);
         postViewModel.setStateContent(content);
         postViewModel.setStateUsername(username);
         postViewModel.setStateAvatarUrl(avatarUrl);
         postViewModel.setStateDate(date);
+        postViewModel.setStateLikes(likes);
+        postViewModel.setStatePostID(postId);
+        postViewModel.setStateIsLiked(isLiked);
+    }
+
+    /**
+     * Adds a like to the post with the given post ID.
+     * 
+     * @param postId the ID of the post to add a like to.
+     */
+    @Override
+    public void addLike(int postId) {
+        postViewModel.incrementStateLikes();
+        postViewModel.setStateIsLiked(true);
+        postBoardViewModel.incrementStateLikesByPostId(postId);
+    }
+
+    /**
+     * Removes a like from the post with the given post ID.
+     * 
+     * @param postId the ID of the post to remove a like from.
+     */
+    @Override
+    public void removeLike(int postId) {
+        postViewModel.decrementStateLikes();
+        postViewModel.setStateIsLiked(false);
+        postBoardViewModel.decrementStateLikesByPostId(postId);
     }
 }

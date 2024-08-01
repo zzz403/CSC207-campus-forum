@@ -134,13 +134,15 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
         }
 
         createPostPresenter.submitSeccuss();
-
+        System.out.println("submitPost seccuss: " + post.getId());
         PostInfoData postInfoData = PostInfoData.builder()
                 .setTitle(title)
                 .setContent(content)
                 .setUsername(user.getUsername())
                 .setAvatarUrl(user.getAvatarUrl())
                 .setDate(post.getLastModifiedDate())
+                .setLikes(0)
+                .setPostId(post.getId())
                 .build();
 
         String summary = llmInteractor.summarizeChatHistory(content);
@@ -151,6 +153,7 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
                 .setUserName(user.getUsername())
                 .setAvatarURL(user.getAvatarUrl())
                 .setLikes(0)
+                .setPostID(post.getId())
                 .build();
         postInteractor.initPostPage(postInfoData);
         postBoardPresenter.addPost(postOverviewInfo);

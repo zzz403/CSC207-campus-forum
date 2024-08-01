@@ -154,4 +154,84 @@ public class PostViewModel extends ViewModel {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.format(date);
     }
+
+    /**
+     * Sets the number of likes of the post state and notifies listeners.
+     * 
+     * @param likes the new number of likes of the post.
+     */
+    public void setStateLikes(int likes) {
+        int oldLikes = state.getLikes();
+        state.setLikes(likes);
+        support.firePropertyChange("postLikes", oldLikes, likes);
+    }
+
+    /**
+     * Gets the number of likes of the post state.
+     * 
+     * @return the number of likes of the post.
+     */
+    public int getStateLikes() {
+        return state.getLikes();
+    }
+
+    /**
+     * Sets the post ID of the post state and notifies listeners.
+     * 
+     * @param postId the new post ID of the post.
+     */
+    public void setStatePostID(int postId) {
+        int oldPostId = state.getPostID();
+        state.setPostID(postId);
+        support.firePropertyChange("postId", oldPostId, postId);
+    }
+
+    /**
+     * Gets the post ID of the post state.
+     * 
+     * @return the post ID of the post.
+     */
+    public int getStatePostId() {
+        return state.getPostID();
+    }
+
+    /**
+     * Increments the number of likes of the post state and notifies listeners.
+     */
+    public void incrementStateLikes() {
+        int oldLikes = state.getLikes();
+        state.setLikes(oldLikes + 1);
+        support.firePropertyChange("postLikes", oldLikes, oldLikes + 1);
+    }
+
+    /**
+     * Decrements the number of likes of the post state and notifies listeners.
+     */
+    public void decrementStateLikes() {
+        int oldLikes = state.getLikes();
+        if(oldLikes-1 < 0) {
+            return;
+        }
+        state.setLikes(oldLikes - 1);
+        support.firePropertyChange("postLikes", oldLikes, oldLikes - 1);
+    }
+
+    /**
+     * Sets the liked state of the post and notifies listeners.
+     * 
+     * @param isLiked the new liked state of the post.
+     */
+    public void setStateIsLiked(boolean isLiked) {
+        state.setLiked(isLiked);
+        support.firePropertyChange("isLiked", null, isLiked);
+    }
+
+    /**
+     * Gets the liked state of the post.
+     * 
+     * @return true if the post is liked, false otherwise.
+     */
+    public boolean getStateIsLiked() {
+        return state.isLiked();
+    }
 }

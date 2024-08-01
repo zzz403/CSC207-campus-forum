@@ -33,7 +33,7 @@ public class PostBoardView extends JPanel {
     private JPanel mainPanel;
 
     /** The controller for the post board view. */
-    private final PostBoardController postBoardController = new PostBoardController();
+    private final PostBoardController postBoardController;
 
     private JFrame applicationFrame;
     /**
@@ -42,6 +42,7 @@ public class PostBoardView extends JPanel {
      * @param postBoardViewModel the view model associated with the post board
      */
     public PostBoardView(PostBoardViewModel postBoardViewModel, JFrame applicationFrame) {
+        this.postBoardController = new PostBoardController();
         this.applicationFrame = applicationFrame;
         setLayout(new BorderLayout());
 
@@ -111,6 +112,16 @@ public class PostBoardView extends JPanel {
                         return;
                     }
                     System.out.println("init post unsuccess | postID: " + postID);
+                }
+            });
+
+            postBoardViewModel.addPropertyChangeListener(evt -> {
+                if (evt.getPropertyName().equals("likeChangeInc="+postID)) {
+                    int likes = postBoardViewModel.getPostLikesByPostId(postID);
+                    postComponent.setLikes(likes);
+                }else if (evt.getPropertyName().equals("likeChangeDec="+postID)) {
+                    int likes = postBoardViewModel.getPostLikesByPostId(postID);
+                    postComponent.setLikes(likes);
                 }
             });
 

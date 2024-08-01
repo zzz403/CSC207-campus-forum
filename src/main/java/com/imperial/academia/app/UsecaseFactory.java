@@ -128,7 +128,7 @@ public class UsecaseFactory {
         EditViewModel editViewModel = viewModels.getEditViewModel();
         PostBoardViewModel postBoardViewModel = viewModels.getPostBoardViewModel();
 
-        PostOutputBoundary postPresenter = new PostPresenter(postViewModel);
+        PostOutputBoundary postPresenter = new PostPresenter(postViewModel, postBoardViewModel);
         postInteractor = new PostInteractor(postPresenter);
 
         UserFactory userFactory = new CommonUserFactory();

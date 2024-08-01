@@ -35,6 +35,10 @@ public class PostServiceImpl implements PostService {
         postDAO.insert(post);
         postCache.setPost("post:" + post.getId(), post);
         List<Post> posts = postCache.getPosts("posts:user:" + post.getAuthorId());
+        if(posts == null){
+            postCache.setPosts("posts:user:" + post.getAuthorId(), List.of(post));
+            return;
+        }
         posts.add(post);
         postCache.setPosts("posts:user:" + post.getAuthorId(), posts);
     }
@@ -134,5 +138,19 @@ public class PostServiceImpl implements PostService {
     public int getTotalLikesNumberByPostId(int postId) throws SQLException {
         List<PostLike> postLikes = getPostLikes(postId);
         return postLikes.size();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean checkLiked(int postId, int userId) throws SQLException {
+        List<PostLike> postLikes = getPostLikes(postId);
+        for (PostLike postLike : postLikes) {
+            if (postLike.getUserId() == userId) {
+                return true;
+            }
+        }
+        return false;
     }
 }

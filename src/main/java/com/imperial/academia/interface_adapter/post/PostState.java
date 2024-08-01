@@ -3,7 +3,8 @@ package com.imperial.academia.interface_adapter.post;
 import java.sql.Timestamp;
 
 /**
- * The PostState class represents the state of a post, including its title, content,
+ * The PostState class represents the state of a post, including its title,
+ * content,
  * username, avatar URL, and date.
  */
 public class PostState {
@@ -12,6 +13,9 @@ public class PostState {
     private String username;
     private String avatarUrl;
     private Timestamp date;
+    private int likes;
+    private int postID;
+    private boolean isLiked;
 
     /**
      * Constructs a new PostState as a copy of the specified PostState.
@@ -24,6 +28,9 @@ public class PostState {
         this.date = other.getDate();
         this.username = other.getUsername();
         this.avatarUrl = other.getAvatarUrl();
+        this.likes = other.getLikes();
+        this.postID = other.getPostID();
+        this.isLiked = other.isLiked();
     }
 
     /**
@@ -35,6 +42,9 @@ public class PostState {
         this.date = new Timestamp(System.currentTimeMillis());
         this.username = "";
         this.avatarUrl = "";
+        this.likes = 0;
+        this.postID = 1;
+        this.isLiked = false;
     }
 
     /**
@@ -126,4 +136,59 @@ public class PostState {
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
     }
+
+    /**
+     * Gets the likes of the post.
+     * 
+     * @return the likes of the post.
+     */
+    public int getLikes() {
+        return likes;
+    }
+
+    /**
+     * Sets the likes of the post.
+     * 
+     * @param likes the new likes of the post.
+     */
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    /**
+     * Gets the postID of the post.
+     * 
+     * @return the postID of the post.
+     */
+    public int getPostID() {
+        return postID;
+    }
+
+    /**
+     * Sets the postID of the post.
+     * 
+     * @param postID the new postID of the post.
+     */
+    public void setPostID(int postID) {
+        this.postID = postID;
+    }
+
+    /**
+     * Gets whether the post is liked.
+     * 
+     * @return true if the post is liked, false otherwise.
+     */
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    /**
+     * Sets whether the post is liked.
+     * 
+     * @param isLiked true if the post is liked, false otherwise.
+     */
+    public void setLiked(boolean isLiked) {
+        this.isLiked = isLiked;
+    }
+
 }
