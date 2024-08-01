@@ -749,14 +749,6 @@ public class ChatWindowView extends JPanel {
 
         g2.dispose();
 
-        try {
-            File outputFile = new File("rounded_corners_image.png");
-            ImageIO.write(output, "png", outputFile);
-            System.out.println("Saved rounded corners image to: " + outputFile.getAbsolutePath());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         return output;
     }
 
