@@ -1,5 +1,7 @@
 package com.imperial.academia.use_case.post;
 
+import java.util.List;
+
 public interface PostOutputBoundary {
     /**
      * Initializes the post page display with the given post information data.
@@ -21,4 +23,18 @@ public interface PostOutputBoundary {
      * @param postId the ID of the post to remove a like from
      */
     void removeLike(int postId);
+
+    /**
+     * Initializes the comments section with the given comments.
+     *
+     * @param comments the comments to initialize the comments section with
+     */
+    void initComments(List<CommentData> comments);
+
+    /**
+     * Adds a comment to the post.
+     *
+     * @param commentData the comment to add
+     */
+    void addPost(CommentData commentData);
 }

@@ -11,11 +11,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -33,6 +38,8 @@ import javax.swing.border.EmptyBorder;
 
 import com.imperial.academia.interface_adapter.post.PostController;
 import com.imperial.academia.interface_adapter.post.PostViewModel;
+import com.imperial.academia.use_case.post.CommentData;
+import com.imperial.academia.view.style.CustomScrollBarUI;
 
 /**
  * The PostView class represents the view for a single post in the application.
@@ -96,7 +103,7 @@ public class PostView extends JPanel {
         JTextArea commentsArea = new JTextArea();
         commentsArea.setFont(new Font("Arial", Font.PLAIN, 14));
         commentsArea.setEditable(false);
-        JScrollPane commentsScrollPane = new JScrollPane(commentsArea);
+        JScrollPane commentsScrollPane = new CustomScrollBarUI.CustomScrollPane(commentsArea);
         commentsScrollPane.setPreferredSize(new Dimension(400, 150));
         commentsScrollPane.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
 
@@ -113,12 +120,42 @@ public class PostView extends JPanel {
         postCommentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String commentText = commentInput.getText();
+                postComment(commentInput);
+            }
+        });
 
-                if (!commentText.trim().isEmpty()) {
-                    commentsArea.append("Me: " + commentText + "\n"); // TODO: replace by save it to db
-                    commentInput.setText("");
+        commentInput.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    postComment(commentInput);
                 }
+            }
+        });
+
+        postViewModel.addPropertyChangeListener(evt -> {
+            if (evt.getPropertyName().equals("comments")) {
+                commentsArea.setText("");
+                List<CommentData> commentDatas = postViewModel.getStateComments();
+                for (CommentData commentData : commentDatas) {
+                    String userName = commentData.getUsername();
+                    String content = commentData.getContent().strip();
+                    Timestamp time = commentData.getLastModified();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String date = dateFormat.format(time);
+                    commentsArea.append(date + "\n");
+                    commentsArea.append(userName + ": " + content + "\n");
+                }
+            }else if(evt.getPropertyName().equals("addComment")){
+                List<CommentData> commentDatas = postViewModel.getStateComments();
+                CommentData newComment = commentDatas.get(commentDatas.size()-1);
+                String userName = newComment.getUsername();
+                String content = newComment.getContent().strip();
+                Timestamp time = newComment.getLastModified();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String date = dateFormat.format(time);
+                commentsArea.append(date + "\n");
+                commentsArea.append(userName + ": " + content + "\n");
             }
         });
 
@@ -130,6 +167,19 @@ public class PostView extends JPanel {
         return commentSection;
     }
 
+    /**
+     * Posts a comment to the post.
+     */
+    private void postComment(JTextField commentInput) {
+        String commentText = commentInput.getText().strip();
+        if(commentText.isBlank()){
+            return;
+        }
+        int postId = postViewModel.getStatePostId();
+        postController.postComment(postId, commentText);
+        commentInput.setText("");
+    }
+    
     /**
      * Creates and returns the content panel.
      * 

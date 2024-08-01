@@ -8,6 +8,8 @@ import com.imperial.academia.cache.ChatGroupCache;
 import com.imperial.academia.cache.ChatGroupCacheImpl;
 import com.imperial.academia.cache.ChatMessageCache;
 import com.imperial.academia.cache.ChatMessageCacheImpl;
+import com.imperial.academia.cache.CommentCache;
+import com.imperial.academia.cache.CommentCacheImpl;
 import com.imperial.academia.cache.GroupMemberCache;
 import com.imperial.academia.cache.GroupMemberCacheImpl;
 import com.imperial.academia.cache.PostCache;
@@ -18,6 +20,7 @@ import com.imperial.academia.data_access.BoardDAO;
 import com.imperial.academia.data_access.ChatGroupDAI;
 import com.imperial.academia.data_access.ChatGroupDAO;
 import com.imperial.academia.data_access.ChatMessageDAO;
+import com.imperial.academia.data_access.CommentDAO;
 import com.imperial.academia.data_access.DatabaseConnection;
 import com.imperial.academia.data_access.GroupMemberDAI;
 import com.imperial.academia.data_access.GroupMemberDAO;
@@ -31,6 +34,8 @@ import com.imperial.academia.service.ChatGroupService;
 import com.imperial.academia.service.ChatGroupServiceImpl;
 import com.imperial.academia.service.ChatMessageService;
 import com.imperial.academia.service.ChatMessageServiceImpl;
+import com.imperial.academia.service.CommentService;
+import com.imperial.academia.service.CommentServiceImpl;
 import com.imperial.academia.service.FileService;
 import com.imperial.academia.service.FileServiceImpl;
 import com.imperial.academia.service.MapService;
@@ -54,6 +59,8 @@ public class ServiceFactory {
     private static ChatMessageService chatMessageService;
     private static BoardService boardService;
     private static PostService postService;
+
+    private static CommentService commentService;
 
     
     /**
@@ -84,7 +91,11 @@ public class ServiceFactory {
         PostCache postCache = new PostCacheImpl();
         PostDAO postDAO = new PostDAO(DatabaseConnection.getConnection());
         postService = new PostServiceImpl(postCache, postDAO);
-        
+
+        CommentCache commentCache = new CommentCacheImpl();
+        CommentDAO commentDAO = new CommentDAO(DatabaseConnection.getConnection());
+        commentService = new CommentServiceImpl(commentCache, commentDAO);
+
         audioService = new AudioServiceImpl();
 
         mapService = new MapServiceImpl();
@@ -163,5 +174,9 @@ public class ServiceFactory {
      */
     public static FileService getFileService() {
         return fileService;
+    }
+
+    public static CommentService getCommentService() {
+        return commentService;
     }
 }

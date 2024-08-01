@@ -162,4 +162,112 @@ public class Comment {
     public void setLastModified(Timestamp lastModified) { 
         this.lastModified = lastModified; 
     }
+
+    /**
+     * Creates a new CommentBuilder instance.
+     * 
+     * @return A new CommentBuilder instance.
+     */
+    public static CommentBuilder builder() {
+        return new CommentBuilder();
+    }
+
+    /**
+     * The CommentBuilder class is a builder for creating new Comment instances.
+     */
+    public static class CommentBuilder {
+        private int id;
+        private String content;
+        private int authorId;
+        private int postId;
+        private Integer parentCommentId;
+        private Timestamp creationDate;
+        private Timestamp lastModified;
+
+        /**
+         * Sets the unique identifier of the comment.
+         * 
+         * @param id The unique identifier of the comment.
+         * @return The updated CommentBuilder instance.
+         */
+        public CommentBuilder setId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        /**
+         * Sets the content of the comment.
+         * 
+         * @param content The content of the comment.
+         * @return The updated CommentBuilder instance.
+         */
+        public CommentBuilder setContent(String content) {
+            this.content = content;
+            return this;
+        }
+
+        /**
+         * Sets the ID of the user who authored the comment.
+         * 
+         * @param authorId The ID of the user who authored the comment.
+         * @return The updated CommentBuilder instance.
+         */
+        public CommentBuilder setAuthorId(int authorId) {
+            this.authorId = authorId;
+            return this;
+        }
+
+        /**
+         * Sets the ID of the post the comment is associated with.
+         * 
+         * @param postId The ID of the post the comment is associated with.
+         * @return The updated CommentBuilder instance.
+         */
+        public CommentBuilder setPostId(int postId) {
+            this.postId = postId;
+            return this;
+        }
+
+        /**
+         * Sets the ID of the parent comment, if any.
+         * 
+         * @param parentCommentId The ID of the parent comment, if any.
+         * @return The updated CommentBuilder instance.
+         */
+        public CommentBuilder setParentCommentId(Integer parentCommentId) {
+            this.parentCommentId = parentCommentId;
+            return this;
+        }
+
+        /**
+         * Sets the timestamp when the comment was created.
+         * 
+         * @param creationDate The timestamp when the comment was created.
+         * @return The updated CommentBuilder instance.
+         */
+        public CommentBuilder setCreationDate(Timestamp creationDate) {
+            this.creationDate = creationDate;
+            return this;
+        }
+
+        /**
+         * Sets the timestamp when the comment was last modified.
+         * 
+         * @param lastModified The timestamp when the comment was last modified.
+         * @return The updated CommentBuilder instance.
+         */
+        public CommentBuilder setLastModified(Timestamp lastModified) {
+            this.lastModified = lastModified;
+            return this;
+        }
+
+        /**
+         * Builds a new Comment instance with the specified details.
+         * 
+         * @return A new Comment instance with the specified details.
+         */
+        public Comment build() {
+            return new Comment(id, content, authorId, postId, parentCommentId, creationDate, lastModified);
+        }
+    }
 }

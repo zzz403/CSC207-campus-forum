@@ -49,4 +49,13 @@ public interface PostInputBoundary {
      * @return true if the post is liked by the user, false otherwise.
      */
     boolean checkLiked(int postId, int userId);
+
+    /**
+     * Posts a comment to the post with the given post ID.
+     * 
+     * @param postId  the ID of the post to post a comment to.
+     * @param userId  the ID of the user posting the comment.
+     * @param content the content of the comment.
+     */
+    void postComment(int postId, int userId, String content);
 }

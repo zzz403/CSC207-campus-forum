@@ -44,4 +44,19 @@ public class PostController {
         postInteractor.addLike(postId, userId);
     }
     
+    /**
+     * Post a comment to the post with the specified post ID.
+     * 
+     * @param postId the ID of the post to post a comment to.
+     * @param content the content of the comment.
+     */
+    public void postComment(int postId, String content) {
+        User user = SessionManager.getCurrentUser();
+        if (user == null) {
+            return;
+        }
+        int userId = user.getId();
+        
+        postInteractor.postComment(postId, userId, content);
+    }
 }
