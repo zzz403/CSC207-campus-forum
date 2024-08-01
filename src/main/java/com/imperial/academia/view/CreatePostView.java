@@ -185,6 +185,7 @@ public class CreatePostView extends JPanel {
             System.out.println("No board name are find, error from CreatePostView");
         }
         List<String> boardsNameArr = createPostViewModel.getState().getBoardsName();
+        System.out.println("Boards Name: " + boardsNameArr);
         String[] boardsName = new String[boardsNameArr.size()];
         boardsName = boardsNameArr.toArray(boardsName);
         createPostViewModel.setStateCurrentBoardName(boardsName[0]);

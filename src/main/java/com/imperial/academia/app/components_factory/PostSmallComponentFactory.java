@@ -36,6 +36,8 @@ public class PostSmallComponentFactory {
         BufferedImage avatar = null;
         try {
             // Load images from file paths
+            System.out.println("Image loaded: "+ imageUrl);
+
             image = ImageIO.read(new File(imageUrl));
             avatar = ImageIO.read(new File(avatarUrl));
         } catch (IOException e) {

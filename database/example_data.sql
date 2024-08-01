@@ -5,7 +5,22 @@ INSERT INTO users (username, password, email, role, registration_date, avatar_ur
 ('jane_smith', 'hashed_password2', 'jane@example.com', 'admin', CURRENT_TIMESTAMP, 'resources/avatar/avater_example3.png', CURRENT_TIMESTAMP),
 ('alice_jones', 'hashed_password3', 'alice@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example4.png', CURRENT_TIMESTAMP),
 ('bob_brown', 'hashed_password4', 'bob@example.com', 'moderator', CURRENT_TIMESTAMP, 'resources/avatar/avater_example5.png', CURRENT_TIMESTAMP),
-('charlie_clark', 'hashed_password5', 'charlie@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example6.png', CURRENT_TIMESTAMP);
+('charlie_clark', 'hashed_password5', 'charlie@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example6.png', CURRENT_TIMESTAMP),
+('david_lee', 'hashed_password6', 'david@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example7.png', CURRENT_TIMESTAMP),
+('emily_wilson', 'hashed_password7', 'emily@example.com', 'moderator', CURRENT_TIMESTAMP, 'resources/avatar/avater_example8.png', CURRENT_TIMESTAMP),
+('frank_harris', 'hashed_password8', 'frank@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example9.png', CURRENT_TIMESTAMP),
+('grace_martin', 'hashed_password9', 'grace@example.com', 'admin', CURRENT_TIMESTAMP, 'resources/avatar/avater_example10.png', CURRENT_TIMESTAMP),
+('henry_white', 'hashed_password10', 'henry@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example11.png', CURRENT_TIMESTAMP),
+('isabella_kim', 'hashed_password11', 'isabella@example.com', 'moderator', CURRENT_TIMESTAMP, 'resources/avatar/avater_example12.png', CURRENT_TIMESTAMP),
+('james_young', 'hashed_password12', 'james@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example13.png', CURRENT_TIMESTAMP),
+('karen_sanders', 'hashed_password13', 'karen@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example14.png', CURRENT_TIMESTAMP),
+('lucas_roberts', 'hashed_password14', 'lucas@example.com', 'admin', CURRENT_TIMESTAMP, 'resources/avatar/avater_example15.png', CURRENT_TIMESTAMP),
+('mia_moore', 'hashed_password15', 'mia@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example16.png', CURRENT_TIMESTAMP),
+('noah_clarkson', 'hashed_password16', 'noah@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example17.png', CURRENT_TIMESTAMP),
+('olivia_green', 'hashed_password17', 'olivia@example.com', 'moderator', CURRENT_TIMESTAMP, 'resources/avatar/avater_example18.png', CURRENT_TIMESTAMP),
+('paul_baker', 'hashed_password18', 'paul@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example19.png', CURRENT_TIMESTAMP),
+('quinn_adams', 'hashed_password19', 'quinn@example.com', 'admin', CURRENT_TIMESTAMP, 'resources/avatar/avater_example20.png', CURRENT_TIMESTAMP),
+('rachel_turner', 'hashed_password20', 'rachel@example.com', 'user', CURRENT_TIMESTAMP, 'resources/avatar/avater_example21.png', CURRENT_TIMESTAMP);
 
 -- Insert boards
 INSERT INTO boards (name, description, creator_id, created_at) VALUES
@@ -21,7 +36,22 @@ INSERT INTO posts (title, content, author_id, board_id, creation_date, last_modi
 ('Tech News', 'Let''s talk about the latest tech news.', 2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('Fitness Tips', 'Share your best fitness tips here.', 3, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('Favorite Destinations', 'What are your favorite travel destinations?', 4, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('Book Recommendations', 'Recommend some good books to read.', 5, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+('Book Recommendations', 'Recommend some good books to read.', 5, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Gaming Discussion', 'What games are you currently playing?', 6, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Photography Tips', 'Share your best photography tips and tricks.', 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Cooking Recipes', 'Post your favorite recipes here.', 1, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Music Recommendations', 'What music are you listening to these days?', 9, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Programming Challenges', 'Share some interesting coding challenges.', 10, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Travel Stories', 'Share your most memorable travel experiences.', 11, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Pet Care Advice', 'How do you take care of your pets?', 12, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Art and Creativity', 'Showcase your artwork and creative projects.', 13, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Sports Talk', 'Discuss the latest sports news and events.', 1, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Movie Night', 'What movies have you watched recently?', 15, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Healthy Eating', 'Share your favorite healthy recipes and snacks.', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('DIY Projects', 'Post your latest do-it-yourself projects here.', 17, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Career Advice', 'Discuss career tips and job hunting strategies.', 18, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Tech Gadgets', 'What new gadgets are you excited about?', 19, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Education and Learning', 'Share your learning experiences and resources.', 20, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Insert comments
 INSERT INTO comments (content, author_id, post_id, parent_comment_id, creation_date, last_modified) VALUES
@@ -186,7 +216,32 @@ INSERT INTO post_likes (user_id, post_id, liked_at) VALUES
 (2, 2, CURRENT_TIMESTAMP),
 (3, 3, CURRENT_TIMESTAMP),
 (4, 4, CURRENT_TIMESTAMP),
-(5, 5, CURRENT_TIMESTAMP);
+(5, 5, CURRENT_TIMESTAMP),
+(6, 1, CURRENT_TIMESTAMP),
+(7, 2, CURRENT_TIMESTAMP),
+(8, 3, CURRENT_TIMESTAMP),
+(9, 4, CURRENT_TIMESTAMP),
+(10, 5, CURRENT_TIMESTAMP),
+(11, 6, CURRENT_TIMESTAMP),
+(12, 7, CURRENT_TIMESTAMP),
+(13, 8, CURRENT_TIMESTAMP),
+(14, 9, CURRENT_TIMESTAMP),
+(15, 10, CURRENT_TIMESTAMP),
+(16, 11, CURRENT_TIMESTAMP),
+(17, 12, CURRENT_TIMESTAMP),
+(18, 13, CURRENT_TIMESTAMP),
+(19, 14, CURRENT_TIMESTAMP),
+(20, 15, CURRENT_TIMESTAMP),
+(1, 6, CURRENT_TIMESTAMP),
+(2, 7, CURRENT_TIMESTAMP),
+(3, 8, CURRENT_TIMESTAMP),
+(4, 9, CURRENT_TIMESTAMP),
+(5, 10, CURRENT_TIMESTAMP),
+(6, 11, CURRENT_TIMESTAMP),
+(7, 12, CURRENT_TIMESTAMP),
+(8, 13, CURRENT_TIMESTAMP),
+(9, 14, CURRENT_TIMESTAMP),
+(10, 15, CURRENT_TIMESTAMP);
 
 -- Insert comment likes
 INSERT INTO comment_likes (user_id, comment_id, liked_at) VALUES
