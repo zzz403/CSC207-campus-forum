@@ -97,7 +97,7 @@ public class PostProfileViewComponent extends JPanel {
      * @param content The content to truncate.
      * @return The truncated content.
      */
-    private static String truncateContent(String content) {
+    static String truncateContent(String content) {
         if (content.length() > 50) {
             return content.substring(0, 50) + "...";
         }

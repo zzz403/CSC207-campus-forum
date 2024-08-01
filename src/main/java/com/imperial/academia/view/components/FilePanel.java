@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
 
 public class FilePanel extends JPanel {
 
-    public FilePanel(FileData fileData, boolean isMe) {
+    public FilePanel(FileData fileData) {
         setOpaque(false);
         setLayout(new BorderLayout());
 
