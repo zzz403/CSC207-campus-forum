@@ -86,6 +86,7 @@ public class BoardDAO implements BoardDAI {
                 ));
             }
         }
+        System.out.println(boards);
         return boards;
     }
 
