@@ -15,16 +15,23 @@ public class LoginController {
 
     /**
      * Constructs a LoginController with the specified LoginInputBoundary.
-     * 
+     *
      * @param loginInteractor The login interactor to handle login logic.
      */
+    public LoginController(LoginInputBoundary loginInteractor) {
+        this.loginInteractor = loginInteractor;
+    }
+
+    /**
+     * Constructs a LoginController using the UsecaseFactory.
+     */
     public LoginController() {
-        this.loginInteractor = UsecaseFactory.getLoginInteractor();
+        this(UsecaseFactory.getLoginInteractor());
     }
 
     /**
      * Executes the login process with the provided credentials.
-     * 
+     *
      * @param username The username of the user.
      * @param password The password of the user.
      * @param rememberMe Whether to remember the user.
@@ -36,7 +43,7 @@ public class LoginController {
 
     /**
      * Loads the saved credentials if available.
-     * 
+     *
      * @return An array containing the username and password.
      */
     public String[] loadCredentials() {

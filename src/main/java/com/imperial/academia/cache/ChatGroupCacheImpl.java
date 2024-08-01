@@ -44,6 +44,20 @@ public class ChatGroupCacheImpl implements ChatGroupCache {
     }
 
     /**
+     * Constructs a new ChatGroupCacheImpl with the specified caches.
+     * @param chatGroupCache
+     * @param chatGroupsCache
+     * @param lastMessageCache
+     * @param avatarUrlCache
+     */
+    public ChatGroupCacheImpl(Cache<String, ChatGroup> chatGroupCache, Cache<String, List<ChatGroup>> chatGroupsCache, Cache<String, ChatMessage> lastMessageCache, Cache<String, User> avatarUrlCache) {
+        this.chatGroupCache = chatGroupCache;
+        this.chatGroupsCache = chatGroupsCache;
+        this.lastMessageCache = lastMessageCache;
+        this.avatarUrlCache = avatarUrlCache;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

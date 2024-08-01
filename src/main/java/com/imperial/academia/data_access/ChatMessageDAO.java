@@ -19,14 +19,19 @@ import java.util.List;
  */
 public class ChatMessageDAO implements ChatMessageDAI {
     private final Connection conn;
-
+    private final ObjectMapper objectMapper;
     /**
      * Constructs a ChatMessageDAO with the specified database connection.
      *
      * @param conn The database connection to be used by this DAO.
      */
-    public ChatMessageDAO(Connection conn) {
+    public ChatMessageDAO(Connection conn, ObjectMapper objectMapper) {
         this.conn = conn;
+        this.objectMapper = objectMapper;
+    }
+
+    public ChatMessageDAO(Connection conn) {
+        this(conn, new ObjectMapper());
     }
 
     /**
@@ -216,11 +221,10 @@ public class ChatMessageDAO implements ChatMessageDAI {
             pstmt.setInt(1, messageId);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    ObjectMapper mapper = new ObjectMapper();
                     @SuppressWarnings("unchecked")
-                    List<Integer> minValues = mapper.readValue(rs.getString("min_values"), List.class);
+                    List<Integer> minValues = objectMapper.readValue(rs.getString("min_values"), List.class);
                     @SuppressWarnings("unchecked")
-                    List<Integer> maxValues = mapper.readValue(rs.getString("max_values"), List.class);
+                    List<Integer> maxValues = objectMapper.readValue(rs.getString("max_values"), List.class);
                     float duration = rs.getFloat("duration");
                     return new WaveformData(minValues, maxValues, duration);
                 }
