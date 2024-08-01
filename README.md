@@ -1,31 +1,54 @@
 # CSC207 Campus Forum - Academia Imperial
 
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Features](#features)
+3. [Technology Stack](#technology-stack)
+4. [Domain Entities](#domain-entities)
+5. [APIs](#apis)
+6. [Installation and Setup](#installation-and-setup)
+7. [Usage](#usage)
+8. [Contributors](#contributors)
+9. [Contribution Guidelines](#contribution-guidelines)
+10. [License](#license)
+11. [Contact](#contact)
+
 ## Overview
 Academia Imperial's Campus Forum is a user-friendly and inclusive platform designed for students and faculty to discuss, share resources, post announcements, and exchange information about events. The forum is built with extensibility in mind, allowing for the easy addition of new features.
 
+![Chat Interface](img/example2.png)
+![Chat Interface](img/example1.png)
+
+
 ## Features
-- **Post Management**: Create, edit, and delete posts.
-- **Commenting**: Comment on posts and reply to comments.
-- **Search**: Find posts and comments using a search bar.
-- **Notifications**: Receive notifications for new comments or replies.
-- **Real-Time Chat**: Engage in real-time conversations.
-- **Admin Controls**: Manage users and content, ban users, and remove inappropriate content.
-- **Board Navigation**: Browse different discussion boards.
+
+1. **Advanced Post Creation**
+  - **AI-Enhanced Posts**: Effortlessly create posts with the help of AI-powered touchups for impeccable grammar and style, ensuring your content stands out.
+  - **Seamless Post Management**: Intuitively create and manage posts, allowing you to share insights and information with ease.
+
+2. **Dynamic Commenting System**
+  - **Interactive Comments**: Engage with the community through a dynamic commenting system that supports direct replies, fostering meaningful conversations.
+  - **Threaded Discussions**: Keep track of discussions with threaded comments, ensuring clarity and context in every interaction.
+
+3. **Powerful Search Capabilities**
+  - **Intelligent Search Engine**: Quickly find users and posts with our intelligent search engine, designed to deliver accurate and relevant results with lightning speed.
+  - **Enhanced Discoverability**: Navigate the forum effortlessly, making information and connections easily accessible.
+
+4. **Comprehensive Chat Experience**
+  - **Real-Time Conversations**: Connect instantly with others through our real-time chat feature, complete with emoji support for expressive communication.
+  - **File and Location Sharing**: Enhance your conversations with seamless file transfers and location sharing, bridging the gap between online and offline interactions.
+  - **AI-Powered Summaries**: Stay informed with AI-generated summaries that keep you up-to-date with chat highlights.
+
+5. **Personalized User Profiles**
+  - **Customizable Profiles**: Tailor your profile to reflect your identity, with options to change your password, avatar, and personal details.
+  - **Enhanced Security**: Safeguard your account with robust security features, giving you peace of mind as you interact with the community.
 
 ## Technology Stack
 - **UI**: Swing
 - **Database**: H2
 - **Backend**: Pure Java (excluding SQL for data storage)
 - **JDK Version**: JDK 17
-
-## User Stories
-1. **Creating and Managing Posts**
-2. **Commenting on Posts**
-3. **Searching for Content**
-4. **Receiving Notifications**
-5. **Participating in Real-Time Chat**
-6. **Admin Managing Users and Content**
-7. **Browsing Different Boards**
 
 ## Domain Entities
 
@@ -185,21 +208,24 @@ public class WaveformData {
 }
 ```
 
-## Features and APIs
+## APIs
 
 ### Chat
-Our chat feature was created with the vision of providing a seamless and secure communication platform for users around the world. Whether you want to connect with friends, family, or colleagues, our app offers a range of features to make your conversations more engaging and convenient.
+Our chat feature is designed to offer a seamless and secure communication platform, enriched by advanced APIs that enhance user interactions and experiences.
 
-- **Sending Files and Pictures**: The system interacts with the operating system to handle file selection, reading, and sending.
-- **Sending Maps**: Utilizes the `Mapbox` API to fetch and render maps. It provides detailed map data and various map functionalities.
-- **Sending Audio Recordings**: Uses Java to interface with the operating system's audio recording capabilities.
+- **Location Sharing**: Easily send your location using the `Mapbox` API, which provides detailed map data and various functionalities, allowing users to share precise locations with ease.
+
+- **Voice-to-Text Conversion**: Transform audio recordings into text using IBM's powerful speech recognition API, enabling users to convert spoken words into text for better accessibility and convenience.
+
+- **Conversation Summarization**: Get quick insights with AI-powered summaries of chat history using the `gpt-3.5-turbo-0125` model. This feature helps users stay updated with important discussion points without reading through entire chat logs.
+
+- **Language Translation**: Communicate effortlessly across language barriers with `DeepL` integration, providing accurate and real-time translation services to make your conversations more inclusive.
 
 ### Create Post
-Our "Create Post" feature was designed with the vision of empowering users to share their thoughts and opinions effortlessly. We believe that everyone should have a platform to express themselves and engage with a wider community. By leveraging advanced technology, we have created a user-friendly and efficient tool for you to post your ideas and viewpoints.
+Our "Create Post" feature empowers users to share their thoughts and opinions effortlessly, utilizing cutting-edge technology to enhance content creation and presentation.
 
-- **Create Post**: Easily share your ideas with our intuitive interface and rich text editing capabilities.
-- **AI Writing Enhance**: Enhance your posts with `gpt-3.5-turbo-0125` model for grammar and style improvements for clearer and more compelling content.
-- **Check Post**: Review and verify your post after publishing.
+- **AI Writing Enhancement**: Elevate your writing with grammar and style improvements using the `gpt-3.5-turbo-0125` model. This feature ensures that your posts are clear, engaging, and compelling, allowing you to express yourself confidently to a wider community.
+
 
 ## Installation and Setup
 
@@ -236,13 +262,13 @@ Upon running the application, the Swing-based UI will launch, providing access t
 The application uses H2 as its database. Configuration details can be found in the `DatabaseConfig.java` file.
 
 ## Contributors
-- **Zhongze (August) Zheng** - *Login & Signup Feature; Chat Feature*  
+- **Zhongze (August) Zheng** - *Login & Signup Feature; Chat Feature; Navigation Bar*  
   [Zhongze's GitHub page](https://github.com/zzz403)
 
-- **Zhengyu (Joey) Wang** - *Create Post & View Post Feature*  
+- **Zhengyu (Joey) Wang** - *Create Post & View Post Feature; Home Page*  
   [Zhengyu's GitHub page](https://github.com/wzy403)
 
-- **Ray Liu** - *View Profile Feature*  
+- **Ray Liu** - *Profile Feature & Edit Personal Information*  
   [Ray's GitHub page](https://github.com/zliu0312)
 
 
