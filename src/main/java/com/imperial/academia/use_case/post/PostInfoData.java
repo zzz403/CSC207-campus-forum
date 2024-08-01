@@ -13,6 +13,8 @@ public class PostInfoData {
     private String avatarUrl;
     private Timestamp date;
     private int likes = 0;
+    private int postID = 1;
+    private boolean isLiked = false;
 
     /**
      * Private constructor for PostInfoData.
@@ -27,6 +29,8 @@ public class PostInfoData {
         this.avatarUrl = builder.avatarUrl;
         this.date = builder.date;
         this.likes = builder.likes;
+        this.postID = builder.postID;
+        this.isLiked = builder.isLiked;
     }
 
     /**
@@ -39,13 +43,15 @@ public class PostInfoData {
      * @param date      the date of the post.
      * @param likes     the number of likes the post has.
      */
-    public PostInfoData(String title, String content, String username, String avatarUrl, Timestamp date, int likes) {
+    public PostInfoData(String title, String content, String username, String avatarUrl, Timestamp date, int likes, int postID, boolean isLiked) {
         this.title = title;
         this.content = content;
         this.username = username;
         this.avatarUrl = avatarUrl;
         this.date = date;
         this.likes = likes;
+        this.postID = postID;
+        this.isLiked = isLiked;
     }
 
     /**
@@ -162,6 +168,8 @@ public class PostInfoData {
         return date;
     }
 
+    
+
     /**
      * Creates a new builder for PostInfoData.
      * 
@@ -181,6 +189,8 @@ public class PostInfoData {
         private String avatarUrl;
         private Timestamp date;
         private int likes;
+        private int postID;
+        private boolean isLiked;
 
         public PostInfoDataBuilder setLikes(int likes) {
             this.likes = likes;
@@ -243,6 +253,28 @@ public class PostInfoData {
         }
 
         /**
+         * Sets the post id of the post.
+         * 
+         * @param postId the post id to set.
+         * @return the builder instance.
+         */
+        public PostInfoDataBuilder setPostId(int postId){
+            this.postID = postId;
+            return this;
+        }
+
+        /**
+         * Sets the isLiked of the post.
+         * 
+         * @param isLiked the isLiked to set.
+         * @return the builder instance.
+         */
+        public PostInfoDataBuilder setIsLiked(boolean isLiked){
+            this.isLiked = isLiked;
+            return this;
+        }
+
+        /**
          * Builds and returns an instance of PostInfoData.
          * 
          * @return the constructed PostInfoData object.
@@ -250,5 +282,42 @@ public class PostInfoData {
         public PostInfoData build() {
             return new PostInfoData(this);
         }
+    }
+
+
+    /**
+     * Get the postID
+     * 
+     * @return an interge postID
+     */
+    public int getPostID() {
+        return postID;
+    }
+
+    /**
+     * Set the post id
+     * 
+     * @param postID - the post id
+     */
+    public void setPostID(int postID) {
+        this.postID = postID;
+    }
+
+    /**
+     * Get the isLiked
+     * 
+     * @return a boolean isLiked
+     */
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    /**
+     * Set the isLiked
+     * 
+     * @param isLiked - the isLiked
+     */
+    public void setLiked(boolean isLiked) {
+        this.isLiked = isLiked;
     }
 }

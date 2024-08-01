@@ -72,8 +72,45 @@ public class PostBoardViewModel extends ViewModel {
         support.firePropertyChange("post list", oldList, postList);
     }
 
+    /**
+     * Adds a post information to the state.
+     * 
+     * @param postOverviewInfo the post overview information to add to the state.
+     */
     public void addOnePostInfoToState(PostOverviewInfo postOverviewInfo) {
         state.addPost(postOverviewInfo);
         support.firePropertyChange("addPost", null, state);
+    }
+
+    /**
+     * Increments the likes of a post by the post ID.
+     * 
+     * @param postId the post ID to increment the likes of.
+     */
+    public void incrementStateLikesByPostId(int postId) {
+        System.out.println("incrementStateLikesByPostId");
+        state.incrementLikesByPostId(postId);
+        support.firePropertyChange("likeChangeInc="+postId, null, state);
+    }
+
+    /**
+     * Decrements the likes of a post by the post ID.
+     * 
+     * @param postId the post ID to decrement the likes of.
+     */
+    public void decrementStateLikesByPostId(int postId) {
+        System.out.println("decrementStateLikesByPostId");
+        state.decrementLikesByPostId(postId);
+        support.firePropertyChange("likeChangeDec="+postId, null, state);
+    }
+
+    /**
+     * Gets the likes of a post by the post ID.
+     * 
+     * @param postId the post ID to get the likes of.
+     * @return the number of likes of the post.
+     */
+    public int getPostLikesByPostId(int postId) {
+        return state.getLikesByPostId(postId);
     }
 }

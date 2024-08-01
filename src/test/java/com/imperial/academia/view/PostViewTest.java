@@ -8,16 +8,20 @@ import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import javax.swing.JFrame;
+
 class PostViewTest {
     private PostView postView;
 
     @Mock
     private PostViewModel mockPostViewModel;
 
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        postView = new PostView(mockPostViewModel);
+        JFrame jFrame = new JFrame();
+        postView = new PostView(mockPostViewModel, jFrame);
     }
 
     @Test

@@ -2,13 +2,27 @@ package com.imperial.academia.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -17,6 +31,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
+import com.imperial.academia.interface_adapter.post.PostController;
 import com.imperial.academia.interface_adapter.post.PostViewModel;
 
 /**
@@ -25,17 +40,27 @@ import com.imperial.academia.interface_adapter.post.PostViewModel;
  */
 public class PostView extends JPanel {
 
+    // The name of this view.
     public final String viewName = "post";
 
+    // The ViewModel associated with this view.
     private final PostViewModel postViewModel;
+
+    // The controller for the post view.
+    private final PostController postController;
+
+    // The main frame of the application.
+    private JFrame applicationFrame;
 
     /**
      * Constructor for the PostView class.
      * 
      * @param postViewModel the ViewModel associated with this view.
      */
-    public PostView(PostViewModel postViewModel) {
+    public PostView(PostViewModel postViewModel, JFrame applicationFrame) {
         this.postViewModel = postViewModel;
+        this.postController = new PostController();
+        this.applicationFrame = applicationFrame;
 
         setLayout(new BorderLayout());
         setBackground(new Color(245, 245, 245));
@@ -89,7 +114,7 @@ public class PostView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String commentText = commentInput.getText();
-                
+
                 if (!commentText.trim().isEmpty()) {
                     commentsArea.append("Me: " + commentText + "\n"); // TODO: replace by save it to db
                     commentInput.setText("");
@@ -157,13 +182,21 @@ public class PostView extends JPanel {
         userInfoPanel.add(usernameLabel, BorderLayout.CENTER);
         userInfoPanel.add(createTime, BorderLayout.EAST);
 
+        JPanel titlePanel = new JPanel(new BorderLayout());
+        titlePanel.setBackground(new Color(255, 255, 255));
+
         // Title label
         JLabel titleLabel = new JLabel("Test test 123123");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
+        JPanel likePanel = getLikePanel();
+
+        titlePanel.add(likePanel, BorderLayout.EAST);
+        titlePanel.add(titleLabel, BorderLayout.WEST);
+
         headerPanel.add(userInfoPanel, BorderLayout.CENTER);
-        headerPanel.add(titleLabel, BorderLayout.NORTH);
+        headerPanel.add(titlePanel, BorderLayout.NORTH);
 
         // property listener
         postViewModel.addPropertyChangeListener(evt -> {
@@ -177,5 +210,70 @@ public class PostView extends JPanel {
             }
         });
         return headerPanel;
+    }
+
+    private JPanel getLikePanel() {
+        JPanel likePanel = new JPanel(new BorderLayout());
+        likePanel.setLayout(new BoxLayout(likePanel, BoxLayout.X_AXIS));
+        likePanel.setOpaque(false);
+        likePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        // Load and scale like icon
+        Image likeIcon = getLikeIcon(postViewModel.getStateIsLiked());
+        
+        if (likeIcon != null) {
+            JLabel likeIconLabel = new JLabel(new ImageIcon(likeIcon));
+            likeIconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5)); // Add some padding
+            likePanel.add(likeIconLabel);
+            
+            postViewModel.addPropertyChangeListener(evt -> {
+                if (evt.getPropertyName().equals("isLiked")) {
+                    likeIconLabel.setIcon(new ImageIcon(getLikeIcon(postViewModel.getStateIsLiked())));
+                }
+            });
+        }
+
+        JLabel likesLabel = new JLabel(String.valueOf(postViewModel.getStateLikes()));
+        likesLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        likePanel.add(likesLabel);
+
+        likePanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                postController.likeClick(postViewModel.getStatePostId());
+            }
+        });
+
+        postViewModel.addPropertyChangeListener(evt -> {
+            if (evt.getPropertyName().equals("postLikes")) {
+                likesLabel.setText(String.valueOf(postViewModel.getStateLikes()));
+            }
+        });
+
+        // fix display issue when size changing
+        applicationFrame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                likesLabel.setVisible(false);
+                likesLabel.setVisible(true);
+            }
+        });
+        return likePanel;
+    }
+
+    private Image getLikeIcon(boolean isLiked) {
+        BufferedImage likeIcon = null;
+        try {
+            if(!isLiked){
+                likeIcon = ImageIO.read(new File("resources/icons/like_icon.png"));
+            }else{
+                likeIcon = ImageIO.read(new File("resources/icons/like_icon_red.png"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        Image scaledLikeIcon = likeIcon.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        return scaledLikeIcon;
     }
 }

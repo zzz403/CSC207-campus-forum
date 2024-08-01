@@ -35,6 +35,8 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 public class PostSmallComponent extends JPanel {
+    
+    JLabel likesLabel;
 
     public PostSmallComponent(BufferedImage image, BufferedImage avatar, String title, String content, String author, int likes, JFrame applicationFrame) {
         setOpaque(false);
@@ -100,7 +102,7 @@ public class PostSmallComponent extends JPanel {
             authorLikesPanel.add(likeIconLabel);
         }
 
-        JLabel likesLabel = new JLabel(String.valueOf(likes));
+        likesLabel = new JLabel(String.valueOf(likes));
         likesLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         authorLikesPanel.add(likesLabel);
 
@@ -123,6 +125,15 @@ public class PostSmallComponent extends JPanel {
                 likesLabel.setVisible(true);
             }
         });
+    }
+
+    /**
+     * Sets the number of likes for the post.
+     * 
+     * @param likes the number of likes to set.
+     */
+    public void setLikes(int likes) {
+        likesLabel.setText(String.valueOf(likes));
     }
 
     @Override
