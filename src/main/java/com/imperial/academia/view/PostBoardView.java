@@ -93,8 +93,10 @@ public class PostBoardView extends JPanel {
             int postLikes = pInfo.getLikes();
 
             Random rand = new Random();
-            int randomNum = rand.nextInt((9 - 1) + 1) + 1;
-
+            int randomNum = rand.nextInt((20 - 1) + 1) + 1;
+            if (i < 19){
+                randomNum = i+1;
+            }
             PostSmallComponent postComponent = PostSmallComponentFactory.createPostSmallComponent(
                     "resources/test_image/test_image_"+randomNum+".jpg",
                     avatarURL, // user avatar url
