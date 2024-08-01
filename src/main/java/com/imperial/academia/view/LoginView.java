@@ -30,11 +30,15 @@ import com.imperial.academia.interface_adapter.login.LoginViewModel;
 public class LoginView extends JPanel {
     public final String viewName = "log in";
     
-    private final LoginController loginController = new LoginController();
+    private LoginController loginController;
     private JLabel usernameErrorLabel;
     private JLabel passwordErrorLabel;
     private JTextField usernameField;
     private JPasswordField passwordField;
+
+    public void setLoginController(LoginController loginController) {
+        this.loginController = loginController;
+    }
 
     /**
      * Constructs a LoginView instance and initializes the UI components.
@@ -42,6 +46,7 @@ public class LoginView extends JPanel {
      * @param loginViewModel  the login view model
      */
     public LoginView(LoginViewModel loginViewModel) {
+        loginController = new LoginController();
         setLayout(new BorderLayout());
 
         // Left panel setup

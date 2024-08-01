@@ -1,25 +1,25 @@
-// ChatView.java
-package com.imperial.academia.view;
+    // ChatView.java
+    package com.imperial.academia.view;
 
-import com.imperial.academia.view.components.ChatSideBarView;
-import com.imperial.academia.view.components.ChatWindowView;
+    import com.imperial.academia.view.components.ChatSideBarView;
+    import com.imperial.academia.view.components.ChatWindowView;
 
-import javax.swing.*;
-import java.awt.*;
+    import javax.swing.*;
+    import java.awt.*;
 
-public class ChatView extends JPanel {
-    public final String viewName = "chat";
+    public class ChatView extends JPanel {
+        public final String viewName = "chat";
 
-    ChatSideBarView chatSideBarView;
-    ChatWindowView chatWindowView;
+        JPanel chatSideBarView;
+        JPanel chatWindowView;
 
-    public ChatView(ChatSideBarView chatSideBarView, ChatWindowView chatWindowView) {
-        this.chatSideBarView = chatSideBarView;
-        this.chatWindowView = chatWindowView;
+        public ChatView(JPanel chatSideBarView, JPanel chatWindowView) {
+            this.chatSideBarView = chatSideBarView;
+            this.chatWindowView = chatWindowView;
 
-        setLayout(new BorderLayout());
+            setLayout(new BorderLayout());
 
-        add(chatSideBarView, BorderLayout.WEST);
-        add(chatWindowView, BorderLayout.CENTER);
+            add(chatSideBarView, BorderLayout.WEST);
+            add(chatWindowView, BorderLayout.CENTER);
+        }
     }
-}
