@@ -24,7 +24,7 @@ class MapPanelTest {
 
     @Test
     void testMapPanelInitialization() {
-        when(mockMapData.getLocationInfo()).thenReturn("Imperial College London");
+        when(mockMapData.getLocationInfo()).thenReturn("Imperial College");
 
         MapPanel mapPanel = new MapPanel(mockMapData, mockMapImage, false);
         assertNotNull(mapPanel);
