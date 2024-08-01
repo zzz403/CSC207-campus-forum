@@ -55,7 +55,7 @@ public class SignupPresenter implements SignupOutputBoundary {
      * @param error The error message.
      */
     @Override
-    public void prepareFailView(String error) { //TODO type
+    public void prepareFailView(String error) {
         SignupState signupState = signupViewModel.getState();
         if (error == null) {
             signupState.setUsernameError(null);

@@ -20,6 +20,15 @@ public class SignupController {
     }
 
     /**
+     * Constructs a SignupController with the provided signupInteractor.
+     *
+     * @param signupInteractor The signup interactor to handle signup logic.
+     */
+    public SignupController(SignupInputBoundary signupInteractor) {
+        this.signupInteractor = signupInteractor;
+    }
+
+    /**
      * Executes the signup process with the provided user details.
      * 
      * @param username The username of the user.

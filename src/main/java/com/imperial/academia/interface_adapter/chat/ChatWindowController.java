@@ -22,6 +22,15 @@ public class ChatWindowController {
     }
 
     /**
+     * Constructor for ChatWindowController.
+     *
+     * @param chatWindowInteractor the chat window interactor
+     */
+    public ChatWindowController(ChatWindowInputBoundary chatWindowInteractor) {
+        this.chatWindowInteractor = chatWindowInteractor;
+    }
+
+    /**
      * Loads chat messages for a specific chat group.
      *
      * @param chatGroupId the ID of the chat group

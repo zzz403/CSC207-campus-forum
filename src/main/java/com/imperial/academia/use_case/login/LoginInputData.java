@@ -1,5 +1,7 @@
 package com.imperial.academia.use_case.login;
 
+import java.util.Objects;
+
 /**
  * The LoginInputData class represents the input data required for the login process.
  */
@@ -46,5 +48,20 @@ public class LoginInputData {
      */
     public boolean isRememberMe() {
         return rememberMe;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LoginInputData that = (LoginInputData) o;
+        return rememberMe == that.rememberMe &&
+                Objects.equals(username, that.username) &&
+                Objects.equals(password, that.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, password, rememberMe);
     }
 }
