@@ -121,12 +121,5 @@ public class GroupMember {
     public void setLastModified(Timestamp lastModified) { 
         this.lastModified = lastModified; 
     }
-//
-//    public void setPrevent(boolean isPrevent){
-//        this.isPrevent = isPrevent;
-//    }
-//
-//    public boolean isPrevent(){
-//        return isPrevent;
-//    }
+
 }
