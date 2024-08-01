@@ -22,7 +22,7 @@ class FilePanelTest {
     @Test
     void testFilePanelInitialization() {
         when(mockFileData.getFileName()).thenReturn("testfile.txt");
-        when(mockFileData.getFileSize()).thenReturn("1 KB");
+        when(mockFileData.getFileSize()).thenReturn("2 KB");
 
         FilePanel filePanel = new FilePanel(mockFileData);
         assertNotNull(filePanel);
