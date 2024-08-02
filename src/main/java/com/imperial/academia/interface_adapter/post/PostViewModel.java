@@ -4,9 +4,12 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.imperial.academia.interface_adapter.common.ViewModel;
+import com.imperial.academia.use_case.post.CommentData;
 
 /**
  * The PostViewModel class represents the ViewModel for a post,
@@ -233,5 +236,35 @@ public class PostViewModel extends ViewModel {
      */
     public boolean getStateIsLiked() {
         return state.isLiked();
+    }
+
+    /**
+     * Sets the comments of the post state and notifies listeners.
+     * 
+     * @param comments the new comments of the post.
+     */
+    public void setStateComments(List<CommentData> comments) {
+        List<CommentData> oldComments = state.getComments();
+        state.setComments(comments);
+        support.firePropertyChange("comments", oldComments, comments);
+    }
+
+    /**
+     * Gets the comments of the post state.
+     * 
+     * @return the comments of the post.
+     */
+    public List<CommentData> getStateComments() {
+        return new ArrayList<>(this.state.getComments());
+    }
+
+    /**
+     * Adds a comment to the post state and notifies listeners.
+     * 
+     * @param commentData the comment to add.
+     */
+    public void addStateComment(CommentData commentData) {
+        this.state.addComment(commentData);
+        support.firePropertyChange("addComment", null, this.state);
     }
 }

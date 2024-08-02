@@ -3,13 +3,18 @@ package com.imperial.academia.use_case.post;
 import java.sql.SQLException;
 
 import com.imperial.academia.app.ServiceFactory;
+import com.imperial.academia.entity.comment.Comment;
 import com.imperial.academia.entity.post.Post;
 import com.imperial.academia.entity.user.User;
+import com.imperial.academia.service.CommentService;
 import com.imperial.academia.service.PostService;
 import com.imperial.academia.service.UserService;
 import com.imperial.academia.session.SessionManager;
 
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The PostInteractor class handles the interaction logic for posts.
@@ -22,15 +27,19 @@ public class PostInteractor implements PostInputBoundary {
 
     private final UserService userService;
 
+    private final CommentService commentService;
+
     /**
      * Constructs a new PostInteractor with the specified PostOutputBoundary.
      * 
-     * @param postPresenter the output boundary that will handle the presentation logic.
+     * @param postPresenter the output boundary that will handle the presentation
+     *                      logic.
      */
     public PostInteractor(PostOutputBoundary postPresenter) {
         this.postPresenter = postPresenter;
         this.postService = ServiceFactory.getPostService();
         this.userService = ServiceFactory.getUserService();
+        this.commentService = ServiceFactory.getCommentService();
     }
 
     /**
@@ -66,24 +75,55 @@ public class PostInteractor implements PostInputBoundary {
 
             User currentUser = SessionManager.getCurrentUser();
             boolean isLiked = postService.checkLiked(postID, currentUser.getId());
-            
+
             PostInfoData postInfoData = PostInfoData.builder()
-                                                    .setTitle(title)
-                                                    .setContent(content)
-                                                    .setUsername(username)
-                                                    .setAvatarUrl(avatarUrl)
-                                                    .setDate(date)
-                                                    .setLikes(postLikes)
-                                                    .setPostId(postID)
-                                                    .setIsLiked(isLiked)
-                                                    .build();
+                    .setTitle(title)
+                    .setContent(content)
+                    .setUsername(username)
+                    .setAvatarUrl(avatarUrl)
+                    .setDate(date)
+                    .setLikes(postLikes)
+                    .setPostId(postID)
+                    .setIsLiked(isLiked)
+                    .build();
 
             postPresenter.initPostPage(postInfoData);
+
+            initComments(postID, currentUser);
+
         } catch (SQLException e) {
             System.out.println("Can't find the post or user DNE when init post page");
             return false;
         }
         return true;
+    }
+
+    /**
+     * Gets the comments for the post with the given post ID.
+     * 
+     * @param postID      the ID of the post to get the comments for.
+     * @param currentUser the current user.
+     * @throws SQLException if there is an error getting the comments.
+     */
+    private void initComments(int postID, User currentUser) throws SQLException {
+        List<CommentData> commentDataList = new ArrayList<>();
+        List<Comment> comments = commentService.getAllByPostId(postID);
+        for (Comment comment : comments) {
+            User tempUser = userService.get(comment.getAuthorId());
+            String tempUsername = tempUser.getUsername();
+            if (tempUser.getId() == currentUser.getId()) {
+                tempUsername = "Me";
+            }
+            CommentData commentData = CommentData.builder()
+                    .setId(comment.getId())
+                    .setContent(comment.getContent())
+                    .setAuthorId(comment.getAuthorId())
+                    .setUsername(tempUsername)
+                    .setLastModified(comment.getLastModified())
+                    .build();
+            commentDataList.add(commentData);
+        }
+        postPresenter.initComments(commentDataList);
     }
 
     /**
@@ -94,9 +134,9 @@ public class PostInteractor implements PostInputBoundary {
      */
     @Override
     public boolean addLike(int postId, int userId) {
-        try{
+        try {
             postService.likePost(postId, userId);
-        }catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println("Can't like the post");
             return false;
         }
@@ -112,9 +152,9 @@ public class PostInteractor implements PostInputBoundary {
      */
     @Override
     public boolean removeLike(int postId, int userId) {
-        try{
+        try {
             postService.unlikePost(postId, userId);
-        }catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println("Can't unlike the post");
             return false;
         }
@@ -132,12 +172,46 @@ public class PostInteractor implements PostInputBoundary {
      */
     @Override
     public boolean checkLiked(int postId, int userId) {
-        try{
+        try {
             return postService.checkLiked(postId, userId);
-        }catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println("Can't check if liked");
             return false;
         }
 
+    }
+
+    /**
+     * Posts a comment to the post with the given post ID.
+     * 
+     * @param postId  the ID of the post to post a comment to.
+     * @param userId  the ID of the user posting the comment.
+     * @param content the content of the comment.
+     */
+    @Override
+    public void postComment(int postId, int userId, String content) {
+        try {
+            Comment comment = Comment.builder()
+                    .setContent(content)
+                    .setPostId(postId)
+                    .setAuthorId(userId)
+                    .setCreationDate(Timestamp.from(Instant.now()))
+                    .setLastModified(Timestamp.from(Instant.now()))
+                    .build();
+            commentService.insert(comment);
+            
+            CommentData commentData = CommentData.builder()
+                    .setId(comment.getId())
+                    .setContent(comment.getContent())
+                    .setAuthorId(comment.getAuthorId())
+                    .setUsername("Me")
+                    .setLastModified(comment.getLastModified())
+                    .build();
+
+            postPresenter.addPost(commentData);
+
+        } catch (SQLException e) {
+            System.out.println("Can't summbit the comment");
+        }
     }
 }

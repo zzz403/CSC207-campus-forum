@@ -1,6 +1,10 @@
 package com.imperial.academia.interface_adapter.post;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.imperial.academia.use_case.post.CommentData;
 
 /**
  * The PostState class represents the state of a post, including its title,
@@ -16,6 +20,7 @@ public class PostState {
     private int likes;
     private int postID;
     private boolean isLiked;
+    private List<CommentData> comments = new ArrayList<>();
 
     /**
      * Constructs a new PostState as a copy of the specified PostState.
@@ -191,4 +196,31 @@ public class PostState {
         this.isLiked = isLiked;
     }
 
+    /**
+     * Sets the comments of the post.
+     * 
+     * @param comments the new comments of the post.
+     */
+    public void setComments(List<CommentData> comments) {
+        this.comments = new ArrayList<>(comments);
+    }
+
+    /**
+     * Gets the comments of the post.
+     * 
+     * @return the comments of the post.
+     */
+    public List<CommentData> getComments() {
+        return new ArrayList<>(this.comments);
+    }
+
+    /**
+     * Adds a comment to the post.
+     * 
+     * @param commentData the comment to add.
+     */
+    public void addComment(CommentData commentData) {
+        this.comments.add(commentData);
+    }
+    
 }

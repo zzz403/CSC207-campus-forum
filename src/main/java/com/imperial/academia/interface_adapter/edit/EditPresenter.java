@@ -1,6 +1,5 @@
 package com.imperial.academia.interface_adapter.edit;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.imperial.academia.use_case.edit.EditOutputBoundary;
 import com.imperial.academia.use_case.edit.EditOutputData;
 

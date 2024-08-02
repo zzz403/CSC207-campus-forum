@@ -1,8 +1,10 @@
 package com.imperial.academia.interface_adapter.post;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
+import com.imperial.academia.use_case.post.CommentData;
 import com.imperial.academia.use_case.post.PostInfoData;
 import com.imperial.academia.use_case.post.PostOutputBoundary;
 
@@ -73,5 +75,25 @@ public class PostPresenter implements PostOutputBoundary {
         postViewModel.decrementStateLikes();
         postViewModel.setStateIsLiked(false);
         postBoardViewModel.decrementStateLikesByPostId(postId);
+    }
+
+    /**
+     * Initializes the comments section with the given comments.
+     * 
+     * @param comments the comments to initialize the comments section with.
+     */
+    @Override
+    public void initComments(List<CommentData> comments) {
+        postViewModel.setStateComments(comments);
+    }
+
+    /**
+     * Adds a comment to the post.
+     * 
+     * @param commentData the comment to add.
+     */
+    @Override
+    public void addPost(CommentData commentData) {
+        postViewModel.addStateComment(commentData);
     }
 }
