@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 import com.imperial.academia.interface_adapter.createpost.CreatePostController;
 import com.imperial.academia.interface_adapter.createpost.CreatePostViewModel;
 
@@ -37,9 +38,9 @@ public class CreatePostView extends JPanel {
     /**
      * Constructs a new CreatePostView with the specified controller and view model.
      * 
-     * @param createPostViewModel  the view model associated with creating a post
+     * @param createPostViewModel the view model associated with creating a post
      */
-    public CreatePostView(CreatePostViewModel createPostViewModel) {
+    public CreatePostView(CreatePostViewModel createPostViewModel, ViewManagerModel viewManagerModel) {
         this.createPostViewModel = createPostViewModel;
 
         setLayout(new BorderLayout());
@@ -96,17 +97,19 @@ public class CreatePostView extends JPanel {
         JButton saveDraftButton = new JButton("Save Draft");
         saveDraftButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 String title = titleField.getText().strip();
                 String content = contentArea.getText().strip();
-                
+
                 createPostViewModel.setStateTitle(title);
                 createPostViewModel.setStateContent(content);
+
+                createPostViewModel.setStateIsSave(true);
 
                 System.out.println("Save post success");
             }
         });
-        
+
         // post button
         JButton postButton = new JButton("Post");
         postButton.addActionListener(new ActionListener() {
@@ -119,14 +122,27 @@ public class CreatePostView extends JPanel {
                     System.out.println("Post submit unseccuss due to illegal/empty input for title or content");
                     return;
                 }
-                System.out.println("Post submit | Title: " + title + " | Content: " + content + " | BoardName: " + boardName);
+                System.out.println(
+                        "Post submit | Title: " + title + " | Content: " + content + " | BoardName: " + boardName);
                 createPostController.submitPost(title, content, boardName);
             }
         });
-            
+
+        viewManagerModel.addPropertyChangeListener(evt -> {
+            if ("changeView".equals(evt.getPropertyName())) {
+                String title = createPostViewModel.getStateTitle();
+                String content = createPostViewModel.getStateContent();
+                int boardIndex = createPostViewModel.getStateCurrentBoardIndex() == -1 ? 0
+                        : createPostViewModel.getStateCurrentBoardIndex();
+                contentArea.setText(content);
+                titleField.setText(title);
+                boardSelect.setSelectedIndex(boardIndex);
+            }
+        });
+
         // enhance content button
         JButton enhanceContentButton = new JButton("Enhance Content");
-            
+
         enhanceContentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -135,7 +151,7 @@ public class CreatePostView extends JPanel {
                     System.out.println("Content is empty, cannot enhance.");
                     return;
                 }
-                
+
                 // Call the method to enhance content using ChatGPT
                 createPostController.enhanceContentUsingChatGPT(content);
             }
@@ -143,11 +159,11 @@ public class CreatePostView extends JPanel {
 
         // Add property change listener to update the view when the model changes
         createPostViewModel.addPropertyChangeListener(evt -> {
-            if("content".equals(evt.getPropertyName())){
+            if ("content".equals(evt.getPropertyName())) {
                 contentArea.setText(createPostViewModel.getStateContent());
-            }else if("title".equals(evt.getPropertyName())){
+            } else if ("title".equals(evt.getPropertyName())) {
                 titleField.setText(createPostViewModel.getStateTitle());
-            }else if("reset".equals(evt.getPropertyName())){
+            } else if ("reset".equals(evt.getPropertyName())) {
                 titleField.setText(createPostViewModel.getStateTitle());
                 contentArea.setText(createPostViewModel.getStateContent());
                 boardSelect.setSelectedIndex(0);
@@ -158,7 +174,7 @@ public class CreatePostView extends JPanel {
         buttonsPanel.add(enhanceContentButton);
         buttonsPanel.add(saveDraftButton);
         buttonsPanel.add(postButton);
-        
+
         // Combine boardSelectPanel and buttonsPanel into one panel
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new GridLayout(2, 1));

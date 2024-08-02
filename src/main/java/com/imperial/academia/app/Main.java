@@ -94,7 +94,7 @@ public class Main {
             PostBoardView postBoardView = new PostBoardView(postBoardViewModel, application);
             views.add(postBoardView, postBoardView.viewName);
 
-            CreatePostView createPostView = new CreatePostView(createPostViewModel);
+            CreatePostView createPostView = new CreatePostView(createPostViewModel, viewManagerModel);
             views.add(createPostView, createPostView.viewName);
 
             ChatSideBarView chatSideBarView = new ChatSideBarView(chatSideBarViewModel);
