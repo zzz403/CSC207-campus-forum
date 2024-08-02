@@ -308,6 +308,12 @@ INSERT INTO group_members (group_id, user_id, role, joined_date, last_modified) 
 -- Insert post likes
 INSERT INTO post_likes (user_id, post_id, liked_at) VALUES
 (1, 1, CURRENT_TIMESTAMP),
+(2, 1, CURRENT_TIMESTAMP),
+(3, 1, CURRENT_TIMESTAMP),
+(4, 1, CURRENT_TIMESTAMP),
+(5, 1, CURRENT_TIMESTAMP),
+(7, 1, CURRENT_TIMESTAMP),
+(8, 1, CURRENT_TIMESTAMP),
 (2, 2, CURRENT_TIMESTAMP),
 (3, 3, CURRENT_TIMESTAMP),
 (4, 4, CURRENT_TIMESTAMP),

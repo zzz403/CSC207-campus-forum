@@ -9,14 +9,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -152,6 +145,11 @@ public class LoginView extends JPanel {
         forgotPasswordLabel.setForeground(Color.BLUE);
         forgotPasswordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         forgotPasswordLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        forgotPasswordLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JOptionPane.showMessageDialog(null, "Our mail system is being updated. \nPlease contact the administrator.", "Service updating", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
         leftPanel.add(forgotPasswordLabel, gbc);
 
         // Sign up label setup

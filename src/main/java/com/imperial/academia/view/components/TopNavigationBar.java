@@ -24,15 +24,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JWindow;
+import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 import com.imperial.academia.app.components_factory.AvatarFactory;
@@ -160,6 +152,13 @@ public class TopNavigationBar extends JPanel {
 
         // Notification Button
         JButton notificationButton = createIconButton("resources/icons/notification_icon.png", 40, 40, "Notifications");
+        notificationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Show a message dialog when the button is clicked
+                JOptionPane.showMessageDialog(null, "You don't have any notifications yet", "Notification", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
         rightPanel.add(notificationButton);
 
         // Profile Button
