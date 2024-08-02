@@ -196,7 +196,7 @@ public class PostView extends JPanel {
         contentArea.setFont(new Font("Arial", Font.PLAIN, 14));
         contentArea.setEditable(false);
         contentArea.setBackground(new Color(255, 255, 255));
-        JScrollPane contentScrollPane = new JScrollPane(contentArea);
+        JScrollPane contentScrollPane = new CustomScrollBarUI.CustomScrollPane(contentArea);
         contentScrollPane.setPreferredSize(new Dimension(400, 200));
         contentScrollPane.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
 
