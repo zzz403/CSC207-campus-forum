@@ -3,6 +3,8 @@ package com.imperial.academia.interface_adapter.topnavbar;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.session.SessionInputBoundary;
 import com.imperial.academia.use_case.session.SessionOutputData;
+import com.imperial.academia.use_case.topnav.TopNavInputBoundary;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -19,6 +21,7 @@ class TopNavigationBarControllerTest {
     private ChangeViewInputBoundary mockChangeViewInteractor;
     private SessionInputBoundary mockSessionInputBoundary;
     private SessionOutputData mockSessionOutputData;
+    private TopNavInputBoundary mockTopNavInteractor;
 
     @BeforeEach
     void setUp() {
@@ -28,7 +31,7 @@ class TopNavigationBarControllerTest {
 
         when(mockSessionInputBoundary.getSessionInfo()).thenReturn(mockSessionOutputData);
 
-        controller = new TopNavigationBarController(mockChangeViewInteractor, mockSessionInputBoundary);
+        controller = new TopNavigationBarController(mockChangeViewInteractor, mockSessionInputBoundary, mockTopNavInteractor);
         Mockito.reset(mockSessionInputBoundary); // Reset to ignore constructor call
     }
 
@@ -52,7 +55,7 @@ class TopNavigationBarControllerTest {
     void testGetCurrentUserAvatarUrl_NoSession() {
         when(mockSessionInputBoundary.getSessionInfo()).thenReturn(null);
 
-        TopNavigationBarController noSessionController = new TopNavigationBarController(mockChangeViewInteractor, mockSessionInputBoundary);
+        TopNavigationBarController noSessionController = new TopNavigationBarController(mockChangeViewInteractor, mockSessionInputBoundary, mockTopNavInteractor);
         String result = noSessionController.getCurrentUserAvatarUrl();
         assertNull(result);
     }

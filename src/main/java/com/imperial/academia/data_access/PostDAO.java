@@ -219,4 +219,30 @@ public class PostDAO implements PostDAI {
         }
         return likes;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Post getReleventPostByTitle(String title) throws SQLException {
+        String sql = "SELECT * FROM posts WHERE LOWER(title) like LOWER(?)";
+        Post post = null;
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, "%" + title + "%");
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    post = new Post(
+                        rs.getInt("post_id"),
+                        rs.getString("title"),
+                        rs.getString("content"),
+                        rs.getInt("author_id"),
+                        rs.getInt("board_id"),
+                        rs.getTimestamp("creation_date"),
+                        rs.getTimestamp("last_modified_date")
+                    );
+                }
+            }
+        }
+        return post;
+    }
 }

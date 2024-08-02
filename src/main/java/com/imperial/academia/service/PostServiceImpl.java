@@ -153,4 +153,12 @@ public class PostServiceImpl implements PostService {
         }
         return false;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Post getReleventPostByTitle(String title) throws SQLException {
+        return postDAO.getReleventPostByTitle(title);
+    }
 }

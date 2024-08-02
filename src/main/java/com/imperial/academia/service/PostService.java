@@ -105,4 +105,16 @@ public interface PostService {
      * @throws SQLException if a database access error occurs
      */
     boolean checkLiked(int postId, int userId) throws SQLException;
+
+    /**
+     * Retrieves all posts from the database by user ID that have been modified
+     * since a given timestamp.
+     *
+     * @param userId    the ID of the user to retrieve posts for
+     * @param timestamp the timestamp to compare against
+     * @return a list of posts by the specified user modified since the specified
+     *         timestamp. If no posts are found, an null object will return.
+     * @throws SQLException if a database access error occurs
+     */
+    Post getReleventPostByTitle(String title) throws SQLException;
 }
