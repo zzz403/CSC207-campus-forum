@@ -16,15 +16,20 @@ import com.imperial.academia.cache.PostCache;
 import com.imperial.academia.cache.PostCacheImpl;
 import com.imperial.academia.cache.UserCache;
 import com.imperial.academia.cache.UserCacheImpl;
+import com.imperial.academia.data_access.BoardDAI;
 import com.imperial.academia.data_access.BoardDAO;
 import com.imperial.academia.data_access.ChatGroupDAI;
 import com.imperial.academia.data_access.ChatGroupDAO;
+import com.imperial.academia.data_access.ChatMessageDAI;
 import com.imperial.academia.data_access.ChatMessageDAO;
+import com.imperial.academia.data_access.CommentDAI;
 import com.imperial.academia.data_access.CommentDAO;
 import com.imperial.academia.data_access.DatabaseConnection;
 import com.imperial.academia.data_access.GroupMemberDAI;
 import com.imperial.academia.data_access.GroupMemberDAO;
+import com.imperial.academia.data_access.PostDAI;
 import com.imperial.academia.data_access.PostDAO;
+import com.imperial.academia.data_access.UserDAI;
 import com.imperial.academia.data_access.UserDAO;
 import com.imperial.academia.service.AudioService;
 import com.imperial.academia.service.AudioServiceImpl;
@@ -71,7 +76,7 @@ public class ServiceFactory {
      */
     public static void initialize() throws SQLException, ClassNotFoundException {
         UserCache userCache = new UserCacheImpl();
-        UserDAO userDAO = new UserDAO(DatabaseConnection.getConnection());
+        UserDAI userDAO = new UserDAO(DatabaseConnection.getConnection());
         userService = new UserServiceImpl(userCache, userDAO);
         
         ChatGroupCache chatGroupCache = new ChatGroupCacheImpl();
@@ -81,19 +86,19 @@ public class ServiceFactory {
         chatGroupService = new ChatGroupServiceImpl(chatGroupCache, chatGroupDAO,groupMemberCache,groupMemberDAO);
         
         ChatMessageCache chatMessageCache = new ChatMessageCacheImpl();
-        ChatMessageDAO chatMessageDAO = new ChatMessageDAO(DatabaseConnection.getConnection());
+        ChatMessageDAI chatMessageDAO = new ChatMessageDAO(DatabaseConnection.getConnection());
         chatMessageService = new ChatMessageServiceImpl(chatMessageDAO, userDAO, chatMessageCache, userCache);
         
         BoardCache boardCache = new BoardCacheImpl();
-        BoardDAO boardDAO = new BoardDAO(DatabaseConnection.getConnection());
+        BoardDAI boardDAO = new BoardDAO(DatabaseConnection.getConnection());
         boardService = new BoardServiceImpl(boardCache, boardDAO);
 
         PostCache postCache = new PostCacheImpl();
-        PostDAO postDAO = new PostDAO(DatabaseConnection.getConnection());
+        PostDAI postDAO = new PostDAO(DatabaseConnection.getConnection());
         postService = new PostServiceImpl(postCache, postDAO);
 
         CommentCache commentCache = new CommentCacheImpl();
-        CommentDAO commentDAO = new CommentDAO(DatabaseConnection.getConnection());
+        CommentDAI commentDAO = new CommentDAO(DatabaseConnection.getConnection());
         commentService = new CommentServiceImpl(commentCache, commentDAO);
 
         audioService = new AudioServiceImpl();

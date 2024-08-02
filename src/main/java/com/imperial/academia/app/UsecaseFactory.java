@@ -68,6 +68,8 @@ import com.imperial.academia.use_case.session.SessionInteractor;
 import com.imperial.academia.use_case.signup.SignupInputBoundary;
 import com.imperial.academia.use_case.signup.SignupInteractor;
 import com.imperial.academia.use_case.signup.SignupOutputBoundary;
+import com.imperial.academia.use_case.topnav.TopNavInputBoundary;
+import com.imperial.academia.use_case.topnav.TopNavInteractor;
 
 /**
  * The UsecaseFactory class is responsible for initializing and providing
@@ -94,6 +96,7 @@ public class UsecaseFactory {
     private static TranslatorInputBoundary translatorInteractor;
     private static PostBoardInputBoundary postBoardInteractor;
     private static EditInputBoundary editInteractor;
+    private static TopNavInputBoundary topNavInteractor;
 
     /** Prevents instantiation of this utility class. */
     private UsecaseFactory() {
@@ -160,6 +163,8 @@ public class UsecaseFactory {
 
         CreatePostOutputBoundary createPostPresenter = new CreatePostPresenter(createPostViewModel);
         createPostInteractor = new CreatePostInteractor(createPostPresenter, postBoardPresenter);
+
+        topNavInteractor = new TopNavInteractor();
 
         System.out.println("init seccuss for usecase!!!!");
 
@@ -296,5 +301,14 @@ public class UsecaseFactory {
      */
     public static TranslatorInputBoundary getTranslatorInteractor() {
         return translatorInteractor;
+    }
+
+    /**
+     * Returns the TopNavInteractor
+     * 
+     * @return the TopNavInteractor
+     */
+    public static TopNavInputBoundary getTopNavInteractor() {
+        return topNavInteractor;
     }
 }

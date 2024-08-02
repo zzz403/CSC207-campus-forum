@@ -20,6 +20,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -38,7 +40,7 @@ import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewMod
  */
 public class TopNavigationBar extends JPanel {
 
-    private final TopNavigationBarController topNavigationBarController = new TopNavigationBarController();
+    private final TopNavigationBarController topNavigationBarController;
 
     private JPanel topNavPanel;
     private JLabel logoText;
@@ -53,6 +55,7 @@ public class TopNavigationBar extends JPanel {
      * @throws IOException If an error occurs while reading resources.
      */
     public TopNavigationBar(TopNavigationBarViewModel topNavigationBarViewModel, JFrame applicationFrame) throws IOException {
+        this.topNavigationBarController = new TopNavigationBarController();
         this.applicationFrame = applicationFrame;
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
@@ -344,6 +347,17 @@ public class TopNavigationBar extends JPanel {
                     if (getText().isEmpty()) {
                         setForeground(Color.GRAY);
                         setText("Search...");
+                    }
+                }
+            });
+
+            addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    if (e.getKeyChar() == KeyEvent.VK_ENTER) {
+                        String title = getText().strip().toLowerCase();
+                        topNavigationBarController.searchPostByTitle(title);
+                        setText("");
                     }
                 }
             });

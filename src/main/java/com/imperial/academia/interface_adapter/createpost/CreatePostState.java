@@ -22,6 +22,8 @@ public class CreatePostState {
     /** The list of board names. */
     private List<String> boardsName;
 
+    private boolean isSave;
+
 
     /**
      * Constructs a new CreatePostState by copying the state from another instance.
@@ -32,6 +34,7 @@ public class CreatePostState {
         this.title = other.getTitle();
         this.content = other.getContent();
         this.boardsName = other.getBoardsName();
+        this.currentBoardName = other.getCurrentBoardName();
     }
 
     /**
@@ -42,6 +45,7 @@ public class CreatePostState {
         this.content = "";
         this.currentBoardName = "";
         this.boardsName = new ArrayList<>();
+        this.isSave = false;
     }
 
     /**
@@ -115,5 +119,17 @@ public class CreatePostState {
      */
     public void setCurrentBoardName(String currentBoardName) {
         this.currentBoardName = currentBoardName;
+    }
+
+    public void setIsSave(boolean b) {
+        this.isSave = b;
+    }
+
+    public boolean getIsSave() {
+        return this.isSave;
+    }
+
+    public int getCurrentBoardIndex() {
+        return boardsName.indexOf(currentBoardName);
     }
 }

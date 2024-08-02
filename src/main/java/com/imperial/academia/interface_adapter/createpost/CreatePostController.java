@@ -42,6 +42,11 @@ public class CreatePostController {
         return createPostInteractor.submitPost(title, content, boardName);
     }
 
+    /**
+     * Enhance the content using ChatGPT
+     * 
+     * @param content the content to enhance
+     */
     public void enhanceContentUsingChatGPT(String content) {
         createPostInteractor.enhanceContent(content);
     }

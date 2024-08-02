@@ -136,6 +136,11 @@ public class ProfileInteractorTest {
             public boolean checkLiked(int postId, int userId) throws SQLException {
                 return false;
             }
+
+            @Override
+            public Post getReleventPostByTitle(String title) throws SQLException {
+                return Post.builder().build();
+            }
         };
 
         mockUserService = new UserService() {

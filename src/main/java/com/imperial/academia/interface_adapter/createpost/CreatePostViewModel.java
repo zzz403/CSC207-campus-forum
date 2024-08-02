@@ -117,6 +117,15 @@ public class CreatePostViewModel extends ViewModel {
     }
 
     /**
+     * Set the current board index selected
+     * 
+     * @param newBoardIndex The newBoardIndex to set
+     */
+    public int getStateCurrentBoardIndex() {
+        return state.getCurrentBoardIndex();
+    }
+
+    /**
      * reset the state
      */
     public void resetState() {
@@ -128,6 +137,27 @@ public class CreatePostViewModel extends ViewModel {
             return;
         }
         this.state.setCurrentBoardName(boardNames.get(0));
+        this.state.setIsSave(false);
         support.firePropertyChange("reset", null, this.state);
+    }
+
+    /**
+     * Set the isSave in the state
+     * 
+     * @param b The isSave to set
+     */
+    public void setStateIsSave(boolean b) {
+        boolean oldIsSave = state.getIsSave();
+        state.setIsSave(b);
+        support.firePropertyChange("isSave", oldIsSave, b);
+    }
+
+    /**
+     * Get the isSave in the state
+     * 
+     * @return the isSave in the state
+     */
+    public boolean getStateIsSave() {
+        return state.getIsSave();
     }
 }
