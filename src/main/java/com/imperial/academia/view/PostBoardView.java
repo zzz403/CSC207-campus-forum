@@ -6,13 +6,13 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import com.imperial.academia.app.Main;
 import com.imperial.academia.app.components_factory.PostSmallComponentFactory;
 import com.imperial.academia.interface_adapter.postboard.PostBoardController;
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
@@ -36,6 +36,8 @@ public class PostBoardView extends JPanel {
     private final PostBoardController postBoardController;
 
     private JFrame applicationFrame;
+
+    private final Map<Integer,PostSmallComponent> postCaChe = new HashMap<>();
     /**
      * Constructs a new PostBoardView with the specified view model.
      * 
@@ -93,11 +95,20 @@ public class PostBoardView extends JPanel {
             int postLikes = pInfo.getLikes();
 
             Random rand = new Random();
+            PostSmallComponent postComponent = null;
+            if (postCaChe.get(postID) != null) {
+                postComponent = postCaChe.get(postID);
+                gbc.gridx = i % 3;
+                gbc.gridy = i / 3;
+                mainPanel.add(postComponent, gbc);
+                continue;
+            }
+
             int randomNum = rand.nextInt((20 - 1) + 1) + 1;
             if (i < 19){
                 randomNum = i+1;
             }
-            PostSmallComponent postComponent = PostSmallComponentFactory.createPostSmallComponent(
+            postComponent = PostSmallComponentFactory.createPostSmallComponent(
                     "resources/test_image/test_image_"+randomNum+".jpg",
                     avatarURL, // user avatar url
                     title, // post title
@@ -117,18 +128,21 @@ public class PostBoardView extends JPanel {
                 }
             });
 
+            PostSmallComponent finalPostComponent = postComponent;
             postBoardViewModel.addPropertyChangeListener(evt -> {
                 if (evt.getPropertyName().equals("likeChangeInc="+postID)) {
                     int likes = postBoardViewModel.getPostLikesByPostId(postID);
-                    postComponent.setLikes(likes);
+                    finalPostComponent.setLikes(likes);
                 }else if (evt.getPropertyName().equals("likeChangeDec="+postID)) {
                     int likes = postBoardViewModel.getPostLikesByPostId(postID);
-                    postComponent.setLikes(likes);
+                    finalPostComponent.setLikes(likes);
                 }
             });
 
             gbc.gridx = i % 3;
             gbc.gridy = i / 3;
+
+            postCaChe.put(postID, postComponent);
             mainPanel.add(postComponent, gbc);
         }
     }
