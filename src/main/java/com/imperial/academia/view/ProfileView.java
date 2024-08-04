@@ -1,25 +1,12 @@
 package com.imperial.academia.view;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 import com.imperial.academia.app.components_factory.PostProfileFactory;
 import com.imperial.academia.interface_adapter.profile.ProfileController;
@@ -65,20 +52,27 @@ public class ProfileView extends JPanel {
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setPreferredSize(new Dimension(400, 100));
 
-        // default image
-        JPanel avatarPanel = new JPanel(new BorderLayout());
-//        avatarPanel.setBackground(new Color(255, 225, 120));
+        // Default image
+        JPanel avatarPanel = new JPanel();
+        avatarPanel.setLayout(new BoxLayout(avatarPanel, BoxLayout.Y_AXIS));
+        avatarPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 30, 10));
+
         ImageIcon originalIcon = new ImageIcon("resources/avatar/default_avatar.png");
-        Image resizedImage = originalIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        Image resizedImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Smaller size
         ImageIcon resizedIcon = new ImageIcon(resizedImage);
         JLabel imageLabel = new JLabel(resizedIcon);
+        imageLabel.setAlignmentX(CENTER_ALIGNMENT);  // Center the image
         avatarPanel.add(imageLabel);
-        topPanel.add(avatarPanel, BorderLayout.WEST);
 
+        avatarPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add space between image and button
+
+        // Button for editing or chatting
         JButton chatOrModify = new JButton("Edit");
-        chatOrModify.addMouseListener(new java.awt.event.MouseAdapter() {
+        chatOrModify.setAlignmentX(CENTER_ALIGNMENT);  // Center the button
+        chatOrModify.setMaximumSize(new Dimension(200, 30)); // 设置最大宽度为200像素
+        chatOrModify.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mouseClicked(MouseEvent evt) {
                 if (profileViewModel.getProfileState().isMe()) {
                     profileController.edit();
                 } else {
@@ -87,7 +81,8 @@ public class ProfileView extends JPanel {
             }
         });
 
-        topPanel.add(chatOrModify, BorderLayout.EAST);
+        avatarPanel.add(chatOrModify); // Add button below the avatar
+        topPanel.add(avatarPanel, BorderLayout.WEST);
 
         JPanel infoPanel = new JPanel(new GridLayout(0, 1));
 //        infoPanel.setBackground(new Color(255, 225, 120));
@@ -105,10 +100,28 @@ public class ProfileView extends JPanel {
         infoPanel.add(nameLabel, BorderLayout.CENTER);
         infoPanel.add(emailLabel, BorderLayout.CENTER);
         infoPanel.add(idLabel, BorderLayout.CENTER);
+        infoPanel.add(idLabel, BorderLayout.CENTER);
         infoPanel.add(roleLabel, BorderLayout.CENTER);
         infoPanel.add(registrationDateLabel, BorderLayout.CENTER);
         infoPanel.setBorder(BorderFactory.createEmptyBorder(0, 100, 0, 0));
         topPanel.add(infoPanel, BorderLayout.CENTER);
+
+        // Button for editing or chatting
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.setAlignmentX(SwingConstants.RIGHT); // Align button to the right
+        logoutButton.setPreferredSize(new Dimension(100, 30));
+        logoutButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                profileController.logout();
+                System.out.println("Logout button clicked");
+            }
+        });
+
+        JPanel buttonPanel = new JPanel(new BorderLayout());
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        buttonPanel.add(logoutButton, BorderLayout.NORTH);
+        topPanel.add(buttonPanel, BorderLayout.EAST); // Add button to the top panel
 
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
@@ -133,13 +146,13 @@ public class ProfileView extends JPanel {
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.weightx = 1.0;
-        constraints.weighty = 0.2;
+        constraints.weighty = 0.6;
         constraints.fill = GridBagConstraints.BOTH;
         mainPanel.add(topPanel, constraints);
 
         // Set constraints for the scroll pane
         constraints.gridy = 1;
-        constraints.weighty = 0.8;
+        constraints.weighty = 0.4;
         mainPanel.add(scrollPane, constraints);
 
         this.add(mainPanel, BorderLayout.CENTER);  // Add mainPanel to ProfileView
