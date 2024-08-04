@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
@@ -40,6 +42,9 @@ public class PostBoardView extends JPanel {
     private JFrame applicationFrame;
 
     private final Map<Integer,PostSmallComponent> postCaChe = new HashMap<>();
+
+    private static final int POST_COMPONENT_WIDTH = 325;
+    private int postNum = 3;
     /**
      * Constructs a new PostBoardView with the specified view model.
      * 
@@ -72,6 +77,15 @@ public class PostBoardView extends JPanel {
         generatePostComponents(postBoardViewModel);
 
         // Add scroll panel to the center of the layout
+
+        applicationFrame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                adjustPostNumBasedOnWidth();
+                generatePostComponents(postBoardViewModel);
+            }
+        });
+
         add(scrollPane, BorderLayout.CENTER);
     }
 
@@ -100,8 +114,8 @@ public class PostBoardView extends JPanel {
             PostSmallComponent postComponent = null;
             if (postCaChe.get(postID) != null) {
                 postComponent = postCaChe.get(postID);
-                gbc.gridx = i % 3;
-                gbc.gridy = i / 3;
+                gbc.gridx = i % postNum;
+                gbc.gridy = i / postNum;
                 mainPanel.add(postComponent, gbc);
                 continue;
             }
@@ -141,11 +155,22 @@ public class PostBoardView extends JPanel {
                 }
             });
 
-            gbc.gridx = i % 3;
-            gbc.gridy = i / 3;
+            gbc.gridx = i % postNum;
+            gbc.gridy = i / postNum;
 
             postCaChe.put(postID, postComponent);
             mainPanel.add(postComponent, gbc);
+        }
+    }
+
+
+    private void adjustPostNumBasedOnWidth() {
+        int frameWidth = applicationFrame.getWidth();
+        int newPostNum = Math.max(1, frameWidth / POST_COMPONENT_WIDTH); // Ensure at least 1 post per row
+
+        if (newPostNum != postNum) {
+            postNum = newPostNum;
+            System.out.println("Adjusting posts per row to: " + postNum);
         }
     }
 }
