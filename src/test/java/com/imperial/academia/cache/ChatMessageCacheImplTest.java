@@ -1,21 +1,25 @@
 package com.imperial.academia.cache;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.imperial.academia.entity.chat_message.ChatMessage;
-import com.imperial.academia.entity.chat_message.FileData;
-import com.imperial.academia.entity.chat_message.MapData;
-import com.imperial.academia.entity.chat_message.WaveformData;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import com.google.common.cache.Cache;
+import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.chat_message.FileData;
+import com.imperial.academia.entity.chat_message.MapData;
+import com.imperial.academia.entity.chat_message.WaveformData;
 
 class ChatMessageCacheImplTest {
 
@@ -26,6 +30,7 @@ class ChatMessageCacheImplTest {
     private Cache<String, MapData> mockMapDataCache;
     private Cache<String, FileData> mockFileDataCache;
 
+    @SuppressWarnings("unchecked")
     @BeforeEach
     void setUp() {
         mockChatMessageCache = Mockito.mock(Cache.class);

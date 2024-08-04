@@ -67,7 +67,7 @@ class CreatePostInteractorTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         createPostInteractor = new CreatePostInteractor(changeViewInteractor, postInteractor, llmInteractor,
-                createPostPresenter, boardService, postService,postBoardPresenter);
+                createPostPresenter, boardService, postService, postBoardPresenter);
     }
 
     @AfterEach

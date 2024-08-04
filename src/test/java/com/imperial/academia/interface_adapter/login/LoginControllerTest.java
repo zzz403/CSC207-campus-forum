@@ -1,16 +1,19 @@
 package com.imperial.academia.interface_adapter.login;
 
-import com.imperial.academia.use_case.login.LoginInputBoundary;
-import com.imperial.academia.use_case.login.LoginInputData;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+
+import com.imperial.academia.use_case.login.LoginInputBoundary;
+import com.imperial.academia.use_case.login.LoginInputData;
 
 class LoginControllerTest {
 

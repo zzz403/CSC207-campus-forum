@@ -29,6 +29,20 @@ public class PostBoardController {
     }
 
     /**
+     * Constructs the PostBoardController with the specified ChangeViewInputBoundary
+     * and PostBoardInputBoundary.
+     * 
+     * @param changeViewInteractor the interactor for changing the view.
+     * @param postBoardInteractor  the interactor for postBoard
+     */
+    public PostBoardController(ChangeViewInputBoundary changeViewInteractor, PostBoardInputBoundary postBoardInteractor,
+            PostInputBoundary postInteractor) {
+        this.changeViewInteractor = changeViewInteractor;
+        this.postBoardInteractor = postBoardInteractor;
+        this.postInteractor = postInteractor;
+    }
+
+    /**
      * Changes the view to the specified view name.
      * 
      * @param viewName the name of the view to change to

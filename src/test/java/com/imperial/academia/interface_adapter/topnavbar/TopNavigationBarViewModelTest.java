@@ -1,13 +1,17 @@
 package com.imperial.academia.interface_adapter.topnavbar;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class TopNavigationBarViewModelTest {
 
@@ -56,6 +60,7 @@ class TopNavigationBarViewModelTest {
 
     @Test
     void testAddPropertyChangeListener() {
+        @SuppressWarnings("unused")
         PropertyChangeSupport support = mock(PropertyChangeSupport.class);
         viewModel.addPropertyChangeListener(listener);
         viewModel.firePropertyChanged();

@@ -1,13 +1,12 @@
 package com.imperial.academia.entity.chat_group;
 
-import org.checkerframework.checker.units.qual.C;
-import org.checkerframework.checker.units.qual.Time;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.sql.Timestamp;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class ChatGroupTest {
     private ChatGroup chatGroup;

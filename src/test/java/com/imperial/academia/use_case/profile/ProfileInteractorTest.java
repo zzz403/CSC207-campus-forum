@@ -1,5 +1,17 @@
 package com.imperial.academia.use_case.profile;
 
+import java.lang.reflect.Field;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+
 import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.entity.post.Post;
@@ -9,19 +21,6 @@ import com.imperial.academia.service.PostService;
 import com.imperial.academia.service.UserService;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-
-import java.lang.reflect.Field;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
-import static junit.framework.Assert.assertFalse;
 
 public class ProfileInteractorTest {
     private ProfileOutputBoundary mockPresenter;
@@ -198,7 +197,7 @@ public class ProfileInteractorTest {
             }
         };
 
-        profileInteractor = new ProfileInteractor(mockPresenter, mockUserService,mockChangeViewInteractor,mockPostService);// TODO chang test
+        profileInteractor = new ProfileInteractor(mockPresenter, mockUserService,mockChangeViewInteractor,mockPostService);
     }
 
     @Test

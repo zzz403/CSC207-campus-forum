@@ -10,28 +10,45 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 /**
- * The IBMInteractor class provides functionality to convert speech to text using IBM Watson's Speech to Text API.
+ * The IBMInteractor class provides functionality to convert speech to text
+ * using IBM Watson's Speech to Text API.
  * It implements the ASRInputBoundary interface.
  */
 public class IBMInteractor implements ASRInputBoundary {
-    String apiKey;
+    private String apiKey;
+    private String serviceUrl;
 
     /**
      * Constructor to initialize IBMInteractor.
      * Retrieves the IBM Speech to Text API key from the ApiKeyConfig.
      */
     public IBMInteractor() {
-        apiKey = ApiKeyConfig.getIBMSpeechToTextApiKey();
+        this(ApiKeyConfig.getIBMSpeechToTextApiKey(),
+                "https://api.us-east.speech-to-text.watson.cloud.ibm.com/instances/7dde5480-c90d-4450-8b48-81a997c34650");
     }
 
     /**
-     * Converts the speech from the provided audio file to text using IBM Watson's Speech to Text API.
+     * Constructor to initialize IBMInteractor with custom service URL.
+     * 
+     * @param apiKey     API key for IBM Speech to Text service.
+     * @param serviceUrl The service URL for IBM Speech to Text.
+     */
+    public IBMInteractor(String apiKey, String serviceUrl) {
+        this.apiKey = apiKey;
+        this.serviceUrl = serviceUrl;
+    }
+
+    /**
+     * Converts the speech from the provided audio file to text using IBM Watson's
+     * Speech to Text API.
      *
      * @param audioFile Path to the audio file in .wav format.
-     * @return The transcribed text as a String. If an error occurs or the API key is not found, it returns an appropriate error message or null.
+     * @return The transcribed text as a String. If an error occurs or the API key
+     *         is not found, it returns an appropriate error message or null.
      */
     @Override
     public String speechToText(String audioFile) {
+        apiKey = ApiKeyConfig.getIBMSpeechToTextApiKey();
         if (apiKey == null || apiKey.isEmpty()) {
             return "API key not found";
         }
@@ -42,7 +59,7 @@ public class IBMInteractor implements ASRInputBoundary {
                     .build();
 
             SpeechToText speechToText = new SpeechToText(authenticator);
-            speechToText.setServiceUrl("https://api.us-east.speech-to-text.watson.cloud.ibm.com/instances/7dde5480-c90d-4450-8b48-81a997c34650");
+            speechToText.setServiceUrl(serviceUrl);
 
             // Load the audio file as InputStream
             InputStream audioStream = new FileInputStream(audioFile);
@@ -55,12 +72,15 @@ public class IBMInteractor implements ASRInputBoundary {
                     .build();
 
             // Perform speech recognition and get results
-            SpeechRecognitionResults speechRecognitionResults = speechToText.recognize(recognizeOptions).execute().getResult();
+            SpeechRecognitionResults speechRecognitionResults = speechToText.recognize(recognizeOptions).execute()
+                    .getResult();
 
+            System.out.println(serviceUrl);
             // Extract and return the transcription from the results
             return extractResults(speechRecognitionResults);
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Error occurred during speech to text conversion");
             return null;
         }
     }
@@ -71,7 +91,7 @@ public class IBMInteractor implements ASRInputBoundary {
      * @param speechRecognitionResults The results returned by the IBM Watson API.
      * @return A String containing the full transcription of the audio.
      */
-    private String extractResults(SpeechRecognitionResults speechRecognitionResults) {
+    String extractResults(SpeechRecognitionResults speechRecognitionResults) {
         StringBuilder fullTranscription = new StringBuilder();
 
         speechRecognitionResults.getResults().forEach(result -> {

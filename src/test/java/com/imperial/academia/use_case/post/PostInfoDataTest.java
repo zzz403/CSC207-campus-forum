@@ -2,6 +2,8 @@ package com.imperial.academia.use_case.post;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -17,6 +19,9 @@ class PostInfoDataTest {
         String username = "testuser";
         String avatarUrl = "http://example.com/avatar.jpg";
         Timestamp date = Timestamp.from(Instant.now());
+        int likes = 100;
+        int postID = 1;
+        boolean isLiked = true;
 
         PostInfoData postInfoData = PostInfoData.builder()
                 .setTitle(title)
@@ -24,6 +29,9 @@ class PostInfoDataTest {
                 .setUsername(username)
                 .setAvatarUrl(avatarUrl)
                 .setDate(date)
+                .setLikes(likes)
+                .setPostId(postID)
+                .setIsLiked(isLiked)
                 .build();
 
         assertEquals(title, postInfoData.getTitle());
@@ -31,6 +39,9 @@ class PostInfoDataTest {
         assertEquals(username, postInfoData.getUsername());
         assertEquals(avatarUrl, postInfoData.getAvatarUrl());
         assertEquals(date, postInfoData.getDate());
+        assertEquals(likes, postInfoData.getLikes());
+        assertEquals(postID, postInfoData.getPostID());
+        assertTrue(postInfoData.isLiked());
     }
 
     @Test
@@ -93,6 +104,9 @@ class PostInfoDataTest {
         String username = "testuser";
         String avatarUrl = "http://example.com/avatar.jpg";
         Timestamp date = Timestamp.from(Instant.now());
+        int likes = 100;
+        int postID = 1;
+        boolean isLiked = true;
 
         PostInfoData postInfoData = PostInfoData.builder()
                 .setTitle(title)
@@ -100,6 +114,9 @@ class PostInfoDataTest {
                 .setUsername(username)
                 .setAvatarUrl(avatarUrl)
                 .setDate(date)
+                .setLikes(likes)
+                .setPostId(postID)
+                .setIsLiked(isLiked)
                 .build();
 
         assertEquals(title, postInfoData.getTitle());
@@ -107,6 +124,40 @@ class PostInfoDataTest {
         assertEquals(username, postInfoData.getUsername());
         assertEquals(avatarUrl, postInfoData.getAvatarUrl());
         assertEquals(date, postInfoData.getDate());
+        assertEquals(likes, postInfoData.getLikes());
+        assertEquals(postID, postInfoData.getPostID());
+        assertTrue(postInfoData.isLiked());
+    }
+
+    @Test
+    void testSettersAndGetters() {
+        PostInfoData postInfoData = new PostInfoData();
+        String title = "Test Title";
+        String content = "Test Content";
+        String username = "testuser";
+        String avatarUrl = "http://example.com/avatar.jpg";
+        Timestamp date = Timestamp.from(Instant.now());
+        int likes = 100;
+        int postID = 1;
+        boolean isLiked = true;
+
+        postInfoData.setTitle(title);
+        postInfoData.setContent(content);
+        postInfoData.setUsername(username);
+        postInfoData.setAvatarUrl(avatarUrl);
+        postInfoData.setDate(date);
+        postInfoData.setLikes(likes);
+        postInfoData.setPostID(postID);
+        postInfoData.setLiked(isLiked);
+
+        assertEquals(title, postInfoData.getTitle());
+        assertEquals(content, postInfoData.getContent());
+        assertEquals(username, postInfoData.getUsername());
+        assertEquals(avatarUrl, postInfoData.getAvatarUrl());
+        assertEquals(date, postInfoData.getDate());
+        assertEquals(likes, postInfoData.getLikes());
+        assertEquals(postID, postInfoData.getPostID());
+        assertTrue(postInfoData.isLiked());
     }
 
     @Test
@@ -117,6 +168,9 @@ class PostInfoDataTest {
                 .setUsername("user1")
                 .setAvatarUrl("http://example.com/avatar1.jpg")
                 .setDate(Timestamp.from(Instant.now()))
+                .setLikes(10)
+                .setPostId(1)
+                .setIsLiked(true)
                 .build();
 
         PostInfoData postInfoData2 = PostInfoData.builder()
@@ -125,16 +179,25 @@ class PostInfoDataTest {
                 .setUsername("user2")
                 .setAvatarUrl("http://example.com/avatar2.jpg")
                 .setDate(Timestamp.from(Instant.now()))
+                .setLikes(20)
+                .setPostId(2)
+                .setIsLiked(false)
                 .build();
 
         assertEquals("Title 1", postInfoData1.getTitle());
         assertEquals("Content 1", postInfoData1.getContent());
         assertEquals("user1", postInfoData1.getUsername());
         assertEquals("http://example.com/avatar1.jpg", postInfoData1.getAvatarUrl());
+        assertEquals(10, postInfoData1.getLikes());
+        assertEquals(1, postInfoData1.getPostID());
+        assertTrue(postInfoData1.isLiked());
 
         assertEquals("Title 2", postInfoData2.getTitle());
         assertEquals("Content 2", postInfoData2.getContent());
         assertEquals("user2", postInfoData2.getUsername());
         assertEquals("http://example.com/avatar2.jpg", postInfoData2.getAvatarUrl());
+        assertEquals(20, postInfoData2.getLikes());
+        assertEquals(2, postInfoData2.getPostID());
+        assertFalse(postInfoData2.isLiked());
     }
 }

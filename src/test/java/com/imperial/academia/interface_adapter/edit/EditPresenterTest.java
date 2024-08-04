@@ -1,11 +1,12 @@
 package com.imperial.academia.interface_adapter.edit;
 
-import com.google.common.base.Verify;
-import com.imperial.academia.use_case.edit.EditOutputData;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.imperial.academia.use_case.edit.EditOutputData;
 
 class EditPresenterTest {
     private EditPresenter editPresenter;

@@ -1,14 +1,11 @@
 package com.imperial.academia.entity.user;
 
-import com.mysql.cj.result.LocalDateTimeValueFactory;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class CommonUserFactoryTest {
     private  CommonUserFactory commonUserFactory;

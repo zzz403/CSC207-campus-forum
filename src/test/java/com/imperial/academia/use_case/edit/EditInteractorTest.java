@@ -1,5 +1,23 @@
 package com.imperial.academia.use_case.edit;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.io.File;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
+import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+
 import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.entity.user.UpdateUserFactory;
@@ -10,23 +28,6 @@ import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.profile.ProfileInputBoundary;
 import com.imperial.academia.use_case.profile.ProfileInputData;
-import com.imperial.academia.use_case.profile.ProfileInteractor;
-import org.junit.Assert;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-
-
-import java.io.File;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
-import static com.google.common.base.CharMatcher.any;
-import static org.mockito.Mockito.*;
 
 class EditInteractorTest {
     private EditInteractor editInteractor;

@@ -64,8 +64,36 @@ class ChatGPTInteractorTest {
     }
 
     @Test
-    void testEnhanceContentApiFailure() throws IOException {
-        String originalContent = "This is a test content.";
+    void testSummarizeChatHistorySuccess() throws IOException {
+        String chatHistory = "User: Hello\nAssistant: Hi there!";
+        String summary = "Summary of chat history.";
+
+        String mockResponse = "{\"choices\":[{\"message\":{\"content\":\"" + summary + "\"}}]}";
+
+        mockWebServer.enqueue(new MockResponse()
+                .setBody(mockResponse)
+                .addHeader("Content-Type", "application/json"));
+
+        mockedApiKeyConfig.when(ApiKeyConfig::getGPTApi).thenReturn("test-api-key");
+
+        String result = chatGPTInteractor.summarizeChatHistory(chatHistory);
+
+        assertEquals(summary, result);
+    }
+
+    @Test
+    void testSummarizeChatHistoryApiKeyMissing() {
+        mockedApiKeyConfig.when(ApiKeyConfig::getGPTApi).thenReturn(""); // Setting an empty API key
+        String chatHistory = "User: Hello\nAssistant: Hi there!";
+
+        String result = chatGPTInteractor.summarizeChatHistory(chatHistory);
+
+        assertEquals(chatHistory, result); // Expecting the original chat history to be returned
+    }
+
+    @Test
+    void testSummarizeChatHistoryApiFailure() throws IOException {
+        String chatHistory = "User: Hello\nAssistant: Hi there!";
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500)
@@ -73,7 +101,7 @@ class ChatGPTInteractorTest {
 
         mockedApiKeyConfig.when(ApiKeyConfig::getGPTApi).thenReturn("test-api-key");
 
-        String result = chatGPTInteractor.enhanceContent(originalContent);
+        String result = chatGPTInteractor.summarizeChatHistory(chatHistory);
 
         assertEquals("", result); // Expecting an empty string due to API failure
     }

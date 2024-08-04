@@ -1,11 +1,13 @@
 package com.imperial.academia.interface_adapter.topnavbar;
 
-import com.imperial.academia.interface_adapter.common.ViewManagerModel;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
-import static org.mockito.Mockito.*;
+import com.imperial.academia.interface_adapter.common.ViewManagerModel;
 
 class TopNavigationBarPresenterTest {
 

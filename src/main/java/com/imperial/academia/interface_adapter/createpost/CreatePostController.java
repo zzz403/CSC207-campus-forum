@@ -6,10 +6,11 @@ import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.use_case.createpost.CreatePostInputBoundary;
 
 /**
- * The controller that handles the update board name action for the create post use case.
+ * The controller that handles the update board name action for the create post
+ * use case.
  */
 public class CreatePostController {
-    
+
     /** The interactor that handles the business logic for creating a post. */
     private final CreatePostInputBoundary createPostInteractor;
 
@@ -19,6 +20,16 @@ public class CreatePostController {
      */
     public CreatePostController() {
         this.createPostInteractor = UsecaseFactory.getCreatePostInteractor();
+    }
+
+    /**
+     * Constructs a new CreatePostController with the specified interactor.
+     * 
+     * @param createPostInteractor the interactor that handles the business logic
+     *                             for creating a post.
+     */
+    public CreatePostController(CreatePostInputBoundary createPostInteractor) {
+        this.createPostInteractor = createPostInteractor;
     }
 
     /**
@@ -33,8 +44,8 @@ public class CreatePostController {
     /**
      * Submit the post
      * 
-     * @param title title of the post
-     * @param content content of the post
+     * @param title     title of the post
+     * @param content   content of the post
      * @param boardName which board name this post is create in
      * @return true if submit post success, otherwise false
      */

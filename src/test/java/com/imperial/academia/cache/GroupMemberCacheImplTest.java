@@ -1,19 +1,24 @@
 package com.imperial.academia.cache;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.imperial.academia.entity.group_member.GroupMember;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import com.google.common.cache.Cache;
+import com.imperial.academia.entity.group_member.GroupMember;
 
 class GroupMemberCacheImplTest {
 
@@ -21,6 +26,7 @@ class GroupMemberCacheImplTest {
     private Cache<String, GroupMember> mockGroupMemberCache;
     private Cache<String, List<GroupMember>> mockGroupMembersCache;
 
+    @SuppressWarnings("unchecked")
     @BeforeEach
     void setUp() {
         mockGroupMemberCache = Mockito.mock(Cache.class);
@@ -135,6 +141,7 @@ class GroupMemberCacheImplTest {
         groupMembers.add(new GroupMember(1, 1, "member", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
         groupMembers.add(new GroupMember(1, 2, "member", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
 
+        @SuppressWarnings("unchecked")
         ConcurrentMap<String, List<GroupMember>> mockMap = Mockito.mock(ConcurrentMap.class);
         when(mockMap.values()).thenReturn(List.of(groupMembers));
         when(mockGroupMembersCache.asMap()).thenReturn(mockMap);
@@ -149,6 +156,7 @@ class GroupMemberCacheImplTest {
         List<GroupMember> groupMembers = new ArrayList<>();
         groupMembers.add(new GroupMember(1, 1, "member", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
 
+        @SuppressWarnings("unchecked")
         ConcurrentMap<String, List<GroupMember>> mockMap = Mockito.mock(ConcurrentMap.class);
         when(mockMap.values()).thenReturn(List.of(groupMembers));
         when(mockGroupMembersCache.asMap()).thenReturn(mockMap);
@@ -165,6 +173,7 @@ class GroupMemberCacheImplTest {
         groupMembers.add(new GroupMember(1, 2, "member", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
         groupMembers.add(new GroupMember(1, 3, "member", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
 
+        @SuppressWarnings("unchecked")
         ConcurrentMap<String, List<GroupMember>> mockMap = Mockito.mock(ConcurrentMap.class);
         when(mockMap.values()).thenReturn(List.of(groupMembers));
         when(mockGroupMembersCache.asMap()).thenReturn(mockMap);

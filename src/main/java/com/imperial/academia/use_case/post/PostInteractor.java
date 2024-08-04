@@ -42,6 +42,25 @@ public class PostInteractor implements PostInputBoundary {
         this.commentService = ServiceFactory.getCommentService();
     }
 
+    
+    /**
+     * Constructs a new PostInteractor with the specified PostOutputBoundary, PostService, UserService, and CommentService.
+     * 
+     * @param postPresenter the output boundary that will handle the presentation logic.
+     * @param postService the service that will handle the post logic.
+     * @param userService the service that will handle the user logic.
+     * @param commentService the service that will handle the comment logic.
+     */
+    public PostInteractor(PostOutputBoundary postPresenter, PostService postService, UserService userService,
+            CommentService commentService) {
+        this.postPresenter = postPresenter;
+        this.postService = postService;
+        this.userService = userService;
+        this.commentService = commentService;
+    }
+
+
+
     /**
      * Initializes the post page desplay with the given post information data.
      * 
@@ -105,25 +124,29 @@ public class PostInteractor implements PostInputBoundary {
      * @param currentUser the current user.
      * @throws SQLException if there is an error getting the comments.
      */
-    private void initComments(int postID, User currentUser) throws SQLException {
+    public void initComments(int postID, User currentUser) {
         List<CommentData> commentDataList = new ArrayList<>();
-        List<Comment> comments = commentService.getAllByPostId(postID);
-        for (Comment comment : comments) {
-            User tempUser = userService.get(comment.getAuthorId());
-            String tempUsername = tempUser.getUsername();
-            if (tempUser.getId() == currentUser.getId()) {
-                tempUsername = "Me";
+        try {
+            List<Comment> comments = commentService.getAllByPostId(postID);
+            for (Comment comment : comments) {
+                User tempUser = userService.get(comment.getAuthorId());
+                String tempUsername = tempUser.getUsername();
+                if (tempUser.getId() == currentUser.getId()) {
+                    tempUsername = "Me";
+                }
+                CommentData commentData = CommentData.builder()
+                        .setId(comment.getId())
+                        .setContent(comment.getContent())
+                        .setAuthorId(comment.getAuthorId())
+                        .setUsername(tempUsername)
+                        .setLastModified(comment.getLastModified())
+                        .build();
+                commentDataList.add(commentData);
             }
-            CommentData commentData = CommentData.builder()
-                    .setId(comment.getId())
-                    .setContent(comment.getContent())
-                    .setAuthorId(comment.getAuthorId())
-                    .setUsername(tempUsername)
-                    .setLastModified(comment.getLastModified())
-                    .build();
-            commentDataList.add(commentData);
+            postPresenter.initComments(commentDataList);
+        } catch (SQLException e) {
+            return;
         }
-        postPresenter.initComments(commentDataList);
     }
 
     /**
@@ -199,7 +222,7 @@ public class PostInteractor implements PostInputBoundary {
                     .setLastModified(Timestamp.from(Instant.now()))
                     .build();
             commentService.insert(comment);
-            
+
             CommentData commentData = CommentData.builder()
                     .setId(comment.getId())
                     .setContent(comment.getContent())

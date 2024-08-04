@@ -1,10 +1,20 @@
 package com.imperial.academia.use_case.signup;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.app.UsecaseFactory;
@@ -12,9 +22,6 @@ import com.imperial.academia.entity.user.User;
 import com.imperial.academia.entity.user.UserFactory;
 import com.imperial.academia.service.UserService;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.*;
 
 public class SignupInteractorTest {
 
@@ -137,6 +144,7 @@ public class SignupInteractorTest {
             mockedUsecaseFactory.when(UsecaseFactory::getChangeViewInteractor).thenReturn(changeViewInteractor);
 
             // Execute: instantiate the SignupInteractor
+            @SuppressWarnings("unused")
             SignupInteractor interactor = new SignupInteractor(signupPresenter, userFactory);
 
             // Verify: Check if the static method was called as expected

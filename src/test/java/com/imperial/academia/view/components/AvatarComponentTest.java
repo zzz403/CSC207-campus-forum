@@ -1,18 +1,17 @@
 package com.imperial.academia.view.components;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
-import com.imperial.academia.interface_adapter.profile.ProfileController;
-import com.imperial.academia.view.components.AvatarComponent;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import javax.swing.*;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+import javax.swing.ImageIcon;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.imperial.academia.interface_adapter.profile.ProfileController;
 
 public class AvatarComponentTest {
 

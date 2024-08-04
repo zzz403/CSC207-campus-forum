@@ -1,18 +1,16 @@
 package com.imperial.academia.view;
 
-import com.imperial.academia.interface_adapter.profile.ProfileState;
-import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
-import org.checkerframework.checker.units.qual.A;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-
-import java.security.PrivateKey;
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.imperial.academia.interface_adapter.profile.ProfileState;
+import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
 
 class ProfileViewTest {
     private ProfileView profileView;

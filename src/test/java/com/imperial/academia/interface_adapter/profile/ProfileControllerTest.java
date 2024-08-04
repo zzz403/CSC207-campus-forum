@@ -1,5 +1,18 @@
 package com.imperial.academia.interface_adapter.profile;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+
 import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.chat.ChatCoordinatorInputBoundary;
@@ -7,16 +20,8 @@ import com.imperial.academia.use_case.edit.EditInputBoundary;
 import com.imperial.academia.use_case.post.PostInputBoundary;
 import com.imperial.academia.use_case.profile.ProfileInputBoundary;
 import com.imperial.academia.use_case.profile.ProfileInputData;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
-import java.io.File;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
+@SuppressWarnings("unused")
 class ProfileControllerTest {
     private ProfileInputBoundary mockProfileInteractor;
     private ChatCoordinatorInputBoundary mockChatCoordinatorInteractor;

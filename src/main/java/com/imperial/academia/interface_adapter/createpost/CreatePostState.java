@@ -22,6 +22,7 @@ public class CreatePostState {
     /** The list of board names. */
     private List<String> boardsName;
 
+    /** The flag to check if the post is saved */
     private boolean isSave;
 
 
@@ -35,6 +36,7 @@ public class CreatePostState {
         this.content = other.getContent();
         this.boardsName = other.getBoardsName();
         this.currentBoardName = other.getCurrentBoardName();
+        this.isSave = other.getIsSave();
     }
 
     /**

@@ -2,17 +2,16 @@ package com.imperial.academia.use_case.login;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-import com.imperial.academia.app.ServiceFactory;
-import com.imperial.academia.app.UsecaseFactory;
-import com.imperial.academia.use_case.signup.SignupInteractor;
-import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -20,6 +19,8 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import com.imperial.academia.app.ServiceFactory;
+import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.data_access.RememberMeDAI;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.service.UserService;
@@ -149,6 +150,7 @@ class LoginInteractorTest {
             mockedUsecaseFactory.when(UsecaseFactory::getChatSideBarInteractor).thenReturn(chatSideBarInteractor);
 
             // Execute: instantiate the SignupInteractor
+            @SuppressWarnings("unused")
             LoginInteractor interactor = new LoginInteractor(loginPresenter, rememberMeDAO);
 
             // Verify: Check if the static method was called as expected
