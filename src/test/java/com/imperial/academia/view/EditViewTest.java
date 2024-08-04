@@ -1,15 +1,15 @@
 package com.imperial.academia.view;
 
-import com.imperial.academia.interface_adapter.edit.EditViewModel;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import javax.swing.JFrame;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import javax.swing.*;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.verify;
+import com.imperial.academia.interface_adapter.edit.EditViewModel;
 
 class EditViewTest {
     private EditView editView;

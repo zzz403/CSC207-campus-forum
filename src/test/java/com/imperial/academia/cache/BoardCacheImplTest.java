@@ -1,18 +1,23 @@
 package com.imperial.academia.cache;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.imperial.academia.entity.board.Board;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import com.google.common.cache.Cache;
+import com.imperial.academia.entity.board.Board;
 
 class BoardCacheImplTest {
 
@@ -20,6 +25,7 @@ class BoardCacheImplTest {
     private Cache<String, Board> mockBoardCache;
     private Cache<String, List<Board>> mockBoardsCache;
 
+    @SuppressWarnings("unchecked")
     @BeforeEach
     void setUp() {
         mockBoardCache = Mockito.mock(Cache.class);

@@ -1,17 +1,18 @@
 package com.imperial.academia.view.components;
 
-import com.imperial.academia.entity.chat_group.ChatGroupDTO;
-import com.imperial.academia.entity.chat_message.ChatMessageDTO;
-import com.imperial.academia.interface_adapter.chat.ChatWindowState;
-import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JFrame;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import javax.swing.*;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import com.imperial.academia.entity.chat_message.ChatMessageDTO;
+import com.imperial.academia.interface_adapter.chat.ChatWindowState;
+import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
 
 class ChatWindowViewTest {
 

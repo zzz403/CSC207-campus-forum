@@ -6,13 +6,15 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import com.imperial.academia.app.Main;
 import com.imperial.academia.app.components_factory.PostSmallComponentFactory;
 import com.imperial.academia.interface_adapter.postboard.PostBoardController;
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;

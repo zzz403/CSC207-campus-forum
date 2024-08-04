@@ -6,20 +6,18 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
-import com.imperial.academia.interface_adapter.common.ViewManagerModel;
-import com.imperial.academia.interface_adapter.login.LoginViewModel;
-import com.imperial.academia.interface_adapter.signup.SignupViewModel;
-import com.imperial.academia.interface_adapter.createpost.CreatePostViewModel;
 import com.imperial.academia.interface_adapter.chat.ChatSideBarViewModel;
 import com.imperial.academia.interface_adapter.chat.ChatWindowViewModel;
-import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
-import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
-import com.imperial.academia.interface_adapter.post.PostViewModel;
+import com.imperial.academia.interface_adapter.common.ViewManagerModel;
+import com.imperial.academia.interface_adapter.createpost.CreatePostViewModel;
 import com.imperial.academia.interface_adapter.edit.EditViewModel;
+import com.imperial.academia.interface_adapter.login.LoginViewModel;
+import com.imperial.academia.interface_adapter.post.PostViewModel;
 import com.imperial.academia.interface_adapter.postboard.PostBoardViewModel;
+import com.imperial.academia.interface_adapter.profile.ProfileViewModel;
+import com.imperial.academia.interface_adapter.signup.SignupViewModel;
+import com.imperial.academia.interface_adapter.topnavbar.TopNavigationBarViewModel;
 
 public class UsecaseFactoryTest {
 

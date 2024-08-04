@@ -20,6 +20,7 @@ class LoginInputDataTest {
         assertEquals(inputData, inputData);
         boolean flag = inputData == null;
         assertFalse(flag);
+        @SuppressWarnings("unlikely-arg-type")
         boolean flag1 = inputData.equals("asd");
         assertFalse(flag1);
         LoginInputData inputData1 = new LoginInputData("", "", true);

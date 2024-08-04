@@ -1,10 +1,9 @@
 package com.imperial.academia.entity.chat_message;
 
-import org.checkerframework.checker.units.qual.C;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CommonChatMessageFactoryTest {
     private CommonChatMessageFactory commonChatMessageFactory;

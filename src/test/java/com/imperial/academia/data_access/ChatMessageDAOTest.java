@@ -1,21 +1,35 @@
 package com.imperial.academia.data_access;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imperial.academia.entity.chat_message.ChatMessage;
 import com.imperial.academia.entity.chat_message.FileData;
 import com.imperial.academia.entity.chat_message.MapData;
 import com.imperial.academia.entity.chat_message.WaveformData;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import java.io.IOException;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class ChatMessageDAOTest {
 
@@ -23,6 +37,7 @@ class ChatMessageDAOTest {
     private Connection mockConnection;
     private PreparedStatement mockPreparedStatement;
     private ResultSet mockResultSet;
+    @SuppressWarnings("unused")
     private ObjectMapper mockObjectMapper;
 
     @BeforeEach
@@ -195,6 +210,7 @@ class ChatMessageDAOTest {
         verify(mockResultSet, times(1)).next();
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     void getWaveformData_shouldThrowSQLExceptionOnJsonMappingException() throws SQLException, IOException {
         int messageId = 1;

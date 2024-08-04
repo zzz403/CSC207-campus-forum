@@ -16,9 +16,6 @@ import java.util.List;
 
 import javax.sound.sampled.LineUnavailableException;
 
-import com.imperial.academia.use_case.ASR.ASRInputBoundary;
-import com.imperial.academia.use_case.LLM.LLMInputBoundary;
-import com.imperial.academia.use_case.Translator.TranslatorInputBoundary;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,6 +36,9 @@ import com.imperial.academia.service.ChatMessageService;
 import com.imperial.academia.service.FileService;
 import com.imperial.academia.service.MapService;
 import com.imperial.academia.session.SessionManager;
+import com.imperial.academia.use_case.ASR.ASRInputBoundary;
+import com.imperial.academia.use_case.LLM.LLMInputBoundary;
+import com.imperial.academia.use_case.Translator.TranslatorInputBoundary;
 
 public class ChatWindowInteractorTest {
 
@@ -172,6 +172,7 @@ public class ChatWindowInteractorTest {
         ChatMessage chatMessage = new ChatMessage(1, 1, 1, "map", content, timestamp);
         double[] location = {37.7749, -122.4194};
         String locationInfo = "San Francisco, California, United States";
+        @SuppressWarnings("unused")
         MapData mapData = new MapData(location[0], location[1], locationInfo);
 
         try (MockedStatic<SessionManager> mockedSessionManager = mockStatic(SessionManager.class)) {
@@ -223,6 +224,7 @@ public class ChatWindowInteractorTest {
     public void testStopRecording_StopsRecordingAndSendsAudioMessage() throws Exception {
         int groupId = 1;
         String audioFilePath = "path/to/audio.mp3";
+        @SuppressWarnings("unused")
         ChatWindowInputData chatWindowInputData = new ChatWindowInputData(groupId, audioFilePath, "audio");
 
         when(audioService.getOutputFilePath()).thenReturn(audioFilePath);

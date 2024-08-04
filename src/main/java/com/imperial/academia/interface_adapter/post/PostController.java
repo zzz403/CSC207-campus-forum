@@ -22,7 +22,15 @@ public class PostController {
         this.postInteractor = UsecaseFactory.getPostInteractor();
     }
 
-    
+    /**
+     * post controller with postInteractor
+     * 
+     * @param postInteractor postInteractor 
+     */
+    public PostController(PostInputBoundary postInteractor) {
+        this.postInteractor = postInteractor;
+    }
+
     /**
      * Add a like to the post with the specified post ID.
      * 
@@ -35,19 +43,19 @@ public class PostController {
             return;
         }
         int userId = user.getId();
-        
-        if(postInteractor.checkLiked(postId, userId)){
+
+        if (postInteractor.checkLiked(postId, userId)) {
             postInteractor.removeLike(postId, userId);
             return;
         }
-        
+
         postInteractor.addLike(postId, userId);
     }
-    
+
     /**
      * Post a comment to the post with the specified post ID.
      * 
-     * @param postId the ID of the post to post a comment to.
+     * @param postId  the ID of the post to post a comment to.
      * @param content the content of the comment.
      */
     public void postComment(int postId, String content) {
@@ -56,7 +64,7 @@ public class PostController {
             return;
         }
         int userId = user.getId();
-        
+
         postInteractor.postComment(postId, userId, content);
     }
 }

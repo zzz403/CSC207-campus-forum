@@ -1,16 +1,17 @@
 package com.imperial.academia.interface_adapter.chat;
 
-import com.imperial.academia.entity.chat_message.ChatMessageDTO;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.Timestamp;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.imperial.academia.entity.chat_message.ChatMessageDTO;
 
 class ChatWindowViewModelTest {
 
@@ -34,6 +35,7 @@ class ChatWindowViewModelTest {
         assertEquals(initialState.getChatGroupId(), state.getChatGroupId());
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     void testAddChatMessage() {
         ChatMessageDTO chatMessage = new ChatMessageDTO(
@@ -48,6 +50,7 @@ class ChatWindowViewModelTest {
         assertTrue(((List<ChatMessageDTO>) event.getNewValue()).contains(chatMessage));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     void testRemoveChatMessage() {
         ChatMessageDTO chatMessage = new ChatMessageDTO(

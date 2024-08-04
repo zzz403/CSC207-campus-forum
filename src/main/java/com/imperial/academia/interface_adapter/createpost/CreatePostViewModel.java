@@ -134,9 +134,9 @@ public class CreatePostViewModel extends ViewModel {
         List<String> boardNames = state.getBoardsName();
         if(boardNames.size() <= 0){
             this.state.setCurrentBoardName("");
-            return;
+        }else{
+            this.state.setCurrentBoardName(boardNames.get(0));
         }
-        this.state.setCurrentBoardName(boardNames.get(0));
         this.state.setIsSave(false);
         support.firePropertyChange("reset", null, this.state);
     }

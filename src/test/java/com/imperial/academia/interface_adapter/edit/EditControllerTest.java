@@ -1,18 +1,20 @@
 package com.imperial.academia.interface_adapter.edit;
 
-import com.imperial.academia.app.UsecaseFactory;
-import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
-import com.imperial.academia.use_case.edit.EditInputBoundary;
-import com.imperial.academia.use_case.edit.EditInputData;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+import java.io.File;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
-import java.io.File;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import com.imperial.academia.app.UsecaseFactory;
+import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
+import com.imperial.academia.use_case.edit.EditInputBoundary;
+import com.imperial.academia.use_case.edit.EditInputData;
 
 class EditControllerTest {
 private EditInputBoundary mockEditInteractor;

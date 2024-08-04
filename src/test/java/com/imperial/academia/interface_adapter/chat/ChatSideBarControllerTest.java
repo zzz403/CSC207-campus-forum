@@ -1,15 +1,16 @@
 package com.imperial.academia.interface_adapter.chat;
 
-import com.imperial.academia.app.UsecaseFactory;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
 import com.imperial.academia.use_case.chat.ChatSideBarInputData;
 import com.imperial.academia.use_case.chat.ChatWindowInputBoundary;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 class ChatSideBarControllerTest {
 

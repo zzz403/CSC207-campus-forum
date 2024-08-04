@@ -67,7 +67,6 @@ public class ProfileController {
 
     public boolean initPostById(int postID) {
         if (!postInteractor.initPostById(postID)) {
-            //TODO: does not find post
             return false;
         }
         changeViewInteractor.changeView("post");

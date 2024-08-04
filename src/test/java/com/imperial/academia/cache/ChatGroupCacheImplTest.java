@@ -1,20 +1,25 @@
 package com.imperial.academia.cache;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.imperial.academia.entity.chat_group.ChatGroup;
-import com.imperial.academia.entity.chat_message.ChatMessage;
-import com.imperial.academia.entity.user.User;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import com.google.common.cache.Cache;
+import com.imperial.academia.entity.chat_group.ChatGroup;
+import com.imperial.academia.entity.chat_message.ChatMessage;
+import com.imperial.academia.entity.user.User;
 
 class ChatGroupCacheImplTest {
 
@@ -24,6 +29,7 @@ class ChatGroupCacheImplTest {
     private Cache<String, ChatMessage> mockLastMessageCache;
     private Cache<String, User> mockAvatarUrlCache;
 
+    @SuppressWarnings("unchecked")
     @BeforeEach
     void setUp() {
         mockChatGroupCache = Mockito.mock(Cache.class);

@@ -45,6 +45,25 @@ public class PostBoardInteractor implements PostBoardInputBoundary {
     }
 
     /**
+     * Constructs a new PostBoardInteractor with the specified
+     * PostBoardOutputBoundary, PostService, UserService, and LLMInputBoundary.
+     * 
+     * @param postBoardPresenter the output boundary that will handle the
+     *                           presentation
+     *                           logic.
+     * @param postService        the service that will handle the post logic.
+     * @param userService        the service that will handle the user logic.
+     * @param llmInteractor      the interactor that will handle the LLM logic.
+     */
+    public PostBoardInteractor(PostBoardOutputBoundary postBoardPresenter, PostService postService,
+            UserService userService, LLMInputBoundary llmInteractor) {
+        this.postBoardPresenter = postBoardPresenter;
+        this.postService = postService;
+        this.userService = userService;
+        this.llmInteractor = llmInteractor;
+    }
+
+    /**
      * Fetches all posts from the database and updates the post board view with the
      * post information.
      * 

@@ -1,15 +1,16 @@
 package com.imperial.academia.interface_adapter.profile;
 
-import com.imperial.academia.use_case.profile.ProfileOutputData;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.imperial.academia.use_case.profile.ProfileOutputData;
 
 class ProfilePresenterTest {
     private ProfileViewModel profileViewModel;

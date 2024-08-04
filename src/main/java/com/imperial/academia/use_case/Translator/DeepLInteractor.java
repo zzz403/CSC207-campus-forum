@@ -17,14 +17,28 @@ import org.json.JSONObject;
  */
 public class DeepLInteractor implements TranslatorInputBoundary {
     private final String API_KEY;
-    private static final String API_URL = "https://api-free.deepl.com/v2/translate";
+    private final String API_URL;
+    private final CloseableHttpClient httpClient;
 
     /**
      * Constructor for DeepLInteractor.
      * Initializes the API key from the configuration.
      */
     public DeepLInteractor() {
-        this.API_KEY = ApiKeyConfig.getDeepLApiKey();
+        this(ApiKeyConfig.getDeepLApiKey(), "https://api-free.deepl.com/v2/translate", HttpClients.createDefault());
+    }
+
+    /**
+     * Constructor for DeepLInteractor with custom parameters for testing.
+     *
+     * @param apiKey The API key for DeepL API.
+     * @param apiUrl The URL for DeepL API.
+     * @param httpClient The HTTP client to use for making requests.
+     */
+    public DeepLInteractor(String apiKey, String apiUrl, CloseableHttpClient httpClient) {
+        this.API_KEY = apiKey;
+        this.API_URL = apiUrl;
+        this.httpClient = httpClient;
     }
 
     /**
@@ -42,7 +56,7 @@ public class DeepLInteractor implements TranslatorInputBoundary {
         try {
             return translateText(text, targetLanguage);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("An error occurred during translation");
         }
         return "An error occurred during translation.";
     }
@@ -57,7 +71,6 @@ public class DeepLInteractor implements TranslatorInputBoundary {
      */
     public String translateText(String text, String targetLanguage) throws Exception {
         // Create an HTTP client and post request
-        CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(API_URL);
 
         // Set request headers
