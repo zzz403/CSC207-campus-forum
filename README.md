@@ -215,7 +215,7 @@ Our chat feature is designed to offer a seamless and secure communication platfo
 
 - **Location Sharing**: Easily send your location using the `Mapbox` API, which provides detailed map data and various functionalities, allowing users to share precise locations with ease.
 
-- **Voice-to-Text Conversion**: Transform audio recordings into text using IBM's powerful speech recognition API, enabling users to convert spoken words into text for better accessibility and convenience.
+- **Voice-to-Text Conversion**: Transform audio recordings into text using `IBM`'s powerful speech recognition API, enabling users to convert spoken words into text for better accessibility and convenience.
 
 - **Conversation Summarization**: Get quick insights with AI-powered summaries of chat history using the `gpt-3.5-turbo-0125` model. This feature helps users stay updated with important discussion points without reading through entire chat logs.
 
@@ -254,6 +254,10 @@ mvn clean install
 ```bash
 mvn exec:java -Dexec.mainClass="com.imperial.academia.app.Main"
 ```
+
+### Username and Password for Testing:
+- **Username**: admin
+- **Password**: admin123
 
 ## Usage
 Upon running the application, the Swing-based UI will launch, providing access to the forum's features. Users can sign up, log in, create posts, comment, and engage in real-time chat.

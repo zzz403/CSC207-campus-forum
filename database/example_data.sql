@@ -191,6 +191,7 @@ INSERT INTO chat_messages (sender_id, group_id, content_type, content, timestamp
 (5, 5, 'text', 'Have you read the new book by Stephen King?', '2024-06-01 10:52:30'),
 (3, 5, 'text', 'Yes, it is amazing!', '2024-06-01 10:57:12'),
 (4, 4, 'text', 'What is your favorite place to travel?', '2024-06-01 11:01:45'),
+(1,1, 'map', 'resources/map/1/1_-80.554000_43.474000_1720424928.png','2024-06-01 11:01:50'),
 (2, 4, 'text', 'I love going to Italy.', '2024-06-01 11:06:33'),
 (5, 5, 'text', 'What do you think about the new book club guidelines?', '2024-06-01 11:10:18'),
 (1, 5, 'text', 'I think they are very helpful.', '2024-06-01 11:14:50'),
@@ -258,13 +259,7 @@ INSERT INTO chat_messages (sender_id, group_id, content_type, content, timestamp
 (1, 9, 'text', 'What gear do you recommend for a beginner hiker?', '2024-06-01 16:03:35'),
 (2, 9, 'text', 'Comfortable shoes and a good backpack are essential.', '2024-06-01 16:08:13'),
 (3, 9, 'text', 'Don''t forget a water bottle and some snacks.', '2024-06-01 16:13:00'),
-(1, 13, 'text', 'Hello', '2024-07-01 16:13:00'),
-(1,1, 'map', 'resources/map/1/1_-80.554000_43.474000_1720424928.png','2024-07-05 16:13:00');
-
--- (1, 1, 'audio', 'resources/audio/1/admin_20240701_174611.wav', '2024-07-01 17:46:11'),
--- (3, 1, 'audio', 'resources/audio/1/john_doe_20240701_180149.wav', '2024-07-01 18:01:49'),
--- (3, 1, 'audio', 'resources/audio/1/john_doe_20240701_183942.wav', '2024-07-01 18:39:42'),
--- (2, 1, 'audio', 'resources/audio/1/2_20240704_154636.wav', '2024-07-04 15:46:36')
+(1, 13, 'text', 'Hello', '2024-07-01 16:13:00');
 
 
 -- Insert group members
@@ -386,4 +381,4 @@ INSERT INTO audio_waveforms (message_id, min_values, max_values, duration) VALUE
  5.374875283446712);
 
 INSERT INTO map_data (message_id, latitude, longitude, location_info) VALUES
-(85, 43.474, -80.554, 'Columbia Lake Firepit, Waterloo, Ontario N2L 6J7, Canada');
+(17, 43.474, -80.554, 'Columbia Lake Firepit, Waterloo, Ontario N2L 6J7, Canada');
