@@ -1,25 +1,11 @@
 package com.imperial.academia.view;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 import com.imperial.academia.app.components_factory.PostProfileFactory;
 import com.imperial.academia.interface_adapter.profile.ProfileController;
@@ -49,7 +35,7 @@ public class ProfileView extends JPanel {
      */
     private final ProfileController profileController = new ProfileController();
 
-    private JPanel bottomPanel;
+    private final JPanel bottomPanel;
 
     /**
      * Constructs a new ProfileView with the specified profile view model.
@@ -63,22 +49,32 @@ public class ProfileView extends JPanel {
         GridBagConstraints constraints = new GridBagConstraints();
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setPreferredSize(new Dimension(400, 100));
+        // Set preferred, minimum, and maximum sizes for top panel
+        topPanel.setPreferredSize(new Dimension(400, 600));
+        topPanel.setMinimumSize(new Dimension(400, 600));
+        topPanel.setMaximumSize(new Dimension(400, 600));
 
-        // default image
-        JPanel avatarPanel = new JPanel(new BorderLayout());
-//        avatarPanel.setBackground(new Color(255, 225, 120));
+        // Default image
+        JPanel avatarPanel = new JPanel();
+        avatarPanel.setLayout(new BoxLayout(avatarPanel, BoxLayout.Y_AXIS));
+        avatarPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 30, 10));
+
         ImageIcon originalIcon = new ImageIcon("resources/avatar/default_avatar.png");
-        Image resizedImage = originalIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        Image resizedImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Smaller size
         ImageIcon resizedIcon = new ImageIcon(resizedImage);
         JLabel imageLabel = new JLabel(resizedIcon);
+        imageLabel.setAlignmentX(CENTER_ALIGNMENT);  // Center the image
         avatarPanel.add(imageLabel);
-        topPanel.add(avatarPanel, BorderLayout.WEST);
 
+        avatarPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add space between image and button
+
+        // Button for editing or chatting
         JButton chatOrModify = new JButton("Edit");
-        chatOrModify.addMouseListener(new java.awt.event.MouseAdapter() {
+        chatOrModify.setAlignmentX(CENTER_ALIGNMENT);  // Center the button
+        chatOrModify.setMaximumSize(new Dimension(200, 30)); // Set max width
+        chatOrModify.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mouseClicked(MouseEvent evt) {
                 if (profileViewModel.getProfileState().isMe()) {
                     profileController.edit();
                 } else {
@@ -87,10 +83,10 @@ public class ProfileView extends JPanel {
             }
         });
 
-        topPanel.add(chatOrModify, BorderLayout.EAST);
+        avatarPanel.add(chatOrModify); // Add button below the avatar
+        topPanel.add(avatarPanel, BorderLayout.WEST);
 
         JPanel infoPanel = new JPanel(new GridLayout(0, 1));
-//        infoPanel.setBackground(new Color(255, 225, 120));
         JLabel nameLabel = new JLabel("UserName: UserName");
         nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
         JLabel emailLabel = new JLabel("Email: xxx@mail.com");
@@ -102,44 +98,60 @@ public class ProfileView extends JPanel {
         JLabel registrationDateLabel = new JLabel("Member since ");
         registrationDateLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        infoPanel.add(nameLabel, BorderLayout.CENTER);
-        infoPanel.add(emailLabel, BorderLayout.CENTER);
-        infoPanel.add(idLabel, BorderLayout.CENTER);
-        infoPanel.add(roleLabel, BorderLayout.CENTER);
-        infoPanel.add(registrationDateLabel, BorderLayout.CENTER);
+        infoPanel.add(nameLabel);
+        infoPanel.add(emailLabel);
+        infoPanel.add(idLabel);
+        infoPanel.add(roleLabel);
+        infoPanel.add(registrationDateLabel);
         infoPanel.setBorder(BorderFactory.createEmptyBorder(0, 100, 0, 0));
         topPanel.add(infoPanel, BorderLayout.CENTER);
 
+        // Logout button setup
+        // Logout button setup
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.setPreferredSize(new Dimension(100, 30));
+        logoutButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                profileController.logout();
+                System.out.println("Logout button clicked");
+            }
+        });
+
+        // Right side button panel
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.add(logoutButton);  // Add logout button at the top
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        topPanel.add(buttonPanel, BorderLayout.EAST);
+
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
-//      bottomPanel.setBackground(new Color(58, 185, 232));
-
-
-
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-
-        ProfileState currentState =  profileViewModel.getProfileState();
-
+        ProfileState currentState = profileViewModel.getProfileState();
         createAllPost(currentState);
 
         JScrollPane scrollPane = new CustomScrollBarUI.CustomScrollPane(bottomPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        mainPanel.add(scrollPane);
+        // Set preferred, minimum, and maximum sizes for bottom panel
+        scrollPane.setPreferredSize(new Dimension(400, 400));
+        scrollPane.setMinimumSize(new Dimension(400, 400));
+        scrollPane.setMaximumSize(new Dimension(400, 400));
 
         // Set constraints for the top panel
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.weightx = 1.0;
-        constraints.weighty = 0.2;
+        constraints.weighty = 0.6; // 60% height for top panel
         constraints.fill = GridBagConstraints.BOTH;
         mainPanel.add(topPanel, constraints);
 
-        // Set constraints for the scroll pane
+        // Set constraints for the scroll pane (bottom panel)
         constraints.gridy = 1;
-        constraints.weighty = 0.8;
+        constraints.weighty = 0.4; // 40% height for bottom panel
         mainPanel.add(scrollPane, constraints);
 
         this.add(mainPanel, BorderLayout.CENTER);  // Add mainPanel to ProfileView
@@ -162,16 +174,18 @@ public class ProfileView extends JPanel {
                 nameLabel.setText("UserName: " + state.getUsername());
                 emailLabel.setText("Email: " + state.getEmail());
                 idLabel.setText("User ID: " + state.getId());
-                roleLabel.setText("Role : " + state.getRole());
+                roleLabel.setText("Role: " + state.getRole());
                 registrationDateLabel.setText("Member since " + state.getRegistrationDate().toString().substring(0, 10));
                 chatOrModify.setText(state.isMe() ? "Edit" : "Chat");
+
+                logoutButton.setVisible(state.isMe());
 
                 createAllPost(state);
             }
         });
     }
 
-    private void createAllPost(ProfileState state){
+    private void createAllPost(ProfileState state) {
         bottomPanel.removeAll();
         for (int i = 0; i < state.getPostTitles().size(); i++) {
             PostProfileViewComponent post = PostProfileFactory.create(
@@ -189,7 +203,7 @@ public class ProfileView extends JPanel {
                         System.out.println("init post success | postID: " + postID);
                         return;
                     }
-                    System.out.println("init post unsuccess | postID: " + postID);
+                    System.out.println("init post unsuccessful | postID: " + postID);
                 }
             });
             bottomPanel.add(post);
@@ -197,5 +211,3 @@ public class ProfileView extends JPanel {
         }
     }
 }
-
-

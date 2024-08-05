@@ -42,9 +42,8 @@ public class TopNavigationBar extends JPanel {
 
     private final TopNavigationBarController topNavigationBarController;
 
-    private JPanel topNavPanel;
-    private JLabel logoText;
-    private JFrame applicationFrame;
+    private final JLabel logoText;
+    private final JFrame applicationFrame;
     private JLabel profileButton;
 
     /**
@@ -62,7 +61,9 @@ public class TopNavigationBar extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         // Create the main panel with GridBagLayout
-        topNavPanel = new JPanel(new GridBagLayout()) {
+        // Draw bottom border
+        // Draw shadow
+        JPanel topNavPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);

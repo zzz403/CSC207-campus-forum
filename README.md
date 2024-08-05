@@ -243,7 +243,7 @@ cd CSC207-campus-forum
 ```bash
 vi src\main\java\com\imperial\academia\config\ApiKeyConfig.java
 ```
-In here replease your **Mapbox** and **gpt-3.5-turbo-0125** model token under `MAP_BOX_API_KEY` and `GPT_3_5_turbo_0125_TOKEN` variable.
+In here replease your API keys under each variable.
 
 ### Build the Project
 ```bash

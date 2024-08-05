@@ -1,6 +1,7 @@
 package com.imperial.academia.interface_adapter.profile;
 
 import com.imperial.academia.app.UsecaseFactory;
+import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.chat.ChatCoordinatorInputBoundary;
 import com.imperial.academia.use_case.edit.EditInputBoundary;
@@ -71,5 +72,10 @@ public class ProfileController {
         }
         changeViewInteractor.changeView("post");
         return true;
+    }
+
+    public void logout() {
+        SessionManager.setCurrentUser(null);
+        changeViewInteractor.changeView("log in");
     }
 }

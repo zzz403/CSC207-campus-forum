@@ -12,7 +12,10 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -38,7 +41,7 @@ public class ChatWindowView extends JPanel {
     private Image scaledOpenMicIconImage;
     private Image scaledCloseMicIconImage;
     private boolean isButtonEnabled = true;
-    private Queue<JLabel> audioPopupQueue = new LinkedList<>();
+    private final Queue<JLabel> audioPopupQueue = new LinkedList<>();
 
     ChatWindowViewModel chatWindowViewModel;
 
