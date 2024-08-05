@@ -92,7 +92,7 @@ public class PostBoardView extends JPanel {
     /**
      * Generates the post components for the post board view.
      * 
-     * @param posterViewModel the view model associated with the post board
+     * @param postBoardViewModel the view model associated with the post board
      */
     private void generatePostComponents(PostBoardViewModel postBoardViewModel) {
         GridBagConstraints gbc = new GridBagConstraints();

@@ -164,7 +164,7 @@ public class EditView extends JPanel {
                         nameFiled.getText(),
                         passwordFiled.getText(),
                         repeatPasswordFiled.getText(),
-                        "resources/avatar/default_avatar.png", //TODO change to updated url
+                        "resources/avatar/default_avatar.png",
                         emailFiled.getText()
                 );
             }

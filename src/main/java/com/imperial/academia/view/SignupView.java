@@ -7,6 +7,7 @@ import com.imperial.academia.interface_adapter.signup.SignupState;
 import javax.swing.*;
 import java.awt.*;
 
+
 /**
  * SignupView class represents the signup interface of the application.
  */

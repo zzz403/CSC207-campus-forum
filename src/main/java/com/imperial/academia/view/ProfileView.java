@@ -35,7 +35,7 @@ public class ProfileView extends JPanel {
      */
     private final ProfileController profileController = new ProfileController();
 
-    private JPanel bottomPanel;
+    private final JPanel bottomPanel;
 
     /**
      * Constructs a new ProfileView with the specified profile view model.
@@ -203,7 +203,7 @@ public class ProfileView extends JPanel {
                         System.out.println("init post success | postID: " + postID);
                         return;
                     }
-                    System.out.println("init post unsuccess | postID: " + postID);
+                    System.out.println("init post unsuccessful | postID: " + postID);
                 }
             });
             bottomPanel.add(post);

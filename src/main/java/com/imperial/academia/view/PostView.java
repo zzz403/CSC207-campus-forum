@@ -57,7 +57,7 @@ public class PostView extends JPanel {
     private final PostController postController;
 
     // The main frame of the application.
-    private JFrame applicationFrame;
+    private final JFrame applicationFrame;
 
     /**
      * Constructor for the PostView class.
