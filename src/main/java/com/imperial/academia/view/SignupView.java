@@ -16,10 +16,10 @@ public class SignupView extends JPanel {
 
     private final SignupController signupController = new SignupController();
 
-    private JLabel usernameErrorLabel;
-    private JLabel passwordErrorLabel;
-    private JLabel repeatPasswordErrorLabel;
-    private JLabel emailErrorLabel;
+    private final JLabel usernameErrorLabel;
+    private final JLabel passwordErrorLabel;
+    private final JLabel repeatPasswordErrorLabel;
+    private final JLabel emailErrorLabel;
 
     /**
      * Constructs a SignupView instance and initializes the UI components.
@@ -152,7 +152,7 @@ public class SignupView extends JPanel {
                 emailField.getText()));
         leftPanel.add(signupButton, gbc);
 
-        // Back to login label setup
+        // Back to log in label setup
         gbc.gridy++;
         gbc.insets = new Insets(0, 0, 10, 0);
 

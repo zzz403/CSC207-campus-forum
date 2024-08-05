@@ -7,8 +7,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
@@ -21,6 +19,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Objects;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -117,12 +116,7 @@ public class PostView extends JPanel {
         JButton postCommentButton = new JButton("Post Comment");
         postCommentButton.setFont(new Font("Arial", Font.PLAIN, 14));
         postCommentButton.setPreferredSize(new Dimension(200, 50));
-        postCommentButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                postComment(commentInput);
-            }
-        });
+        postCommentButton.addActionListener(e -> postComment(commentInput));
 
         commentInput.addKeyListener(new KeyAdapter() {
             @Override
@@ -138,24 +132,12 @@ public class PostView extends JPanel {
                 commentsArea.setText("");
                 List<CommentData> commentDatas = postViewModel.getStateComments();
                 for (CommentData commentData : commentDatas) {
-                    String userName = commentData.getUsername();
-                    String content = commentData.getContent().strip();
-                    Timestamp time = commentData.getLastModified();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String date = dateFormat.format(time);
-                    commentsArea.append(date + "\n");
-                    commentsArea.append(userName + ": " + content + "\n");
+                    displayComment(commentsArea, commentData);
                 }
             }else if(evt.getPropertyName().equals("addComment")){
                 List<CommentData> commentDatas = postViewModel.getStateComments();
                 CommentData newComment = commentDatas.get(commentDatas.size()-1);
-                String userName = newComment.getUsername();
-                String content = newComment.getContent().strip();
-                Timestamp time = newComment.getLastModified();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String date = dateFormat.format(time);
-                commentsArea.append(date + "\n");
-                commentsArea.append(userName + ": " + content + "\n");
+                displayComment(commentsArea, newComment);
             }
         });
 
@@ -165,6 +147,16 @@ public class PostView extends JPanel {
 
         commentSection.add(commentInputPanel, BorderLayout.CENTER);
         return commentSection;
+    }
+
+    private void displayComment(JTextArea commentsArea, CommentData commentData) {
+        String userName = commentData.getUsername();
+        String content = commentData.getContent().strip();
+        Timestamp time = commentData.getLastModified();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = dateFormat.format(time);
+        commentsArea.append(date + "\n");
+        commentsArea.append(userName + ": " + content + "\n");
     }
 
     /**
@@ -278,7 +270,7 @@ public class PostView extends JPanel {
             
             postViewModel.addPropertyChangeListener(evt -> {
                 if (evt.getPropertyName().equals("isLiked")) {
-                    likeIconLabel.setIcon(new ImageIcon(getLikeIcon(postViewModel.getStateIsLiked())));
+                    likeIconLabel.setIcon(new ImageIcon(Objects.requireNonNull(getLikeIcon(postViewModel.getStateIsLiked()))));
                 }
             });
         }
@@ -312,7 +304,7 @@ public class PostView extends JPanel {
     }
 
     private Image getLikeIcon(boolean isLiked) {
-        BufferedImage likeIcon = null;
+        BufferedImage likeIcon;
         try {
             if(!isLiked){
                 likeIcon = ImageIO.read(new File("resources/icons/like_icon.png"));
@@ -320,10 +312,8 @@ public class PostView extends JPanel {
                 likeIcon = ImageIO.read(new File("resources/icons/like_icon_red.png"));
             }
         } catch (IOException e) {
-            e.printStackTrace();
             return null;
         }
-        Image scaledLikeIcon = likeIcon.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        return scaledLikeIcon;
+        return likeIcon.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
     }
 }

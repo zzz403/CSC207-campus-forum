@@ -41,7 +41,7 @@ public class ChatWindowView extends JPanel {
     private Image scaledOpenMicIconImage;
     private Image scaledCloseMicIconImage;
     private boolean isButtonEnabled = true;
-    private Queue<JLabel> audioPopupQueue = new LinkedList<>();
+    private final Queue<JLabel> audioPopupQueue = new LinkedList<>();
 
     ChatWindowViewModel chatWindowViewModel;
 
