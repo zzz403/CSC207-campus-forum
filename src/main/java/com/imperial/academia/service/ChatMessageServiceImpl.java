@@ -106,7 +106,6 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         }
     }
 
-    @SuppressWarnings("null")
     @Override
     public ChatMessageDTO get(int id) throws SQLException {
         ChatMessage chatMessage = chatMessageCache.getChatMessage("chatMessage:" + id);
@@ -183,7 +182,6 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         chatMessageCache.deleteChatMessage("chatMessage:" + id);
     }
 
-    @SuppressWarnings("null")
     private List<ChatMessageDTO> convertToDTOs(List<ChatMessage> chatMessages) throws SQLException {
         List<ChatMessageDTO> chatMessageDTOs = new ArrayList<>();
         for (ChatMessage chatMessage : chatMessages) {
