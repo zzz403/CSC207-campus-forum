@@ -150,10 +150,6 @@ public class UsecaseFactory {
 
         chatCoordinatorInteractor = new ChatCoordinatorInteractor();
 
-        RememberMeDAO rememberMeDAO = new RememberMeDAO();
-        LoginOutputBoundary loginPresenter = new LoginPresenter(loginViewModel, topNavigationBarViewModel);
-        loginInteractor = new LoginInteractor(loginPresenter, rememberMeDAO);
-
         UpdateUserFactory updateUserFactory = new UpdatedUserFactoryImpl();
         EditOutputBoundary editPresenter = new EditPresenter(editViewModel);
         editInteractor = new EditInteractor(editPresenter, updateUserFactory);
@@ -163,6 +159,10 @@ public class UsecaseFactory {
 
         CreatePostOutputBoundary createPostPresenter = new CreatePostPresenter(createPostViewModel);
         createPostInteractor = new CreatePostInteractor(createPostPresenter, postBoardPresenter);
+
+        RememberMeDAO rememberMeDAO = new RememberMeDAO();
+        LoginOutputBoundary loginPresenter = new LoginPresenter(loginViewModel, topNavigationBarViewModel);
+        loginInteractor = new LoginInteractor(loginPresenter, rememberMeDAO);
 
         topNavInteractor = new TopNavInteractor();
 

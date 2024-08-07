@@ -90,4 +90,28 @@ public class PostBoardState {
         }
         return 0;
     }
+
+    /**
+     * Update the isLiked field of the post with the given post ID.
+     * 
+     * @param postId   the ID of the post to update.
+     * @param isLiked the new value of the isLiked field.
+     */
+    public void updateIsLikeByPostId(int postId, boolean isLiked) {
+        for (PostOverviewInfo post : postList) {
+            if (post.getPostID() == postId) {
+                post.setLiked(isLiked);
+                return;
+            }
+        }
+    }
+
+    public boolean getIsLikeByPostId(int postID) {
+        for (PostOverviewInfo post : postList) {
+            if (post.getPostID() == postID) {
+                return post.isLiked();
+            }
+        }
+        return false;
+    }
 }

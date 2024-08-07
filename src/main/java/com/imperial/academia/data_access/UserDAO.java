@@ -195,7 +195,7 @@ public class UserDAO implements UserDAI {
      */
     @Override
     public List<User> getAllSince(Timestamp timestamp) throws SQLException {
-        String sql = "SELECT * FROM users WHERE last_modified > ?";
+        String sql = "SELECT * FROM users WHERE last_modified >= ?";
         List<User> users = new ArrayList<>();
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setTimestamp(1, timestamp);

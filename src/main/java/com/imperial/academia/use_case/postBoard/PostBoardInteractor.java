@@ -10,6 +10,7 @@ import com.imperial.academia.entity.post.Post;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.service.PostService;
 import com.imperial.academia.service.UserService;
+import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.use_case.LLM.LLMInputBoundary;
 import com.imperial.academia.use_case.post.PostOverviewInfo;
 
@@ -80,35 +81,69 @@ public class PostBoardInteractor implements PostBoardInputBoundary {
         }
         List<PostOverviewInfo> postInfoList = new ArrayList<>();
         for (Post post : posts) {
-            int postID = post.getId();
-            int postLikes = 0;
-            String title = post.getTitle();
-            String content = post.getContent();
-            String summary = llmInteractor.summarizeChatHistory(content);
-            String username = "404not found";
-            String avatarURL = "resources\\avatar\\default_avatar.png";
-            try {
-                int userID = post.getAuthorId();
-                User user = userService.get(userID);
-                avatarURL = user.getAvatarUrl();
-                username = user.getUsername();
-                postLikes = postService.getTotalLikesNumberByPostId(postID);
-            } catch (SQLException e) {
-                System.out.println("no user found for this post");
-            }
-
-            PostOverviewInfo postInfoData = PostOverviewInfo.builder()
-                    .setPostID(postID)
-                    .setLikes(postLikes)
-                    .setPostTitle(title)
-                    .setSummary(summary)
-                    .setUserName(username)
-                    .setAvatarURL(avatarURL)
-                    .build();
+            PostOverviewInfo postInfoData = getPostInfoData(post, false);
             postInfoList.add(postInfoData);
         }
         postBoardPresenter.updatePostList(postInfoList);
         return true;
     }
 
+    /**
+     * Fetches all posts from the database and updates the post board view with the
+     * post information.
+     * 
+     * @return true if the posts were fetched successfully, false otherwise.
+     */
+    private PostOverviewInfo getPostInfoData(Post post, boolean isLiked) {
+        int postID = post.getId();
+        int postLikes = 0;
+        String title = post.getTitle();
+        String content = post.getContent();
+        String summary = llmInteractor.summarizeChatHistory(content);
+        String username = "404not found";
+        String avatarURL = "resources\\avatar\\default_avatar.png";
+        try {
+            int userID = post.getAuthorId();
+            User user = userService.get(userID);
+            avatarURL = user.getAvatarUrl();
+            username = user.getUsername();
+            postLikes = postService.getTotalLikesNumberByPostId(postID);
+        } catch (SQLException e) {
+            System.out.println("no user found for this post");
+        }
+        
+        PostOverviewInfo postInfoData = PostOverviewInfo.builder()
+                .setPostID(postID)
+                .setLikes(postLikes)
+                .setPostTitle(title)
+                .setSummary(summary)
+                .setUserName(username)
+                .setAvatarURL(avatarURL)
+                .setIsLiked(isLiked)
+                .build();
+        return postInfoData;
+    }
+
+    /**
+     * Updates the isLiked status of all posts in the post board view.
+     */
+    public void updateisLiked(){
+        List<Post> posts;
+        try {
+            posts = postService.getAll();
+        } catch (SQLException e) {
+            System.out.println("fetch all post unseccess");
+            return;
+        }
+        User currUser = SessionManager.getCurrentUser();
+        for (Post post : posts) {
+            boolean isLiked;
+            try {
+                isLiked = postService.checkLiked(post.getId(), currUser.getId());
+            } catch (SQLException e) {
+                isLiked = false;
+            }
+            postBoardPresenter.updateIsLikeByPostId(post.getId(), isLiked);
+        }
+    }
 }

@@ -134,9 +134,9 @@ public class PostView extends JPanel {
                 for (CommentData commentData : commentDatas) {
                     displayComment(commentsArea, commentData);
                 }
-            }else if(evt.getPropertyName().equals("addComment")){
+            } else if (evt.getPropertyName().equals("addComment")) {
                 List<CommentData> commentDatas = postViewModel.getStateComments();
-                CommentData newComment = commentDatas.get(commentDatas.size()-1);
+                CommentData newComment = commentDatas.get(commentDatas.size() - 1);
                 displayComment(commentsArea, newComment);
             }
         });
@@ -164,14 +164,14 @@ public class PostView extends JPanel {
      */
     private void postComment(JTextField commentInput) {
         String commentText = commentInput.getText().strip();
-        if(commentText.isBlank()){
+        if (commentText.isBlank()) {
             return;
         }
         int postId = postViewModel.getStatePostId();
         postController.postComment(postId, commentText);
         commentInput.setText("");
     }
-    
+
     /**
      * Creates and returns the content panel.
      * 
@@ -254,6 +254,11 @@ public class PostView extends JPanel {
         return headerPanel;
     }
 
+    /**
+     * Creates and returns the like panel.
+     * 
+     * @return the JPanel representing the like button.
+     */
     private JPanel getLikePanel() {
         JPanel likePanel = new JPanel(new BorderLayout());
         likePanel.setLayout(new BoxLayout(likePanel, BoxLayout.X_AXIS));
@@ -262,15 +267,17 @@ public class PostView extends JPanel {
 
         // Load and scale like icon
         Image likeIcon = getLikeIcon(postViewModel.getStateIsLiked());
-        
+
         if (likeIcon != null) {
             JLabel likeIconLabel = new JLabel(new ImageIcon(likeIcon));
             likeIconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5)); // Add some padding
             likePanel.add(likeIconLabel);
-            
+
             postViewModel.addPropertyChangeListener(evt -> {
                 if (evt.getPropertyName().equals("isLiked")) {
-                    likeIconLabel.setIcon(new ImageIcon(Objects.requireNonNull(getLikeIcon(postViewModel.getStateIsLiked()))));
+                    likeIconLabel.setIcon(
+                        new ImageIcon(Objects.requireNonNull(getLikeIcon(postViewModel.getStateIsLiked())))
+                    );
                 }
             });
         }
@@ -303,12 +310,18 @@ public class PostView extends JPanel {
         return likePanel;
     }
 
+    /**
+     * Loads and scales the like icon.
+     * 
+     * @param isLiked whether the post is liked.
+     * @return the scaled like icon.
+     */
     private Image getLikeIcon(boolean isLiked) {
         BufferedImage likeIcon;
         try {
-            if(!isLiked){
+            if (!isLiked) {
                 likeIcon = ImageIO.read(new File("resources/icons/like_icon.png"));
-            }else{
+            } else {
                 likeIcon = ImageIO.read(new File("resources/icons/like_icon_red.png"));
             }
         } catch (IOException e) {

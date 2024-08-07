@@ -27,6 +27,7 @@ import com.imperial.academia.service.UserService;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
+import com.imperial.academia.use_case.postBoard.PostBoardInputBoundary;
 
 class LoginInteractorTest {
 
@@ -35,13 +36,14 @@ class LoginInteractorTest {
     @Mock private RememberMeDAI rememberMeDAO;
     @Mock private ChatSideBarInputBoundary chatSideBarInteractor;
     @Mock private ChangeViewInputBoundary changeViewInteractor;
+    @Mock private PostBoardInputBoundary postBoardInteractor;
 
     private LoginInteractor loginInteractor;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        loginInteractor = new LoginInteractor(loginPresenter, rememberMeDAO, userService, chatSideBarInteractor, changeViewInteractor);
+        loginInteractor = new LoginInteractor(loginPresenter, rememberMeDAO, userService, chatSideBarInteractor, changeViewInteractor, postBoardInteractor);
         loginInteractor = spy(loginInteractor);
     }
 

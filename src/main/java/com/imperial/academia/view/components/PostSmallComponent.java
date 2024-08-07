@@ -31,6 +31,7 @@ import javax.swing.SwingConstants;
 public class PostSmallComponent extends JPanel {
     
     JLabel likesLabel;
+    JLabel likeIconLabel;
 
     public PostSmallComponent(BufferedImage image, BufferedImage avatar, String title, String content, String author, int likes, JFrame applicationFrame) {
         setOpaque(false);
@@ -84,14 +85,14 @@ public class PostSmallComponent extends JPanel {
         // Load and scale like icon
         BufferedImage likeIcon = null;
         try {
-            likeIcon = ImageIO.read(new File("resources/icons/like_icon.png"));
+            likeIcon = getLikeIcon(false);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Failed to load like icon image.");
         }
 
         if (likeIcon != null) {
             Image scaledLikeIcon = likeIcon.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-            JLabel likeIconLabel = new JLabel(new ImageIcon(scaledLikeIcon));
+            likeIconLabel = new JLabel(new ImageIcon(scaledLikeIcon));
             likeIconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5)); // Add some padding
             authorLikesPanel.add(likeIconLabel);
         }
@@ -130,6 +131,21 @@ public class PostSmallComponent extends JPanel {
         likesLabel.setText(String.valueOf(likes));
     }
 
+    /**
+     * Sets the like icon for the post.
+     * 
+     * @param isLiked true if the post is liked, false otherwise.
+     */
+    public void setLikeIcon(boolean isLiked) {
+        try {
+            BufferedImage likeIcon = getLikeIcon(isLiked);
+            Image scaledLikeIcon = likeIcon.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+            likeIconLabel.setIcon(new ImageIcon(scaledLikeIcon));
+        } catch (IOException e) {
+            System.out.println("Failed to load like icon image.");
+        }
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -143,6 +159,27 @@ public class PostSmallComponent extends JPanel {
         g2.fill(roundedRect);
 
         g2.dispose();
+    }
+
+    /**
+     * Returns an image of a like icon with the specified color.
+     *
+     * @param isLiked True if the icon should be red, false if it should be gray.
+     * @return The like icon image.
+     * @throws IOException 
+     */
+    private BufferedImage getLikeIcon(boolean isLiked) throws IOException {
+        BufferedImage likeIcon;
+        try {
+            if (!isLiked) {
+                likeIcon = ImageIO.read(new File("resources/icons/like_icon.png"));
+            } else {
+                likeIcon = ImageIO.read(new File("resources/icons/like_icon_red.png"));
+            }
+        } catch (IOException e) {
+            throw new IOException("Failed to load like icon image.");
+        }
+        return likeIcon;
     }
 
     // private static BufferedImage scaleImage(BufferedImage image, int maxWidth, int maxHeight) {

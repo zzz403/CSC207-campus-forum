@@ -23,4 +23,12 @@ public interface PostBoardOutputBoundary {
      * @param postOverviewInfo the post overview information to add to the post list.
      */
     void addPost(PostOverviewInfo postOverviewInfo);
+
+    /**
+     * Updates the isLiked field of a post with the given ID.
+     * 
+     * @param id      the ID of the post to update.
+     * @param isLiked the new value of the isLiked field.
+     */
+    void updateIsLikeByPostId(int id, boolean isLiked);
 }
