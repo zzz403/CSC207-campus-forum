@@ -12,4 +12,9 @@ public interface PostBoardInputBoundary {
      * @return true if the posts were fetched successfully, false otherwise.
      */
     Boolean fetchAllPost();
+
+    /**
+     * Updates the isLiked status of all posts in the post board view.
+     */
+    void updateisLiked();
 }

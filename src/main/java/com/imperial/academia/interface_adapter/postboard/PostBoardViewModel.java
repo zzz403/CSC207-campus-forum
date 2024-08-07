@@ -90,6 +90,7 @@ public class PostBoardViewModel extends ViewModel {
     public void incrementStateLikesByPostId(int postId) {
         System.out.println("incrementStateLikesByPostId");
         state.incrementLikesByPostId(postId);
+        updateStateIsLikeByPostId(postId, true);
         support.firePropertyChange("likeChangeInc="+postId, null, state);
     }
 
@@ -101,6 +102,7 @@ public class PostBoardViewModel extends ViewModel {
     public void decrementStateLikesByPostId(int postId) {
         System.out.println("decrementStateLikesByPostId");
         state.decrementLikesByPostId(postId);
+        updateStateIsLikeByPostId(postId, false);
         support.firePropertyChange("likeChangeDec="+postId, null, state);
     }
 
@@ -112,5 +114,26 @@ public class PostBoardViewModel extends ViewModel {
      */
     public int getPostLikesByPostId(int postId) {
         return state.getLikesByPostId(postId);
+    }
+
+    /**
+     * Updates the isLiked field of a post with the given ID.
+     * 
+     * @param postId  the ID of the post to update.
+     * @param isLiked the new value of the isLiked field.
+     */
+    public void updateStateIsLikeByPostId(int postId, boolean isLiked) {
+        state.updateIsLikeByPostId(postId, isLiked);
+        support.firePropertyChange("isLikedChange="+postId, null, state);
+    }
+
+    /**
+     * Gets the isLiked field of a post by the post ID.
+     * 
+     * @param postID the post ID to get the isLiked field of.
+     * @return the isLiked field of the post.
+     */
+    public boolean getIsLikeByPostId(int postID) {
+        return state.getIsLikeByPostId(postID);
     }
 }

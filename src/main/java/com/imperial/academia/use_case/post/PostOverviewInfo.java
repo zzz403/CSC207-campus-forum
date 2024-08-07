@@ -12,6 +12,7 @@ public class PostOverviewInfo {
     private String avatarURL;
     private int likes;
     private String postImgURL;
+    private boolean isLiked;
 
     /**
      * Constructs a new PostOverviewInfo with the specified parameters.
@@ -25,7 +26,7 @@ public class PostOverviewInfo {
      * @param postImgURL the URL of the post image.
      */
     public PostOverviewInfo(int postID, String postTitle, String summary, String userName, String avatarURL, int likes,
-            String postImgURL) {
+            String postImgURL, boolean isLiked) {
         this.postID = postID;
         this.postTitle = postTitle;
         this.summary = summary;
@@ -33,6 +34,7 @@ public class PostOverviewInfo {
         this.avatarURL = avatarURL;
         this.likes = likes;
         this.postImgURL = postImgURL;
+        this.isLiked = isLiked;
     }
 
     /**
@@ -57,6 +59,7 @@ public class PostOverviewInfo {
         this.avatarURL = builder.avatarURL;
         this.postImgURL = builder.postImgURL;
         this.likes = builder.likes;
+        this.isLiked = builder.isLiked;
     }
 
     /**
@@ -170,6 +173,7 @@ public class PostOverviewInfo {
         private String avatarURL;
         private String postImgURL;
         private int likes;
+        private boolean isLiked;
 
         /**
          * Constructs a new PostListInfoDataBuilder.
@@ -263,6 +267,11 @@ public class PostOverviewInfo {
         public PostOverviewInfo build() {
             return new PostOverviewInfo(this);
         }
+
+        public PostListInfoDataBuilder setIsLiked(boolean isLiked) {
+            this.isLiked = isLiked;
+            return this;
+        }
     }
 
     /**
@@ -299,5 +308,23 @@ public class PostOverviewInfo {
      */
     public void setLikes(int likes) {
         this.likes = likes;
+    }
+
+    /**
+     * Returns the isLiked for the PostOverviewInfo instance.
+     * 
+     * @return the isLiked for the PostOverviewInfo instance.
+     */
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    /**
+     * Sets the isLiked for the PostOverviewInfo instance.
+     * 
+     * @param isLiked the isLiked to set.
+     */
+    public void setLiked(boolean isLiked) {
+        this.isLiked = isLiked;
     }
 }

@@ -3,6 +3,7 @@ package com.imperial.academia.use_case.login;
 import com.imperial.academia.session.SessionManager;
 import com.imperial.academia.use_case.changeview.ChangeViewInputBoundary;
 import com.imperial.academia.use_case.chat.ChatSideBarInputBoundary;
+import com.imperial.academia.use_case.postBoard.PostBoardInputBoundary;
 import com.imperial.academia.service.UserService;
 import com.imperial.academia.app.ServiceFactory;
 import com.imperial.academia.app.UsecaseFactory;
@@ -21,6 +22,7 @@ public class LoginInteractor implements LoginInputBoundary {
     private final LoginOutputBoundary loginPresenter;
     private final RememberMeDAI rememberMeDAO;
     private final ChatSideBarInputBoundary chatSideBarInteractor;
+    private final PostBoardInputBoundary postBoardInteractor;
 
     private final ChangeViewInputBoundary changeViewInteractor;
 
@@ -38,14 +40,16 @@ public class LoginInteractor implements LoginInputBoundary {
         this.rememberMeDAO = rememberMeDAO;
         this.chatSideBarInteractor = UsecaseFactory.getChatSideBarInteractor();
         this.changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
+        this.postBoardInteractor = UsecaseFactory.getPostBoardInteractor();
     }
 
-    public LoginInteractor(LoginOutputBoundary loginPresenter, RememberMeDAI rememberMeDAO, UserService userService, ChatSideBarInputBoundary chatSideBarInteractor, ChangeViewInputBoundary changeViewInteractor) {
+    public LoginInteractor(LoginOutputBoundary loginPresenter, RememberMeDAI rememberMeDAO, UserService userService, ChatSideBarInputBoundary chatSideBarInteractor, ChangeViewInputBoundary changeViewInteractor, PostBoardInputBoundary postBoardInteractor) {
         this.userService = userService;
         this.loginPresenter = loginPresenter;
         this.rememberMeDAO = rememberMeDAO;
         this.chatSideBarInteractor = chatSideBarInteractor;
         this.changeViewInteractor = changeViewInteractor;
+        this.postBoardInteractor = postBoardInteractor;
     }
 
     /**
@@ -97,6 +101,7 @@ public class LoginInteractor implements LoginInputBoundary {
 
         chatSideBarInteractor.execute();
         loginPresenter.prepareSuccessView(loginOutputData);
+        postBoardInteractor.updateisLiked();
         changeViewInteractor.changeView("post board");
     }
 

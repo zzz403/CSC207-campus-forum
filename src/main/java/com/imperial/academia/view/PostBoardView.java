@@ -41,10 +41,11 @@ public class PostBoardView extends JPanel {
 
     private JFrame applicationFrame;
 
-    private final Map<Integer,PostSmallComponent> postCaChe = new HashMap<>();
+    private final Map<Integer, PostSmallComponent> postCaChe = new HashMap<>();
 
     private static final int POST_COMPONENT_WIDTH = 325;
     private int postNum = 3;
+
     /**
      * Constructs a new PostBoardView with the specified view model.
      * 
@@ -109,7 +110,6 @@ public class PostBoardView extends JPanel {
             String username = pInfo.getUserName();
             String avatarURL = pInfo.getAvatarURL();
             int postLikes = pInfo.getLikes();
-
             Random rand = new Random();
             PostSmallComponent postComponent = null;
             if (postCaChe.get(postID) != null) {
@@ -121,18 +121,17 @@ public class PostBoardView extends JPanel {
             }
 
             int randomNum = rand.nextInt((20 - 1) + 1) + 1;
-            if (i < 19){
-                randomNum = i+1;
+            if (i < 19) {
+                randomNum = i + 1;
             }
             postComponent = PostSmallComponentFactory.createPostSmallComponent(
-                    "resources/test_image/test_image_"+randomNum+".jpg",
+                    "resources/test_image/test_image_" + randomNum + ".jpg",
                     avatarURL, // user avatar url
                     title, // post title
                     summary, // summary content
                     username, // author
                     postLikes, // likes
-                    applicationFrame
-            );
+                    applicationFrame);
 
             postComponent.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent evt) {
@@ -146,12 +145,15 @@ public class PostBoardView extends JPanel {
 
             PostSmallComponent finalPostComponent = postComponent;
             postBoardViewModel.addPropertyChangeListener(evt -> {
-                if (evt.getPropertyName().equals("likeChangeInc="+postID)) {
+                if (evt.getPropertyName().equals("likeChangeInc=" + postID)) {
                     int likes = postBoardViewModel.getPostLikesByPostId(postID);
                     finalPostComponent.setLikes(likes);
-                }else if (evt.getPropertyName().equals("likeChangeDec="+postID)) {
+                } else if (evt.getPropertyName().equals("likeChangeDec=" + postID)) {
                     int likes = postBoardViewModel.getPostLikesByPostId(postID);
                     finalPostComponent.setLikes(likes);
+                } else if(evt.getPropertyName().equals("isLikedChange=" + postID)) {
+                    boolean isLike = postBoardViewModel.getIsLikeByPostId(postID);
+                    finalPostComponent.setLikeIcon(isLike);
                 }
             });
 
@@ -163,7 +165,10 @@ public class PostBoardView extends JPanel {
         }
     }
 
-
+    /**
+     * Adjusts the number of posts per row based on the width of the application
+     * frame.
+     */
     private void adjustPostNumBasedOnWidth() {
         int frameWidth = applicationFrame.getWidth();
         int newPostNum = Math.max(1, frameWidth / POST_COMPONENT_WIDTH); // Ensure at least 1 post per row

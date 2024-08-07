@@ -45,4 +45,15 @@ public class PostBoardPresenter implements PostBoardOutputBoundary {
     public void addPost(PostOverviewInfo postOverviewInfo) {
         postBoardViewModel.addOnePostInfoToState(postOverviewInfo);
     }
+
+    /**
+     * Updates the isLiked field of a post with the given ID.
+     * 
+     * @param id      the ID of the post to update.
+     * @param isLiked the new value of the isLiked field.
+     */
+    @Override
+    public void updateIsLikeByPostId(int id, boolean isLiked) {
+        postBoardViewModel.updateStateIsLikeByPostId(id, isLiked);
+    }
 }
