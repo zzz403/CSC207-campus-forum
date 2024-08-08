@@ -47,10 +47,13 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
     /**
      * Constructs a new CreatePostInteractor with the specified presenter.
      * 
-     * @param createPostPresenter the presenter that updates the view model with the board names
-     * @param postBoardPresenter the presenter that updates the view model with the board names
+     * @param createPostPresenter the presenter that updates the view model with the
+     *                            board names
+     * @param postBoardPresenter  the presenter that updates the view model with the
+     *                            board names
      */
-    public CreatePostInteractor(CreatePostOutputBoundary createPostPresenter, PostBoardOutputBoundary postBoardPresenter) {
+    public CreatePostInteractor(CreatePostOutputBoundary createPostPresenter,
+            PostBoardOutputBoundary postBoardPresenter) {
         this.createPostPresenter = createPostPresenter;
         this.postBoardPresenter = postBoardPresenter;
         changeViewInteractor = UsecaseFactory.getChangeViewInteractor();
@@ -72,7 +75,7 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
      */
     public CreatePostInteractor(ChangeViewInputBoundary changeViewInteractor, PostInputBoundary postInteractor,
             LLMInputBoundary llmInteractor, CreatePostOutputBoundary createPostPresenter, BoardService boardService,
-            PostService postService,PostBoardOutputBoundary postBoardPresenter) {
+            PostService postService, PostBoardOutputBoundary postBoardPresenter) {
         this.changeViewInteractor = changeViewInteractor;
         this.postInteractor = postInteractor;
         this.llmInteractor = llmInteractor;
@@ -98,13 +101,13 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
     @Override
     public boolean submitPost(String title, String content, String boardName) {
         User user = SessionManager.getCurrentUser();
-        if (user == null){
+        if (user == null) {
             System.out.println("No user login");
             return false;
-        }else if(title == null || content == null || boardName == null){
+        } else if (title == null || content == null || boardName == null) {
             System.out.println("invalid input! Recheck!!");
             return false;
-        }else if(title.equals("") || content.equals("") || boardName.equals("")){
+        } else if (title.equals("") || content.equals("") || boardName.equals("")) {
             System.out.println("Input is empty! recheck!!");
             return false;
         }
@@ -133,7 +136,6 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
             return false;
         }
 
-        createPostPresenter.submitSeccuss();
         System.out.println("submitPost seccuss: " + post.getId());
         PostInfoData postInfoData = PostInfoData.builder()
                 .setTitle(title)
@@ -145,11 +147,10 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
                 .setPostId(post.getId())
                 .build();
 
-        String summary = llmInteractor.summarizeChatHistory(content);
         PostOverviewInfo postOverviewInfo = PostOverviewInfo.builder()
                 .setPostID(post.getId())
                 .setPostTitle(title)
-                .setSummary(summary)
+                .setSummary(content)
                 .setUserName(user.getUsername())
                 .setAvatarURL(user.getAvatarUrl())
                 .setLikes(0)
@@ -158,6 +159,8 @@ public class CreatePostInteractor implements CreatePostInputBoundary {
         postInteractor.initPostPage(postInfoData);
         postBoardPresenter.addPost(postOverviewInfo);
         changeViewInteractor.changeView("post");
+
+        createPostPresenter.submitSeccuss();
         return true;
     }
 

@@ -5,13 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.imperial.academia.app.ServiceFactory;
-import com.imperial.academia.app.UsecaseFactory;
 import com.imperial.academia.entity.post.Post;
 import com.imperial.academia.entity.user.User;
 import com.imperial.academia.service.PostService;
 import com.imperial.academia.service.UserService;
 import com.imperial.academia.session.SessionManager;
-import com.imperial.academia.use_case.LLM.LLMInputBoundary;
 import com.imperial.academia.use_case.post.PostOverviewInfo;
 
 /**
@@ -28,9 +26,6 @@ public class PostBoardInteractor implements PostBoardInputBoundary {
     // The service for users.
     private final UserService userService;
 
-    // The interactor for LLM.
-    private final LLMInputBoundary llmInteractor;
-
     /**
      * Constructs a new PostBoardInteractor with the specified
      * PostBoardOutputBoundary.
@@ -42,7 +37,6 @@ public class PostBoardInteractor implements PostBoardInputBoundary {
         this.postBoardPresenter = postBoardPresenter;
         this.postService = ServiceFactory.getPostService();
         this.userService = ServiceFactory.getUserService();
-        this.llmInteractor = UsecaseFactory.getLLMInteractor();
     }
 
     /**
@@ -57,11 +51,10 @@ public class PostBoardInteractor implements PostBoardInputBoundary {
      * @param llmInteractor      the interactor that will handle the LLM logic.
      */
     public PostBoardInteractor(PostBoardOutputBoundary postBoardPresenter, PostService postService,
-            UserService userService, LLMInputBoundary llmInteractor) {
+            UserService userService) {
         this.postBoardPresenter = postBoardPresenter;
         this.postService = postService;
         this.userService = userService;
-        this.llmInteractor = llmInteractor;
     }
 
     /**
@@ -99,7 +92,7 @@ public class PostBoardInteractor implements PostBoardInputBoundary {
         int postLikes = 0;
         String title = post.getTitle();
         String content = post.getContent();
-        String summary = llmInteractor.summarizeChatHistory(content);
+        // String summary = llmInteractor.summarizeChatHistory(content);
         String username = "404not found";
         String avatarURL = "resources\\avatar\\default_avatar.png";
         try {
@@ -116,7 +109,7 @@ public class PostBoardInteractor implements PostBoardInputBoundary {
                 .setPostID(postID)
                 .setLikes(postLikes)
                 .setPostTitle(title)
-                .setSummary(summary)
+                .setSummary(content)
                 .setUserName(username)
                 .setAvatarURL(avatarURL)
                 .setIsLiked(isLiked)
