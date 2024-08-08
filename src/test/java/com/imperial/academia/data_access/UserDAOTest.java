@@ -142,9 +142,11 @@ class UserDAOTest {
         User user1 = new User(0, "user1", "password", "user1@example.com", "user", null, Timestamp.from(Instant.now()), Timestamp.from(Instant.now()));
         userDAO.insert(user1);
 
-        Thread.sleep(1000); // Ensure timestamp difference
+        Thread.sleep(100); // Ensure timestamp difference
 
         Timestamp timestamp = Timestamp.from(Instant.now());
+
+        Thread.sleep(100); // Ensure timestamp difference
 
         User user2 = new User(0, "user2", "password", "user2@example.com", "user", null, Timestamp.from(Instant.now()), Timestamp.from(Instant.now()));
         userDAO.insert(user2);

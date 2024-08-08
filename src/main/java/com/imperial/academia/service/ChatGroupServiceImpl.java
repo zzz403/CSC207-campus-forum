@@ -73,6 +73,7 @@ public class ChatGroupServiceImpl implements ChatGroupService {
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("null")
     @Override
     public List<ChatGroupDTO> getChatGroupsByGroupName(String serchGroupName) throws SQLException {
 

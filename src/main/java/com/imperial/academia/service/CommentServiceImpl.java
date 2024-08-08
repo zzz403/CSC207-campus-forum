@@ -34,6 +34,13 @@ public class CommentServiceImpl implements CommentService {
     public void insert(Comment comment) throws SQLException {
         commentDAO.insert(comment);
         commentCache.setComment("comment:" + comment.getId(), comment);
+
+        List<Comment> comments = commentCache.getComments("comments:post:" + comment.getPostId());
+        if (comments == null) {
+            comments = commentDAO.getAllByPostId(comment.getPostId());
+        }
+        comments.add(comment);
+        commentCache.setComments("comments:post:" + comment.getPostId(), comments);
     }
 
     /**

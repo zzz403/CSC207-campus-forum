@@ -69,6 +69,7 @@ public class PostInteractor implements PostInputBoundary {
     @Override
     public void initPostPage(PostInfoData postInfoData) {
         postPresenter.initPostPage(postInfoData);
+        initComments(postInfoData.getPostID(), SessionManager.getCurrentUser());
     }
 
     /**
@@ -107,8 +108,6 @@ public class PostInteractor implements PostInputBoundary {
                     .build();
 
             postPresenter.initPostPage(postInfoData);
-
-            initComments(postID, currentUser);
 
         } catch (SQLException e) {
             System.out.println("Can't find the post or user DNE when init post page");
