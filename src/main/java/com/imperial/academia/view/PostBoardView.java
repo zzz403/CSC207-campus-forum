@@ -145,8 +145,7 @@ public class PostBoardView extends JPanel {
 
             PostSmallComponent finalPostComponent = postComponent;
             postBoardViewModel.addPropertyChangeListener(evt -> {
-                if (evt.getPropertyName().equals("likeChange=" + postID) ||
-                        evt.getPropertyName().equals("likeChange=" + postID)) {
+                if (evt.getPropertyName().equals("likeChange=" + postID)) {
                     int likes = postBoardViewModel.getPostLikesByPostId(postID);
                     finalPostComponent.setLikes(likes);
                 } else if (evt.getPropertyName().equals("isLiked=" + postID)) {
