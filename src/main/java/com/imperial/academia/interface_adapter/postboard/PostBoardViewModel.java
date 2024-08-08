@@ -91,7 +91,7 @@ public class PostBoardViewModel extends ViewModel {
         System.out.println("incrementStateLikesByPostId");
         state.incrementLikesByPostId(postId);
         updateStateIsLikeByPostId(postId, true);
-        support.firePropertyChange("likeChangeInc="+postId, null, state);
+        support.firePropertyChange("likeChange="+postId, null, state);
     }
 
     /**
@@ -103,7 +103,7 @@ public class PostBoardViewModel extends ViewModel {
         System.out.println("decrementStateLikesByPostId");
         state.decrementLikesByPostId(postId);
         updateStateIsLikeByPostId(postId, false);
-        support.firePropertyChange("likeChangeDec="+postId, null, state);
+        support.firePropertyChange("likeChange="+postId, null, state);
     }
 
     /**
@@ -124,7 +124,7 @@ public class PostBoardViewModel extends ViewModel {
      */
     public void updateStateIsLikeByPostId(int postId, boolean isLiked) {
         state.updateIsLikeByPostId(postId, isLiked);
-        support.firePropertyChange("isLikedChange="+postId, null, state);
+        support.firePropertyChange("isLiked="+postId, null, state);
     }
 
     /**

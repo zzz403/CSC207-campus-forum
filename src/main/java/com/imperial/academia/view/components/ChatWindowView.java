@@ -479,7 +479,6 @@ public class ChatWindowView extends JPanel {
                         }
 
                     }
-                    @SuppressWarnings("null")
                     Image scaledMessageImage = messageImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
                     messageImageLabel.setIcon(new ImageIcon(scaledMessageImage));
                     contentPanel.add(messageImageLabel);
