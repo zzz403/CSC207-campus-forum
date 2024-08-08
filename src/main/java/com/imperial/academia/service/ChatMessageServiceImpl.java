@@ -125,6 +125,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                 }
             }
             assert user != null;
+            @SuppressWarnings("null")
             ChatMessageDTO chatMessageDTO = new ChatMessageDTO(
                     chatMessage.getId(),
                     chatMessage.getSenderId(),
@@ -192,6 +193,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                     userCache.setUser("user:" + chatMessage.getSenderId(), user);
                 }
             }
+            @SuppressWarnings("null")
             ChatMessageDTO chatMessageDTO = new ChatMessageDTO(
                     chatMessage.getId(),
                     chatMessage.getSenderId(),
