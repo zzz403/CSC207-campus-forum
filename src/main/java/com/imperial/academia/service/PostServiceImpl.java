@@ -36,7 +36,7 @@ public class PostServiceImpl implements PostService {
         postCache.setPost("post:" + post.getId(), post);
         List<Post> posts = postCache.getPosts("posts:user:" + post.getAuthorId());
         if(posts == null){
-            return;
+            posts = postDAO.getAllByUserId(post.getAuthorId());
         }
         posts.add(post);
         postCache.setPosts("posts:user:" + post.getAuthorId(), posts);
