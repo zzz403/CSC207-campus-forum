@@ -107,7 +107,7 @@ public class PostInteractor implements PostInputBoundary {
                     .setIsLiked(isLiked)
                     .build();
 
-            postPresenter.initPostPage(postInfoData);
+            initPostPage(postInfoData);
 
         } catch (SQLException e) {
             System.out.println("Can't find the post or user DNE when init post page");
